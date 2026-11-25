@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="chapter-atomics.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span style="visibility: hidden"> | <a href="" rel="next">Next</a></span></div><hr>
+<h1 data-number="41" id="function-specifier-alignment-specifier-dan-operator"><span class="header-section-number">41</span> Function Specifier, Alignment Specifier dan Operator</h1>
+<p>Menurut pengalamanku, ini tidak terlalu sering dipakai, tapi kita bahas di sini demi kelengkapan.</p>
+<h2 data-number="41.1" id="function-specifier"><span class="header-section-number">41.1</span> Function Specifier</h2>
+<p></p>
+<p>Saat mendeklarasikan fungsi, kamu bisa memberi compiler beberapa petunjuk tentang bagaimana fungsi itu mungkin atau akan dipakai. Ini memungkinkan atau mendorong compiler melakukan optimasi tertentu.</p>
+<h3 data-number="41.1.1" id="inline-untuk-kecepatanmungkin"><span class="header-section-number">41.1.1</span> <code>inline</code> untuk Kecepatan—Mungkin</h3>
+<p></p>
+<p>Kamu bisa mendeklarasikan fungsi sebagai inline seperti ini:</p>
+<div class="sourceCode" id="cb797"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb797-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb797-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="kw">inline</span> <span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb797-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb797-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb797-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb797-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ini dimaksudkan untuk mendorong compiler membuat pemanggilan fungsi ini secepat mungkin. Dan, secara historis, salah satu caranya adalah <em>inlining</em>, artinya badan fungsi disematkan seluruhnya di tempat pemanggilan dilakukan. Ini menghindari semua overhead menyiapkan dan membongkar pemanggilan fungsi, dengan konsekuensi ukuran kode lebih besar karena fungsi disalin ke mana-mana, bukan dipakai ulang.</p>
+<p>Hal-hal cepat dan kasar yang perlu diingat:</p>
+<ol type="1">
+<li><p>Kamu kemungkinan tidak perlu memakai <code>inline</code> untuk kecepatan. Compiler modern tahu mana yang terbaik.</p></li>
+<li><p>Kalau kamu memakainya untuk kecepatan, pakai dengan file scope, yaitu <code>static inline</code>. Ini menghindari aturan rumit external linkage dan fungsi inline.</p></li>
+</ol>
+<p>Berhenti membaca bagian ini sekarang.</p>
+<p>Suka menyiksa diri, ya?</p>
+<p>Mari kita coba menghilangkan <code>static</code>.</p>
+<div class="sourceCode" id="cb798"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb798-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb798-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-2" aria-label="2"></a></span>
+<span id="cb798-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-3" aria-label="3"></a><span class="kw">inline</span> <span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb798-4"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb798-5"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-5" aria-label="5"></a>    <span class="cf">return</span> x <span class="op">+</span> y<span class="op">;</span></span>
+<span id="cb798-6"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-6" aria-label="6"></a><span class="op">}</span></span>
+<span id="cb798-7"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-7" aria-label="7"></a></span>
+<span id="cb798-8"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb798-9"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb798-10"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">));</span></span>
+<span id="cb798-11"><a href="function-specifier-alignment-specifier-dan-operator.html#cb798-11" aria-label="11"></a><span class="op">}</span></span></code></pre></div>
+<p><code>gcc</code> memberi error linker pada <code>add()</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn231" class="footnote-ref" id="fnref231" role="doc-noteref"><sup>231</sup></a>. Spesifikasi mewajibkan bahwa kalau kamu punya fungsi inline non-<code>extern</code>, kamu juga harus menyediakan versi dengan external linkage.</p>
+<p>Jadi kamu harus punya versi <code>extern</code> di tempat lain agar ini berfungsi. Kalau compiler punya fungsi <code>inline</code> di file saat ini dan versi eksternal dari fungsi yang sama di tempat lain, ia boleh memilih mana yang dipanggil. Jadi aku sangat menyarankan keduanya sama.</p>
+<p>Hal lain yang bisa dilakukan adalah mendeklarasikan fungsi sebagai <code>extern inline</code>. Ini akan mencoba meng-inline di file yang sama (demi kecepatan), tapi juga membuat versi dengan external linkage.</p>
+<p></p>
+<h3 data-number="41.1.2" id="noreturn"><span class="header-section-number">41.1.2</span> <code>noreturn</code> dan <code>_Noreturn</code></h3>
+<p> </p>
+<p>Ini menandakan kepada compiler bahwa suatu fungsi tidak akan pernah kembali ke pemanggilnya, yaitu program akan keluar lewat suatu mekanisme sebelum fungsi itu kembali.</p>
+<p>Ini memungkinkan compiler melakukan beberapa optimasi di sekitar pemanggilan fungsi tersebut.</p>
+<p>Ini juga memungkinkanmu memberi tahu developer lain bahwa sebagian logika program bergantung pada fungsi yang <em>tidak</em> kembali.</p>
+<p>Kemungkinan kamu tidak akan pernah memakainya, tapi kamu akan melihatnya pada beberapa pemanggilan library seperti <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-exit"><code>exit()</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn232" class="footnote-ref" id="fnref232" role="doc-noteref"><sup>232</sup></a> dan <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-abort"><code>abort()</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn233" class="footnote-ref" id="fnref233" role="doc-noteref"><sup>233</sup></a>.</p>
+<p>Kata kunci bawaannya adalah <code>_Noreturn</code>, tapi kalau tidak merusak kode yang sudah ada, semua orang akan menyarankan meng-include <code>&lt;stdnoreturn.h&gt;</code> dan memakai <code>noreturn</code> yang lebih mudah dibaca.</p>
+<p>Ini undefined behavior kalau fungsi yang dinyatakan <code>noreturn</code> ternyata kembali. Itu tidak jujur secara komputasi, tahu.</p>
+<p>Berikut contoh pemakaian <code>noreturn</code> dengan benar:</p>
+<div class="sourceCode" id="cb799"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb799-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb799-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb799-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;stdnoreturn.h&gt;</span></span>
+<span id="cb799-4"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-4" aria-label="4"></a></span>
+<span id="cb799-5"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-5" aria-label="5"></a>noreturn <span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="co">// Fungsi ini tidak boleh pernah kembali!</span></span>
+<span id="cb799-6"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb799-7"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;Happy days</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb799-8"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-8" aria-label="8"></a></span>
+<span id="cb799-9"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-9" aria-label="9"></a>    exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span>            <span class="co">// Dan ia tidak kembali--ia keluar di sini!</span></span>
+<span id="cb799-10"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-10" aria-label="10"></a><span class="op">}</span></span>
+<span id="cb799-11"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-11" aria-label="11"></a></span>
+<span id="cb799-12"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-12" aria-label="12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb799-13"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-13" aria-label="13"></a><span class="op">{</span></span>
+<span id="cb799-14"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-14" aria-label="14"></a>    foo<span class="op">();</span></span>
+<span id="cb799-15"><a href="function-specifier-alignment-specifier-dan-operator.html#cb799-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p>Kalau compiler mendeteksi bahwa fungsi <code>noreturn</code> bisa kembali, ia mungkin akan memperingatkanmu, dengan baik hati.</p>
+<p>Mengganti fungsi <code>foo()</code> dengan ini:</p>
+<div class="sourceCode" id="cb800"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb800-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb800-1" aria-hidden="true" tabindex="-1"></a>noreturn <span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb800-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb800-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb800-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb800-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Breakin&#39; the law</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb800-4"><a href="function-specifier-alignment-specifier-dan-operator.html#cb800-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>menghasilkan peringatan:</p>
+<div class="sourceCode" id="cb801"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb801-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb801-1" aria-hidden="true" tabindex="-1"></a>foo.c:7:1: warning: function declared &#39;noreturn&#39; should not return</span></code></pre></div>
+<p> </p>
+<h2 data-number="41.2" id="alignment-specifier-dan-operator"><span class="header-section-number">41.2</span> Alignment Specifier dan Operator</h2>
+<p></p>
+<p><a href="https://en.wikipedia.org/wiki/Data_structure_alignment"><em>Alignment</em></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn234" class="footnote-ref" id="fnref234" role="doc-noteref"><sup>234</sup></a> sepenuhnya tentang kelipatan alamat tempat object bisa disimpan. Bisakah ini disimpan di alamat mana pun? Atau harus alamat awal yang habis dibagi 2? Atau 8? Atau 16?</p>
+<p>Kalau kamu membuat sesuatu yang low-level seperti memory allocator yang berinteraksi dengan OS-mu, kamu mungkin perlu mempertimbangkan ini. Kebanyakan developer melewati seluruh kariernya tanpa memakai fungsionalitas ini di C.</p>
+<h3 data-number="41.2.1" id="alignas-dan-_alignas"><span class="header-section-number">41.2.1</span> <code>alignas</code> dan <code>_Alignas</code></h3>
+<p> </p>
+<p>Ini bukan fungsi. Melainkan <em>alignment specifier</em> yang bisa dipakai pada deklarasi variabel.</p>
+<p>Specifier bawaannya adalah <code>_Alignas</code>, tapi header <code>&lt;stdalign.h&gt;</code> mendefinisikannya sebagai <code>alignas</code> agar lebih sedap dipandang.</p>
+<p>Kalau kamu butuh <code>char</code>-mu ter-align seperti <code>int</code>, kamu bisa memaksanya seperti ini saat mendeklarasikannya:</p>
+<div class="sourceCode" id="cb802"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb802-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb802-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> c<span class="op">;</span></span></code></pre></div>
+<p>Kamu juga bisa mengoper nilai konstan atau ekspresi sebagai alignment. Ini harus sesuatu yang didukung sistem, tapi spesifikasi tidak sampai menentukan nilai apa yang boleh dimasukkan. Pangkat 2 kecil (1, 2, 4, 8, dan 16) umumnya taruhan yang aman.</p>
+<div class="sourceCode" id="cb803"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb803-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb803-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dv">8</span><span class="op">)</span> c<span class="op">;</span>   <span class="co">// align pada batas 8 byte</span></span></code></pre></div>
+<p>Kalau ingin meng-align pada alignment maksimum yang dipakai sistemmu, include <code>&lt;stddef.h&gt;</code> dan pakai tipe <code>max_align_t</code>, seperti ini:</p>
+<div class="sourceCode" id="cb804"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb804-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb804-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="kw">alignas</span><span class="op">(</span><span class="dt">max_align_t</span><span class="op">)</span> c<span class="op">;</span></span></code></pre></div>
+<p>Kamu berpotensi melakukan <em>over-align</em> dengan menentukan alignment lebih besar dari <code>max_align_t</code>, tapi apakah hal seperti itu diizinkan tergantung sistem.</p>
+<p> </p>
+<h3 data-number="41.2.2" id="alignof-dan-_alignof"><span class="header-section-number">41.2.2</span> <code>alignof</code> dan <code>_Alignof</code></h3>
+<p> </p>
+<p>Operator ini mengembalikan kelipatan alamat yang dipakai tipe tertentu untuk alignment di sistem ini. Misalnya, mungkin <code>char</code> di-align setiap 1 alamat, dan <code>int</code> di-align setiap 4 alamat.</p>
+<p>Operator bawaannya adalah <code>_Alignof</code>, tapi header <code>&lt;stdalign.h&gt;</code> mendefinisikannya sebagai <code>alignof</code> kalau kamu ingin tampak lebih keren.</p>
+<p>Berikut program yang mencetak alignment berbagai tipe. Sekali lagi, ini akan bervariasi dari satu sistem ke sistem lain. Perhatikan bahwa tipe <code>max_align_t</code> akan memberi alignment maksimum yang dipakai sistem.</p>
+<div class="sourceCode" id="cb805"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb805-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdalign.h&gt;</span></span>
+<span id="cb805-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span><span class="pp">     </span><span class="co">// untuk printf()</span></span>
+<span id="cb805-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span><span class="pp">    </span><span class="co">// untuk max_align_t</span></span>
+<span id="cb805-4"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-4" aria-label="4"></a></span>
+<span id="cb805-5"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-5" aria-label="5"></a><span class="kw">struct</span> t <span class="op">{</span></span>
+<span id="cb805-6"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-6" aria-label="6"></a>    <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb805-7"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-7" aria-label="7"></a>    <span class="dt">char</span> b<span class="op">;</span></span>
+<span id="cb805-8"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-8" aria-label="8"></a>    <span class="dt">float</span> c<span class="op">;</span></span>
+<span id="cb805-9"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-9" aria-label="9"></a><span class="op">};</span></span>
+<span id="cb805-10"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-10" aria-label="10"></a></span>
+<span id="cb805-11"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-11" aria-label="11"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb805-12"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-12" aria-label="12"></a><span class="op">{</span></span>
+<span id="cb805-13"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;char       : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">char</span><span class="op">));</span></span>
+<span id="cb805-14"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;short      : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">short</span><span class="op">));</span></span>
+<span id="cb805-15"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-15" aria-label="15"></a>    printf<span class="op">(</span><span class="st">&quot;int        : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span></span>
+<span id="cb805-16"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;long       : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">long</span><span class="op">));</span></span>
+<span id="cb805-17"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;long long  : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">long</span> <span class="dt">long</span><span class="op">));</span></span>
+<span id="cb805-18"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-18" aria-label="18"></a>    printf<span class="op">(</span><span class="st">&quot;double     : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">double</span><span class="op">));</span></span>
+<span id="cb805-19"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-19" aria-label="19"></a>    printf<span class="op">(</span><span class="st">&quot;long double: </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">long</span> <span class="dt">double</span><span class="op">));</span></span>
+<span id="cb805-20"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-20" aria-label="20"></a>    printf<span class="op">(</span><span class="st">&quot;struct t   : </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="kw">struct</span> t<span class="op">));</span></span>
+<span id="cb805-21"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-21" aria-label="21"></a>    printf<span class="op">(</span><span class="st">&quot;max_align_t: </span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">alignof</span><span class="op">(</span><span class="dt">max_align_t</span><span class="op">));</span></span>
+<span id="cb805-22"><a href="function-specifier-alignment-specifier-dan-operator.html#cb805-22" aria-label="22"></a><span class="op">}</span></span></code></pre></div>
+<p>Output di sistemku:</p>
+<div class="sourceCode" id="cb806"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb806-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-1" aria-hidden="true" tabindex="-1"></a>char       : 1</span>
+<span id="cb806-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-2" aria-hidden="true" tabindex="-1"></a>short      : 2</span>
+<span id="cb806-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-3" aria-hidden="true" tabindex="-1"></a>int        : 4</span>
+<span id="cb806-4"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-4" aria-hidden="true" tabindex="-1"></a>long       : 8</span>
+<span id="cb806-5"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-5" aria-hidden="true" tabindex="-1"></a>long long  : 8</span>
+<span id="cb806-6"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-6" aria-hidden="true" tabindex="-1"></a>double     : 8</span>
+<span id="cb806-7"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-7" aria-hidden="true" tabindex="-1"></a>long double: 16</span>
+<span id="cb806-8"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-8" aria-hidden="true" tabindex="-1"></a>struct t   : 16</span>
+<span id="cb806-9"><a href="function-specifier-alignment-specifier-dan-operator.html#cb806-9" aria-hidden="true" tabindex="-1"></a>max_align_t: 16</span></code></pre></div>
+<p> </p>
+<h2 data-number="41.3" id="fungsi-memalignment"><span class="header-section-number">41.3</span> Fungsi <code>memalignment()</code></h2>
+<p></p>
+<p>Baru di C23!</p>
+<p>(Peringatan: tidak ada compilerku yang mendukung fungsi ini, jadi kodenya sebagian besar belum teruji.)</p>
+<p><code>alignof</code> bagus kalau kamu tahu tipe datamu. Tapi bagaimana kalau kamu <em>sangat tidak tahu</em> tipenya, dan hanya punya pointer ke data itu?</p>
+<p>Bagaimana itu bisa terjadi?</p>
+<p>Tentu saja dengan teman baik kita <code>void*</code>. Kita tidak bisa mengopernya ke <code>alignof</code>, tapi bagaimana kalau kita perlu tahu alignment sesuatu yang ditunjuknya?</p>
+<p>Mungkin kita ingin tahu ini kalau akan memakai memori itu untuk sesuatu yang punya kebutuhan alignment yang signifikan. Misalnya, tipe atomic dan floating sering berperilaku buruk kalau tidak ter-align.</p>
+<p>Jadi dengan fungsi ini kita bisa memeriksa alignment sebuah data selama kita punya pointer ke data itu, bahkan kalau berupa <code>void*</code>.</p>
+<p>Mari kita buat tes cepat untuk melihat apakah void pointer ter-align dengan baik untuk dipakai sebagai tipe atomic, dan, kalau ya, kita ambil variabel untuk memakainya sebagai tipe itu:</p>
+<div class="sourceCode" id="cb807"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb807-1"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>p<span class="op">)</span></span>
+<span id="cb807-2"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb807-3"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>memalignment<span class="op">(</span>p<span class="op">)</span> <span class="op">&gt;=</span> <span class="kw">alignof</span><span class="op">(</span>atomic <span class="dt">int</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb807-4"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-4" aria-hidden="true" tabindex="-1"></a>        atomic <span class="dt">int</span> <span class="op">*</span>i <span class="op">=</span> p<span class="op">;</span></span>
+<span id="cb807-5"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-5" aria-hidden="true" tabindex="-1"></a>        do_things<span class="op">(</span>i<span class="op">);</span></span>
+<span id="cb807-6"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> <span class="cf">else</span></span>
+<span id="cb807-7"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-7" aria-hidden="true" tabindex="-1"></a>        puts<span class="op">(</span><span class="st">&quot;This pointer is no good as an atomic int</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb807-8"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb807-9"><a href="function-specifier-alignment-specifier-dan-operator.html#cb807-9" aria-hidden="true" tabindex="-1"></a><span class="op">...</span></span></code></pre></div>
+<p>Kurasa kamu akan jarang (sampai kemungkinan tidak pernah) memerlukan fungsi ini kecuali kamu mengerjakan hal-hal low-level.</p>
+<p></p>
+<p>Dan begitulah. Alignment!</p>
+<p></p>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>https://www.ioccc.org/<a href="kata-pengantar.html#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>https://en.wikipedia.org/wiki/Python_(programming_language)<a href="kata-pengantar.html#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>https://en.wikipedia.org/wiki/JavaScript<a href="kata-pengantar.html#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>https://en.wikipedia.org/wiki/Java_(programming_language)<a href="kata-pengantar.html#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>https://en.wikipedia.org/wiki/Rust_(programming_language)<a href="kata-pengantar.html#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>https://en.wikipedia.org/wiki/Go_(programming_language)<a href="kata-pengantar.html#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>https://en.wikipedia.org/wiki/Swift_(programming_language)<a href="kata-pengantar.html#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>https://en.wikipedia.org/wiki/Objective-C<a href="kata-pengantar.html#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>https://beej.us/guide/bgclr/<a href="kata-pengantar.html#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>https://en.wikipedia.org/wiki/ANSI_C<a href="kata-pengantar.html#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn11"><p>https://en.wikipedia.org/wiki/POSIX<a href="kata-pengantar.html#fnref11" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn12"><p>https://visualstudio.microsoft.com/vs/community/<a href="kata-pengantar.html#fnref12" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn13"><p>https://docs.microsoft.com/en-us/windows/wsl/install-win10<a href="kata-pengantar.html#fnref13" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn14"><p>https://developer.apple.com/xcode/<a href="kata-pengantar.html#fnref14" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn15"><p>https://beej.us/guide/bgc/<a href="kata-pengantar.html#fnref15" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn16"><p>https://en.cppreference.com/<a href="kata-pengantar.html#fnref16" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn17"><p>https://groups.google.com/g/comp.lang.c<a href="kata-pengantar.html#fnref17" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn18"><p>https://www.reddit.com/r/C_Programming/<a href="kata-pengantar.html#fnref18" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn19"><p>https://en.wikipedia.org/wiki/Assembly_language<a href="hello-world.html#fnref19" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn20"><p>https://en.wikipedia.org/wiki/Bare_machine<a href="hello-world.html#fnref20" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn21"><p>https://en.wikipedia.org/wiki/Operating_system<a href="hello-world.html#fnref21" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn22"><p>https://en.wikipedia.org/wiki/Embedded_system<a href="hello-world.html#fnref22" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn23"><p>https://en.wikipedia.org/wiki/Rust_(programming_language)<a href="hello-world.html#fnref23" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn24"><p>https://en.wikipedia.org/wiki/Grok<a href="hello-world.html#fnref24" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn25"><p>Penulis tahu pasti ada yang akan membantah, tapi setidaknya masuk tiga besar, kan?<a href="hello-world.html#fnref25" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn26"><p>Secara teknis sih lebih dari dua, tapi anggap saja dua—tidak tahu itu menyenangkan, kan?<a href="hello-world.html#fnref26" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn27"><p>https://en.wikipedia.org/wiki/Assembly_language<a href="hello-world.html#fnref27" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn28"><p>https://en.wikipedia.org/wiki/Machine_code<a href="hello-world.html#fnref28" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn29"><p>Secara teknis, isinya directive preprocessor dan function prototype (nanti dibahas) untuk kebutuhan input dan output yang umum.<a href="hello-world.html#fnref29" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn30"><p>https://en.wikipedia.org/wiki/Unix<a href="hello-world.html#fnref30" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn31"><p>Kalau nama file output tidak diberikan, hasilnya otomatis ditulis ke file bernama <code>a.out</code>—nama ini berakar jauh di sejarah Unix.<a href="hello-world.html#fnref31" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn32"><p>https://formulae.brew.sh/formula/gcc<a href="hello-world.html#fnref32" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn33"><p>Satu “byte” biasanya adalah bilangan biner 8-bit. Bayangkan sebagai integer yang hanya bisa menyimpan nilai 0 sampai 255, inklusif. Secara teknis, C membolehkan byte punya jumlah bit berapa pun, dan kalau ingin merujuk dengan jelas ke bilangan 8-bit, istilah yang tepat adalah <em>oktet</em>. Tapi programmer akan menganggap kamu bermaksud 8-bit kalau bilang “byte”, kecuali kamu menyebutkan yang lain.<a href="variabel-dan-pernyataan.html#fnref33" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn34"><p>Cara kerja memori modern di sini disederhanakan sedikit berlebihan. Tapi model mental ini cukup berhasil, jadi mohon dimaklumi.<a href="variabel-dan-pernyataan.html#fnref34" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn35"><p>Ini sedikit bohong. Secara teknis <code>3.14159</code> bertipe <code>double</code>, tapi kita belum sampai ke sana, dan tujuannya adalah supaya kamu mengasosiasikan <code>float</code> dengan “Floating Point”. C dengan senang hati akan mengonversinya menjadi <code>float</code>. Singkatnya, jangan dipusingkan dulu.<a href="variabel-dan-pernyataan.html#fnref35" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn36"><p>Bacanya “pointer ke char” atau “char pointer”. “Char” kependekan dari karakter. Belum ada studi resmi, tapi secara anekdot kebanyakan orang melafalkannya “char” (seperti “charcoal”), sebagian kecil bilang “car”, dan segelintir bilang “care”. Pointer akan dibahas lebih lanjut nanti.<a href="variabel-dan-pernyataan.html#fnref36" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn37"><p>Secara informal kita bilang nilainya “acak”, padahal sebenarnya bukan—bahkan bukan bilangan pseudo-acak.<a href="variabel-dan-pernyataan.html#fnref37" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn38"><p>Ini tidak sepenuhnya benar. Ketika kita sampai ke pembahasan static storage duration, kamu akan tahu bahwa beberapa variabel otomatis diinisialisasi ke nol. Tapi cara yang aman adalah selalu menginisialisasinya sendiri.<a href="variabel-dan-pernyataan.html#fnref38" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn39"><p>Secara teknis hanya satu bit dari sebuah <code>char</code> yang dipakai untuk merepresentasikan <code>bool</code>, jadi nilainya hanya bisa nol atau satu. Hanya saja, isi bit-bit sisanya (padding) dalam <code>char</code> itu tidak ditentukan. Untuk <code>false</code>, pasti semuanya nol. Tapi untuk <code>true</code>, penulis tidak yakin apakah sisanya harus nol semua.<a href="variabel-dan-pernyataan.html#fnref39" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn40"><p><code>_t</code> kependekan dari <code>type</code>.<a href="variabel-dan-pernyataan.html#fnref40" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn41"><p>Kecuali untuk variable length array—tapi itu cerita untuk lain waktu.<a href="variabel-dan-pernyataan.html#fnref41" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn42"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-srand<a href="variabel-dan-pernyataan.html#fnref42" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn43"><p>Hal ini dianggap sebagai bahaya yang begitu besar, sampai-sampai para perancang bahasa pemrograman Go menjadikan <code>break</code> sebagai perilaku bawaan; kamu harus secara eksplisit memakai pernyataan <code>fallthrough</code> di Go kalau ingin jatuh ke case berikutnya.<a href="variabel-dan-pernyataan.html#fnref43" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn44"><p>Biasanya. Pasti ada pengecualian di lorong-lorong gelap sejarah komputasi.<a href="pointers.html#fnref44" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn45"><p>Byte adalah angka yang terdiri dari tidak lebih dari 8 digit biner, atau singkatnya <em>bit</em>. Dalam digit desimal seperti yang biasa dipakai nenek kita, byte bisa menyimpan bilangan tak bertanda antara 0 dan 255, inklusif.<a href="pointers.html#fnref45" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn46"><p>Urutan byte disebut <em>endianness</em> dari angka tersebut. Yang paling sering ditemui adalah <em>big-endian</em> (byte paling signifikan di depan) dan <em>little-endian</em> (byte paling signifikan di belakang), atau yang kini jarang, <em>mixed-endian</em> (byte paling signifikan di tempat lain).<a href="pointers.html#fnref46" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn47"><p>Yaitu basis 16 dengan digit 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, dan F.<a href="pointers.html#fnref47" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn48"><p>https://en.wikipedia.org/wiki/Virtual_memory<a href="pointers.html#fnref48" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn49"><p>Dan itu belum semua! Asterisk juga dipakai dalam <code>/*komentar*/</code>, perkalian, dan function prototype dengan variable length array! Semuanya <code>*</code> yang sama, tapi konteksnya memberi makna yang berbeda.<a href="pointers.html#fnref49" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn50"><p>https://en.wikipedia.org/wiki/Null_pointer#History<a href="pointers.html#fnref50" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn51"><p>https://en.wikipedia.org/wiki/Sentinel_value<a href="pointers.html#fnref51" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn52"><p>Variabel bertipe pointer adalah <code>a</code>, <code>d</code>, <code>f</code>, dan <code>i</code>, karena hanya merekalah yang punya <code>*</code> di depannya.<a href="pointers.html#fnref52" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn53"><p>Setidaknya zaman sekarang.<a href="arrays.html#fnref53" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn54"><p>Sebenarnya tidak juga, tapi variable-length array—yang penulis sendiri kurang suka—adalah cerita untuk lain waktu.<a href="arrays.html#fnref54" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn55"><p>Karena di balik layar array hanyalah pointer ke elemen pertama array, tidak ada informasi tambahan yang mencatat panjangnya.<a href="arrays.html#fnref55" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn56"><p>Karena ketika sebuah array dioper ke fungsi, yang sebenarnya dioper hanyalah pointer ke elemen pertama array itu, bukan “seluruh” array.<a href="arrays.html#fnref56" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn57"><p>Pada masa MS-DOS dulu, sebelum ada proteksi memori, penulis pernah menulis kode C yang sangat kasar dan sengaja melakukan segala macam undefined behavior. Tapi penulis tahu apa yang dilakukan, dan semuanya berjalan cukup lancar. Sampai suatu langkah keliru menyebabkan komputer hang dan, seperti yang ketahuan saat reboot, menghapus semua pengaturan BIOS. Seru sekali. (Salam untuk <span class="citation" data-cites="man">@man</span> atas masa-masa seru itu.)<a href="arrays.html#fnref57" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn58"><p>Banyak hal yang menyebabkan undefined behavior, bukan hanya akses array di luar batas. Inilah yang membuat bahasa C begitu <em>menarik</em>.<a href="arrays.html#fnref58" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn59"><p>https://en.wikipedia.org/wiki/Row-_and_column-major_order<a href="arrays.html#fnref59" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn60"><p>Ini secara teknis tidak tepat, karena pointer ke array dan pointer ke elemen pertama array punya tipe yang berbeda. Tapi soal itu kita urus nanti saat sudah sampai.<a href="arrays.html#fnref60" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn61"><p>C11 §6.7.6.2¶1 mensyaratkan angkanya lebih besar dari nol. Tapi kamu mungkin menemukan kode yang mendeklarasikan array berukuran nol di akhir <code>struct</code>, dan GCC cukup longgar soal ini kecuali kamu mengompilasi dengan <code>-pedantic</code>. Array berukuran nol ini dulu adalah mekanisme akal-akalan untuk membuat struktur dengan ukuran variabel. Sayangnya, secara teknis mengakses array seperti itu adalah undefined behavior, meskipun di mana-mana praktis berfungsi. C99 menetapkan pengganti yang terdefinisi dengan baik, yang disebut <em>flexible array member</em>, dan akan kita bahas nanti.<a href="arrays.html#fnref61" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn62"><p>Ini juga setara: <code>void print_2D_array(int (*a)[3])</code>, tapi itu sudah melebihi yang ingin dibahas sekarang.<a href="arrays.html#fnref62" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn63"><p>Walaupun memang benar bahwa C tidak mencatat panjang string.<a href="strings.html#fnref63" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn64"><p>Kalau kamu memakai character set dasar atau character set 8-bit, kamu terbiasa dengan satu karakter sama dengan satu byte. Tapi itu tidak berlaku di semua character encoding.<a href="strings.html#fnref64" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn65"><p>Ini berbeda dari pointer <code>NULL</code>, dan penulis menyingkatnya <code>NUL</code> kalau membicarakan karakternya dan <code>NULL</code> untuk pointer-nya.<a href="strings.html#fnref65" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn66"><p>Nanti kita akan belajar cara yang lebih rapi dengan pointer arithmetic.<a href="strings.html#fnref66" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn67"><p>Ada fungsi lain bernama <code>strncpy()</code> yang membatasi jumlah byte yang disalin. Sebagian orang bilang kamu harus selalu memakai <code>strncpy()</code> karena ada perlindungan dari buffer overrun. Sebagian lain bilang jangan pernah memakai <code>strncpy()</code> karena ia belum tentu mengakhiri string-mu, footgun mengerikan lainnya. Kalau mau benar-benar aman, kamu bisa menulis versi <code>strncpy()</code> sendiri yang selalu mengakhiri string.<a href="strings.html#fnref67" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn68"><p>Walaupun di C setiap item di memori seperti <code>int</code> disebut “object”, itu bukan object dalam arti pemrograman berorientasi objek.<a href="structs.html#fnref68" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn69"><p>Saturn dulu adalah merek mobil ekonomi yang populer di Amerika Serikat, sampai akhirnya gulung tikar akibat krisis 2008, sayangnya bagi kami para penggemarnya.<a href="structs.html#fnref69" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn70"><p>Pointer kemungkinan berukuran 8 byte di sistem 64-bit.<a href="structs.html#fnref70" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn71"><p><em>Deep copy</em> mengikuti pointer di dalam <code>struct</code> dan ikut menyalin data yang ditunjuknya. <em>Shallow copy</em> hanya menyalin pointer-nya, bukan hal yang ditunjuk. C tidak punya fungsionalitas deep copy bawaan.<a href="structs.html#fnref71" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn72"><p>https://beej.us/guide/bgclr/html/split/stringref.html#man-strcmp<a href="structs.html#fnref72" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn73"><p>https://beej.us/guide/bgclr/html/split/stringref.html#man-memset<a href="structs.html#fnref73" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn74"><p>https://stackoverflow.com/questions/141720/how-do-you-compare-structs-for-equality-in-c<a href="structs.html#fnref74" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn75"><p>Dulu ada tiga jenis newline yang berlaku luas: Carriage Return (CR, dipakai Mac lama), Linefeed (LF, dipakai sistem Unix), dan Carriage Return/Linefeed (CRLF, dipakai sistem Windows). Untungnya kehadiran OS X, yang berbasis Unix, mengurangi jumlah ini menjadi dua.<a href="inputoutput-file.html#fnref75" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn76"><p>Kalau buffer tidak cukup besar untuk membaca satu baris penuh, ia akan berhenti membaca di tengah baris, dan pemanggilan <code>fgets()</code> berikutnya akan melanjutkan sisa barisnya.<a href="inputoutput-file.html#fnref76" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn77"><p>Biasanya program kedua akan membaca semua byte sekaligus, lalu <em>baru kemudian</em> mencetaknya dalam loop. Itu lebih efisien. Tapi di sini kita mengejar nilai demonstrasi.<a href="inputoutput-file.html#fnref77" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn78"><p>https://en.wikipedia.org/wiki/Hex_dump<a href="inputoutput-file.html#fnref78" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn79"><p>https://en.wikipedia.org/wiki/Endianess<a href="inputoutput-file.html#fnref79" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn80"><p>Dan inilah alasan penulis dengan cerdik memakai byte individual pada contoh <code>fwrite()</code> dan <code>fread()</code> di atas.<a href="inputoutput-file.html#fnref80" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn81"><p>https://en.wikipedia.org/wiki/Protocol_buffers<a href="inputoutput-file.html#fnref81" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn82"><p>Soal ini dibahas lebih lanjut nanti.<a href="typedef-membuat-tipe-baru.html#fnref82" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn83"><p>Ingat, operator <code>sizeof</code> memberi tahu ukuran sebuah object di memori dalam byte.<a href="pointers2.html#fnref83" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn84"><p>Atau string, yang sebenarnya array berisi <code>char</code>. Agak aneh, kamu juga boleh punya pointer yang merujuk ke <em>satu elemen setelah</em> ujung array tanpa masalah dan tetap bisa menghitungnya. Hanya saja, pointer itu tidak boleh di-dereference selagi berada di sana.<a href="pointers2.html#fnref84" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn85"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-qsort<a href="pointers2.html#fnref85" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn86"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-bsearch<a href="pointers2.html#fnref86" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn87"><p>Karena ingat, notasi array hanyalah dereference ditambah sedikit aritmetika pointer, dan <code>void*</code> tidak bisa di-dereference!<a href="pointers2.html#fnref87" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn88"><p>Kamu juga bisa melakukan <em>cast</em> pada <code>void*</code> ke tipe lain, tapi kita belum sampai ke cast.<a href="pointers2.html#fnref88" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn89"><p>Atau sampai program berakhir, dan saat itu semua memori yang dialokasikannya dibebaskan. Tanda bintang: beberapa sistem mengizinkan kamu mengalokasikan memori yang bertahan setelah program berakhir, tapi itu bergantung pada sistem, di luar cakupan panduan ini, dan kamu pasti tidak akan melakukannya secara tidak sengaja.<a href="alokasi-memori-manual.html#fnref89" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn90"><p>http://www.open-std.org/jtc1/sc22/wg14/www/docs/summary.htm#dr_460<a href="alokasi-memori-manual.html#fnref90" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn91"><p>https://en.wikipedia.org/wiki/Bit_bucket<a href="scope.html#fnref91" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn92"><p>“Bit” kependekan dari <em>binary digit</em>. Biner hanyalah cara lain merepresentasikan angka. Alih-alih digit 0-9 yang biasa kita pakai, digitnya hanya 0-1.<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref92" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn93"><p>https://en.wikipedia.org/wiki/Two%27s_complement<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref93" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn94"><p>Istilah industri untuk deretan yang tepat dan pasti 8 bit adalah <em>oktet</em>.<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref94" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn95"><p>Secara umum, kalau ada bilangan two’s complement <span class="math inline">\(n\)</span> bit, rentang signed-nya adalah <span class="math inline">\(-2^{n-1}\)</span> sampai <span class="math inline">\(2^{n-1}-1\)</span>. Dan rentang unsigned-nya adalah <span class="math inline">\(0\)</span> sampai <span class="math inline">\(2^n-1\)</span>.<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref95" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn96"><p>https://en.wikipedia.org/wiki/ASCII<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref96" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn97"><p>https://en.wikipedia.org/wiki/List_of_information_system_character_sets<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref97" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn98"><p>https://en.wikipedia.org/wiki/Unicode<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref98" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn99"><p>Tergantung apakah <code>char</code> secara bawaan berupa <code>signed char</code> atau <code>unsigned char</code><a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref99" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn100"><p>https://en.wikipedia.org/wiki/Signed_number_representations#Signed_magnitude_representation<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref100" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn101"><p><code>char</code> di sistemku adalah signed.<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref101" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn102"><p>https://en.wikipedia.org/wiki/IEEE_754<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref102" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn103"><p>Program ini berjalan sesuai komentarnya pada sistem dengan <code>FLT_DIG</code> bernilai <code>6</code> yang memakai bilangan floating point IEEE-754 basis-2. Kalau tidak, hasilnya mungkin berbeda.<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref103" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn104"><p>Aku sungguh heran C belum memasukkan ini ke spesifikasi. Di dokumen C99 Rationale, tertulis, “A proposal to add binary constants was rejected due to lack of precedent and insufficient utility.” Padahal itu terdengar agak konyol, mengingat fitur-fitur lain yang dijejalkan ke sana! Aku berani taruhan salah satu rilis berikutnya akan memilikinya.<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref104" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn105"><p>https://en.wikipedia.org/wiki/Scientific_notation<a href="tipe-ii-jauh-lebih-banyak-tipe.html#fnref105" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn106"><p>Keduanya sama, kecuali <code>snprintf()</code> memungkinkan kita menentukan jumlah byte maksimum yang ditulis, sehingga mencegah kelebihan menulis melewati ujung string. Jadi lebih aman.<a href="tipe-iii-konversi.html#fnref106" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn107"><p>https://en.wikipedia.org/wiki/ASCII<a href="tipe-iii-konversi.html#fnref107" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn108"><p>Kita harus mengoper pointer ke <code>badchar</code> ke <code>strtoul()</code>, kalau tidak ia tidak akan bisa mengubahnya dengan cara yang terlihat oleh kita, sama seperti alasan kenapa kamu harus mengoper pointer ke <code>int</code> ke fungsi kalau ingin fungsi itu bisa mengubah nilai <code>int</code> itu.<a href="tipe-iii-konversi.html#fnref108" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn109"><p>Setiap karakter punya nilai yang terkait dengannya pada skema character encoding mana pun.<a href="tipe-iii-konversi.html#fnref109" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn110"><p>Dalam praktiknya, implementasimu kemungkinan cuma membuang bit-bit orde tinggi dari hasil, jadi angka 16-bit <code>0x1234</code> yang dikonversi menjadi angka 8-bit berakhir sebagai <code>0x0034</code>, atau cukup <code>0x34</code>.<a href="tipe-iii-konversi.html#fnref110" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn111"><p>Lagi-lagi, dalam praktiknya, di sistemmu kemungkinan pola bit angka aslinya dipotong lalu dipakai begitu saja untuk merepresentasikan angka signed, two’s complement. Misalnya, sistemku mengambil <code>unsigned char</code> <code>192</code> dan mengonversinya menjadi <code>signed char</code> <code>-64</code>. Dalam two’s complement, pola bit kedua angka ini adalah biner <code>11000000</code>.<a href="tipe-iii-konversi.html#fnref111" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn112"><p>Sebenarnya tidak—cuma dibuang seperti biasa.<a href="tipe-iii-konversi.html#fnref112" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn113"><p>Fungsi dengan jumlah argumen yang bervariasi.<a href="tipe-iii-konversi.html#fnref113" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn114"><p>Ini jarang dilakukan karena compiler akan protes dan punya prototype adalah <em>Hal yang Benar</em>. Kurasa ini masih berfungsi karena alasan historis, sebelum prototype ada.<a href="tipe-iii-konversi.html#fnref114" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn115"><p>https://beej.us/guide/bgclr/html/split/ctype.html<a href="tipe-iii-konversi.html#fnref115" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn116"><p>https://gustedt.wordpress.com/2010/08/17/a-common-misconsception-the-register-keyword/<a href="tipe-iv-qualifier-dan-specifier.html#fnref116" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn117"><p>https://en.wikipedia.org/wiki/Processor_register<a href="tipe-iv-qualifier-dan-specifier.html#fnref117" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn118"><p>https://en.wikipedia.org/wiki/Boids<a href="proyek-multifile.html#fnref118" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn119"><p>Secara historis, program MS-DOS dan Windows melakukan ini secara berbeda dari Unix. Di Unix, shell akan <em>memperluas</em> wildcard menjadi semua file yang cocok sebelum programmu melihatnya, sedangkan varian Microsoft mengoper ekspresi wildcard itu ke program untuk ditangani sendiri. Bagaimanapun juga, ada argumen yang dioper ke program.<a href="lingkungan-di-luar-program.html#fnref119" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn120"><p>Karena keduanya hanya nama parameter biasa, kamu sebenarnya tidak harus menamainya <code>argc</code> dan <code>argv</code>. Tapi nama-nama itu begitu idiomatis, sehingga kalau kamu kreatif, programmer C lain pasti akan menatapmu dengan curiga!<a href="lingkungan-di-luar-program.html#fnref120" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn121"><p><code>ps</code>, Process Status, adalah perintah Unix untuk melihat proses apa saja yang sedang berjalan.<a href="lingkungan-di-luar-program.html#fnref121" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn122"><p>https://en.wikipedia.org/wiki/Inception<a href="lingkungan-di-luar-program.html#fnref122" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn123"><p>https://en.wikipedia.org/wiki/Shell_(computing)<a href="lingkungan-di-luar-program.html#fnref123" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn124"><p>Di Windows <code>cmd.exe</code>, ketik <code>echo %errorlevel%</code>. Di PowerShell, ketik <code>$LastExitCode</code>.<a href="lingkungan-di-luar-program.html#fnref124" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn125"><p>Kalau kamu butuh nilai numerik, konversikan string itu dengan sesuatu seperti <code>atoi()</code> atau <code>strtol()</code>.<a href="lingkungan-di-luar-program.html#fnref125" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn126"><p>Di Windows CMD.EXE, pakai <code>set FROTZ=value</code>. Di PowerShell, pakai <code>$Env:FROTZ=value</code>.<a href="lingkungan-di-luar-program.html#fnref126" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn127"><p>https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html<a href="lingkungan-di-luar-program.html#fnref127" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn128"><p>Kamu tidak selalu bisa langsung membungkus kode dengan komentar <code>/*</code> <code>*/</code> karena komentar itu tidak bisa bersarang.<a href="c-preprocessor.html#fnref128" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn129"><p>Ini sebenarnya bukan makro—secara teknis ia identifier. Tapi ia satu-satunya identifier bawaan dan terasa sangat seperti makro, jadi kumasukkan di sini. Seperti pemberontak.<a href="c-preprocessor.html#fnref129" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn130"><p>Hosted implementation pada dasarnya berarti kamu menjalankan standar C yang lengkap, kemungkinan di atas semacam sistem operasi. Dan kemungkinan besar memang begitu keadaanmu. Kalau kamu berjalan di bare metal pada semacam embedded system, kemungkinan kamu memakai <em>standalone implementation</em>.<a href="c-preprocessor.html#fnref130" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn131"><p>Oke, aku tahu itu jawaban yang mengelak. Pada dasarnya ada ekstensi opsional yang bisa diimplementasikan compiler, yaitu mereka setuju membatasi jenis undefined behavior tertentu supaya kode C lebih mudah dianalisis secara statis. Kecil kemungkinan kamu perlu memakainya.<a href="c-preprocessor.html#fnref131" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn132"><p><em>Breakin’ the law… breakin’ the law…</em><a href="c-preprocessor.html#fnref132" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn133"><p>https://www.openmp.org/<a href="c-preprocessor.html#fnref133" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn134"><p>Secara teknis kita bilang ia punya <em>incomplete type</em>.<a href="struct-ii-lebih-seru-dengan-struct.html#fnref134" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn135"><p>Walaupun beberapa compiler punya opsi untuk memaksa hal itu terjadi—cari <code>__attribute__((packed))</code> untuk melihat caranya di GCC.<a href="struct-ii-lebih-seru-dengan-struct.html#fnref135" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn136"><p>Omong-omong, <code>super</code> bukan kata kunci. Aku cuma meminjam sedikit terminologi OOP.<a href="struct-ii-lebih-seru-dengan-struct.html#fnref136" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn137"><p>Dengan asumsi <code>char</code> 8-bit, yaitu <code>CHAR_BIT == 8</code>.<a href="struct-ii-lebih-seru-dengan-struct.html#fnref137" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn138"><p>https://en.wikipedia.org/wiki/Type_punning<a href="struct-ii-lebih-seru-dengan-struct.html#fnref138" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn139"><p>Angka itu kukarang sendiri, tapi kemungkinan tidak jauh meleset<a href="karakter-dan-string-ii.html#fnref139" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn140"><p>Ada setan di detailnya untuk nilai yang hanya disimpan di register, tapi untuk keperluan kita di sini, hal itu aman untuk diabaikan. Lagi pula spesifikasi C tidak mengambil sikap soal “register” ini di luar kata kunci <code>register</code>, yang deskripsinya tidak menyebut register.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref140" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn141"><p>Kemungkinan besar angka di komputermu berbeda.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref141" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn142"><p>Sama sekali tidak ada di spesifikasi yang mengatakan ini akan selalu begini, tapi kebetulan di sistemku begitu.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref142" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn143"><p>Bahkan kalau <code>E</code> adalah <code>NULL</code>, ternyata, anehnya.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref143" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn144"><p>https://beej.us/guide/bgclr/html/split/stringref.html#man-memcpy<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref144" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn145"><p>C compiler-mu tidak wajib menambahkan padding byte, dan nilai padding byte yang ditambahkan itu tak tentu.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref145" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn146"><p>Ini bervariasi tergantung arsitektur, tapi sistemku <em>little endian</em>, artinya byte paling tidak signifikan dari angka disimpan lebih dulu. Sistem <em>big endian</em> akan punya <code>12</code> di depan dan <code>78</code> di belakang. Tapi spesifikasi tidak menentukan apa pun soal representasi ini.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref146" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn147"><p>Ini fitur opsional, jadi mungkin tidak ada—tapi kemungkinan besar ada.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref147" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn148"><p>Aku mencetak nilai 16-bit secara terbalik karena aku memakai mesin little-endian dan ini membuatnya lebih mudah dibaca di sini.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref148" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn149"><p>Dengan asumsi keduanya menunjuk ke object array yang sama.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref149" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn150"><p>Bahasa Pemrograman Go mengambil inspirasi sintaks deklarasi tipenya dari kebalikan dari yang dilakukan C.<a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#fnref150" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn151"><p>Bukan berarti bahasa lain tidak melakukannya—mereka melakukannya. Menarik betapa banyak bahasa modern memakai operator yang sama dengan C untuk bitwise.<a href="operasi-bitwise.html#fnref151" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn152"><p>https://en.wikipedia.org/wiki/Bitwise_operation<a href="operasi-bitwise.html#fnref152" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn153"><p>Maksudnya, kita para developer rendahan tidak seharusnya tahu apa isinya atau artinya. Spesifikasi tidak menentukan secara rinci apa itu.<a href="fungsi-variadic.html#fnref153" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn154"><p>Jujur saja, batasan itu sebenarnya bisa dihapus dari bahasa, tapi idenya adalah makro <code>va_start()</code>, <code>va_arg()</code>, dan <code>va_end()</code> harus bisa ditulis dalam C. Dan supaya itu terwujud, kita butuh cara untuk menginisialisasi pointer ke lokasi parameter pertama. Dan untuk itu, kita butuh <em>nama</em> parameter pertama. Itu akan butuh ekstensi bahasa untuk dimungkinkan, dan sejauh ini komite belum menemukan alasan untuk melakukannya.<a href="fungsi-variadic.html#fnref154" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn155"><p>“This planet has—or rather had—a problem, which was this: most of the people living on it were unhappy for pretty much of the time. Many solutions were suggested for this problem, but most of these were largely concerned with the movement of small green pieces of paper, which was odd because on the whole it wasn’t the small green pieces of paper that were unhappy.” —The Hitchhiker’s Guide to the Galaxy, Douglas Adams<a href="locale-dan-internasionalisasi.html#fnref155" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn156"><p>Ingat bahwa <code>char</code> hanyalah integer seukuran byte.<a href="locale-dan-internasionalisasi.html#fnref156" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn157"><p>Kecuali <code>isdigit()</code> dan <code>isxdigit()</code>.<a href="locale-dan-internasionalisasi.html#fnref157" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn158"><p>Misalnya, kita bisa menyimpan code point dalam integer 32-bit big-endian. Mudah! Kita baru saja menciptakan sebuah encoding! Sebenarnya tidak; itulah yang disebut encoding UTF-32BE. Ya sudahlah—kembali bekerja!<a href="unicode-wide-character-dan-semacamnya.html#fnref158" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn159"><p>Kurang lebih. Secara teknis, lebarnya bervariasi—ada cara untuk merepresentasikan code point yang lebih tinggi dari <span class="math inline">\(2^{16}\)</span> dengan menggabungkan dua karakter UTF-16.<a href="unicode-wide-character-dan-semacamnya.html#fnref159" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn160"><p>Ada karakter khusus bernama <em>Byte Order Mark</em> (BOM), code point 0xFEFF, yang boleh mendahului aliran data dan menandakan endianess-nya. Tapi ini tidak wajib.<a href="unicode-wide-character-dan-semacamnya.html#fnref160" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn161"><p>Sekali lagi, ini hanya benar di UTF-16 untuk karakter yang muat dalam dua byte.<a href="unicode-wide-character-dan-semacamnya.html#fnref161" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn162"><p>https://en.wikipedia.org/wiki/UTF-8<a href="unicode-wide-character-dan-semacamnya.html#fnref162" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn163"><p>https://www.youtube.com/watch?v=MijmeoH9LT4<a href="unicode-wide-character-dan-semacamnya.html#fnref163" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn164"><p>Mungkin compiler berusaha sebaik mungkin menerjemahkan code point ke encoding output apa pun itu, tapi aku tidak menemukan jaminannya di spesifikasi.<a href="unicode-wide-character-dan-semacamnya.html#fnref164" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn165"><p>Dengan format specifier seperti <code>"%.12s"</code>, misalnya.<a href="unicode-wide-character-dan-semacamnya.html#fnref165" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn166"><p><code>wcscoll()</code> sama dengan <code>wcsxfrm()</code> diikuti <code>wcscmp()</code>.<a href="unicode-wide-character-dan-semacamnya.html#fnref166" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn167"><p>Kurang lebih—urusannya jadi aneh pada encoding UTF-16 dengan beberapa <code>char16_t</code>.<a href="unicode-wide-character-dan-semacamnya.html#fnref167" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn168"><p>https://en.wikipedia.org/wiki/Iconv<a href="unicode-wide-character-dan-semacamnya.html#fnref168" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn169"><p>http://site.icu-project.org/<a href="unicode-wide-character-dan-semacamnya.html#fnref169" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn170"><p>https://en.wikipedia.org/wiki/Core_dump<a href="keluar-dari-program.html#fnref170" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn171"><p>Tampaknya jauh di dalamnya Windows sama sekali tidak mengenal signal ala Unix, dan untuk aplikasi konsol signal itu disimulasikan.<a href="penanganan-signal.html#fnref171" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn172"><p>Membingungkan, <code>sig_atomic_t</code> lebih tua daripada atomic lock-free dan tidak sama dengannya.<a href="penanganan-signal.html#fnref172" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn173"><p>Kalau <code>sig_action_t</code> signed, rentangnya setidaknya <code>-127</code> sampai <code>127</code>. Kalau unsigned, setidaknya <code>0</code> sampai <code>255</code>.<a href="penanganan-signal.html#fnref173" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn174"><p>Ini karena VLA biasanya dialokasikan di stack, sedangkan variabel <code>static</code> ada di heap. Dan seluruh gagasan VLA adalah mereka otomatis didealokasikan saat stack frame di-pop di akhir fungsi.<a href="variable-length-array-vla.html#fnref174" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn175"><p>https://en.wikipedia.org/wiki/Goto#Criticism<a href="goto.html#fnref175" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn176"><p>Aku ingin menunjukkan bahwa memakai <code>goto</code> pada semua kasus ini bisa dihindari. Kamu bisa memakai variabel dan loop sebagai gantinya. Hanya saja sebagian orang menganggap <code>goto</code> menghasilkan kode <em>terbaik</em> pada keadaan-keadaan itu.<a href="goto.html#fnref176" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn177"><p>https://en.wikipedia.org/wiki/Tail_call<a href="goto.html#fnref177" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn178"><p>Yang tidak persis sama, karena ia array, bukan pointer ke <code>int</code>.<a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#fnref178" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn179"><p>Variabel yang dipakai di sini <em>adalah</em> ekspresi.<a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#fnref179" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn180"><p>Baik “stack pointer” maupun “program counter” terkait dengan arsitektur dan implementasi C di bawahnya, dan bukan bagian dari spesifikasi.<a href="setjmp-longjmp.html#fnref180" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn181"><p>Alasannya, program mungkin menyimpan nilai sementara di <em>register CPU</em> saat mengerjakannya. Pada rentang waktu itu, register menyimpan nilai yang benar, dan nilai di stack mungkin sudah usang. Lalu nanti nilai register akan tertimpa dan perubahan pada variabel itu hilang.<a href="setjmp-longjmp.html#fnref181" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn182"><p>Artinya, tetap teralokasi sampai program berakhir tanpa cara untuk membebaskannya.<a href="setjmp-longjmp.html#fnref182" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn183"><p>Ini bisa karena di C, pointer berukuran sama apa pun tipe data yang ditunjuknya. Jadi compiler tidak perlu tahu ukuran <code>struct node</code> pada titik ini; ia hanya perlu tahu ukuran pointer.<a href="incomplete-type.html#fnref183" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn184"><p>https://en.wikipedia.org/wiki/Complex_number<a href="bilangan-kompleks.html#fnref184" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn185"><p>Yang satu ini lebih sulit diriset, dan aku menerima informasi tambahan dari siapa pun. <code>I</code> bisa didefinisikan sebagai <code>_Complex_I</code> atau <code>_Imaginary_I</code>, kalau yang terakhir ada. <code>_Imaginary_I</code> akan menangani nol bertanda, tapi <code>_Complex_I</code> <em>mungkin</em> tidak. Ini punya implikasi pada branch cut dan hal-hal lain yang berbau matematika-kompleks. Mungkin. Kelihatan kan aku mulai keluar dari zona nyamanku? Bagaimanapun, makro <code>CMPLX()</code> berperilaku seolah-olah <code>I</code> didefinisikan sebagai <code>_Imaginary_I</code>, dengan nol bertanda, bahkan kalau <code>_Imaginary_I</code> tidak ada di sistem.<a href="bilangan-kompleks.html#fnref185" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn186"><p>Kesederhanaan pernyataan ini tidak mencerminkan besarnya upaya yang dibutuhkan hanya untuk memahami bagaimana floating point sebenarnya bekerja. https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/<a href="bilangan-kompleks.html#fnref186" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn187"><p>Ini satu-satunya yang tidak diawali <code>c</code> tambahan, anehnya.<a href="bilangan-kompleks.html#fnref187" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn188"><p>Beberapa arsitektur punya data berukuran berbeda yang bisa diolah CPU dan RAM dengan laju lebih cepat daripada yang lain. Dalam kasus itu, kalau kamu butuh angka 8-bit tercepat, mungkin yang diberikan adalah tipe 16- atau 32-bit karena itu memang lebih cepat. Jadi dengan ini, kamu tidak akan tahu seberapa besar tipenya, tapi ukurannya setidaknya sebesar yang kamu sebutkan.<a href="tipe-integer-berlebar-tetap.html#fnref188" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn189"><p>Yaitu, sistem punya integer 8, 16, 32, atau 64 bit tanpa padding yang memakai representasi two’s complement, dan dalam kasus itu varian <code>intN_t</code> untuk jumlah bit tersebut <em>harus</em> didefinisikan.<a href="tipe-integer-berlebar-tetap.html#fnref189" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn190"><p>Di Bumi, setidaknya. Siapa tahu sistem gila apa yang dipakai <em>di luar sana</em>…<a href="fungsionalitas-tanggal-dan-waktu.html#fnref190" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn191"><p>Oke, jangan hajar aku! GMT secara teknis adalah zona waktu, sedangkan UTC adalah sistem waktu global. Selain itu beberapa negara mungkin menyesuaikan GMT untuk daylight saving time, sedangkan UTC tidak pernah disesuaikan untuk daylight saving time.<a href="fungsionalitas-tanggal-dan-waktu.html#fnref191" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn192"><p>Harus diakui, ada lebih dari dua.<a href="fungsionalitas-tanggal-dan-waktu.html#fnref192" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn193"><p>https://en.wikipedia.org/wiki/Unix_time<a href="fungsionalitas-tanggal-dan-waktu.html#fnref193" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn194"><p>https://beej.us/guide/bgclr/html/split/time.html#man-strftime<a href="fungsionalitas-tanggal-dan-waktu.html#fnref194" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn195"><p>Di POSIX bisa, karena <code>time_t</code> jelas integer. Sayangnya seluruh dunia bukan POSIX, jadi begitulah.<a href="fungsionalitas-tanggal-dan-waktu.html#fnref195" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn196"><p>https://en.wikipedia.org/wiki/POSIX_Threads<a href="multithreading.html#fnref196" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn197"><p>Aku sendiri lebih suka shared-nothing, dan kemampuanku dengan konstruksi multithreading klasik berkarat, paling tidak begitu.<a href="multithreading.html#fnref197" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn198"><p>Ya, <code>pthreads</code> dengan “<code>p</code>”. Itu singkatan POSIX threads, library yang banyak dipinjam C11 untuk implementasi thread-nya.<a href="multithreading.html#fnref198" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn199"><p>Menurut §7.1.4¶5.<a href="multithreading.html#fnref199" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn200"><p>Kecuali kamu <code>thrd_detach()</code>. Soal ini dibahas nanti.<a href="multithreading.html#fnref200" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn201"><p>Walaupun kurasa tidak harus begitu. Hanya saja thread tampaknya tidak dijadwalkan ulang sampai ada semacam system call, seperti yang mungkin terjadi pada <code>printf()</code>… itulah kenapa ada <code>printf()</code> di situ.<a href="multithreading.html#fnref201" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn202"><p>Singkatan “mutual exclusion”, alias “lock” pada bagian kode yang hanya boleh dieksekusi satu thread.<a href="multithreading.html#fnref202" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn203"><p>Artinya, prosesmu akan tidur.<a href="multithreading.html#fnref203" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn204"><p>Mungkin kamu mengira itu “waktu dari sekarang”, tapi kamu pasti ingin berpikir begitu, kan!<a href="multithreading.html#fnref204" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn205"><p>Dan itulah kenapa mereka disebut <em>condition variable</em>!<a href="multithreading.html#fnref205" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn206"><p>Aku tidak bilang ini ulah alien… tapi ini ulah alien. Oke, sebenarnya lebih mungkin thread lain sudah terbangun dan sampai ke pekerjaannya lebih dulu.<a href="multithreading.html#fnref206" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn207"><p>Yang kuat yang bertahan! Benar? Harus diakui ini sebenarnya sama sekali tidak seperti itu.<a href="multithreading.html#fnref207" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn208"><p>Makro <code>__STDC_VERSION__</code> tidak ada di C89 awal, jadi kalau kamu khawatir soal itu, periksa dengan <code>#ifdef</code>.<a href="chapter-atomics.html#fnref208" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn209"><p>Alasannya, saat dioptimasi, compilerku menaruh nilai <code>x</code> di register agar loop <code>while</code> cepat. Tapi register tidak punya cara untuk tahu bahwa variabel diperbarui di thread lain, jadi ia tidak pernah melihat <code>3490</code>. Ini sebenarnya tidak terkait dengan bagian <em>semua-atau-tidak-sama-sekali</em> dari atomicity, tapi lebih terkait dengan aspek sinkronisasi di bagian berikutnya.<a href="chapter-atomics.html#fnref209" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn210"><p>Sampai kukatakan lain, aku berbicara secara umum tentang operasi <em>sequentially consistent</em>. Soal artinya dibahas sebentar lagi.<a href="chapter-atomics.html#fnref210" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn211"><p>Paling waras dari sudut pandang programmer.<a href="chapter-atomics.html#fnref211" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn212"><p>Tampaknya C++23 menambahkan ini sebagai makro.<a href="chapter-atomics.html#fnref212" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn213"><p>Spesifikasi mencatat bahwa keduanya mungkin berbeda dalam ukuran, representasi, dan alignment.<a href="chapter-atomics.html#fnref213" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn214"><p>Aku mengarang contoh itu begitu saja. Mungkin tidak berpengaruh di Intel/AMD, tapi bisa berpengaruh di suatu tempat, astaga!<a href="chapter-atomics.html#fnref214" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn215"><p>C++ menjelaskan bahwa kalau signal adalah hasil pemanggilan <code>raise()</code>, ia disekuensikan <em>setelah</em> <code>raise()</code>.<a href="chapter-atomics.html#fnref215" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn216"><p>https://en.wikipedia.org/wiki/Test-and-set<a href="chapter-atomics.html#fnref216" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn217"><p>Karena consume sepenuhnya tentang operasi yang bergantung pada nilai variabel atomic yang di-acquire, dan tidak ada variabel atomic pada fence.<a href="chapter-atomics.html#fnref217" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn218"><p>https://www.youtube.com/watch?v=A8eCGOqgvH4<a href="chapter-atomics.html#fnref218" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn219"><p>https://www.youtube.com/watch?v=KeLBd2EJLOU<a href="chapter-atomics.html#fnref219" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn220"><p>https://preshing.com/archives/<a href="chapter-atomics.html#fnref220" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn221"><p>https://preshing.com/20120612/an-introduction-to-lock-free-programming/<a href="chapter-atomics.html#fnref221" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn222"><p>https://preshing.com/20120913/acquire-and-release-semantics/<a href="chapter-atomics.html#fnref222" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn223"><p>https://preshing.com/20130702/the-happens-before-relation/<a href="chapter-atomics.html#fnref223" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn224"><p>https://preshing.com/20130823/the-synchronizes-with-relation/<a href="chapter-atomics.html#fnref224" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn225"><p>https://preshing.com/20140709/the-purpose-of-memory_order_consume-in-cpp11/<a href="chapter-atomics.html#fnref225" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn226"><p>https://preshing.com/20150402/you-can-do-any-kind-of-atomic-read-modify-write-operation/<a href="chapter-atomics.html#fnref226" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn227"><p>https://en.cppreference.com/w/c/atomic/memory_order<a href="chapter-atomics.html#fnref227" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn228"><p>https://en.cppreference.com/w/c/language/atomic<a href="chapter-atomics.html#fnref228" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn229"><p>https://docs.microsoft.com/en-us/windows/win32/dxtecharts/lockless-programming<a href="chapter-atomics.html#fnref229" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn230"><p>https://www.reddit.com/r/C_Programming/<a href="chapter-atomics.html#fnref230" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn231"><p>Kecuali kamu mengompilasi dengan optimasi aktif (kemungkinan)! Tapi kurasa, ketika itu terjadi, perilakunya tidak sesuai spesifikasi.<a href="function-specifier-alignment-specifier-dan-operator.html#fnref231" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn232"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-exit<a href="function-specifier-alignment-specifier-dan-operator.html#fnref232" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn233"><p>https://beej.us/guide/bgclr/html/split/stdlib.html#man-abort<a href="function-specifier-alignment-specifier-dan-operator.html#fnref233" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn234"><p>https://en.wikipedia.org/wiki/Data_structure_alignment<a href="function-specifier-alignment-specifier-dan-operator.html#fnref234" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+</body>
+<hr><div style="text-align:center"><span><a href="chapter-atomics.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span style="visibility: hidden"> | <a href="" rel="next">Next</a></span></div></body>
+</html>

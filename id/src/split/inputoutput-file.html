@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="structs.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="typedef-membuat-tipe-baru.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="9" id="inputoutput-file"><span class="header-section-number">9</span> Input/Output File</h1>
+<p> Kita sudah melihat beberapa contoh I/O dengan <code>printf()</code> untuk melakukan I/O di konsol.</p>
+<p>Tapi di bab ini kita akan mendorong konsep-konsep itu sedikit lebih jauh.</p>
+<h2 data-number="9.1" id="tipe-data-file"><span class="header-section-number">9.1</span> Tipe Data <code>FILE*</code></h2>
+<p> Setiap kali kita melakukan I/O apa pun di C, kita melakukannya lewat sepotong data yang kita dapat dalam bentuk tipe <code>FILE*</code>. <code>FILE*</code> ini menyimpan semua informasi yang dibutuhkan untuk berkomunikasi dengan subsistem I/O tentang file mana yang kamu buka, di mana posisimu dalam file, dan sebagainya.</p>
+<p>Spesifikasi menyebut semua ini <em>stream</em>, yaitu aliran data dari sebuah file atau dari sumber apa pun. Penulis akan memakai “file” dan “stream” secara bergantian, tapi sebenarnya kamu sebaiknya menganggap “file” sebagai kasus khusus dari “stream”. Ada cara lain untuk mengalirkan data ke dalam program selain membaca dari file.</p>
+<p>Sebentar lagi kita akan melihat cara mendapatkan <code>FILE*</code> yang terbuka dari sebuah nama file, tapi pertama-tama perlu disebutkan tiga stream yang sudah terbuka dan siap dipakai.</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Nama <code>FILE*</code></th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stdin</code></td>
+<td>Standard Input, umumnya keyboard secara bawaan</td>
+</tr>
+<tr>
+<td><code>stdout</code></td>
+<td>Standard Output, umumnya layar secara bawaan</td>
+</tr>
+<tr>
+<td><code>stderr</code></td>
+<td>Standard Error, umumnya layar juga secara bawaan</td>
+</tr>
+</tbody>
+</table>
+<p>Ternyata kita sebenarnya sudah memakai ketiganya secara implisit. Misalnya, dua pemanggilan ini sama:</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb143-1"><a href="inputoutput-file.html#cb143-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb143-2"><a href="inputoutput-file.html#cb143-2" aria-hidden="true" tabindex="-1"></a>fprintf<span class="op">(</span>stdout<span class="op">,</span> <span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// printf ke sebuah file</span></span></code></pre></div>
+<p>Tapi soal itu dibahas nanti.</p>
+<p>Kamu juga akan memperhatikan bahwa <code>stdout</code> dan <code>stderr</code> sama-sama menuju layar. Sekilas ini tampak seperti kelalaian atau redundansi, tapi sebenarnya bukan. Sistem operasi pada umumnya memungkinkan kamu <em>mengalihkan</em> output salah satunya ke file yang berbeda, dan memisahkan pesan error dari output biasa yang bukan error bisa sangat praktis.</p>
+<p>Misalnya, di shell POSIX (seperti sh, ksh, bash, zsh, dan sebagainya) pada sistem mirip Unix, kita bisa menjalankan program dan mengirim hanya output non-error (<code>stdout</code>) ke satu file, dan semua output error (<code>stderr</code>) ke file lain.</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb144-1"><a href="inputoutput-file.html#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./foo</span> <span class="op">&gt;</span> output.txt <span class="dv">2</span><span class="op">&gt;</span> errors.txt   <span class="co"># Perintah ini khusus Unix</span></span></code></pre></div>
+<p>Karena alasan ini, kamu sebaiknya mengirim pesan error yang serius ke <code>stderr</code>, bukan <code>stdout</code>. </p>
+<p>Cara melakukannya dibahas lebih lanjut nanti. </p>
+<h2 data-number="9.2" id="membaca-file-teks"><span class="header-section-number">9.2</span> Membaca File Teks</h2>
+<p> Stream sebagian besar dikategorikan dalam dua cara: <em>teks</em> dan <em>biner</em>.</p>
+<p>Stream teks boleh melakukan terjemahan data yang signifikan, terutama penerjemahan newline ke berbagai representasinya<a href="function-specifier-alignment-specifier-dan-operator.html#fn75" class="footnote-ref" id="fnref75" role="doc-noteref"><sup>75</sup></a>. File teks secara logis adalah deretan <em>baris</em> yang dipisahkan newline. Agar portabel, data inputmu sebaiknya selalu diakhiri newline.</p>
+<p>Tapi aturan umumnya: kalau kamu bisa menyunting file itu di text editor biasa, ia file teks. Kalau tidak, ia biner. Soal biner dibahas nanti.</p>
+<p>Jadi mari kita bekerja—bagaimana cara membuka file untuk dibaca, dan mengambil data darinya?</p>
+<p>Kita buat file bernama <code>hello.txt</code> yang isinya hanya ini:</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb145-1"><a href="inputoutput-file.html#cb145-1" aria-hidden="true" tabindex="-1"></a>Hello, world!</span></code></pre></div>
+<p>Lalu kita tulis program untuk membuka file itu, membaca satu karakter darinya, dan menutup file saat selesai. Itulah rencana permainannya!</p>
+<p> </p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb146-1"><a href="inputoutput-file.html#cb146-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb146-2"><a href="inputoutput-file.html#cb146-2" aria-label="2"></a></span>
+<span id="cb146-3"><a href="inputoutput-file.html#cb146-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb146-4"><a href="inputoutput-file.html#cb146-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb146-5"><a href="inputoutput-file.html#cb146-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span>                      <span class="co">// Variabel untuk mewakili file yang terbuka</span></span>
+<span id="cb146-6"><a href="inputoutput-file.html#cb146-6" aria-label="6"></a></span>
+<span id="cb146-7"><a href="inputoutput-file.html#cb146-7" aria-label="7"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;hello.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span>  <span class="co">// Buka file untuk dibaca</span></span>
+<span id="cb146-8"><a href="inputoutput-file.html#cb146-8" aria-label="8"></a></span>
+<span id="cb146-9"><a href="inputoutput-file.html#cb146-9" aria-label="9"></a>    <span class="dt">int</span> c <span class="op">=</span> fgetc<span class="op">(</span>fp<span class="op">);</span>             <span class="co">// Baca satu karakter</span></span>
+<span id="cb146-10"><a href="inputoutput-file.html#cb146-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>             <span class="co">// Cetak karakter ke stdout</span></span>
+<span id="cb146-11"><a href="inputoutput-file.html#cb146-11" aria-label="11"></a></span>
+<span id="cb146-12"><a href="inputoutput-file.html#cb146-12" aria-label="12"></a>    fclose<span class="op">(</span>fp<span class="op">);</span>                    <span class="co">// Tutup file saat selesai</span></span>
+<span id="cb146-13"><a href="inputoutput-file.html#cb146-13" aria-label="13"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat bagaimana saat kita membuka file dengan <code>fopen()</code>, ia mengembalikan <code>FILE*</code> kepada kita supaya bisa dipakai nanti.</p>
+<p>(Pengecekan ini dihilangkan demi keringkasan, tapi <code>fopen()</code> akan mengembalikan <code>NULL</code> kalau ada yang salah, misalnya file tidak ditemukan, jadi kamu seharusnya benar-benar melakukan pengecekan error!)</p>
+<p>Perhatikan juga <code>"r"</code> yang kita oper—ini berarti “buka stream teks untuk dibaca”. (Ada berbagai string yang bisa kita oper ke <code>fopen()</code> dengan makna tambahan, seperti menulis, menambahkan, dan sebagainya.) </p>
+<p>Setelah itu, kita memakai fungsi <code>fgetc()</code> untuk mengambil satu karakter dari stream. Mungkin kamu bertanya-tanya kenapa <code>c</code> dibuat <code>int</code> dan bukan <code>char</code>—tahan dulu pikiran itu! </p>
+<p>Terakhir, kita menutup stream saat selesai memakainya. Semua stream otomatis ditutup saat program keluar, tapi menutup sendiri setiap file yang sudah selesai dipakai itu sopan santun dan kebiasaan rumah tangga yang baik. </p>
+<p><code>FILE*</code> melacak posisi kita di dalam file. Jadi pemanggilan <code>fgetc()</code> berikutnya akan mengambil karakter berikutnya dalam file, lalu berikutnya lagi, sampai akhir.</p>
+<p>Tapi itu terdengar merepotkan. Mari kita lihat apakah bisa dipermudah. </p>
+<h2 data-number="9.3" id="akhir-file-eof"><span class="header-section-number">9.3</span> Akhir File: <code>EOF</code></h2>
+<p> Ada karakter khusus yang didefinisikan sebagai makro: <code>EOF</code>. Inilah yang dikembalikan <code>fgetc()</code> ketika akhir file tercapai dan kamu mencoba membaca karakter lagi.</p>
+<p>Saatnya berbagi Fakta Menarik™ itu. Ternyata <code>EOF</code> adalah alasan kenapa <code>fgetc()</code> dan fungsi sejenisnya mengembalikan <code>int</code> dan bukan <code>char</code>. <code>EOF</code> bukan karakter yang sebenarnya, dan nilainya kemungkinan berada di luar rentang <code>char</code>. Karena <code>fgetc()</code> harus bisa mengembalikan byte apa pun <strong>dan</strong> <code>EOF</code>, ia harus bertipe lebih lebar yang bisa menampung lebih banyak nilai. Jadi dipilihlah <code>int</code>. Tapi kecuali kamu membandingkan nilai kembaliannya dengan <code>EOF</code>, kamu boleh tahu, jauh di dalamnya, ia adalah <code>char</code>.</p>
+<p>Baiklah! Kembali ke dunia nyata! Kita bisa memakai ini untuk membaca seluruh file dalam loop.</p>
+<p> </p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb147-1"><a href="inputoutput-file.html#cb147-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb147-2"><a href="inputoutput-file.html#cb147-2" aria-label="2"></a></span>
+<span id="cb147-3"><a href="inputoutput-file.html#cb147-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb147-4"><a href="inputoutput-file.html#cb147-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb147-5"><a href="inputoutput-file.html#cb147-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span></span>
+<span id="cb147-6"><a href="inputoutput-file.html#cb147-6" aria-label="6"></a>    <span class="dt">int</span> c<span class="op">;</span></span>
+<span id="cb147-7"><a href="inputoutput-file.html#cb147-7" aria-label="7"></a></span>
+<span id="cb147-8"><a href="inputoutput-file.html#cb147-8" aria-label="8"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;hello.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb147-9"><a href="inputoutput-file.html#cb147-9" aria-label="9"></a></span>
+<span id="cb147-10"><a href="inputoutput-file.html#cb147-10" aria-label="10"></a>    <span class="cf">while</span> <span class="op">((</span>c <span class="op">=</span> fgetc<span class="op">(</span>fp<span class="op">))</span> <span class="op">!=</span> EOF<span class="op">)</span></span>
+<span id="cb147-11"><a href="inputoutput-file.html#cb147-11" aria-label="11"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
+<span id="cb147-12"><a href="inputoutput-file.html#cb147-12" aria-label="12"></a></span>
+<span id="cb147-13"><a href="inputoutput-file.html#cb147-13" aria-label="13"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb147-14"><a href="inputoutput-file.html#cb147-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>(Kalau baris 10 terlalu aneh, uraikan saja mulai dari tanda kurung yang paling dalam. Hal pertama yang dilakukan adalah menugaskan hasil <code>fgetc()</code> ke <code>c</code>, dan <em>baru kemudian</em> membandingkan <em>nilai itu</em> dengan <code>EOF</code>. Kita hanya menjejalkannya dalam satu baris. Mungkin kelihatan sulit dibaca, tapi pelajari—ini idiomatis di C.) </p>
+<p>Dan saat dijalankan, kita lihat:</p>
+<div class="sourceCode" id="cb148"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb148-1"><a href="inputoutput-file.html#cb148-1" aria-hidden="true" tabindex="-1"></a>Hello, world!</span></code></pre></div>
+<p>Tapi tetap saja kita bekerja satu karakter demi satu karakter, padahal banyak file teks lebih masuk akal dibaca per baris. Mari beralih ke itu. </p>
+<h3 data-number="9.3.1" id="membaca-satu-baris-sekaligus"><span class="header-section-number">9.3.1</span> Membaca Satu Baris Sekaligus</h3>
+<p> Jadi bagaimana mendapat satu baris utuh sekaligus? <code>fgets()</code> datang menyelamatkan! Sebagai argumen, ia menerima pointer ke buffer <code>char</code> untuk menampung byte, jumlah byte maksimum yang dibaca, dan <code>FILE*</code> tempat membaca. Ia mengembalikan <code>NULL</code> saat end-of-file atau error. <code>fgets()</code> bahkan cukup baik hati untuk mengakhiri string dengan NUL saat selesai<a href="function-specifier-alignment-specifier-dan-operator.html#fn76" class="footnote-ref" id="fnref76" role="doc-noteref"><sup>76</sup></a>.</p>
+<p>Kita buat loop yang mirip dengan tadi, hanya saja dengan file multibaris yang dibaca satu baris sekaligus.</p>
+<p>Berikut file <code>quote.txt</code>:</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb149-1"><a href="inputoutput-file.html#cb149-1" aria-hidden="true" tabindex="-1"></a>A wise man can learn more from</span>
+<span id="cb149-2"><a href="inputoutput-file.html#cb149-2" aria-hidden="true" tabindex="-1"></a>a foolish question than a fool</span>
+<span id="cb149-3"><a href="inputoutput-file.html#cb149-3" aria-hidden="true" tabindex="-1"></a>can learn from a wise answer.</span>
+<span id="cb149-4"><a href="inputoutput-file.html#cb149-4" aria-hidden="true" tabindex="-1"></a>                  --Bruce Lee</span></code></pre></div>
+<p>Dan berikut kode yang membaca file itu satu baris sekaligus dan mencetak nomor baris sebelum masing-masing baris:</p>
+<p></p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb150-1"><a href="inputoutput-file.html#cb150-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb150-2"><a href="inputoutput-file.html#cb150-2" aria-label="2"></a></span>
+<span id="cb150-3"><a href="inputoutput-file.html#cb150-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb150-4"><a href="inputoutput-file.html#cb150-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb150-5"><a href="inputoutput-file.html#cb150-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span></span>
+<span id="cb150-6"><a href="inputoutput-file.html#cb150-6" aria-label="6"></a>    <span class="dt">char</span> s<span class="op">[</span><span class="dv">1024</span><span class="op">];</span>  <span class="co">// Cukup besar untuk baris apa pun yang ditemui program ini</span></span>
+<span id="cb150-7"><a href="inputoutput-file.html#cb150-7" aria-label="7"></a>    <span class="dt">int</span> linecount <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb150-8"><a href="inputoutput-file.html#cb150-8" aria-label="8"></a></span>
+<span id="cb150-9"><a href="inputoutput-file.html#cb150-9" aria-label="9"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;quote.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb150-10"><a href="inputoutput-file.html#cb150-10" aria-label="10"></a></span>
+<span id="cb150-11"><a href="inputoutput-file.html#cb150-11" aria-label="11"></a>    <span class="cf">while</span> <span class="op">(</span>fgets<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> fp<span class="op">)</span> <span class="op">!=</span> NULL<span class="op">)</span> </span>
+<span id="cb150-12"><a href="inputoutput-file.html#cb150-12" aria-label="12"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">: </span><span class="sc">%s</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">++</span>linecount<span class="op">,</span> s<span class="op">);</span></span>
+<span id="cb150-13"><a href="inputoutput-file.html#cb150-13" aria-label="13"></a></span>
+<span id="cb150-14"><a href="inputoutput-file.html#cb150-14" aria-label="14"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb150-15"><a href="inputoutput-file.html#cb150-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Yang memberi output:</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb151-1"><a href="inputoutput-file.html#cb151-1" aria-hidden="true" tabindex="-1"></a>1: A wise man can learn more from</span>
+<span id="cb151-2"><a href="inputoutput-file.html#cb151-2" aria-hidden="true" tabindex="-1"></a>2: a foolish question than a fool</span>
+<span id="cb151-3"><a href="inputoutput-file.html#cb151-3" aria-hidden="true" tabindex="-1"></a>3: can learn from a wise answer.</span>
+<span id="cb151-4"><a href="inputoutput-file.html#cb151-4" aria-hidden="true" tabindex="-1"></a>4:                   --Bruce Lee</span></code></pre></div>
+<p></p>
+<h2 data-number="9.4" id="input-terformat"><span class="header-section-number">9.4</span> Input Terformat</h2>
+<p> Kamu tahu bagaimana kamu bisa mendapat output terformat dengan <code>printf()</code> (dan, dengan demikian, <code>fprintf()</code> seperti yang akan kita lihat di bawah)?</p>
+<p> Hal yang sama bisa dilakukan dengan <code>fscanf()</code>.</p>
+<blockquote>
+<p>Sebelum mulai, perlu diingatkan bahwa memakai fungsi gaya <code>scanf()</code> bisa berbahaya untuk input yang tidak tepercaya. Kalau kamu tidak menentukan lebar field pada <code>%s</code>, buffer bisa meluap. Lebih buruk lagi, konversi numerik yang tidak valid menghasilkan undefined behavior. Cara aman untuk input yang tidak tepercaya adalah memakai <code>%s</code> dengan lebar field, lalu memakai fungsi seperti <code>strtol()</code> atau <code>strtod()</code> untuk melakukan konversinya.</p>
+</blockquote>
+<p>Kita siapkan file berisi serangkaian record data. Dalam hal ini, paus, dengan nama, panjang dalam meter, dan bobot dalam ton. <code>whales.txt</code>:</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb152-1"><a href="inputoutput-file.html#cb152-1" aria-hidden="true" tabindex="-1"></a>blue 29.9 173</span>
+<span id="cb152-2"><a href="inputoutput-file.html#cb152-2" aria-hidden="true" tabindex="-1"></a>right 20.7 135</span>
+<span id="cb152-3"><a href="inputoutput-file.html#cb152-3" aria-hidden="true" tabindex="-1"></a>gray 14.9 41</span>
+<span id="cb152-4"><a href="inputoutput-file.html#cb152-4" aria-hidden="true" tabindex="-1"></a>humpback 16.0 30</span></code></pre></div>
+<p>Ya, kita bisa membacanya dengan <code>fgets()</code> lalu mem-parse string-nya dengan <code>sscanf()</code> (dan itu lebih tahan terhadap file yang rusak), tapi dalam kasus ini, kita pakai saja <code>fscanf()</code> dan mengambilnya langsung.</p>
+<p>Fungsi <code>fscanf()</code> melewati whitespace di depan saat membaca, dan mengembalikan <code>EOF</code> saat end-of-file atau error.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb153-1"><a href="inputoutput-file.html#cb153-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb153-2"><a href="inputoutput-file.html#cb153-2" aria-label="2"></a></span>
+<span id="cb153-3"><a href="inputoutput-file.html#cb153-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb153-4"><a href="inputoutput-file.html#cb153-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb153-5"><a href="inputoutput-file.html#cb153-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span></span>
+<span id="cb153-6"><a href="inputoutput-file.html#cb153-6" aria-label="6"></a>    <span class="dt">char</span> name<span class="op">[</span><span class="dv">1024</span><span class="op">];</span>  <span class="co">// Cukup besar untuk baris apa pun yang ditemui program ini</span></span>
+<span id="cb153-7"><a href="inputoutput-file.html#cb153-7" aria-label="7"></a>    <span class="dt">float</span> length<span class="op">;</span></span>
+<span id="cb153-8"><a href="inputoutput-file.html#cb153-8" aria-label="8"></a>    <span class="dt">int</span> mass<span class="op">;</span></span>
+<span id="cb153-9"><a href="inputoutput-file.html#cb153-9" aria-label="9"></a></span>
+<span id="cb153-10"><a href="inputoutput-file.html#cb153-10" aria-label="10"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;whales.txt&quot;</span><span class="op">,</span> <span class="st">&quot;r&quot;</span><span class="op">);</span></span>
+<span id="cb153-11"><a href="inputoutput-file.html#cb153-11" aria-label="11"></a></span>
+<span id="cb153-12"><a href="inputoutput-file.html#cb153-12" aria-label="12"></a>    <span class="cf">while</span> <span class="op">(</span>fscanf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;</span><span class="sc">%s</span><span class="st"> </span><span class="sc">%f</span><span class="st"> </span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> name<span class="op">,</span> <span class="op">&amp;</span>length<span class="op">,</span> <span class="op">&amp;</span>mass<span class="op">)</span> <span class="op">!=</span> EOF<span class="op">)</span></span>
+<span id="cb153-13"><a href="inputoutput-file.html#cb153-13" aria-label="13"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st"> whale, </span><span class="sc">%d</span><span class="st"> tonnes, </span><span class="sc">%.1f</span><span class="st"> meters</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> name<span class="op">,</span> mass<span class="op">,</span> length<span class="op">);</span></span>
+<span id="cb153-14"><a href="inputoutput-file.html#cb153-14" aria-label="14"></a></span>
+<span id="cb153-15"><a href="inputoutput-file.html#cb153-15" aria-label="15"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb153-16"><a href="inputoutput-file.html#cb153-16" aria-label="16"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Yang memberi hasil:</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb154-1"><a href="inputoutput-file.html#cb154-1" aria-hidden="true" tabindex="-1"></a>blue whale, 173 tonnes, 29.9 meters</span>
+<span id="cb154-2"><a href="inputoutput-file.html#cb154-2" aria-hidden="true" tabindex="-1"></a>right whale, 135 tonnes, 20.7 meters</span>
+<span id="cb154-3"><a href="inputoutput-file.html#cb154-3" aria-hidden="true" tabindex="-1"></a>gray whale, 41 tonnes, 14.9 meters</span>
+<span id="cb154-4"><a href="inputoutput-file.html#cb154-4" aria-hidden="true" tabindex="-1"></a>humpback whale, 30 tonnes, 16.0 meters</span></code></pre></div>
+<p></p>
+<h2 data-number="9.5" id="menulis-file-teks"><span class="header-section-number">9.5</span> Menulis File Teks</h2>
+<p> Sama seperti kita bisa memakai <code>fgetc()</code>, <code>fgets()</code>, dan <code>fscanf()</code> untuk membaca stream teks, kita bisa memakai <code>fputc()</code>, <code>fputs()</code>, dan <code>fprintf()</code> untuk menulis stream teks.</p>
+<p>Untuk itu, kita harus meng-<code>fopen()</code> file dalam mode tulis dengan mengoper <code>"w"</code> sebagai argumen kedua. Membuka file yang sudah ada dalam mode <code>"w"</code> akan langsung memotong file itu menjadi 0 byte untuk ditimpa sepenuhnya.</p>
+<p>Kita susun program sederhana yang mengeluarkan file <code>output.txt</code> dengan berbagai fungsi output.</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb155-1"><a href="inputoutput-file.html#cb155-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb155-2"><a href="inputoutput-file.html#cb155-2" aria-label="2"></a></span>
+<span id="cb155-3"><a href="inputoutput-file.html#cb155-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb155-4"><a href="inputoutput-file.html#cb155-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb155-5"><a href="inputoutput-file.html#cb155-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span></span>
+<span id="cb155-6"><a href="inputoutput-file.html#cb155-6" aria-label="6"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">32</span><span class="op">;</span></span>
+<span id="cb155-7"><a href="inputoutput-file.html#cb155-7" aria-label="7"></a></span>
+<span id="cb155-8"><a href="inputoutput-file.html#cb155-8" aria-label="8"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;output.txt&quot;</span><span class="op">,</span> <span class="st">&quot;w&quot;</span><span class="op">);</span></span>
+<span id="cb155-9"><a href="inputoutput-file.html#cb155-9" aria-label="9"></a></span>
+<span id="cb155-10"><a href="inputoutput-file.html#cb155-10" aria-label="10"></a>    fputc<span class="op">(</span><span class="ch">&#39;B&#39;</span><span class="op">,</span> fp<span class="op">);</span></span>
+<span id="cb155-11"><a href="inputoutput-file.html#cb155-11" aria-label="11"></a>    fputc<span class="op">(</span><span class="ch">&#39;</span><span class="sc">\n</span><span class="ch">&#39;</span><span class="op">,</span> fp<span class="op">);</span>   <span class="co">// newline</span></span>
+<span id="cb155-12"><a href="inputoutput-file.html#cb155-12" aria-label="12"></a>    fprintf<span class="op">(</span>fp<span class="op">,</span> <span class="st">&quot;x = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb155-13"><a href="inputoutput-file.html#cb155-13" aria-label="13"></a>    fputs<span class="op">(</span><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> fp<span class="op">);</span></span>
+<span id="cb155-14"><a href="inputoutput-file.html#cb155-14" aria-label="14"></a></span>
+<span id="cb155-15"><a href="inputoutput-file.html#cb155-15" aria-label="15"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb155-16"><a href="inputoutput-file.html#cb155-16" aria-label="16"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Dan ini menghasilkan file <code>output.txt</code> dengan isi:</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb156-1"><a href="inputoutput-file.html#cb156-1" aria-hidden="true" tabindex="-1"></a>B</span>
+<span id="cb156-2"><a href="inputoutput-file.html#cb156-2" aria-hidden="true" tabindex="-1"></a>x = 32</span>
+<span id="cb156-3"><a href="inputoutput-file.html#cb156-3" aria-hidden="true" tabindex="-1"></a>Hello, world!</span></code></pre></div>
+<p>Fakta menarik: karena <code>stdout</code> adalah sebuah file, kamu bisa mengganti baris 8 dengan:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb157-1"><a href="inputoutput-file.html#cb157-1" aria-hidden="true" tabindex="-1"></a>fp <span class="op">=</span> stdout<span class="op">;</span></span></code></pre></div>
+<p>dan program akan mengeluarkan output ke konsol alih-alih ke file. Coba saja! </p>
+<h2 data-number="9.6" id="io-file-biner"><span class="header-section-number">9.6</span> I/O File Biner</h2>
+<p> Sejauh ini kita hanya membahas file teks. Tapi ada makhluk lain yang sudah disebut di awal, yaitu file <em>biner</em>, atau stream biner.</p>
+<p>Cara kerjanya sangat mirip file teks, kecuali subsistem I/O tidak melakukan terjemahan apa pun pada data seperti yang mungkin dilakukannya pada file teks. Pada file biner, kamu mendapat aliran byte mentah, dan hanya itu.</p>
+<p>Perbedaan besar saat membuka file: kamu harus menambahkan <code>"b"</code> ke mode. Artinya, untuk membaca file biner, buka dalam mode <code>"rb"</code>. Untuk menulis file, buka dalam mode <code>"wb"</code>.</p>
+<p>Karena ini aliran byte, dan aliran byte bisa berisi karakter NUL, dan karakter NUL adalah penanda akhir string di C, jarang orang memakai fungsi <code>fprintf()</code> dan kawan-kawannya untuk mengolah file biner.</p>
+<p> Sebagai gantinya, fungsi yang paling umum adalah <code>fread()</code> dan <code>fwrite()</code>. Fungsi-fungsi ini membaca dan menulis sejumlah byte tertentu ke stream.</p>
+<p>Untuk demo, kita tulis dua program. Yang satu menulis serangkaian nilai byte ke disk sekaligus. Dan program kedua membaca satu byte per satu dan mencetaknya<a href="function-specifier-alignment-specifier-dan-operator.html#fn77" class="footnote-ref" id="fnref77" role="doc-noteref"><sup>77</sup></a>.</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb158-1"><a href="inputoutput-file.html#cb158-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb158-2"><a href="inputoutput-file.html#cb158-2" aria-label="2"></a></span>
+<span id="cb158-3"><a href="inputoutput-file.html#cb158-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb158-4"><a href="inputoutput-file.html#cb158-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb158-5"><a href="inputoutput-file.html#cb158-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span></span>
+<span id="cb158-6"><a href="inputoutput-file.html#cb158-6" aria-label="6"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> bytes<span class="op">[</span><span class="dv">6</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">5</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">88</span><span class="op">,</span> <span class="dv">255</span><span class="op">,</span> <span class="dv">12</span><span class="op">};</span></span>
+<span id="cb158-7"><a href="inputoutput-file.html#cb158-7" aria-label="7"></a></span>
+<span id="cb158-8"><a href="inputoutput-file.html#cb158-8" aria-label="8"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;output.bin&quot;</span><span class="op">,</span> <span class="st">&quot;wb&quot;</span><span class="op">);</span>  <span class="co">// mode wb untuk &quot;write binary&quot;!</span></span>
+<span id="cb158-9"><a href="inputoutput-file.html#cb158-9" aria-label="9"></a></span>
+<span id="cb158-10"><a href="inputoutput-file.html#cb158-10" aria-label="10"></a>    <span class="co">// Pada pemanggilan fwrite, argumennya adalah:</span></span>
+<span id="cb158-11"><a href="inputoutput-file.html#cb158-11" aria-label="11"></a>    <span class="co">//</span></span>
+<span id="cb158-12"><a href="inputoutput-file.html#cb158-12" aria-label="12"></a>    <span class="co">// * Pointer ke data yang akan ditulis</span></span>
+<span id="cb158-13"><a href="inputoutput-file.html#cb158-13" aria-label="13"></a>    <span class="co">// * Ukuran setiap &quot;potongan&quot; data</span></span>
+<span id="cb158-14"><a href="inputoutput-file.html#cb158-14" aria-label="14"></a>    <span class="co">// * Jumlah &quot;potongan&quot; data</span></span>
+<span id="cb158-15"><a href="inputoutput-file.html#cb158-15" aria-label="15"></a>    <span class="co">// * FILE*</span></span>
+<span id="cb158-16"><a href="inputoutput-file.html#cb158-16" aria-label="16"></a></span>
+<span id="cb158-17"><a href="inputoutput-file.html#cb158-17" aria-label="17"></a>    fwrite<span class="op">(</span>bytes<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">),</span> <span class="dv">6</span><span class="op">,</span> fp<span class="op">);</span></span>
+<span id="cb158-18"><a href="inputoutput-file.html#cb158-18" aria-label="18"></a></span>
+<span id="cb158-19"><a href="inputoutput-file.html#cb158-19" aria-label="19"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb158-20"><a href="inputoutput-file.html#cb158-20" aria-label="20"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Dua argumen tengah <code>fwrite()</code> itu agak aneh. Tapi pada dasarnya yang ingin kita sampaikan kepada fungsi itu: “Kita punya item berukuran <em>sebesar ini</em>, dan kita ingin menulis <em>sebanyak itu</em>.” Ini praktis kalau kamu punya record dengan panjang tetap, dan banyak record dalam sebuah array. Kamu cukup memberi tahu ukuran satu record dan berapa yang ditulis.</p>
+<p>Pada contoh di atas, kita memberi tahu bahwa setiap record berukuran sebesar <code>char</code>, dan kita punya 6 buah.</p>
+<p>Menjalankan program ini menghasilkan file <code>output.bin</code>, tapi membukanya di text editor tidak menampilkan apa pun yang ramah! Itu data biner—bukan teks. Dan data biner acak yang baru saja dikarang, pula!</p>
+<p>Kalau kita jalankan lewat program <a href="https://en.wikipedia.org/wiki/Hex_dump">hex dump</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn78" class="footnote-ref" id="fnref78" role="doc-noteref"><sup>78</sup></a>, kita bisa melihat outputnya sebagai byte:</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb159-1"><a href="inputoutput-file.html#cb159-1" aria-hidden="true" tabindex="-1"></a>05 25 00 58 ff 0c</span></code></pre></div>
+<blockquote>
+<p>Banyak sistem Unix menyertakan program bernama <code>hexdump</code> untuk ini. Kamu bisa memakainya seperti ini dengan switch <code>-C</code> (“canonical”) untuk mendapat output yang rapi:</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb160-1"><a href="inputoutput-file.html#cb160-1" aria-hidden="true" tabindex="-1"></a>$ hexdump -C output.bin</span>
+<span id="cb160-2"><a href="inputoutput-file.html#cb160-2" aria-hidden="true" tabindex="-1"></a>00000000  05 25 00 58 ff 0c                              |.%.X..|</span></code></pre></div>
+<!-- ` -->
+<p><code>00000000</code> adalah offset dalam file tempat baris output ini dimulai. <code>05 25 00 58 ff 0c</code> adalah nilai-nilai byte (dan akan lebih panjang (sampai 16 byte per baris) kalau file berisi lebih banyak byte). Dan di sebelah kanan, di antara simbol pipa (<code>|</code>), adalah upaya terbaik <code>hexdump</code> untuk mencetak karakter yang sesuai dengan byte-byte itu. Ia mencetak titik kalau karakternya tidak bisa dicetak. Dalam kasus ini, karena kita hanya mencetak data biner acak, bagian output ini hanya sampah. Tapi kalau kita menulis string ASCII ke file, kita akan melihatnya di sana.</p>
+</blockquote>
+<p>Dan nilai-nilai hex itu memang cocok dengan nilai-nilai (dalam desimal) yang kita tulis.</p>
+<p>Tapi sekarang mari kita coba membacanya kembali dengan program lain. Yang ini akan membuka file untuk pembacaan biner (mode <code>"rb"</code>) dan membaca byte satu per satu dalam loop.</p>
+<p> <code>fread()</code> punya fitur menarik: ia mengembalikan jumlah byte yang dibaca, atau <code>0</code> saat EOF. Jadi kita bisa me-loop sampai melihat itu, sambil mencetak angka.</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb161-1"><a href="inputoutput-file.html#cb161-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb161-2"><a href="inputoutput-file.html#cb161-2" aria-label="2"></a></span>
+<span id="cb161-3"><a href="inputoutput-file.html#cb161-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb161-4"><a href="inputoutput-file.html#cb161-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb161-5"><a href="inputoutput-file.html#cb161-5" aria-label="5"></a>    <span class="dt">FILE</span> <span class="op">*</span>fp<span class="op">;</span></span>
+<span id="cb161-6"><a href="inputoutput-file.html#cb161-6" aria-label="6"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> c<span class="op">;</span></span>
+<span id="cb161-7"><a href="inputoutput-file.html#cb161-7" aria-label="7"></a></span>
+<span id="cb161-8"><a href="inputoutput-file.html#cb161-8" aria-label="8"></a>    fp <span class="op">=</span> fopen<span class="op">(</span><span class="st">&quot;output.bin&quot;</span><span class="op">,</span> <span class="st">&quot;rb&quot;</span><span class="op">);</span> <span class="co">// rb untuk &quot;read binary&quot;!</span></span>
+<span id="cb161-9"><a href="inputoutput-file.html#cb161-9" aria-label="9"></a></span>
+<span id="cb161-10"><a href="inputoutput-file.html#cb161-10" aria-label="10"></a>    <span class="cf">while</span> <span class="op">(</span>fread<span class="op">(&amp;</span>c<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">),</span> <span class="dv">1</span><span class="op">,</span> fp<span class="op">)</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb161-11"><a href="inputoutput-file.html#cb161-11" aria-label="11"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span></span>
+<span id="cb161-12"><a href="inputoutput-file.html#cb161-12" aria-label="12"></a></span>
+<span id="cb161-13"><a href="inputoutput-file.html#cb161-13" aria-label="13"></a>    fclose<span class="op">(</span>fp<span class="op">);</span></span>
+<span id="cb161-14"><a href="inputoutput-file.html#cb161-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Dan saat dijalankan, kita melihat angka-angka asli kita!</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb162-1"><a href="inputoutput-file.html#cb162-1" aria-hidden="true" tabindex="-1"></a>5</span>
+<span id="cb162-2"><a href="inputoutput-file.html#cb162-2" aria-hidden="true" tabindex="-1"></a>37</span>
+<span id="cb162-3"><a href="inputoutput-file.html#cb162-3" aria-hidden="true" tabindex="-1"></a>0</span>
+<span id="cb162-4"><a href="inputoutput-file.html#cb162-4" aria-hidden="true" tabindex="-1"></a>88</span>
+<span id="cb162-5"><a href="inputoutput-file.html#cb162-5" aria-hidden="true" tabindex="-1"></a>255</span>
+<span id="cb162-6"><a href="inputoutput-file.html#cb162-6" aria-hidden="true" tabindex="-1"></a>12</span></code></pre></div>
+<p>Horee! </p>
+<h3 data-number="9.6.1" id="peringatan-tentang-struct-dan-angka"><span class="header-section-number">9.6.1</span> Peringatan tentang <code>struct</code> dan Angka</h3>
+<p> Seperti yang kita lihat di bagian <code>struct</code>, compiler bebas menambahkan padding pada <code>struct</code> sesuai kehendaknya. Dan compiler yang berbeda mungkin melakukannya secara berbeda. Dan compiler yang sama pada arsitektur berbeda bisa melakukannya secara berbeda. Dan compiler yang sama pada arsitektur yang sama pun bisa melakukannya secara berbeda.</p>
+<p>Intinya: tidak portabel kalau langsung <code>fwrite()</code> seluruh <code>struct</code> ke file ketika kamu tidak tahu di mana padding akan berakhir. </p>
+<p>Bagaimana cara memperbaikinya? Tahan dulu pikiran itu—kita akan melihat beberapa caranya setelah membahas masalah lain yang terkait.</p>
+<p> Angka!</p>
+<p>Ternyata tidak semua arsitektur merepresentasikan angka di memori dengan cara yang sama.</p>
+<p>Mari kita lihat <code>fwrite()</code> sederhana untuk angka 2-byte. Kita tulis dalam hex supaya setiap byte jelas. Byte paling signifikan bernilai <code>0x12</code> dan yang paling tidak signifikan bernilai <code>0x34</code>.</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb163-1"><a href="inputoutput-file.html#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">short</span> v <span class="op">=</span> <span class="bn">0x1234</span><span class="op">;</span>  <span class="co">// Dua byte, 0x12 dan 0x34</span></span>
+<span id="cb163-2"><a href="inputoutput-file.html#cb163-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb163-3"><a href="inputoutput-file.html#cb163-3" aria-hidden="true" tabindex="-1"></a>fwrite<span class="op">(&amp;</span>v<span class="op">,</span> <span class="kw">sizeof</span> v<span class="op">,</span> <span class="dv">1</span><span class="op">,</span> fp<span class="op">);</span></span></code></pre></div>
+<p>Apa yang berakhir di stream?</p>
+<p>Kelihatannya seharusnya <code>0x12</code> diikuti <code>0x34</code>, kan?</p>
+<p>Tapi kalau ini dijalankan di mesin penulis dan hasilnya di-hex dump, hasilnya:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb164-1"><a href="inputoutput-file.html#cb164-1" aria-hidden="true" tabindex="-1"></a>34 12</span></code></pre></div>
+<p>Terbalik! Kenapa?</p>
+<p>Ini ada hubungannya dengan yang disebut <a href="https://en.wikipedia.org/wiki/Endianess"><em>endianess</em></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn79" class="footnote-ref" id="fnref79" role="doc-noteref"><sup>79</sup></a> arsitektur. Sebagian menulis byte paling signifikan lebih dulu, dan sebagian menulis byte paling tidak signifikan lebih dulu.</p>
+<p>Artinya, kalau kamu menulis angka multibyte langsung dari memori, kamu tidak bisa melakukannya secara portabel<a href="function-specifier-alignment-specifier-dan-operator.html#fn80" class="footnote-ref" id="fnref80" role="doc-noteref"><sup>80</sup></a>.</p>
+<p>Masalah serupa ada pada floating point. Kebanyakan sistem memakai format yang sama untuk bilangan floating point, tapi sebagian tidak. Tidak ada jaminan!</p>
+<p> Jadi… bagaimana kita memperbaiki semua masalah angka dan <code>struct</code> ini supaya data kita tertulis secara portabel?</p>
+<p>Ringkasnya adalah dengan men-<em>serialize</em> data, yaitu istilah umum yang berarti mengambil semua data dan menuliskannya dalam format yang kamu kendalikan, yang terkenal, dan bisa diprogram agar bekerja sama di semua platform.</p>
+<p>Seperti yang mungkin kamu duga, ini masalah yang sudah terpecahkan. Ada banyak library serialisasi yang bisa kamu manfaatkan, seperti <a href="https://en.wikipedia.org/wiki/Protocol_buffers"><em>protocol buffers</em></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn81" class="footnote-ref" id="fnref81" role="doc-noteref"><sup>81</sup></a> dari Google, yang sudah tersedia dan siap dipakai. Mereka akan mengurus semua detail rumitnya, bahkan memungkinkan data dari programmu di C berinteroperasi dengan bahasa lain yang mendukung metode serialisasi yang sama.</p>
+<p>Lakukan kebaikan untuk dirimu dan semua orang! Serialize data binermu saat menulisnya ke stream! Ini akan menjaga semuanya tetap rapi dan portabel, bahkan kalau kamu memindahkan file data dari satu arsitektur ke arsitektur lain. </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="structs.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="typedef-membuat-tipe-baru.html" rel="next">Next</a></span></div></body>
+</html>

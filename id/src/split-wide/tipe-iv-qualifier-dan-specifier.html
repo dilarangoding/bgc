@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="tipe-iii-konversi.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="proyek-multifile.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="16" id="tipe-iv-qualifier-dan-specifier"><span class="header-section-number">16</span> Tipe IV: Qualifier dan Specifier</h1>
+<p>Sekarang setelah kita punya lebih banyak tipe, ternyata tipe-tipe ini bisa diberi atribut tambahan yang mengatur perilakunya. Inilah <em>type qualifier</em> dan <em>storage-class specifier</em>.</p>
+<h2 data-number="16.1" id="type-qualifier"><span class="header-section-number">16.1</span> Type Qualifier</h2>
+<p></p>
+<p>Dengan ini kamu bisa mendeklarasikan nilai konstan, dan juga memberi petunjuk optimasi kepada compiler yang bisa dimanfaatkannya.</p>
+<h3 data-number="16.1.1" id="const"><span class="header-section-number">16.1.1</span> <code>const</code></h3>
+<p></p>
+<p>Ini type qualifier yang paling umum kamu temui. Artinya variabel itu konstan, dan setiap usaha mengubahnya akan membuat compiler sangat marah.</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb267-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb267-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb267-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb267-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb267-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb267-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>  <span class="co">// SUARA COMPILER MUNTAH, tidak bisa menugaskan ke konstanta</span></span></code></pre></div>
+<p>Nilai <code>const</code> tidak bisa diubah.</p>
+<p>Sering kali kamu melihat <code>const</code> di daftar parameter fungsi:</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb268-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">const</span> <span class="dt">int</span> x<span class="op">)</span></span>
+<span id="cb268-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb268-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb268-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb268-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x <span class="op">+</span> <span class="dv">30</span><span class="op">);</span>  <span class="co">// OK, tidak mengubah &quot;x&quot;</span></span>
+<span id="cb268-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb268-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<h4 data-number="16.1.1.1" id="const-dan-pointer"><span class="header-section-number">16.1.1.1</span> <code>const</code> dan Pointer</h4>
+<p></p>
+<p>Ini agak membingungkan, karena ada dua pemakaian yang punya dua makna ketika menyangkut pointer.</p>
+<p>Pertama, kita bisa membuat agar nilai yang ditunjuk pointer tidak bisa diubah. Caranya dengan menaruh <code>const</code> di depan nama tipe (sebelum asterisk) pada deklarasi tipe.</p>
+<div class="sourceCode" id="cb269"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb269-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb269-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">10</span><span class="op">,</span> <span class="dv">20</span><span class="op">};</span></span>
+<span id="cb269-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb269-2" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> x<span class="op">;</span> </span>
+<span id="cb269-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb269-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb269-4" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// Kita bisa mengubah p, tidak masalah</span></span>
+<span id="cb269-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb269-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb269-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb269-6" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">30</span><span class="op">;</span> <span class="co">// Error compiler! Tidak bisa mengubah yang ditunjuknya</span></span></code></pre></div>
+<p>Agak membingungkan, dua hal ini setara:</p>
+<div class="sourceCode" id="cb270"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb270-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// Tidak bisa mengubah yang ditunjuk p</span></span>
+<span id="cb270-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb270-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="dt">const</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// Tidak bisa mengubah yang ditunjuk p, sama seperti di atas</span></span></code></pre></div>
+<p>Bagus, jadi kita tidak bisa mengubah yang ditunjuk pointer, tapi kita bisa mengubah pointer-nya sendiri. Bagaimana kalau kita ingin sebaliknya? Kita ingin bisa mengubah yang ditunjuk pointer, tapi <em>tidak</em> bisa mengubah pointer-nya sendiri?</p>
+<p>Cukup pindahkan <code>const</code> ke setelah asterisk pada deklarasi:</p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb271-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span>   <span class="co">// Kita tidak bisa mengubah &quot;p&quot; dengan aritmetika pointer</span></span>
+<span id="cb271-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb271-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb271-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb271-3" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// Error compiler!</span></span></code></pre></div>
+<p>Tapi kita bisa mengubah yang ditunjuknya:</p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb272-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb272-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb272-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb272-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb272-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb272-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb272-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb272-4" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">20</span><span class="op">;</span>   <span class="co">// Ubah &quot;x&quot; menjadi 20, tidak masalah</span></span></code></pre></div>
+<p>Kamu juga bisa membuat keduanya <code>const</code>:</p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb273-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb273-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span>  <span class="co">// Tidak bisa mengubah p maupun *p!</span></span></code></pre></div>
+<p>Terakhir, kalau ada beberapa tingkat indirection, kamu harus memberi <code>const</code> pada tingkat yang sesuai. Hanya karena sebuah pointer <code>const</code>, bukan berarti pointer yang ditunjuknya juga harus <code>const</code>. Kamu bisa mengaturnya secara eksplisit seperti pada contoh-contoh berikut:</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb274-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">**</span>p<span class="op">;</span></span>
+<span id="cb274-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-2" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// OK!</span></span>
+<span id="cb274-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-3" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// OK!</span></span>
+<span id="cb274-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-5" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">**</span><span class="dt">const</span> p<span class="op">;</span></span>
+<span id="cb274-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-6" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// Error!</span></span>
+<span id="cb274-7"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-7" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// OK!</span></span>
+<span id="cb274-8"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-9"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-9" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span>p<span class="op">;</span></span>
+<span id="cb274-10"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-10" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// OK!</span></span>
+<span id="cb274-11"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-11" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// Error!</span></span>
+<span id="cb274-12"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb274-13"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-13" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span></span>
+<span id="cb274-14"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-14" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>     <span class="co">// Error!</span></span>
+<span id="cb274-15"><a href="tipe-iv-qualifier-dan-specifier.html#cb274-15" aria-hidden="true" tabindex="-1"></a><span class="op">(*</span>p<span class="op">)++;</span>  <span class="co">// Error!</span></span></code></pre></div>
+<p></p>
+<h4 data-number="16.1.1.2" id="const-correctness"><span class="header-section-number">16.1.1.2</span> <code>const</code> Correctness</h4>
+<p></p>
+<p>Ada satu hal lagi yang harus kusebutkan: compiler akan memberi peringatan untuk kode seperti ini:</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb275-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb275-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb275-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb275-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span></code></pre></div>
+<p>dengan pesan yang kira-kira berbunyi:</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb276-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb276-1" aria-hidden="true" tabindex="-1"></a>initialization discards &#39;const&#39; qualifier from pointer type target</span></code></pre></div>
+<p>Apa yang terjadi di sana?</p>
+<p>Kita perlu melihat tipe di kedua sisi penugasan:</p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb277-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb277-1" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb277-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb277-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb277-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb277-3" aria-hidden="true" tabindex="-1"></a><span class="co">//    ^       ^</span></span>
+<span id="cb277-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb277-4" aria-hidden="true" tabindex="-1"></a><span class="co">//    |       |</span></span>
+<span id="cb277-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb277-5" aria-hidden="true" tabindex="-1"></a><span class="co">//  int*    const int*</span></span></code></pre></div>
+<p>Compiler memperingatkan bahwa nilai di sisi kanan penugasan itu <code>const</code>, tapi yang di sisi kiri tidak. Compiler memberi tahu bahwa ia membuang sifat “const” dari ekspresi di sisi kanan.</p>
+<p>Artinya, kita <em>masih bisa</em> mencoba hal berikut, tapi itu salah. Compiler akan memperingatkan, dan hasilnya undefined behavior:</p>
+<div class="sourceCode" id="cb278"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb278-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb278-1" aria-hidden="true" tabindex="-1"></a><span class="dt">const</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb278-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb278-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb278-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb278-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb278-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb278-4" aria-hidden="true" tabindex="-1"></a><span class="op">*</span>p <span class="op">=</span> <span class="dv">40</span><span class="op">;</span>  <span class="co">// Undefined behavior--mungkin mengubah &quot;x&quot;, mungkin tidak!</span></span>
+<span id="cb278-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb278-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb278-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb278-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 40, kalau beruntung</span></span></code></pre></div>
+<p> </p>
+<h3 data-number="16.1.2" id="restrict"><span class="header-section-number">16.1.2</span> <code>restrict</code></h3>
+<p></p>
+<p>Singkatnya: kamu tidak pernah wajib memakai ini dan boleh mengabaikannya setiap kali melihatnya. Kalau dipakai dengan benar, kemungkinan ada sedikit peningkatan performa. Kalau dipakai dengan salah, kamu akan mendapat undefined behavior.</p>
+<p><code>restrict</code> adalah petunjuk bagi compiler bahwa sepotong memori tertentu hanya akan diakses oleh satu pointer dan tidak pernah oleh pointer lain. (Artinya, tidak ada aliasing pada object yang ditunjuk pointer <code>restrict</code> itu.) Kalau developer mendeklarasikan pointer sebagai <code>restrict</code> lalu mengakses object yang ditunjuknya dengan cara lain (misalnya lewat pointer lain), perilakunya undefined.</p>
+<p>Pada dasarnya kamu berkata kepada C, “Hei—kujamin pointer tunggal ini satu-satunya cara aku mengakses memori ini, dan kalau aku bohong, silakan beri aku undefined behavior.”</p>
+<p>Dengan informasi itu, C bisa mengoptimasi hal-hal tertentu. Misalnya, kalau kamu men-dereference pointer <code>restrict</code> berulang kali dalam loop, C mungkin memutuskan menyimpan hasilnya di register dan hanya menyimpan hasil akhirnya setelah loop selesai. Kalau ada pointer lain yang merujuk memori yang sama dan mengaksesnya di dalam loop, hasilnya tidak akan akurat.</p>
+<p>(Perhatikan bahwa <code>restrict</code> tidak berpengaruh kalau object yang ditunjuk tidak pernah ditulis. Semuanya tentang optimasi seputar penulisan ke memori.)</p>
+<p>Mari kita tulis fungsi untuk menukar dua variabel, dan kita pakai kata kunci <code>restrict</code> untuk meyakinkan C bahwa kita tidak akan pernah mengoper pointer ke hal yang sama. Lalu mari kita sengaja membuat kesalahan dan mencoba mengoper pointer ke hal yang sama.</p>
+<div class="sourceCode" id="cb279"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb279-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-1" aria-label="1"></a><span class="dt">void</span> swap<span class="op">(</span><span class="dt">int</span> <span class="op">*</span><span class="dt">restrict</span> a<span class="op">,</span> <span class="dt">int</span> <span class="op">*</span><span class="dt">restrict</span> b<span class="op">)</span></span>
+<span id="cb279-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-2" aria-label="2"></a><span class="op">{</span></span>
+<span id="cb279-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-3" aria-label="3"></a>    <span class="dt">int</span> t<span class="op">;</span></span>
+<span id="cb279-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-4" aria-label="4"></a></span>
+<span id="cb279-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-5" aria-label="5"></a>    t <span class="op">=</span> <span class="op">*</span>a<span class="op">;</span></span>
+<span id="cb279-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-6" aria-label="6"></a>    <span class="op">*</span>a <span class="op">=</span> <span class="op">*</span>b<span class="op">;</span></span>
+<span id="cb279-7"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-7" aria-label="7"></a>    <span class="op">*</span>b <span class="op">=</span> t<span class="op">;</span></span>
+<span id="cb279-8"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-8" aria-label="8"></a><span class="op">}</span></span>
+<span id="cb279-9"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-9" aria-label="9"></a></span>
+<span id="cb279-10"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-10" aria-label="10"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb279-11"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-11" aria-label="11"></a><span class="op">{</span></span>
+<span id="cb279-12"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-12" aria-label="12"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb279-13"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-13" aria-label="13"></a></span>
+<span id="cb279-14"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-14" aria-label="14"></a>    swap<span class="op">(&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>y<span class="op">);</span>  <span class="co">// OK! &quot;a&quot; dan &quot;b&quot; di atas menunjuk ke hal yang berbeda</span></span>
+<span id="cb279-15"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-15" aria-label="15"></a></span>
+<span id="cb279-16"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-16" aria-label="16"></a>    swap<span class="op">(&amp;</span>x<span class="op">,</span> <span class="op">&amp;</span>x<span class="op">);</span>  <span class="co">// Undefined behavior! &quot;a&quot; dan &quot;b&quot; sama!</span></span>
+<span id="cb279-17"><a href="tipe-iv-qualifier-dan-specifier.html#cb279-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p>Kalau kata kunci <code>restrict</code> di atas dihapus, kedua pemanggilan akan aman. Tapi compiler mungkin tidak bisa mengoptimasi.</p>
+<p><code>restrict</code> punya block scope, artinya pembatasannya hanya berlaku selama scope tempat ia dipakai. Kalau ada di daftar parameter fungsi, ia ada di block scope fungsi itu.</p>
+<p>Kalau pointer yang dibatasi menunjuk ke array, pembatasan itu hanya berlaku pada object individual di array. Pointer lain boleh membaca dan menulis array itu selama tidak membaca atau menulis elemen yang sama dengan yang dibatasi.</p>
+<p>Kalau <code>restrict</code> dipakai di file scope, di luar fungsi apa pun, pembatasannya mencakup seluruh program.</p>
+<p>Kamu kemungkinan besar akan melihatnya di fungsi library seperti <code>printf()</code>:</p>
+<div class="sourceCode" id="cb280"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb280-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> printf<span class="op">(</span><span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span> <span class="dt">restrict</span> format<span class="op">,</span> <span class="op">...);</span></span></code></pre></div>
+<p>Sekali lagi, itu hanya memberi tahu compiler bahwa di dalam fungsi <code>printf()</code>, hanya akan ada satu pointer yang merujuk ke bagian mana pun dari string <code>format</code> itu.</p>
+<p>Satu catatan terakhir: kalau karena suatu alasan kamu memakai notasi array pada parameter fungsi alih-alih notasi pointer, kamu bisa memakai <code>restrict</code> seperti ini:</p>
+<div class="sourceCode" id="cb281"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb281-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb281-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> p<span class="op">[</span><span class="dt">restrict</span><span class="op">])</span>     <span class="co">// Tanpa ukuran</span></span>
+<span id="cb281-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb281-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb281-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb281-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> p<span class="op">[</span><span class="dt">restrict</span> <span class="dv">10</span><span class="op">])</span>  <span class="co">// Atau dengan ukuran</span></span></code></pre></div>
+<p>Tapi notasi pointer lebih umum.</p>
+<p></p>
+<h3 data-number="16.1.3" id="volatile"><span class="header-section-number">16.1.3</span> <code>volatile</code></h3>
+<p></p>
+<p>Kecil kemungkinan kamu melihat atau membutuhkan ini kecuali kamu berurusan langsung dengan hardware.</p>
+<p><code>volatile</code> memberi tahu compiler bahwa sebuah nilai mungkin berubah di luar pengetahuannya dan harus dibaca ulang setiap kali.</p>
+<p>Contohnya ketika compiler membaca memori di sebuah alamat yang terus diperbarui di balik layar, misalnya semacam timer hardware.</p>
+<p>Kalau compiler memutuskan mengoptimasinya dan menyimpan nilai di register dalam waktu lama, nilai di memori akan berubah dan tidak tercermin di register.</p>
+<p>Dengan mendeklarasikan sesuatu <code>volatile</code>, kamu berkata kepada compiler, “Hei, yang ditunjuk ini mungkin berubah kapan saja karena alasan di luar kode program ini.”</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb282-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb282-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span></span></code></pre></div>
+<h3 data-number="16.1.4" id="atomic"><span class="header-section-number">16.1.4</span> <code>_Atomic</code></h3>
+<p>Ini fitur C opsional yang akan kita bahas di <a href="chapter-atomics.html#chapter-atomics">bab Atomics</a>.</p>
+<p> </p>
+<h2 data-number="16.2" id="storage-class-specifier"><span class="header-section-number">16.2</span> Storage-Class Specifier</h2>
+<p></p>
+<p>Storage-class specifier mirip type qualifier. Mereka memberi compiler informasi tambahan tentang tipe sebuah variabel.</p>
+<h3 data-number="16.2.1" id="auto"><span class="header-section-number">16.2.1</span> <code>auto</code></h3>
+<p></p>
+<p>Kata kunci ini hampir tidak pernah terlihat, karena <code>auto</code> adalah bawaan untuk variabel block scope. Ia tersirat.</p>
+<p>Keduanya sama:</p>
+<div class="sourceCode" id="cb283"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb283-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb283-1" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb283-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb283-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">;</span>         <span class="co">// auto adalah bawaannya...</span></span>
+<span id="cb283-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb283-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">auto</span> <span class="dt">int</span> a<span class="op">;</span>    <span class="co">// Jadi ini mubazir</span></span>
+<span id="cb283-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb283-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Kata kunci <code>auto</code> menandakan bahwa object ini punya <em>automatic storage duration</em>. Artinya, ia ada di scope tempat ia didefinisikan, dan otomatis didealokasikan saat scope itu ditinggalkan.</p>
+<p>Satu jebakan pada variabel otomatis: nilainya tak tentu sampai kamu menginisialisasinya secara eksplisit. Kita bilang isinya “acak” atau “sampah”, walau aku sendiri kurang puas dengan keduanya. Pokoknya, kamu tidak akan tahu isinya kecuali kamu menginisialisasinya.</p>
+<p></p>
+<p>Selalu inisialisasi semua variabel otomatis sebelum dipakai!</p>
+<h3 data-number="16.2.2" id="static"><span class="header-section-number">16.2.2</span> <code>static</code></h3>
+<p></p>
+<p>Kata kunci ini punya dua makna, tergantung apakah variabelnya file scope atau block scope.</p>
+<p>Kita mulai dengan block scope.</p>
+<h4 data-number="16.2.2.1" id="static-di-block-scope"><span class="header-section-number">16.2.2.1</span> <code>static</code> di Block Scope</h4>
+<p></p>
+<p>Dalam kasus ini, intinya kita berkata, “Aku cuma ingin satu instance variabel ini ada, dipakai bersama antarpemanggilan.”</p>
+<p>Artinya, nilainya bertahan di antara pemanggilan.</p>
+<p><code>static</code> di block scope dengan initializer hanya diinisialisasi satu kali saat program mulai, bukan setiap kali fungsi dipanggil.</p>
+<p>Kita coba contoh:</p>
+<div class="sourceCode" id="cb284"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb284-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb284-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-2" aria-label="2"></a></span>
+<span id="cb284-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-3" aria-label="3"></a><span class="dt">void</span> counter<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb284-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb284-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-5" aria-label="5"></a>    <span class="dt">static</span> <span class="dt">int</span> count <span class="op">=</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// Ini diinisialisasi satu kali</span></span>
+<span id="cb284-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-6" aria-label="6"></a></span>
+<span id="cb284-7"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;This has been called </span><span class="sc">%d</span><span class="st"> time(s)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> count<span class="op">);</span></span>
+<span id="cb284-8"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-8" aria-label="8"></a></span>
+<span id="cb284-9"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-9" aria-label="9"></a>    count<span class="op">++;</span></span>
+<span id="cb284-10"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-10" aria-label="10"></a><span class="op">}</span></span>
+<span id="cb284-11"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-11" aria-label="11"></a></span>
+<span id="cb284-12"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-12" aria-label="12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb284-13"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-13" aria-label="13"></a><span class="op">{</span></span>
+<span id="cb284-14"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-14" aria-label="14"></a>    counter<span class="op">();</span>  <span class="co">// &quot;This has been called 1 time(s)&quot;</span></span>
+<span id="cb284-15"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-15" aria-label="15"></a>    counter<span class="op">();</span>  <span class="co">// &quot;This has been called 2 time(s)&quot;</span></span>
+<span id="cb284-16"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-16" aria-label="16"></a>    counter<span class="op">();</span>  <span class="co">// &quot;This has been called 3 time(s)&quot;</span></span>
+<span id="cb284-17"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-17" aria-label="17"></a>    counter<span class="op">();</span>  <span class="co">// &quot;This has been called 4 time(s)&quot;</span></span>
+<span id="cb284-18"><a href="tipe-iv-qualifier-dan-specifier.html#cb284-18" aria-label="18"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat bagaimana nilai <code>count</code> bertahan di antara pemanggilan?</p>
+<p>Satu hal yang perlu dicatat: variabel <code>static</code> block scope diinisialisasi ke <code>0</code> secara bawaan.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb285-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb285-1" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> foo<span class="op">;</span>      <span class="co">// Nilai awal bawaannya `0`...</span></span>
+<span id="cb285-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// Jadi penugasan `0` ini mubazir</span></span></code></pre></div>
+<p>Terakhir, perlu diingat bahwa kalau kamu menulis program multithread, kamu harus memastikan beberapa thread tidak saling menginjak variabel yang sama.</p>
+<p></p>
+<h4 data-number="16.2.2.2" id="static-di-file-scope"><span class="header-section-number">16.2.2.2</span> <code>static</code> di File Scope</h4>
+<p></p>
+<p>Ketika kita sampai di file scope, di luar blok mana pun, maknanya agak berubah.</p>
+<p>Variabel di file scope sudah bertahan di antara pemanggilan fungsi, jadi perilaku itu sudah ada.</p>
+<p>Sebagai gantinya, dalam konteks ini <code>static</code> berarti variabel tersebut tidak terlihat di luar file sumber ini. Mirip “global”, tapi hanya di file ini.</p>
+<p>Lebih lanjut dibahas di bagian tentang membangun dengan banyak file sumber.</p>
+<p> </p>
+<h3 data-number="16.2.3" id="extern"><span class="header-section-number">16.2.3</span> <code>extern</code></h3>
+<p></p>
+<p>Storage-class specifier <code>extern</code> memberi kita cara untuk merujuk ke object di file sumber lain.</p>
+<p>Katakanlah, misalnya, file <code>bar.c</code> isinya hanya ini:</p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb286-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb286-1" aria-label="1"></a><span class="co">// bar.c</span></span>
+<span id="cb286-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb286-2" aria-label="2"></a></span>
+<span id="cb286-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb286-3" aria-label="3"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">37</span><span class="op">;</span></span></code></pre></div>
+<p>Hanya itu. Mendeklarasikan <code>int a</code> baru di file scope.</p>
+<p>Tapi bagaimana kalau ada file sumber lain, <code>foo.c</code>, dan kita ingin merujuk ke <code>a</code> yang ada di <code>bar.c</code>?</p>
+<p>Mudah dengan kata kunci <code>extern</code>:</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb287-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-1" aria-label="1"></a><span class="co">// foo.c</span></span>
+<span id="cb287-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-2" aria-label="2"></a></span>
+<span id="cb287-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-3" aria-label="3"></a><span class="kw">extern</span> <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb287-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-4" aria-label="4"></a></span>
+<span id="cb287-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb287-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb287-7"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// 37, dari bar.c!</span></span>
+<span id="cb287-8"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-8" aria-label="8"></a></span>
+<span id="cb287-9"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-9" aria-label="9"></a>    a <span class="op">=</span> <span class="dv">99</span><span class="op">;</span></span>
+<span id="cb287-10"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-10" aria-label="10"></a></span>
+<span id="cb287-11"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// &quot;a&quot; yang sama dari bar.c, tapi sekarang 99</span></span>
+<span id="cb287-12"><a href="tipe-iv-qualifier-dan-specifier.html#cb287-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Kita juga bisa menaruh <code>extern int a</code> di block scope, dan ia tetap akan merujuk ke <code>a</code> di <code>bar.c</code>:</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb288-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-1" aria-label="1"></a><span class="co">// foo.c</span></span>
+<span id="cb288-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-2" aria-label="2"></a></span>
+<span id="cb288-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb288-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb288-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-5" aria-label="5"></a>    <span class="kw">extern</span> <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb288-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-6" aria-label="6"></a></span>
+<span id="cb288-7"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// 37, dari bar.c!</span></span>
+<span id="cb288-8"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-8" aria-label="8"></a></span>
+<span id="cb288-9"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-9" aria-label="9"></a>    a <span class="op">=</span> <span class="dv">99</span><span class="op">;</span></span>
+<span id="cb288-10"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-10" aria-label="10"></a></span>
+<span id="cb288-11"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// &quot;a&quot; yang sama dari bar.c, tapi sekarang 99</span></span>
+<span id="cb288-12"><a href="tipe-iv-qualifier-dan-specifier.html#cb288-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Nah, kalau <code>a</code> di <code>bar.c</code> ditandai <code>static</code>, ini tidak akan berfungsi. Variabel <code>static</code> di file scope tidak terlihat di luar file itu.</p>
+<p>Catatan terakhir tentang <code>extern</code> pada fungsi. Untuk fungsi, <code>extern</code> adalah bawaan, jadi mubazir. Kamu bisa mendeklarasikan fungsi <code>static</code> kalau hanya ingin fungsi itu terlihat di satu file sumber.</p>
+<p></p>
+<h3 data-number="16.2.4" id="register"><span class="header-section-number">16.2.4</span> <code>register</code></h3>
+<p></p>
+<p>Ini kata kunci untuk memberi petunjuk ke compiler bahwa variabel ini sering dipakai, dan harus dibuat secepat mungkin diaksesnya. Compiler tidak wajib menyetujuinya.</p>
+<p>Sekarang, optimizer compiler C modern cukup pandai menentukan hal ini sendiri, jadi jarang terlihat belakangan ini. Ada beberapa argumen untuk memakainya, yang kucantumkan di bawah. Meski begitu, jujur saja, aku belum pernah memakainya di kode C mana pun yang pernah kutulis.</p>
+<p>Tapi kalau memang harus:</p>
+<div class="sourceCode" id="cb289"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb289-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb289-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-2" aria-label="2"></a></span>
+<span id="cb289-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb289-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb289-5"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-5" aria-label="5"></a>    <span class="dt">register</span> <span class="dt">int</span> a<span class="op">;</span>   <span class="co">// Buat &quot;a&quot; secepat mungkin dipakai.</span></span>
+<span id="cb289-6"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-6" aria-label="6"></a></span>
+<span id="cb289-7"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-7" aria-label="7"></a>    <span class="cf">for</span> <span class="op">(</span>a <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> a <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> a<span class="op">++)</span></span>
+<span id="cb289-8"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span></span>
+<span id="cb289-9"><a href="tipe-iv-qualifier-dan-specifier.html#cb289-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Tapi ada harganya. Kamu tidak bisa mengambil alamat sebuah register:</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb290-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb290-1" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb290-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb290-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span>    <span class="co">// ERROR COMPILER! Tidak bisa mengambil alamat register</span></span></code></pre></div>
+<p>Hal yang sama berlaku untuk bagian mana pun dari array, karena memperlakukan array <code>register</code> sebagai pointer adalah undefined behavior. Kamu boleh mengambil <code>sizeof()</code>-nya. Tapi itu bukan keuntungan. Artinya array <code>register</code> pada dasarnya tidak berguna.</p>
+<p>GCC dan Clang sama-sama error pada semua yang berikut (kecuali GCC, anehnya, tidak error pada <code>a[2]</code>; ia hanya memberi peringatan kalau kamu memakai <code>-pedantic</code>):</p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb291-1"><a href="tipe-iv-qualifier-dan-specifier.html#cb291-1" aria-hidden="true" tabindex="-1"></a><span class="dt">register</span> <span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
+<span id="cb291-2"><a href="tipe-iv-qualifier-dan-specifier.html#cb291-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> a<span class="op">;</span>       <span class="co">// Undefined behavior!</span></span>
+<span id="cb291-3"><a href="tipe-iv-qualifier-dan-specifier.html#cb291-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="op">*(</span>a <span class="op">+</span> <span class="dv">2</span><span class="op">);</span> <span class="co">// Undefined behavior!</span></span>
+<span id="cb291-4"><a href="tipe-iv-qualifier-dan-specifier.html#cb291-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c <span class="op">=</span> a<span class="op">[</span><span class="dv">2</span><span class="op">];</span>     <span class="co">// Undefined behavior!</span></span></code></pre></div>
+<p>Fakta bahwa alamat variabel register tidak bisa diambil membebaskan compiler untuk melakukan optimasi berdasarkan asumsi itu kalau belum menemukannya sendiri. Selain itu, menambahkan <code>register</code> pada variabel <code>const</code> mencegah seseorang tanpa sengaja mengoper pointer-nya ke fungsi lain yang dengan sengaja mengabaikan sifat konstannya<a href="function-specifier-alignment-specifier-dan-operator.html#fn116" class="footnote-ref" id="fnref116" role="doc-noteref"><sup>116</sup></a>.</p>
+<p>Sedikit latar belakang sejarah: jauh di dalam CPU ada “variabel” kecil khusus bernama <a href="https://en.wikipedia.org/wiki/Processor_register"><em>register</em></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn117" class="footnote-ref" id="fnref117" role="doc-noteref"><sup>117</sup></a>. Aksesnya sangat cepat dibanding RAM, jadi memakainya memberi dorongan kecepatan. Tapi mereka tidak ada di RAM, jadi tidak punya alamat memori (itulah kenapa kamu tidak bisa mengambil address-of atau pointer ke mereka).</p>
+<p>Tapi, seperti kubilang tadi, compiler modern sangat pandai menghasilkan kode optimal, memakai register kapan pun mungkin terlepas dari apakah kamu menulis kata kunci <code>register</code> atau tidak. Bukan hanya itu, spesifikasi membolehkan mereka memperlakukannya seolah-olah kamu menulis <code>auto</code>, kalau mereka mau. Jadi tidak ada jaminan.</p>
+<p></p>
+<h3 data-number="16.2.5" id="thread_local"><span class="header-section-number">16.2.5</span> <code>_Thread_local</code></h3>
+<p></p>
+<p>Saat memakai banyak thread dan ada variabel di global atau block scope <code>static</code>, ini cara untuk memastikan setiap thread mendapat salinannya sendiri dari variabel itu. Ini membantu menghindari race condition dan thread yang saling menginjak kaki.</p>
+<p>Kalau berada di block scope, kamu harus memakainya bersama <code>extern</code> atau <code>static</code>.</p>
+<p>Selain itu, kalau kamu menyertakan <code>&lt;threads.h&gt;</code>, kamu bisa memakai <code>thread_local</code> yang jauh lebih enak dilihat sebagai alias dari <code>_Thread_local</code> yang lebih jelek.</p>
+<p>Informasi lebih lanjut ada di <a href="multithreading.html#thread-local">bagian Threads</a>.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="tipe-iii-konversi.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="proyek-multifile.html" rel="next">Next</a></span></div></body>
+</html>

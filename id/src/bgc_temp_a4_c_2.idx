@@ -1,0 +1,1653 @@
+\indexentry{String|hyperxindexformat{\see {\texttt{char *}}}}{1}
+\indexentry{New line|hyperxindexformat{\see {\texttt{{\backslash}n} newline}}}{1}
+\indexentry{Ternary operator|hyperxindexformat{\see {\texttt{?:} ternary operator}}}{1}
+\indexentry{Addition operator|hyperxindexformat{\see {\texttt{+} addition operator}}}{1}
+\indexentry{Subtraction operator|hyperxindexformat{\see {\texttt{-} subtraction operator}}}{1}
+\indexentry{Multiplication operator|hyperxindexformat{\see {\texttt{*} multiplication operator}}}{1}
+\indexentry{Division operator|hyperxindexformat{\see {\texttt{/} division operator}}}{1}
+\indexentry{Modulus operator|hyperxindexformat{\see {\texttt{\%} modulus operator}}}{1}
+\indexentry{Boolean NOT|hyperxindexformat{\see {\texttt{"!} operator}}}{1}
+\indexentry{Boolean AND|hyperxindexformat{\see {\texttt{\&\&} operator}}}{1}
+\indexentry{Boolean OR|hyperxindexformat{\see {\texttt{\textbar{}\textbar{}} operator}}}{1}
+\indexentry{Bell|hyperxindexformat{\see {\texttt{{\backslash}a} operator}}}{1}
+\indexentry{Tab (is better)|hyperxindexformat{\see {\texttt{{\backslash}t} operator}}}{1}
+\indexentry{Carriage return|hyperxindexformat{\see {\texttt{{\backslash}r} operator}}}{1}
+\indexentry{Hexadecimal|hyperxindexformat{\see {\texttt{0x} hexadecimal}}}{1}
+\indexentry{International Obfuscated C Code Contest|hyperpage}{1}
+\indexentry{Hello, world|hyperpage}{6}
+\indexentry{Komentar|(hyperpage}{6}
+\indexentry{Komentar|)hyperpage}{6}
+\indexentry{C Preprocessor|(hyperpage}{6}
+\indexentry{\#include directive@\texttt{\#include} directive|(hyperpage}{6}
+\indexentry{Octothorpe|hyperpage}{6}
+\indexentry{Preprocessor|hyperpage}{6}
+\indexentry{\#define directive@\texttt{\#define} directive|hyperpage}{6}
+\indexentry{\#include directive@\texttt{\#include} directive|)hyperpage}{6}
+\indexentry{C Preprocessor|)hyperpage}{6}
+\indexentry{stdio.h header file@\texttt{stdio.h} header file|(hyperpage}{6}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi|(hyperpage}{6}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi|)hyperpage}{7}
+\indexentry{stdio.h header file@\texttt{stdio.h} header file|)hyperpage}{7}
+\indexentry{main() fungsi@\texttt{main()} fungsi|(hyperpage}{7}
+\indexentry{stdio.h|hyperpage}{7}
+\indexentry{main() fungsi@\texttt{main()} fungsi|)hyperpage}{7}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi|(hyperpage}{7}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi|)hyperpage}{7}
+\indexentry{{\backslash}n newline@\texttt{{\backslash}n} newline|(hyperpage}{7}
+\indexentry{{\backslash}n newline@\texttt{{\backslash}n} newline|)hyperpage}{7}
+\indexentry{gcc compiler@\texttt{gcc} compiler|hyperpage}{7}
+\indexentry{Hello, world|)}{8}
+\indexentry{Kompilasi|(hyperpage}{8}
+\indexentry{gcc compiler@\texttt{gcc} compiler|(hyperpage}{8}
+\indexentry{gcc compiler@\texttt{gcc} compiler|)hyperpage}{8}
+\indexentry{Kompilasi|)hyperpage}{8}
+\indexentry{clang compiler@\texttt{clang} compiler|hyperpage}{8}
+\indexentry{gcc compiler@\texttt{gcc} compiler|hyperpage}{9}
+\indexentry{Integrated Development Environment|(hyperpage}{9}
+\indexentry{Integrated Development Environment|)hyperpage}{9}
+\indexentry{Language versions|(hyperpage}{9}
+\indexentry{gcc compiler@\texttt{gcc} compiler|(hyperpage}{9}
+\indexentry{gcc compiler@\texttt{gcc} compiler|)hyperpage}{10}
+\indexentry{variabel|(hyperpage}{11}
+\indexentry{variabel|(hyperpage}{11}
+\indexentry{variabel|)hyperpage}{12}
+\indexentry{tipe|hyperpage}{12}
+\indexentry{int tipe@\texttt{int} tipe|hyperpage}{12}
+\indexentry{float tipe@\texttt{float} tipe|hyperpage}{12}
+\indexentry{char tipe@\texttt{char} tipe|hyperpage}{12}
+\indexentry{char * tipe@\texttt{char *} tipe|hyperpage}{12}
+\indexentry{variabel!belum diinisialisasi|hyperpage}{12}
+\indexentry{= operator penugasan@\texttt{=} operator penugasan|hyperpage}{13}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi|(hyperpage}{13}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi|)hyperpage}{13}
+\indexentry{tipe Boolean|(hyperpage}{13}
+\indexentry{stdbool.h header file@\texttt{stdbool.h} header file|hyperpage}{14}
+\indexentry{tipe Boolean|)hyperpage}{14}
+\indexentry{Operator Aritmetika|hyperpage}{14}
+\indexentry{+ operator penjumlahan@\texttt{+} operator penjumlahan|hyperpage}{14}
+\indexentry{- operator pengurangan@\texttt{-} operator pengurangan|hyperpage}{14}
+\indexentry{* operator perkalian@\texttt{*} operator perkalian|hyperpage}{14}
+\indexentry{/ operator pembagian@\texttt{/} operator pembagian|hyperpage}{14}
+\indexentry{\% operator modulus@\texttt{\%} operator modulus|hyperpage}{14}
+\indexentry{+= operator penugasan@\texttt{+=} operator penugasan|hyperpage}{14}
+\indexentry{-= operator penugasan@\texttt{-=} operator penugasan|hyperpage}{14}
+\indexentry{*= operator penugasan@\texttt{*=} operator penugasan|hyperpage}{14}
+\indexentry{/= operator penugasan@\texttt{/=} operator penugasan|hyperpage}{14}
+\indexentry{\%= operator penugasan@\texttt{\%=} operator penugasan|hyperpage}{14}
+\indexentry{pow()|hyperpage}{15}
+\indexentry{Operator Aritmetika|)}{15}
+\indexentry{?: operator ternary@\texttt{?:} operator ternary|(hyperpage}{15}
+\indexentry{printf()|hyperpage}{15}
+\indexentry{?: operator ternary@\texttt{?:} operator ternary|)hyperpage}{15}
+\indexentry{++ operator increment@\texttt{++} operator increment|(hyperpage}{15}
+\indexentry{-- operator decrement@\texttt{--} operator decrement|(hyperpage}{15}
+\indexentry{++ operator increment@\texttt{++} operator increment|)hyperpage}{16}
+\indexentry{-- operator decrement@\texttt{--} operator decrement|)hyperpage}{16}
+\indexentry{, operator koma@\texttt{,} operator koma|(hyperpage}{16}
+\indexentry{, operator koma@\texttt{,} operator koma|)hyperpage}{17}
+\indexentry{Operator Kondisional|(hyperpage}{17}
+\indexentry{operator perbandingan|hyperpage}{17}
+\indexentry{== operator kesamaan@\texttt{==} operator kesamaan|hyperpage}{17}
+\indexentry{"!= operator ketidaksamaan@\texttt{"!=} operator ketidaksamaan|hyperpage}{17}
+\indexentry{< operator kurang dari@\texttt{<} operator kurang dari|hyperpage}{17}
+\indexentry{> operator lebih dari@\texttt{>} operator lebih dari|hyperpage}{17}
+\indexentry{<= operator kurang dari atau sama dengan@\texttt{<=} operator kurang dari atau sama dengan|hyperpage}{17}
+\indexentry{>= operator lebih dari atau sama dengan@\texttt{>=} operator lebih dari atau sama dengan|hyperpage}{17}
+\indexentry{Operator Kondisional|)hyperpage}{17}
+\indexentry{Operator Boolean|(hyperpage}{17}
+\indexentry{\&\& boolean AND@\texttt{\&\&} boolean AND|hyperpage}{17}
+\indexentry{"! boolean NOT@\texttt{"!} boolean NOT|hyperpage}{17}
+\indexentry{\textbar{}\textbar{} boolean OR@\texttt{\textbar{}\textbar{}} boolean OR|hyperpage}{17}
+\indexentry{Operator Boolean|)hyperpage}{17}
+\indexentry{sizeof operator@\texttt{sizeof} operator|(hyperpage}{18}
+\indexentry{char tipe@\texttt{char} tipe|hyperpage}{18}
+\indexentry{size\_t tipe@\texttt{size\_t} tipe|(hyperpage}{18}
+\indexentry{size\_t tipe@\texttt{size\_t} tipe|)hyperpage}{18}
+\indexentry{sizeof operator@\texttt{sizeof} operator|)hyperpage}{18}
+\indexentry{Kendali Alur|(hyperpage}{18}
+\indexentry{if pernyataan@\texttt{if} pernyataan|(hyperpage}{18}
+\indexentry{if pernyataan@\texttt{if} pernyataan|)hyperpage}{19}
+\indexentry{if-else pernyataan@\texttt{if}-\texttt{else} pernyataan|(hyperpage}{19}
+\indexentry{if-else pernyataan@\texttt{if}-\texttt{else} pernyataan|)hyperpage}{20}
+\indexentry{while pernyataan@\texttt{while} pernyataan|(hyperpage}{20}
+\indexentry{while pernyataan@\texttt{while} pernyataan|)hyperpage}{21}
+\indexentry{do-while pernyataan@\texttt{do}-\texttt{while} pernyataan|(hyperpage}{21}
+\indexentry{do-while pernyataan@\texttt{do}-\texttt{while} pernyataan|)hyperpage}{22}
+\indexentry{for pernyataan@\texttt{for} pernyataan|(hyperpage}{22}
+\indexentry{for pernyataan@\texttt{for} pernyataan|)hyperpage}{23}
+\indexentry{switch pernyataan@\texttt{switch} pernyataan|(hyperpage}{23}
+\indexentry{case pernyataan@\texttt{case} pernyataan|(hyperpage}{23}
+\indexentry{break pernyataan@\texttt{break} pernyataan|(hyperpage}{23}
+\indexentry{break pernyataan@\texttt{break} pernyataan|)hyperpage}{23}
+\indexentry{default label@\texttt{default} label|hyperpage}{23}
+\indexentry{case pernyataan@\texttt{case} pernyataan|)hyperpage}{24}
+\indexentry{break pernyataan@\texttt{break} pernyataan|(hyperpage}{24}
+\indexentry{Fall through|(hyperpage}{24}
+\indexentry{Fall through|)hyperpage}{25}
+\indexentry{break pernyataan@\texttt{break} pernyataan|)hyperpage}{25}
+\indexentry{enum kata kunci@\texttt{enum} kata kunci|hyperpage}{25}
+\indexentry{switch pernyataan@\texttt{switch} pernyataan|)hyperpage}{25}
+\indexentry{break pernyataan@\texttt{break} pernyataan|)hyperpage}{25}
+\indexentry{Kendali Alur|)hyperpage}{25}
+\indexentry{C3PO|hyperpage}{27}
+\indexentry{Fungsi|(hyperpage}{27}
+\indexentry{argumen Fungsi|hyperpage}{27}
+\indexentry{return pernyataan@\texttt{return} pernyataan|hyperpage}{27}
+\indexentry{parameter Fungsi|hyperpage}{27}
+\indexentry{main() fungsi@\texttt{main()} fungsi|hyperpage}{28}
+\indexentry{void tipe@\texttt{void} tipe|hyperpage}{28}
+\indexentry{Pass by value|hyperpage}{28}
+\indexentry{Pass by value|)}{29}
+\indexentry{Function prototype|(hyperpage}{29}
+\indexentry{Implicit declaration|hyperpage}{30}
+\indexentry{Function prototype|)hyperpage}{30}
+\indexentry{Empty parameter lists|hyperpage}{30}
+\indexentry{void tipe@\texttt{void} tipe|hyperpage}{30}
+\indexentry{void tipe@\texttt{void} tipe|hyperpage}{30}
+\indexentry{void tipe@\texttt{void} tipe|hyperpage}{30}
+\indexentry{void tipe@\texttt{void} tipe|hyperpage}{30}
+\indexentry{void tipe@\texttt{void} tipe!in function prototypes|hyperpage}{30}
+\indexentry{Fungsi|)hyperpage}{31}
+\indexentry{Pointers|(hyperpage}{33}
+\indexentry{Memory address|hyperpage}{33}
+\indexentry{\& operator address-of@\texttt{\&} operator address-of|(hyperpage}{34}
+\indexentry{printf() fungsi@\texttt{printf()} fungsi!with pointers|hyperpage}{34}
+\indexentry{\& operator address-of@\texttt{\&} operator address-of|)hyperpage}{35}
+\indexentry{Pointer types|(hyperpage}{35}
+\indexentry{Pointer types|)hyperpage}{36}
+\indexentry{Dereferencing|(hyperpage}{36}
+\indexentry{* indirection operator@\texttt{*} indirection operator|(hyperpage}{36}
+\indexentry{Dereferencing|)hyperpage}{37}
+\indexentry{* indirection operator@\texttt{*} indirection operator|)hyperpage}{37}
+\indexentry{Pointers!as arguments|(hyperpage}{37}
+\indexentry{NULL pointer@\texttt{NULL} pointer|(hyperpage}{38}
+\indexentry{NULL pointer@\texttt{NULL} pointer|)hyperpage}{38}
+\indexentry{Pointers!declarations|(hyperpage}{39}
+\indexentry{Pointers!declarations|)hyperpage}{39}
+\indexentry{Pointers!with sizeof@with \texttt{sizeof}|(hyperpage}{39}
+\indexentry{Pointers!with sizeof@with \texttt{sizeof}|)hyperpage}{40}
+\indexentry{Pointers|)hyperpage}{40}
+\indexentry{Arrays|(hyperpage}{41}
+\indexentry{Arrays!indexing|(hyperpage}{41}
+\indexentry{Arrays!indexing|)hyperpage}{42}
+\indexentry{Arrays!getting the length|(hyperpage}{42}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with arrays|(hyperpage}{42}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with arrays|)hyperpage}{42}
+\indexentry{Arrays!getting the length|)hyperpage}{42}
+\indexentry{Array initializers|(hyperpage}{42}
+\indexentry{Array initializers|)hyperpage}{44}
+\indexentry{Arrays!out of bounds|(hyperpage}{44}
+\indexentry{Arrays!out of bounds|)hyperpage}{44}
+\indexentry{Arrays!multidimensional|(hyperpage}{45}
+\indexentry{Arrays!multidimensional|)hyperpage}{45}
+\indexentry{Arrays!as pointers|(hyperpage}{46}
+\indexentry{Arrays!as pointers|)hyperpage}{46}
+\indexentry{Arrays!passing to functions|(hyperpage}{46}
+\indexentry{Arrays!passing to functions|)hyperpage}{47}
+\indexentry{Arrays!modifying within functions|(hyperpage}{47}
+\indexentry{Arrays!modifying within functions|)hyperpage}{48}
+\indexentry{Arrays!passing to functions|(hyperpage}{48}
+\indexentry{Arrays!passing to functions|)hyperpage}{49}
+\indexentry{Arrays|)hyperpage}{49}
+\indexentry{Strings|(hyperpage}{51}
+\indexentry{String literals|(hyperpage}{51}
+\indexentry{String literals|)hyperpage}{51}
+\indexentry{String variables|(hyperpage}{51}
+\indexentry{String variables|)hyperpage}{52}
+\indexentry{String variables!as arrays|(hyperpage}{52}
+\indexentry{String variables!as arrays|)hyperpage}{52}
+\indexentry{Strings!initializers|(hyperpage}{52}
+\indexentry{Strings!initializers|)hyperpage}{53}
+\indexentry{Strings!getting the length|(hyperpage}{53}
+\indexentry{Strings!getting the length|)hyperpage}{53}
+\indexentry{Strings!termination|(hyperpage}{54}
+\indexentry{Strings!termination|)hyperpage}{54}
+\indexentry{Strings!copying|(hyperpage}{54}
+\indexentry{Strings!copying|)hyperpage}{55}
+\indexentry{Strings|)hyperpage}{55}
+\indexentry{struct keyword@\texttt{struct} keyword|(hyperpage}{57}
+\indexentry{struct keyword@\texttt{struct} keyword!declaring|(hyperpage}{57}
+\indexentry{struct keyword@\texttt{struct} keyword!declaring|)hyperpage}{58}
+\indexentry{struct keyword@\texttt{struct} keyword!initializers|(hyperpage}{58}
+\indexentry{struct keyword@\texttt{struct} keyword!initializers|)hyperpage}{58}
+\indexentry{struct keyword@\texttt{struct} keyword!passing and returning|(hyperpage}{58}
+\indexentry{struct keyword@\texttt{struct} keyword!passing and returning|)hyperpage}{59}
+\indexentry{-> arrow operator@\texttt{->} arrow operator|(hyperpage}{60}
+\indexentry{-> arrow operator@\texttt{->} arrow operator|)hyperpage}{60}
+\indexentry{struct keyword@\texttt{struct} keyword!copying|(hyperpage}{60}
+\indexentry{struct keyword@\texttt{struct} keyword!copying|)hyperpage}{60}
+\indexentry{struct keyword@\texttt{struct} keyword!comparing|(hyperpage}{60}
+\indexentry{struct keyword@\texttt{struct} keyword!comparing|)hyperpage}{60}
+\indexentry{struct keyword@\texttt{struct} keyword|)hyperpage}{60}
+\indexentry{File I/O|(hyperpage}{61}
+\indexentry{FILE* type@\texttt{FILE*} type|(hyperpage}{61}
+\indexentry{stdin standard input@\texttt{stdin} standard input|(hyperpage}{61}
+\indexentry{stdout standard output@\texttt{stdout} standard output|(hyperpage}{61}
+\indexentry{stderr standard error@\texttt{stderr} standard error|(hyperpage}{61}
+\indexentry{stdin standard input@\texttt{stdin} standard input|)hyperpage}{62}
+\indexentry{stdout standard output@\texttt{stdout} standard output|)hyperpage}{62}
+\indexentry{stderr standard error@\texttt{stderr} standard error|)hyperpage}{62}
+\indexentry{FILE* type@\texttt{FILE*} type|(hyperpage}{62}
+\indexentry{File I/O!text files, reading|(hyperpage}{62}
+\indexentry{fopen() function@\texttt{fopen()} function|(hyperpage}{62}
+\indexentry{fgetc() function@\texttt{fgetc()} function|(hyperpage}{62}
+\indexentry{fclose() function@\texttt{fclose()} function|(hyperpage}{62}
+\indexentry{fopen() function@\texttt{fopen()} function|)hyperpage}{62}
+\indexentry{fgetc() function@\texttt{fgetc()} function|)hyperpage}{62}
+\indexentry{fclose() function@\texttt{fclose()} function|)hyperpage}{62}
+\indexentry{FILE* type@\texttt{FILE*} type|hyperpage}{62}
+\indexentry{File I/O!text files, reading|)hyperpage}{63}
+\indexentry{EOF end of file@\texttt{EOF} end of file|(hyperpage}{63}
+\indexentry{fopen() function@\texttt{fopen()} function|(hyperpage}{63}
+\indexentry{fgetc() function@\texttt{fgetc()} function|(hyperpage}{63}
+\indexentry{fclose() function@\texttt{fclose()} function|(hyperpage}{63}
+\indexentry{fopen() function@\texttt{fopen()} function|)hyperpage}{63}
+\indexentry{fclose() function@\texttt{fclose()} function|)hyperpage}{63}
+\indexentry{fgetc() function@\texttt{fgetc()} function|)hyperpage}{63}
+\indexentry{EOF end of file@\texttt{EOF} end of file|)hyperpage}{63}
+\indexentry{File I/O!line by line|(hyperpage}{63}
+\indexentry{fgets() function@\texttt{fgets()} function|(hyperpage}{63}
+\indexentry{fgets() function@\texttt{fgets()} function|)hyperpage}{63}
+\indexentry{fgets() function@\texttt{fgets()} function|(hyperpage}{64}
+\indexentry{fgets() function@\texttt{fgets()} function|)hyperpage}{64}
+\indexentry{File I/O!line by line|)hyperpage}{64}
+\indexentry{File I/O!formatted input|(hyperpage}{64}
+\indexentry{fscanf() function@\texttt{fscanf()} function|(hyperpage}{64}
+\indexentry{strtol function@\texttt{strtol} function|hyperpage}{64}
+\indexentry{strtod function@\texttt{strtod} function|hyperpage}{64}
+\indexentry{fgets() function@\texttt{fgets()} function|hyperpage}{64}
+\indexentry{fscanf() function@\texttt{fscanf()} function|)hyperpage}{65}
+\indexentry{File I/O!formatted input|)hyperpage}{65}
+\indexentry{File I/O!text files, writing|(hyperpage}{65}
+\indexentry{fputc() function@\texttt{fputc()} function|(hyperpage}{65}
+\indexentry{fputs() function@\texttt{fputs()} function|(hyperpage}{65}
+\indexentry{fprintf() function@\texttt{fprintf()} function|(hyperpage}{65}
+\indexentry{fputc() function@\texttt{fputc()} function|)hyperpage}{65}
+\indexentry{fputs() function@\texttt{fputs()} function|)hyperpage}{65}
+\indexentry{fprintf() function@\texttt{fprintf()} function|)hyperpage}{65}
+\indexentry{File I/O!text files, writing|)hyperpage}{66}
+\indexentry{File I/O!binary files|(hyperpage}{66}
+\indexentry{fwrite() function@\texttt{fwrite()} function|(hyperpage}{66}
+\indexentry{fread() function@\texttt{fread()} function|hyperpage}{66}
+\indexentry{fwrite() function@\texttt{fwrite()} function|)hyperpage}{66}
+\indexentry{fread() function@\texttt{fread()} function|(hyperpage}{67}
+\indexentry{fread() function@\texttt{fread()} function|)hyperpage}{67}
+\indexentry{File I/O!binary files|)hyperpage}{67}
+\indexentry{File I/O!with structs@with \texttt{struct}s|(hyperpage}{68}
+\indexentry{File I/O!with structs@with \texttt{struct}s|)hyperpage}{68}
+\indexentry{File I/O!with numeric values|(hyperpage}{68}
+\indexentry{Endianess|hyperpage}{68}
+\indexentry{File I/O!with structs@with \texttt{struct}s|(hyperpage}{68}
+\indexentry{Data serialization|hyperpage}{68}
+\indexentry{File I/O!with structs@with \texttt{struct}s|)hyperpage}{68}
+\indexentry{File I/O!with numeric values|)hyperpage}{68}
+\indexentry{File I/O|)hyperpage}{68}
+\indexentry{typedef keyword@\texttt{typedef} keyword|(hyperpage}{69}
+\indexentry{typedef keyword@\texttt{typedef} keyword!scoping rules|(hyperpage}{69}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with structs@with \texttt{struct}s|(hyperpage}{69}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with anonymous structs@with anonymous \texttt{struct}s|(hyperpage}{70}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with anonymous structs@with anonymous \texttt{struct}s|)hyperpage}{71}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with structs@with \texttt{struct}s|)hyperpage}{71}
+\indexentry{typedef keyword@\texttt{typedef} keyword!scoping rules|)hyperpage}{71}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with pointers|(hyperpage}{71}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with pointers|)hyperpage}{71}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with arrays|(hyperpage}{72}
+\indexentry{typedef keyword@\texttt{typedef} keyword!with arrays|)hyperpage}{72}
+\indexentry{typedef keyword@\texttt{typedef} keyword|)hyperpage}{72}
+\indexentry{Pointers!arithmetic|(hyperpage}{73}
+\indexentry{Pointers!subtracting|(hyperpage}{75}
+\indexentry{Pointers!subtracting|)hyperpage}{76}
+\indexentry{Pointers!array equivalence|(hyperpage}{76}
+\indexentry{Pointers!array equivalence|)hyperpage}{77}
+\indexentry{void* void pointer@\texttt{void*} void pointer|(hyperpage}{77}
+\indexentry{memcpy() function@\texttt{memcpy()} function|(hyperpage}{77}
+\indexentry{memcpy() function@\texttt{memcpy()} function|)hyperpage}{78}
+\indexentry{void* void pointer@\texttt{void*} void pointer!caveats|(hyperpage}{79}
+\indexentry{void* void pointer@\texttt{void*} void pointer!caveats|)hyperpage}{79}
+\indexentry{memcpy() function@\texttt{memcpy()} function|(hyperpage}{79}
+\indexentry{memcpy() function@\texttt{memcpy()} function|)hyperpage}{80}
+\indexentry{qsort() function@\texttt{qsort()} function|(hyperpage}{80}
+\indexentry{qsort() function@\texttt{qsort()} function|)hyperpage}{81}
+\indexentry{void* void pointer@\texttt{void*} void pointer|)hyperpage}{81}
+\indexentry{Pointers!arithmetic|)hyperpage}{81}
+\indexentry{Manual memory management|(hyperpage}{83}
+\indexentry{Automatic variables|(hyperpage}{83}
+\indexentry{Automatic variables|)hyperpage}{83}
+\indexentry{The stack|(hyperpage}{83}
+\indexentry{The heap|(hyperpage}{83}
+\indexentry{The heap|)hyperpage}{83}
+\indexentry{The stack|)hyperpage}{83}
+\indexentry{malloc() function@\texttt{malloc()} function|(hyperpage}{83}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with malloc()@with \texttt{malloc()}|(hyperpage}{84}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with malloc()@with \texttt{malloc()}|)hyperpage}{84}
+\indexentry{free() function@\texttt{free()} function|(hyperpage}{84}
+\indexentry{free() function@\texttt{free()} function|)hyperpage}{84}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with malloc()@with \texttt{malloc()}|(hyperpage}{84}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with malloc()@with \texttt{malloc()}|)hyperpage}{84}
+\indexentry{malloc() function@\texttt{malloc()} function|)hyperpage}{84}
+\indexentry{malloc() function@\texttt{malloc()} function!error checking|(hyperpage}{84}
+\indexentry{malloc() function@\texttt{malloc()} function!error checking|)hyperpage}{85}
+\indexentry{malloc() function@\texttt{malloc()} function!and arrays|(hyperpage}{85}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with malloc()@with \texttt{malloc()}|(hyperpage}{85}
+\indexentry{sizeof operator@\texttt{sizeof} operator!with malloc()@with \texttt{malloc()}|)hyperpage}{85}
+\indexentry{malloc() function@\texttt{malloc()} function!and arrays|)hyperpage}{85}
+\indexentry{calloc() function@\texttt{calloc()} function|(hyperpage}{86}
+\indexentry{calloc() function@\texttt{calloc()} function|)hyperpage}{86}
+\indexentry{realloc() function@\texttt{realloc()} function|(hyperpage}{86}
+\indexentry{realloc() function@\texttt{realloc()} function|)hyperpage}{87}
+\indexentry{realloc() function@\texttt{realloc()} function!with NULL argument@with \texttt{NULL} argument|(hyperpage}{89}
+\indexentry{realloc() function@\texttt{realloc()} function!with NULL argument@with \texttt{NULL} argument|)hyperpage}{89}
+\indexentry{Memory alignment|(hyperpage}{90}
+\indexentry{aligned\_alloc() function@\texttt{aligned\_alloc()} function|(hyperpage}{90}
+\indexentry{aligned\_alloc() function@\texttt{aligned\_alloc()} function|)hyperpage}{90}
+\indexentry{Memory alignment|)hyperpage}{91}
+\indexentry{Manual memory management|)hyperpage}{91}
+\indexentry{Scope|(hyperpage}{93}
+\indexentry{Scope!block|(hyperpage}{93}
+\indexentry{Variable hiding|(hyperpage}{94}
+\indexentry{Variable hiding|)hyperpage}{94}
+\indexentry{Scope!block|)hyperpage}{94}
+\indexentry{Scope!file|(hyperpage}{94}
+\indexentry{Scope!file|)hyperpage}{95}
+\indexentry{Scope!for loop@\texttt{for} loop|(hyperpage}{95}
+\indexentry{Scope!for loop@\texttt{for} loop|)hyperpage}{95}
+\indexentry{Scope!function|(hyperpage}{95}
+\indexentry{Scope!function|)hyperpage}{95}
+\indexentry{Scope|)hyperpage}{95}
+\indexentry{Types!signed and unsigned|(hyperpage}{97}
+\indexentry{unsigned type@\texttt{unsigned} type|(hyperpage}{97}
+\indexentry{unsigned type@\texttt{unsigned} type|)hyperpage}{98}
+\indexentry{Types!signed and unsigned|)hyperpage}{98}
+\indexentry{Types!character|(hyperpage}{98}
+\indexentry{char type@\texttt{char} type|(hyperpage}{98}
+\indexentry{unsigned char type@\texttt{unsigned char} type|(hyperpage}{98}
+\indexentry{signed char type@\texttt{signed char} type|(hyperpage}{98}
+\indexentry{unsigned char type@\texttt{unsigned char} type|)hyperpage}{99}
+\indexentry{signed char type@\texttt{signed char} type|)hyperpage}{99}
+\indexentry{' single quote@\texttt{'} single quote|(hyperpage}{99}
+\indexentry{' single quote@\texttt{'} single quote|)hyperpage}{99}
+\indexentry{char type@\texttt{char} type|)hyperpage}{99}
+\indexentry{Types!character|)hyperpage}{99}
+\indexentry{short type@\texttt{short} type|(hyperpage}{99}
+\indexentry{long type@\texttt{long} type|(hyperpage}{99}
+\indexentry{long long type@\texttt{long long} type|(hyperpage}{99}
+\indexentry{short type@\texttt{short} type|)hyperpage}{101}
+\indexentry{long type@\texttt{long} type|)hyperpage}{101}
+\indexentry{long long type@\texttt{long long} type|)hyperpage}{101}
+\indexentry{double type@\texttt{double} type|(hyperpage}{102}
+\indexentry{long double type@\texttt{long double} type|(hyperpage}{102}
+\indexentry{double type@\texttt{double} type|)hyperpage}{102}
+\indexentry{long double type@\texttt{long double} type|)hyperpage}{102}
+\indexentry{Significant digits|(hyperpage}{102}
+\indexentry{FLT\_DIG macro@\texttt{FLT\_DIG} macro|(hyperpage}{102}
+\indexentry{DBL\_DIG macro@\texttt{DBL\_DIG} macro|(hyperpage}{102}
+\indexentry{LDBL\_DIG macro@\texttt{LDBL\_DIG} macro|(hyperpage}{102}
+\indexentry{DBL\_DIG macro@\texttt{DBL\_DIG} macro|)hyperpage}{103}
+\indexentry{LDBL\_DIG macro@\texttt{LDBL\_DIG} macro|)hyperpage}{103}
+\indexentry{FLT\_DIG macro@\texttt{FLT\_DIG} macro|)hyperpage}{103}
+\indexentry{FLT\_DECMIAL\_DIG macro@\texttt{FLT\_DECMIAL\_DIG} macro|(hyperpage}{104}
+\indexentry{DBL\_DECMIAL\_DIG macro@\texttt{DBL\_DECMIAL\_DIG} macro|(hyperpage}{104}
+\indexentry{LDBL\_DECMIAL\_DIG macro@\texttt{LDBL\_DECMIAL\_DIG} macro|(hyperpage}{104}
+\indexentry{DECMIAL\_DIG macro@\texttt{DECMIAL\_DIG} macro|(hyperpage}{104}
+\indexentry{LDBL\_DECMIAL\_DIG macro@\texttt{LDBL\_DECMIAL\_DIG} macro|)hyperpage}{104}
+\indexentry{DECMIAL\_DIG macro@\texttt{DECMIAL\_DIG} macro|)hyperpage}{104}
+\indexentry{DBL\_DECMIAL\_DIG macro@\texttt{DBL\_DECMIAL\_DIG} macro|)hyperpage}{104}
+\indexentry{FLT\_DIG macro@\texttt{FLT\_DIG} macro|hyperpage}{104}
+\indexentry{DBL\_DIG macro@\texttt{DBL\_DIG} macro|hyperpage}{104}
+\indexentry{LDBL\_DIG macro@\texttt{LDBL\_DIG} macro|hyperpage}{104}
+\indexentry{FLT\_DECMIAL\_DIG macro@\texttt{FLT\_DECMIAL\_DIG} macro|)hyperpage}{105}
+\indexentry{Significant digits|)hyperpage}{105}
+\indexentry{0x hexadecimal@\texttt{0x} hexadecimal|(hyperpage}{105}
+\indexentry{0x hexadecimal@\texttt{0x} hexadecimal|)hyperpage}{105}
+\indexentry{0 octal@\texttt{0} octal|(hyperpage}{105}
+\indexentry{0 octal@\texttt{0} octal|)hyperpage}{105}
+\indexentry{0b binary@\texttt{0b} binary|(hyperpage}{105}
+\indexentry{0b binary@\texttt{0b} binary|)hyperpage}{105}
+\indexentry{Integer constants|(hyperpage}{105}
+\indexentry{U unsigned constant@\texttt{U} unsigned constant|(hyperpage}{105}
+\indexentry{L long constant@\texttt{L} long constant|(hyperpage}{105}
+\indexentry{LL long long constant@\texttt{LL} long long constant|(hyperpage}{105}
+\indexentry{UL unsigned long constant@\texttt{UL} unsigned long constant|(hyperpage}{105}
+\indexentry{ULL unsigned long long constant@\texttt{ULL} unsigned long long constant|(hyperpage}{105}
+\indexentry{L long constant@\texttt{L} long constant|)hyperpage}{107}
+\indexentry{LL long long constant@\texttt{LL} long long constant|)hyperpage}{107}
+\indexentry{UL unsigned long constant@\texttt{UL} unsigned long constant|)hyperpage}{107}
+\indexentry{ULL unsigned long long constant@\texttt{ULL} unsigned long long constant|)hyperpage}{107}
+\indexentry{U unsigned constant@\texttt{U} unsigned constant|)hyperpage}{107}
+\indexentry{Integer constants|)hyperpage}{107}
+\indexentry{Floating point constants|(hyperpage}{107}
+\indexentry{F float constant@\texttt{F} float constant|(hyperpage}{107}
+\indexentry{L long double constant@\texttt{L} long double constant|(hyperpage}{107}
+\indexentry{F float constant@\texttt{F} float constant|)hyperpage}{107}
+\indexentry{L long double constant@\texttt{L} long double constant|)hyperpage}{107}
+\indexentry{Floating point constants|)hyperpage}{107}
+\indexentry{Scientific notation|(hyperpage}{107}
+\indexentry{Scientific notation|)hyperpage}{108}
+\indexentry{Hex floating point constants|(hyperpage}{108}
+\indexentry{Hex floating point constants|)hyperpage}{108}
+\indexentry{Type conversions|(hyperpage}{109}
+\indexentry{Type conversions!strings|(hyperpage}{109}
+\indexentry{Type conversions!strings|)hyperpage}{112}
+\indexentry{Type conversions!char@\texttt{char}|(hyperpage}{112}
+\indexentry{Type conversions!char@\texttt{char}|)hyperpage}{113}
+\indexentry{Type conversions!numeric|(hyperpage}{113}
+\indexentry{Type conversions!Boolean|hyperpage}{113}
+\indexentry{Type conversions!integer|(hyperpage}{113}
+\indexentry{Type conversions!floating point|(hyperpage}{114}
+\indexentry{Type conversions!floating point|)hyperpage}{114}
+\indexentry{Type conversions!integer|)hyperpage}{114}
+\indexentry{Type conversions!implicit|(hyperpage}{114}
+\indexentry{Type conversions!implicit|)hyperpage}{115}
+\indexentry{Type conversions!explicit|(hyperpage}{115}
+\indexentry{Type conversions!numeric|)hyperpage}{115}
+\indexentry{Type conversions!casting|(hyperpage}{115}
+\indexentry{Type conversions!explicit|)hyperpage}{116}
+\indexentry{Type conversions!casting|)hyperpage}{116}
+\indexentry{Type conversions|)hyperpage}{116}
+\indexentry{Type qualifiers|(hyperpage}{117}
+\indexentry{const type qualifier@\texttt{const} type qualifier|(hyperpage}{117}
+\indexentry{const type qualifier@\texttt{const} type qualifier!and pointers|(hyperpage}{117}
+\indexentry{const type qualifier@\texttt{const} type qualifier!and pointers|)hyperpage}{118}
+\indexentry{const type qualifier@\texttt{const} type qualifier!correctness|(hyperpage}{118}
+\indexentry{const type qualifier@\texttt{const} type qualifier!correctness|)hyperpage}{119}
+\indexentry{const type qualifier@\texttt{const} type qualifier|)hyperpage}{119}
+\indexentry{restrict type qualifier@\texttt{restrict} type qualifier|(hyperpage}{119}
+\indexentry{restrict type qualifier@\texttt{restrict} type qualifier|)hyperpage}{120}
+\indexentry{volatile type qualifier@\texttt{volatile} type qualifier|(hyperpage}{120}
+\indexentry{volatile type qualifier@\texttt{volatile} type qualifier|)hyperpage}{120}
+\indexentry{Type qualifiers|)hyperpage}{120}
+\indexentry{Storage-Class Specifiers|(hyperpage}{121}
+\indexentry{auto storage class@\texttt{auto} storage class|(hyperpage}{121}
+\indexentry{auto storage class@\texttt{auto} storage class|)hyperpage}{121}
+\indexentry{static storage class@\texttt{static} storage class|(hyperpage}{121}
+\indexentry{static storage class@\texttt{static} storage class!in block scope|(hyperpage}{121}
+\indexentry{static storage class@\texttt{static} storage class!in block scope|)hyperpage}{122}
+\indexentry{static storage class@\texttt{static} storage class!in file scope|(hyperpage}{122}
+\indexentry{static storage class@\texttt{static} storage class!in file scope|)hyperpage}{122}
+\indexentry{static storage class@\texttt{static} storage class|)hyperpage}{122}
+\indexentry{extern storage class@\texttt{extern} storage class|(hyperpage}{122}
+\indexentry{extern storage class@\texttt{extern} storage class|)hyperpage}{123}
+\indexentry{register storage class@\texttt{register} storage class|(hyperpage}{123}
+\indexentry{register storage class@\texttt{register} storage class|)hyperpage}{124}
+\indexentry{\_Thread\_local storage class@\texttt{\_Thread\_local} storage class|(hyperpage}{124}
+\indexentry{\_Thread\_local storage class@\texttt{\_Thread\_local} storage class|)hyperpage}{124}
+\indexentry{Storage-Class Specifiers|)hyperpage}{124}
+\indexentry{Multifile projects|(hyperpage}{125}
+\indexentry{Multifile projects!includes|(hyperpage}{125}
+\indexentry{Multifile projects!function prototypes|(hyperpage}{125}
+\indexentry{Multifile projects!function prototypes|)hyperpage}{127}
+\indexentry{Multifile projects!includes|)hyperpage}{128}
+\indexentry{static storage class@\texttt{static} storage class|(hyperpage}{128}
+\indexentry{extern storage class@\texttt{extern} storage class|(hyperpage}{128}
+\indexentry{Multifile projects!static storage class@\texttt{static} storage class|(hyperpage}{128}
+\indexentry{Multifile projects!extern storage class@\texttt{extern} storage class|(hyperpage}{128}
+\indexentry{static storage class@\texttt{static} storage class|)hyperpage}{128}
+\indexentry{extern storage class@\texttt{extern} storage class|)hyperpage}{128}
+\indexentry{Multifile projects!static storage class@\texttt{static} storage class|)hyperpage}{128}
+\indexentry{Multifile projects!extern storage class@\texttt{extern} storage class|)hyperpage}{128}
+\indexentry{Object files|(hyperpage}{128}
+\indexentry{gcc compiler@\texttt{gcc} compiler|(hyperpage}{128}
+\indexentry{gcc compiler@\texttt{gcc} compiler|)hyperpage}{128}
+\indexentry{Object files|)hyperpage}{129}
+\indexentry{Multifile projects|)hyperpage}{129}
+\indexentry{Command line arguments|(hyperpage}{131}
+\indexentry{argc parameter@\texttt{argc} parameter|(hyperpage}{132}
+\indexentry{argv parameter@\texttt{argv} parameter|(hyperpage}{132}
+\indexentry{main() function@\texttt{main()} function!command line options|(hyperpage}{132}
+\indexentry{main() function@\texttt{main()} function!command line options|)hyperpage}{133}
+\indexentry{argc parameter@\texttt{argc} parameter|)hyperpage}{133}
+\indexentry{argc parameter@\texttt{argc} parameter|(hyperpage}{134}
+\indexentry{argc parameter@\texttt{argc} parameter|)hyperpage}{135}
+\indexentry{argv parameter@\texttt{argv} parameter|)hyperpage}{135}
+\indexentry{Command line arguments|)hyperpage}{135}
+\indexentry{Exit status|(hyperpage}{135}
+\indexentry{main() function@\texttt{main()} function!returning from|(hyperpage}{135}
+\indexentry{main() function@\texttt{main()} function!returning from|)hyperpage}{135}
+\indexentry{EXIT\_SUCCESS macro@\texttt{EXIT\_SUCCESS} macro|(hyperpage}{135}
+\indexentry{EXIT\_FAILURE macro@\texttt{EXIT\_FAILURE} macro|(hyperpage}{135}
+\indexentry{EXIT\_SUCCESS macro@\texttt{EXIT\_SUCCESS} macro|)hyperpage}{136}
+\indexentry{EXIT\_FAILURE macro@\texttt{EXIT\_FAILURE} macro|)hyperpage}{136}
+\indexentry{Exit status!obtaining from shell|(hyperpage}{136}
+\indexentry{Exit status!obtaining from shell|)hyperpage}{136}
+\indexentry{EXIT\_FAILURE macro@\texttt{EXIT\_FAILURE} macro|hyperpage}{136}
+\indexentry{Exit status|)hyperpage}{137}
+\indexentry{Environment variables|(hyperpage}{137}
+\indexentry{getenv() function@\texttt{getenv()} function|(hyperpage}{137}
+\indexentry{getenv() function@\texttt{getenv()} function|)hyperpage}{137}
+\indexentry{putenv() function@\texttt{putenv()} function|hyperpage}{138}
+\indexentry{setenv()@\texttt{setenv()}|hyperpage}{138}
+\indexentry{unsetenv() function@\texttt{unsetenv()} function|hyperpage}{138}
+\indexentry{\_putenv() function@\texttt{\_putenv()} function|hyperpage}{138}
+\indexentry{environ variable@\texttt{environ} variable|(hyperpage}{138}
+\indexentry{environ variable@\texttt{environ} variable|)hyperpage}{139}
+\indexentry{env parameter@\texttt{env} parameter|(hyperpage}{139}
+\indexentry{env parameter@\texttt{env} parameter|)hyperpage}{139}
+\indexentry{Environment variables|)hyperpage}{139}
+\indexentry{Preprocessor|(hyperpage}{141}
+\indexentry{\#include directive@\texttt{\#include} directive|(hyperpage}{141}
+\indexentry{\#include directive@\texttt{\#include} directive!local files|(hyperpage}{141}
+\indexentry{\#include directive@\texttt{\#include} directive!local files|)hyperpage}{142}
+\indexentry{\#include directive@\texttt{\#include} directive|)hyperpage}{142}
+\indexentry{Preprocessor!macros|(hyperpage}{142}
+\indexentry{\#define directive@\texttt{\#define} directive|(hyperpage}{142}
+\indexentry{\#define directive@\texttt{\#define} directive!versus const@versus \texttt{const}|(hyperpage}{142}
+\indexentry{\#define directive@\texttt{\#define} directive!versus const@versus \texttt{const}|)hyperpage}{142}
+\indexentry{\#define directive@\texttt{\#define} directive|)hyperpage}{142}
+\indexentry{Preprocessor!macros|)hyperpage}{142}
+\indexentry{Conditional compilation|(hyperpage}{143}
+\indexentry{\#ifdef directive@\texttt{\#ifdef} directive|(hyperpage}{143}
+\indexentry{\#endif directive@\texttt{\#endif} directive|(hyperpage}{143}
+\indexentry{\#ifdef directive@\texttt{\#ifdef} directive|)hyperpage}{143}
+\indexentry{\#endif directive@\texttt{\#endif} directive|)hyperpage}{143}
+\indexentry{\#ifndef directive@\texttt{\#ifndef} directive|(hyperpage}{143}
+\indexentry{\#endif directive@\texttt{\#endif} directive|(hyperpage}{143}
+\indexentry{\#ifndef directive@\texttt{\#ifndef} directive|)hyperpage}{144}
+\indexentry{\#endif directive@\texttt{\#endif} directive|)hyperpage}{144}
+\indexentry{\#else directive@\texttt{\#else} directive|(hyperpage}{144}
+\indexentry{\#ifdef directive@\texttt{\#ifdef} directive|(hyperpage}{144}
+\indexentry{\#endif directive@\texttt{\#endif} directive|(hyperpage}{144}
+\indexentry{\#ifdef directive@\texttt{\#ifdef} directive|)hyperpage}{144}
+\indexentry{\#else directive@\texttt{\#else} directive|)hyperpage}{144}
+\indexentry{\#endif directive@\texttt{\#endif} directive|)hyperpage}{144}
+\indexentry{\#elifdef directive@\texttt{\#elifdef} directive|(hyperpage}{144}
+\indexentry{\#elifndef directive@\texttt{\#elifndef} directive|(hyperpage}{144}
+\indexentry{\#elifdef directive@\texttt{\#elifdef} directive|)hyperpage}{144}
+\indexentry{\#elifndef directive@\texttt{\#elifndef} directive|)hyperpage}{144}
+\indexentry{\#if directive@\texttt{\#if} directive|(hyperpage}{145}
+\indexentry{\#elif directive@\texttt{\#elif} directive|(hyperpage}{145}
+\indexentry{\#elif directive@\texttt{\#elif} directive|)hyperpage}{145}
+\indexentry{\#if 0 directive@\texttt{\#if 0} directive|(hyperpage}{145}
+\indexentry{\#if 0 directive@\texttt{\#if 0} directive|)hyperpage}{145}
+\indexentry{\#if defined directive@\texttt{\#if defined} directive|(hyperpage}{146}
+\indexentry{\#if defined directive@\texttt{\#if defined} directive|)hyperpage}{146}
+\indexentry{\#if directive@\texttt{\#if} directive|)hyperpage}{146}
+\indexentry{Conditional compilation|)hyperpage}{146}
+\indexentry{\#undef directive@\texttt{\#undef} directive|(hyperpage}{146}
+\indexentry{\#undef directive@\texttt{\#undef} directive|)hyperpage}{147}
+\indexentry{Preprocessor!predefined macros|(hyperpage}{147}
+\indexentry{\_\_DATE\_\_ macro@\texttt{\_\_DATE\_\_} macro|(hyperpage}{147}
+\indexentry{\_\_TIME\_\_ macro@\texttt{\_\_TIME\_\_} macro|(hyperpage}{147}
+\indexentry{\_\_FILE\_\_ macro@\texttt{\_\_FILE\_\_} macro|(hyperpage}{147}
+\indexentry{\_\_LINE\_\_ macro@\texttt{\_\_LINE\_\_} macro|(hyperpage}{147}
+\indexentry{\_\_func\_\_ identifier@\texttt{\_\_func\_\_} identifier|(hyperpage}{147}
+\indexentry{\_\_STDC\_VERSION\_\_ macro@\texttt{\_\_STDC\_VERSION\_\_} macro|(hyperpage}{147}
+\indexentry{\_\_STDC\_\_ macro@\texttt{\_\_STDC\_\_} macro|hyperpage}{147}
+\indexentry{\_\_STDC\_HOSTED\_\_ macro@\texttt{\_\_STDC\_HOSTED\_\_} macro|hyperpage}{147}
+\indexentry{\_\_DATE\_\_ macro@\texttt{\_\_DATE\_\_} macro|)hyperpage}{147}
+\indexentry{\_\_TIME\_\_ macro@\texttt{\_\_TIME\_\_} macro|)hyperpage}{147}
+\indexentry{\_\_FILE\_\_ macro@\texttt{\_\_FILE\_\_} macro|)hyperpage}{147}
+\indexentry{\_\_LINE\_\_ macro@\texttt{\_\_LINE\_\_} macro|)hyperpage}{147}
+\indexentry{\_\_func\_\_ identifier@\texttt{\_\_func\_\_} identifier|)hyperpage}{147}
+\indexentry{Language versions|(hyperpage}{148}
+\indexentry{Language versions|)hyperpage}{148}
+\indexentry{\_\_STDC\_VERSION\_\_ macro@\texttt{\_\_STDC\_VERSION\_\_} macro|)hyperpage}{148}
+\indexentry{\_\_STDC\_ISO\_10646\_\_ macro@\texttt{\_\_STDC\_ISO\_10646\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_MB\_MIGHT\_NEQ\_WC\_\_ macro@\texttt{\_\_STDC\_MB\_MIGHT\_NEQ\_WC\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_UTF\_16\_\_ macro@\texttt{\_\_STDC\_UTF\_16\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_UTF\_32\_\_ macro@\texttt{\_\_STDC\_UTF\_32\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_ANALYZABLE\_\_ macro@\texttt{\_\_STDC\_ANALYZABLE\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_IEC\_559\_\_ macro@\texttt{\_\_STDC\_IEC\_559\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_IEC\_559\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_IEC\_559\_COMPLEX\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_LIB\_EXT1\_\_ macro@\texttt{\_\_STDC\_LIB\_EXT1\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_NO\_ATOMICS\_\_ macro@\texttt{\_\_STDC\_NO\_ATOMICS\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_NO\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_NO\_COMPLEX\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_NO\_THREADS\_\_ macro@\texttt{\_\_STDC\_NO\_THREADS\_\_} macro|hyperpage}{148}
+\indexentry{\_\_STDC\_NO\_VLA\_\_ macro@\texttt{\_\_STDC\_NO\_VLA\_\_} macro|hyperpage}{148}
+\indexentry{Preprocessor!predefined macros|)hyperpage}{148}
+\indexentry{Preprocessor!macros with arguments|(hyperpage}{148}
+\indexentry{\#define directive@\texttt{\#define} directive|(hyperpage}{149}
+\indexentry{Preprocessor!macros with variable arguments|(hyperpage}{151}
+\indexentry{\#define directive@\texttt{\#define} directive|)hyperpage}{151}
+\indexentry{Preprocessor!macros with variable arguments|)hyperpage}{151}
+\indexentry{Preprocessor!macros with arguments|)hyperpage}{151}
+\indexentry{\# stringification@\texttt{\#} stringification|(hyperpage}{151}
+\indexentry{\# stringification@\texttt{\#} stringification|)hyperpage}{152}
+\indexentry{\#\# concatenation@\texttt{\#\#} concatenation|(hyperpage}{152}
+\indexentry{\#\# concatenation@\texttt{\#\#} concatenation|)hyperpage}{152}
+\indexentry{Preprocessor!multiline macros|(hyperpage}{152}
+\indexentry{do-while statement@\texttt{do}-\texttt{while} statement!in multiline macros|(hyperpage}{152}
+\indexentry{do-while statement@\texttt{do}-\texttt{while} statement!in multiline macros|)hyperpage}{153}
+\indexentry{Preprocessor!multiline macros|)hyperpage}{153}
+\indexentry{\#error directive@\texttt{\#error} directive|(hyperpage}{155}
+\indexentry{\#error directive@\texttt{\#error} directive|)hyperpage}{155}
+\indexentry{\#warning directive@\texttt{\#warning} directive|(hyperpage}{155}
+\indexentry{\#warning directive@\texttt{\#warning} directive|)hyperpage}{155}
+\indexentry{\#embed directive@\texttt{\#embed} directive|(hyperpage}{155}
+\indexentry{if\_empty() embed parameter@\texttt{if\_empty()} embed parameter|(hyperpage}{156}
+\indexentry{if\_empty() embed parameter@\texttt{if\_empty()} embed parameter|)hyperpage}{157}
+\indexentry{prefix() embed parameter@\texttt{prefix()} embed parameter|(hyperpage}{157}
+\indexentry{suffix() embed parameter@\texttt{suffix()} embed parameter|(hyperpage}{157}
+\indexentry{prefix() embed parameter@\texttt{prefix()} embed parameter|)hyperpage}{158}
+\indexentry{suffix() embed parameter@\texttt{suffix()} embed parameter|)hyperpage}{158}
+\indexentry{\_\_has\_embed() identifier@\texttt{\_\_has\_embed()} identifier|(hyperpage}{158}
+\indexentry{\_\_has\_embed() identifier@\texttt{\_\_has\_embed()} identifier|)hyperpage}{158}
+\indexentry{\#embed directive@\texttt{\#embed} directive|)hyperpage}{159}
+\indexentry{\#pragma directive@\texttt{\#pragma} directive|(hyperpage}{159}
+\indexentry{\#pragma directive@\texttt{\#pragma} directive!nonstandard pragmas|(hyperpage}{159}
+\indexentry{\#pragma directive@\texttt{\#pragma} directive!nonstandard pragmas|)hyperpage}{159}
+\indexentry{FP\_CONTRACT pragma@\texttt{FP\_CONTRACT} pragma|(hyperpage}{160}
+\indexentry{CX\_LIMITED\_RANGE pragma@\texttt{CX\_LIMITED\_RANGE} pragma|(hyperpage}{160}
+\indexentry{FENV\_ACCESS pragma@\texttt{FENV\_ACCESS} pragma|hyperpage}{160}
+\indexentry{FP\_CONTRACT pragma@\texttt{FP\_CONTRACT} pragma|)hyperpage}{160}
+\indexentry{CX\_LIMITED\_RANGE pragma@\texttt{CX\_LIMITED\_RANGE} pragma|)hyperpage}{160}
+\indexentry{\_Pragma operator@\texttt{\_Pragma} operator|(hyperpage}{160}
+\indexentry{\_Pragma operator@\texttt{\_Pragma} operator!in a macro|(hyperpage}{160}
+\indexentry{\_Pragma operator@\texttt{\_Pragma} operator!in a macro|)hyperpage}{160}
+\indexentry{\_Pragma operator@\texttt{\_Pragma} operator|)hyperpage}{160}
+\indexentry{\#pragma directive@\texttt{\#pragma} directive|)hyperpage}{160}
+\indexentry{\#line directive@\texttt{\#line} directive|(hyperpage}{160}
+\indexentry{\_\_LINE\_\_ macro@\texttt{\_\_LINE\_\_} macro|(hyperpage}{160}
+\indexentry{\_\_LINE\_\_ macro@\texttt{\_\_LINE\_\_} macro|)hyperpage}{160}
+\indexentry{\#line directive@\texttt{\#line} directive|)hyperpage}{161}
+\indexentry{\# null directive@\texttt{\#} null directive|(hyperpage}{161}
+\indexentry{\# null directive@\texttt{\#} null directive|)hyperpage}{161}
+\indexentry{Preprocessor|)hyperpage}{161}
+\indexentry{struct keyword@\texttt{struct} keyword|(hyperpage}{163}
+\indexentry{struct keyword@\texttt{struct} keyword!initializers|(hyperpage}{163}
+\indexentry{struct keyword@\texttt{struct} keyword!initializers|)hyperpage}{165}
+\indexentry{struct keyword@\texttt{struct} keyword!anonymous|(hyperpage}{165}
+\indexentry{struct keyword@\texttt{struct} keyword!anonymous|)hyperpage}{165}
+\indexentry{struct keyword@\texttt{struct} keyword!self-referential|(hyperpage}{166}
+\indexentry{struct keyword@\texttt{struct} keyword!self-referential|)hyperpage}{166}
+\indexentry{struct keyword@\texttt{struct} keyword!flexible array members|(hyperpage}{166}
+\indexentry{Arrays!zero length|(hyperpage}{167}
+\indexentry{Arrays!zero length|)hyperpage}{167}
+\indexentry{struct keyword@\texttt{struct} keyword!flexible array members|)hyperpage}{168}
+\indexentry{struct keyword@\texttt{struct} keyword!padding bytes|(hyperpage}{168}
+\indexentry{struct keyword@\texttt{struct} keyword!padding bytes|)hyperpage}{168}
+\indexentry{offsetof() macro@\texttt{offsetof()} macro|(hyperpage}{169}
+\indexentry{offsetof() macro@\texttt{offsetof()} macro|)hyperpage}{169}
+\indexentry{struct keyword@\texttt{struct} keyword!bit fields|(hyperpage}{171}
+\indexentry{struct keyword@\texttt{struct} keyword!bit fields|)hyperpage}{173}
+\indexentry{union keyword@\texttt{union} keyword|(hyperpage}{173}
+\indexentry{union keyword@\texttt{union} keyword!type punning|(hyperpage}{174}
+\indexentry{union keyword@\texttt{union} keyword!type punning|)hyperpage}{174}
+\indexentry{union keyword@\texttt{union} keyword!pointers to|(hyperpage}{174}
+\indexentry{union keyword@\texttt{union} keyword!pointers to|)hyperpage}{175}
+\indexentry{union keyword@\texttt{union} keyword!common initial sequences|(hyperpage}{175}
+\indexentry{union keyword@\texttt{union} keyword!common initial sequences|)hyperpage}{177}
+\indexentry{union keyword@\texttt{union} keyword!and unnamed structs@and unnamed \texttt{struct}s|(hyperpage}{178}
+\indexentry{union keyword@\texttt{union} keyword!and unnamed structs@and unnamed \texttt{struct}s|)hyperpage}{178}
+\indexentry{union keyword@\texttt{union} keyword!passing and returning|(hyperpage}{178}
+\indexentry{struct keyword@\texttt{struct} keyword!passing and returning|(hyperpage}{178}
+\indexentry{union keyword@\texttt{union} keyword!passing and returning|)hyperpage}{179}
+\indexentry{struct keyword@\texttt{struct} keyword!passing and returning|)hyperpage}{179}
+\indexentry{union keyword@\texttt{union} keyword|)hyperpage}{179}
+\indexentry{struct keyword@\texttt{struct} keyword|)hyperpage}{179}
+\indexentry{Escape sequences|(hyperpage}{181}
+\indexentry{{\backslash} backslash escape@\texttt{{\backslash}} backslash escape|(hyperpage}{181}
+\indexentry{{\backslash}' single quote@\texttt{{\backslash}'} single quote|(hyperpage}{181}
+\indexentry{{\backslash}' single quote@\texttt{{\backslash}'} single quote|)hyperpage}{181}
+\indexentry{{\backslash}n newline@\texttt{{\backslash}n} newline|hyperpage}{181}
+\indexentry{{\backslash}' single quote@\texttt{{\backslash}'} single quote|hyperpage}{181}
+\indexentry{{\backslash}" double quote@\texttt{{\backslash}"} double quote|hyperpage}{181}
+\indexentry{{\backslash}{\backslash} backslash@\texttt{{\backslash}{\backslash}} backslash|hyperpage}{181}
+\indexentry{{\backslash}a alert@\texttt{{\backslash}a} alert|hyperpage}{182}
+\indexentry{{\backslash}b backspace@\texttt{{\backslash}b} backspace|hyperpage}{182}
+\indexentry{{\backslash}f formfeed@\texttt{{\backslash}f} formfeed|hyperpage}{182}
+\indexentry{{\backslash}r carriage return@\texttt{{\backslash}r} carriage return|hyperpage}{182}
+\indexentry{{\backslash}t tab@\texttt{{\backslash}t} tab|hyperpage}{182}
+\indexentry{{\backslash}v vertical tab@\texttt{{\backslash}v} vertical tab|hyperpage}{182}
+\indexentry{{\backslash}? question mark@\texttt{{\backslash}?} question mark|hyperpage}{182}
+\indexentry{{\backslash}b backspace@\texttt{{\backslash}b} backspace|(hyperpage}{182}
+\indexentry{{\backslash}r carriage return@\texttt{{\backslash}r} carriage return|(hyperpage}{182}
+\indexentry{{\backslash}b backspace@\texttt{{\backslash}b} backspace|)hyperpage}{183}
+\indexentry{{\backslash}r carriage return@\texttt{{\backslash}r} carriage return|)hyperpage}{183}
+\indexentry{{\backslash}? question mark@\texttt{{\backslash}?} question mark|(hyperpage}{183}
+\indexentry{Trigraphs|(hyperpage}{183}
+\indexentry{Trigraphs|)hyperpage}{183}
+\indexentry{{\backslash}? question mark@\texttt{{\backslash}?} question mark|)hyperpage}{183}
+\indexentry{{\backslash}123 octal value@\texttt{{\backslash}123} octal value|hyperpage}{184}
+\indexentry{{\backslash}x12 hexadecimal value@\texttt{{\backslash}x12} hexadecimal value|hyperpage}{184}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|hyperpage}{184}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|hyperpage}{184}
+\indexentry{{\backslash}123 octal value@\texttt{{\backslash}123} octal value|(hyperpage}{184}
+\indexentry{{\backslash}123 octal value@\texttt{{\backslash}123} octal value|)hyperpage}{184}
+\indexentry{{\backslash}x12 hexadecimal value@\texttt{{\backslash}x12} hexadecimal value|(hyperpage}{184}
+\indexentry{{\backslash}x12 hexadecimal value@\texttt{{\backslash}x12} hexadecimal value|)hyperpage}{184}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|(hyperpage}{184}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|(hyperpage}{184}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|)hyperpage}{184}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|)hyperpage}{184}
+\indexentry{{\backslash} backslash escape@\texttt{{\backslash}} backslash escape|)hyperpage}{184}
+\indexentry{Escape sequences|)hyperpage}{184}
+\indexentry{enum enumerated types@\texttt{enum} enumerated types|(hyperpage}{185}
+\indexentry{enum enumerated types@\texttt{enum} enumerated types!numbering order|(hyperpage}{185}
+\indexentry{enum enumerated types@\texttt{enum} enumerated types!numbering order|)hyperpage}{186}
+\indexentry{enum enumerated types@\texttt{enum} enumerated types!scope|(hyperpage}{186}
+\indexentry{enum enumerated types@\texttt{enum} enumerated types!scope|)hyperpage}{186}
+\indexentry{enum enumerated types@\texttt{enum} enumerated types|)hyperpage}{188}
+\indexentry{Pointers!to pointers|(hyperpage}{189}
+\indexentry{Pointers!to pointers|)hyperpage}{191}
+\indexentry{Pointers!to pointers, const@to pointers, \texttt{const}|(hyperpage}{191}
+\indexentry{Pointers!to pointers, const@to pointers, \texttt{const}|)hyperpage}{192}
+\indexentry{Pointers!to multibyte values|(hyperpage}{192}
+\indexentry{Pointers!to multibyte values|)hyperpage}{194}
+\indexentry{NULL pointer@\texttt{NULL} pointer!zero equivalence|(hyperpage}{194}
+\indexentry{NULL pointer@\texttt{NULL} pointer!zero equivalence|)hyperpage}{194}
+\indexentry{Pointers!as integers|(hyperpage}{194}
+\indexentry{Pointers!as integers|)hyperpage}{195}
+\indexentry{Pointers!casting|(hyperpage}{195}
+\indexentry{Pointers!casting|)hyperpage}{197}
+\indexentry{Pointers!subtracting|(hyperpage}{197}
+\indexentry{ptrdiff\_t type@\texttt{ptrdiff\_t} type|(hyperpage}{197}
+\indexentry{ptrdiff\_t type@\texttt{ptrdiff\_t} type!printing|(hyperpage}{197}
+\indexentry{ptrdiff\_t type@\texttt{ptrdiff\_t} type!printing|)hyperpage}{197}
+\indexentry{ptrdiff\_t type@\texttt{ptrdiff\_t} type|)hyperpage}{197}
+\indexentry{Pointers!subtracting|)hyperpage}{197}
+\indexentry{Pointers!to functions|(hyperpage}{197}
+\indexentry{Pointers!to functions|)hyperpage}{199}
+\indexentry{Bitwise operations|(hyperpage}{201}
+\indexentry{\& bitwise AND@\texttt{\&} bitwise AND|hyperpage}{201}
+\indexentry{\textbar{} bitwise OR@\texttt{\textbar{}} bitwise OR|hyperpage}{201}
+\indexentry{\^{} bitwise XOR@\texttt{\^{}} bitwise XOR|hyperpage}{201}
+\indexentry{~ bitwise NOT@\texttt{~} bitwise NOT|hyperpage}{201}
+\indexentry{\&= assignment@\texttt{\&=} assignment|hyperpage}{201}
+\indexentry{\textbar{}= assignment@\texttt{\textbar{}=} assignment|hyperpage}{201}
+\indexentry{\^{}= assignment@\texttt{\^{}=} assignment|hyperpage}{201}
+\indexentry{Integer promotions|hyperpage}{201}
+\indexentry{<< shift left@\texttt{<<} shift left|hyperpage}{201}
+\indexentry{>> shift right@\texttt{>>} shift right|hyperpage}{201}
+\indexentry{>>= assignment@\texttt{>>=} assignment|hyperpage}{202}
+\indexentry{<<= assignment@\texttt{<<=} assignment|hyperpage}{202}
+\indexentry{Bitwise operations|)hyperpage}{202}
+\indexentry{Variadic functions|(hyperpage}{203}
+\indexentry{... variadic arguments@\texttt{...} variadic arguments|(hyperpage}{204}
+\indexentry{... variadic arguments@\texttt{...} variadic arguments|)hyperpage}{204}
+\indexentry{stdarg.h header file@\texttt{stdarg.h} header file|hyperpage}{204}
+\indexentry{va\_list type@\texttt{va\_list} type|(hyperpage}{204}
+\indexentry{va\_start() macro@\texttt{va\_start()} macro|(hyperpage}{204}
+\indexentry{va\_arg() macro@\texttt{va\_arg()} macro|(hyperpage}{204}
+\indexentry{va\_end() macro@\texttt{va\_end()} macro|(hyperpage}{204}
+\indexentry{va\_start() macro@\texttt{va\_start()} macro|)hyperpage}{205}
+\indexentry{va\_end() macro@\texttt{va\_end()} macro|)hyperpage}{205}
+\indexentry{va\_start() macro@\texttt{va\_start()} macro|(hyperpage}{205}
+\indexentry{va\_end() macro@\texttt{va\_end()} macro|(hyperpage}{205}
+\indexentry{va\_start() macro@\texttt{va\_start()} macro|)hyperpage}{206}
+\indexentry{va\_end() macro@\texttt{va\_end()} macro|)hyperpage}{206}
+\indexentry{va\_arg() macro@\texttt{va\_arg()} macro|)hyperpage}{206}
+\indexentry{va\_copy() macro@\texttt{va\_copy()} macro|(hyperpage}{206}
+\indexentry{va\_copy() macro@\texttt{va\_copy()} macro|)hyperpage}{206}
+\indexentry{va\_list type@\texttt{va\_list} type!passing to functions|(hyperpage}{206}
+\indexentry{vprintf() function@\texttt{vprintf()} function|(hyperpage}{206}
+\indexentry{vprintf() function@\texttt{vprintf()} function|)hyperpage}{206}
+\indexentry{va\_list type@\texttt{va\_list} type!passing to functions|)hyperpage}{206}
+\indexentry{va\_list type@\texttt{va\_list} type|)hyperpage}{206}
+\indexentry{va\_start() macro@\texttt{va\_start()} macro!scoping issues|)}{207}
+\indexentry{Variadic functions|)hyperpage}{207}
+\indexentry{Locale|(hyperpage}{209}
+\indexentry{locale.h header file@\texttt{locale.h} header file|hyperpage}{209}
+\indexentry{setlocale() function@\texttt{setlocale()} function|(hyperpage}{209}
+\indexentry{setlocale() function@\texttt{setlocale()} function|)hyperpage}{210}
+\indexentry{Locale!money|(hyperpage}{210}
+\indexentry{localeconv() function@\texttt{localeconv()} function|(hyperpage}{210}
+\indexentry{localeconv() function@\texttt{localeconv()} function|)hyperpage}{211}
+\indexentry{localeconv() function@\texttt{localeconv()} function!mon\_grouping@\texttt{mon\_grouping}|(hyperpage}{211}
+\indexentry{localeconv() function@\texttt{localeconv()} function!mon\_grouping@\texttt{mon\_grouping}|)hyperpage}{212}
+\indexentry{localeconv() function@\texttt{localeconv()} function!sep\_by\_space@\texttt{sep\_by\_space}|(hyperpage}{212}
+\indexentry{localeconv() function@\texttt{localeconv()} function!sep\_by\_space@\texttt{sep\_by\_space}|)hyperpage}{212}
+\indexentry{Locale!money|)hyperpage}{212}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_ALL macro@\texttt{LC\_ALL} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_COLLATE macro@\texttt{LC\_COLLATE} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_CTYPE macro@\texttt{LC\_CTYPE} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_MONETARY macro@\texttt{LC\_MONETARY} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_NUMERIC macro@\texttt{LC\_NUMERIC} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_TIME macro@\texttt{LC\_TIME} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_ALL macro@\texttt{LC\_ALL} macro|hyperpage}{213}
+\indexentry{setlocale() function@\texttt{setlocale()} function!LC\_CTYPE macro@\texttt{LC\_CTYPE} macro|hyperpage}{213}
+\indexentry{Locale|)hyperpage}{213}
+\indexentry{Unicode|(hyperpage}{215}
+\indexentry{Unicode!code points|(hyperpage}{215}
+\indexentry{Unicode!code points|)hyperpage}{216}
+\indexentry{Unicode!encoding|(hyperpage}{216}
+\indexentry{Unicode!UTF-8|(hyperpage}{216}
+\indexentry{Unicode!UTF-16|(hyperpage}{216}
+\indexentry{Unicode!UTF-32|(hyperpage}{216}
+\indexentry{Unicode!endianess|(hyperpage}{217}
+\indexentry{Unicode!UTF-16|)hyperpage}{217}
+\indexentry{Unicode!UTF-32|)hyperpage}{217}
+\indexentry{Unicode!endianess|)hyperpage}{217}
+\indexentry{Unicode!UTF-8|)hyperpage}{217}
+\indexentry{Unicode!encoding|)hyperpage}{217}
+\indexentry{Character sets|(hyperpage}{217}
+\indexentry{Character sets!source|hyperpage}{217}
+\indexentry{Character sets!execution|hyperpage}{217}
+\indexentry{Character sets!basic|(hyperpage}{217}
+\indexentry{Character sets!basic|)hyperpage}{218}
+\indexentry{Character sets|)hyperpage}{218}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|(hyperpage}{218}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|(hyperpage}{218}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|)hyperpage}{218}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|)hyperpage}{218}
+\indexentry{Character sets!execution|hyperpage}{218}
+\indexentry{Character sets!source|hyperpage}{218}
+\indexentry{Character sets!execution|hyperpage}{218}
+\indexentry{Character sets!basic|hyperpage}{218}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|(hyperpage}{218}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|(hyperpage}{218}
+\indexentry{{\backslash}u Unicode escape@\texttt{{\backslash}u} Unicode escape|)hyperpage}{218}
+\indexentry{{\backslash}U Unicode escape@\texttt{{\backslash}U} Unicode escape|)hyperpage}{218}
+\indexentry{Unicode!UTF-8|(hyperpage}{219}
+\indexentry{mbstowcs() function@\texttt{mbstowcs()} function!with UTF-8|hyperpage}{219}
+\indexentry{strtok() function@\texttt{strtok()} function!with UTF-8|hyperpage}{219}
+\indexentry{strchr() function@\texttt{strchr()} function!with UTF-8|hyperpage}{219}
+\indexentry{strstr() function@\texttt{strstr()} function!with UTF-8|hyperpage}{219}
+\indexentry{toupper() function@\texttt{toupper()} function!with UTF-8|hyperpage}{219}
+\indexentry{tolower() function@\texttt{tolower()} function!with UTF-8|hyperpage}{219}
+\indexentry{isalpha() function@\texttt{isalpha()} function!with UTF-8|hyperpage}{219}
+\indexentry{printf() function@\texttt{printf()} function!with UTF-8|hyperpage}{219}
+\indexentry{malloc() function@\texttt{malloc()} function!with UTF-8|hyperpage}{219}
+\indexentry{MB\_LEN\_MAX macro@\texttt{MB\_LEN\_MAX} macro|hyperpage}{219}
+\indexentry{Unicode!UTF-8|)hyperpage}{219}
+\indexentry{Multibyte characters|(hyperpage}{219}
+\indexentry{MB\_LEN\_MAX macro@\texttt{MB\_LEN\_MAX} macro|hyperpage}{220}
+\indexentry{strlen() function@\texttt{strlen()} function!with UTF-8|(hyperpage}{220}
+\indexentry{strlen() function@\texttt{strlen()} function!with UTF-8|)hyperpage}{220}
+\indexentry{Multibyte characters|)hyperpage}{220}
+\indexentry{Wide characters|(hyperpage}{220}
+\indexentry{wchar\_t type@\texttt{wchar\_t} type|(hyperpage}{220}
+\indexentry{L wide character prefix@\texttt{L} wide character prefix|(hyperpage}{221}
+\indexentry{L wide character prefix@\texttt{L} wide character prefix|)hyperpage}{221}
+\indexentry{\_\_STDC\_ISO\_10646\_\_ macro@\texttt{\_\_STDC\_ISO\_10646\_\_} macro|hyperpage}{221}
+\indexentry{mbtowc() function@\texttt{mbtowc()} function|hyperpage}{221}
+\indexentry{wctomb() function@\texttt{wctomb()} function|hyperpage}{221}
+\indexentry{mbstowcs() function@\texttt{mbstowcs()} function|hyperpage}{221}
+\indexentry{wcstombs() function@\texttt{wcstombs()} function|hyperpage}{221}
+\indexentry{mbstowcs() function@\texttt{mbstowcs()} function|(hyperpage}{221}
+\indexentry{wchar\_t type@\texttt{wchar\_t} type|)hyperpage}{222}
+\indexentry{mbstowcs() function@\texttt{mbstowcs()} function|)hyperpage}{222}
+\indexentry{wcstombs() function@\texttt{wcstombs()} function|hyperpage}{222}
+\indexentry{wcslen() function@\texttt{wcslen()} function|hyperpage}{222}
+\indexentry{wint\_t type@\texttt{wint\_t} type|(hyperpage}{222}
+\indexentry{wint\_t type@\texttt{wint\_t} type|)hyperpage}{222}
+\indexentry{I/O stream orientation|(hyperpage}{223}
+\indexentry{fwide() function@\texttt{fwide()} function|hyperpage}{223}
+\indexentry{I/O stream orientation|)hyperpage}{223}
+\indexentry{wprintf() function@\texttt{wprintf()} function|hyperpage}{223}
+\indexentry{wscanf() function@\texttt{wscanf()} function|hyperpage}{223}
+\indexentry{getwchar() function@\texttt{getwchar()} function|hyperpage}{223}
+\indexentry{putwchar() function@\texttt{putwchar()} function|hyperpage}{223}
+\indexentry{fwprintf() function@\texttt{fwprintf()} function|hyperpage}{223}
+\indexentry{fwscanf() function@\texttt{fwscanf()} function|hyperpage}{223}
+\indexentry{fgetwc() function@\texttt{fgetwc()} function|hyperpage}{223}
+\indexentry{fputwc() function@\texttt{fputwc()} function|hyperpage}{223}
+\indexentry{fgetws() function@\texttt{fgetws()} function|hyperpage}{223}
+\indexentry{fputws() function@\texttt{fputws()} function|hyperpage}{223}
+\indexentry{swprintf() function@\texttt{swprintf()} function|hyperpage}{223}
+\indexentry{swscanf() function@\texttt{swscanf()} function|hyperpage}{223}
+\indexentry{vfwprintf() function@\texttt{vfwprintf()} function|hyperpage}{223}
+\indexentry{vfwscanf() function@\texttt{vfwscanf()} function|hyperpage}{223}
+\indexentry{vswprintf() function@\texttt{vswprintf()} function|hyperpage}{223}
+\indexentry{vswscanf() function@\texttt{vswscanf()} function|hyperpage}{223}
+\indexentry{vwprintf() function@\texttt{vwprintf()} function|hyperpage}{223}
+\indexentry{vwscanf() function@\texttt{vwscanf()} function|hyperpage}{223}
+\indexentry{ungetwc() function@\texttt{ungetwc()} function|hyperpage}{223}
+\indexentry{fwide() function@\texttt{fwide()} function|hyperpage}{223}
+\indexentry{wcstod() function@\texttt{wcstod()} function|hyperpage}{223}
+\indexentry{wcstof() function@\texttt{wcstof()} function|hyperpage}{223}
+\indexentry{wcstold() function@\texttt{wcstold()} function|hyperpage}{223}
+\indexentry{wcstol() function@\texttt{wcstol()} function|hyperpage}{223}
+\indexentry{wcstoll() function@\texttt{wcstoll()} function|hyperpage}{223}
+\indexentry{wcstoul() function@\texttt{wcstoul()} function|hyperpage}{223}
+\indexentry{wcstoull() function@\texttt{wcstoull()} function|hyperpage}{223}
+\indexentry{wcscpy() function@\texttt{wcscpy()} function|hyperpage}{224}
+\indexentry{wcsncpy() function@\texttt{wcsncpy()} function|hyperpage}{224}
+\indexentry{wmemcpy() function@\texttt{wmemcpy()} function|hyperpage}{224}
+\indexentry{wmemmove() function@\texttt{wmemmove()} function|hyperpage}{224}
+\indexentry{wcscat() function@\texttt{wcscat()} function|hyperpage}{224}
+\indexentry{wcsncat() function@\texttt{wcsncat()} function|hyperpage}{224}
+\indexentry{wcscmp() function@\texttt{wcscmp()} function|hyperpage}{224}
+\indexentry{wcsncmp() function@\texttt{wcsncmp()} function|hyperpage}{224}
+\indexentry{wcscoll() function@\texttt{wcscoll()} function|hyperpage}{224}
+\indexentry{wmemcmp() function@\texttt{wmemcmp()} function|hyperpage}{224}
+\indexentry{wcsxfrm() function@\texttt{wcsxfrm()} function|hyperpage}{224}
+\indexentry{wcschr() function@\texttt{wcschr()} function|hyperpage}{224}
+\indexentry{wcsrchr() function@\texttt{wcsrchr()} function|hyperpage}{224}
+\indexentry{wmemchr() function@\texttt{wmemchr()} function|hyperpage}{224}
+\indexentry{wcsstr() function@\texttt{wcsstr()} function|hyperpage}{224}
+\indexentry{wcspbrk() function@\texttt{wcspbrk()} function|hyperpage}{224}
+\indexentry{wcsspn() function@\texttt{wcsspn()} function|hyperpage}{224}
+\indexentry{wcscspn() function@\texttt{wcscspn()} function|hyperpage}{224}
+\indexentry{wcstok() function@\texttt{wcstok()} function|hyperpage}{224}
+\indexentry{wcslen() function@\texttt{wcslen()} function|hyperpage}{225}
+\indexentry{wmemset() function@\texttt{wmemset()} function|hyperpage}{225}
+\indexentry{wcsftime() function@\texttt{wcsftime()} function|hyperpage}{225}
+\indexentry{iswalnum() function@\texttt{iswalnum()} function|hyperpage}{225}
+\indexentry{iswalpha() function@\texttt{iswalpha()} function|hyperpage}{225}
+\indexentry{iswblank() function@\texttt{iswblank()} function|hyperpage}{225}
+\indexentry{iswcntrl() function@\texttt{iswcntrl()} function|hyperpage}{225}
+\indexentry{iswdigit() function@\texttt{iswdigit()} function|hyperpage}{225}
+\indexentry{iswgraph() function@\texttt{iswgraph()} function|hyperpage}{225}
+\indexentry{iswlower() function@\texttt{iswlower()} function|hyperpage}{225}
+\indexentry{iswprint() function@\texttt{iswprint()} function|hyperpage}{225}
+\indexentry{iswpunct() function@\texttt{iswpunct()} function|hyperpage}{225}
+\indexentry{iswspace() function@\texttt{iswspace()} function|hyperpage}{225}
+\indexentry{iswupper() function@\texttt{iswupper()} function|hyperpage}{225}
+\indexentry{iswxdigit() function@\texttt{iswxdigit()} function|hyperpage}{225}
+\indexentry{towlower() function@\texttt{towlower()} function|hyperpage}{225}
+\indexentry{towupper() function@\texttt{towupper()} function|hyperpage}{225}
+\indexentry{Multibyte characters!parse state|(hyperpage}{225}
+\indexentry{Multibyte characters!parse state|)hyperpage}{227}
+\indexentry{Wide characters|)hyperpage}{227}
+\indexentry{Unicode!UTF-8|(hyperpage}{227}
+\indexentry{u8 UTF-8 prefix@\texttt{u8} UTF-8 prefix|(hyperpage}{227}
+\indexentry{u8 UTF-8 prefix@\texttt{u8} UTF-8 prefix|)hyperpage}{227}
+\indexentry{setlocale() function@\texttt{setlocale()} function|(hyperpage}{227}
+\indexentry{setlocale() function@\texttt{setlocale()} function|)hyperpage}{228}
+\indexentry{Unicode!UTF-8|)hyperpage}{228}
+\indexentry{Unicode!UTF-16|(hyperpage}{228}
+\indexentry{Unicode!UTF-32|(hyperpage}{228}
+\indexentry{char16\_t type@\texttt{char16\_t} type|(hyperpage}{228}
+\indexentry{char32\_t type@\texttt{char32\_t} type|(hyperpage}{228}
+\indexentry{u Unicode prefix@\texttt{u} Unicode prefix|(hyperpage}{228}
+\indexentry{U Unicode prefix@\texttt{U} Unicode prefix|(hyperpage}{228}
+\indexentry{char32\_t type@\texttt{char32\_t} type|)hyperpage}{228}
+\indexentry{u Unicode prefix@\texttt{u} Unicode prefix|)hyperpage}{228}
+\indexentry{U Unicode prefix@\texttt{U} Unicode prefix|)hyperpage}{228}
+\indexentry{\_\_STDC\_UTF\_16\_\_ macro@\texttt{\_\_STDC\_UTF\_16\_\_} macro|hyperpage}{228}
+\indexentry{\_\_STDC\_UTF\_32\_\_ macro@\texttt{\_\_STDC\_UTF\_32\_\_ macro}|hyperpage}{228}
+\indexentry{char16\_t type@\texttt{char16\_t} type|)hyperpage}{228}
+\indexentry{Unicode!UTF-16|)hyperpage}{228}
+\indexentry{Unicode!UTF-32|)hyperpage}{228}
+\indexentry{mbrtoc16() function@\texttt{mbrtoc16()} function|hyperpage}{229}
+\indexentry{mbrtoc32() function@\texttt{mbrtoc32()} function|hyperpage}{229}
+\indexentry{c16rtomb() function@\texttt{c16rtomb()} function|hyperpage}{229}
+\indexentry{c32rtomb() function@\texttt{c32rtomb()} function|hyperpage}{229}
+\indexentry{Unicode|)hyperpage}{229}
+\indexentry{Exiting|(hyperpage}{231}
+\indexentry{Exiting!return from main()@return from \texttt{main()}|(hyperpage}{231}
+\indexentry{Exiting!return from main()@return from \texttt{main()}|)hyperpage}{231}
+\indexentry{Exiting!return from main()@return from \texttt{main()}|)hyperpage}{231}
+\indexentry{atexit() function@\texttt{atexit()} function|(hyperpage}{232}
+\indexentry{atexit() function@\texttt{atexit()} function|)hyperpage}{232}
+\indexentry{quick\_exit() function@\texttt{quick\_exit()} function|(hyperpage}{232}
+\indexentry{quick\_exit() function@\texttt{quick\_exit()} function|)hyperpage}{233}
+\indexentry{\_Exit() function@\texttt{\_Exit()} function|(hyperpage}{233}
+\indexentry{\_Exit() function@\texttt{\_Exit()} function|)hyperpage}{234}
+\indexentry{abort() function@\texttt{abort()} function|(hyperpage}{234}
+\indexentry{SIGABRT signal@\texttt{SIGABRT} signal|hyperpage}{234}
+\indexentry{abort() function@\texttt{abort()} function|)hyperpage}{234}
+\indexentry{Exiting|)hyperpage}{234}
+\indexentry{Signal handling|(hyperpage}{235}
+\indexentry{sigaction() function@\texttt{sigaction()} function|hyperpage}{235}
+\indexentry{SIGABRT signal@\texttt{SIGABRT} signal|hyperpage}{235}
+\indexentry{SIGFPE signal@\texttt{SIGFPE} signal|hyperpage}{235}
+\indexentry{SIGILL signal@\texttt{SIGILL} signal|hyperpage}{235}
+\indexentry{SIGINT signal@\texttt{SIGINT} signal|hyperpage}{235}
+\indexentry{SIGSEGV signal@\texttt{SIGSEGV} signal|hyperpage}{235}
+\indexentry{SIGTERM signal@\texttt{SIGTERM} signal|hyperpage}{235}
+\indexentry{signal() function@\texttt{signal()} function|(hyperpage}{235}
+\indexentry{SIG\_IGN macro@\texttt{SIG\_IGN} macro|(hyperpage}{235}
+\indexentry{SIG\_DFL macro@\texttt{SIG\_DFL} macro|hyperpage}{235}
+\indexentry{SIGINT signal@\texttt{SIGINT} signal|(hyperpage}{236}
+\indexentry{SIGINT signal@\texttt{SIGINT} signal|)hyperpage}{236}
+\indexentry{SIG\_IGN macro@\texttt{SIG\_IGN} macro|)hyperpage}{236}
+\indexentry{signal() function@\texttt{signal()} function|(hyperpage}{236}
+\indexentry{signal() function@\texttt{signal()} function|)hyperpage}{236}
+\indexentry{SIG\_ERR macro@\texttt{SIG\_ERR} macro|hyperpage}{237}
+\indexentry{signal() function@\texttt{signal()} function|(hyperpage}{237}
+\indexentry{SIG\_INT signal@\texttt{SIG\_INT} signal|(hyperpage}{237}
+\indexentry{SIG\_INT signal@\texttt{SIG\_INT} signal|)hyperpage}{237}
+\indexentry{SIG\_DFL macro@\texttt{SIG\_DFL} macro|hyperpage}{237}
+\indexentry{signal() function@\texttt{signal()} function|)hyperpage}{238}
+\indexentry{sigaction() function@\texttt{sigaction()} function|hyperpage}{238}
+\indexentry{Signal handling-!limitations|(hyperpage}{238}
+\indexentry{sig\_atomic\_t type@\texttt{sig\_atomic\_t} type|(hyperpage}{238}
+\indexentry{Signal handling-!limitations|)hyperpage}{238}
+\indexentry{sig\_atomic\_t type@\texttt{sig\_atomic\_t} type|)hyperpage}{239}
+\indexentry{SIG\_DFL macro@\texttt{SIG\_DFL} macro|(hyperpage}{239}
+\indexentry{SIG\_DFL macro@\texttt{SIG\_DFL} macro|)hyperpage}{239}
+\indexentry{signal() function@\texttt{signal()} function|)hyperpage}{240}
+\indexentry{Signal handling|)hyperpage}{240}
+\indexentry{Variable-length array|(hyperpage}{241}
+\indexentry{\_\_STDC\_NO\_VLA\_\_ macro@\texttt{\_\_STDC\_NO\_VLA\_\_} macro|(hyperpage}{241}
+\indexentry{\_\_STDC\_NO\_VLA\_\_ macro@\texttt{\_\_STDC\_NO\_VLA\_\_} macro|)hyperpage}{241}
+\indexentry{Variable-length array!defining|(hyperpage}{241}
+\indexentry{Variable-length array!defining|)hyperpage}{242}
+\indexentry{Variable-length array!and sizeof()@and \texttt{sizeof()}|(hyperpage}{242}
+\indexentry{Variable-length array!and sizeof()@and \texttt{sizeof()}|)hyperpage}{243}
+\indexentry{Variable-length array!multidimensional|(hyperpage}{243}
+\indexentry{Variable-length array!multidimensional|)hyperpage}{243}
+\indexentry{Variable-length array!passing to functions|(hyperpage}{243}
+\indexentry{Variable-length array!in function prototypes|(hyperpage}{244}
+\indexentry{* for VLA function prototypes@\texttt{*} for VLA function prototypes|(hyperpage}{244}
+\indexentry{* for VLA function prototypes@\texttt{*} for VLA function prototypes|)hyperpage}{244}
+\indexentry{Variable-length array!in function prototypes|)hyperpage}{244}
+\indexentry{Variable-length array!passing to functions|)hyperpage}{245}
+\indexentry{Variable-length array!with regular arrays|(hyperpage}{245}
+\indexentry{Variable-length array!with regular arrays|)hyperpage}{246}
+\indexentry{Variable-length array!with typedef@with \texttt{typedef}|(hyperpage}{246}
+\indexentry{Variable-length array!with typedef@with \texttt{typedef}|)hyperpage}{246}
+\indexentry{Variable-length array!with goto@with \texttt{goto}|(hyperpage}{246}
+\indexentry{Variable-length array!with goto@with \texttt{goto}|)hyperpage}{246}
+\indexentry{Variable-length array!with longjmp()@with \texttt{longjmp()}|(hyperpage}{246}
+\indexentry{Variable-length array!with longjmp()@with \texttt{longjmp()}|)hyperpage}{246}
+\indexentry{Variable-length array!controversy|(hyperpage}{246}
+\indexentry{Variable-length array!controversy|)hyperpage}{247}
+\indexentry{Variable-length array|)hyperpage}{247}
+\indexentry{goto statement@\texttt{goto} statement|(hyperpage}{249}
+\indexentry{Labels|(hyperpage}{249}
+\indexentry{Labels|)hyperpage}{250}
+\indexentry{goto statement@\texttt{goto} statement!as labeled continue@as labeled \texttt{continue}|(hyperpage}{250}
+\indexentry{goto statement@\texttt{goto} statement!as labeled continue@as labeled \texttt{continue}|)hyperpage}{251}
+\indexentry{goto statement@\texttt{goto} statement!for bailing out|(hyperpage}{251}
+\indexentry{goto statement@\texttt{goto} statement!for bailing out|)hyperpage}{252}
+\indexentry{goto statement@\texttt{goto} statement!as labeled break@as labeled \texttt{break}|(hyperpage}{252}
+\indexentry{goto statement@\texttt{goto} statement!as labeled break@as labeled \texttt{break}|)hyperpage}{252}
+\indexentry{goto statement@\texttt{goto} statement!multilevel cleanup|(hyperpage}{252}
+\indexentry{goto statement@\texttt{goto} statement!multilevel cleanup|)hyperpage}{253}
+\indexentry{goto statement@\texttt{goto} statement!tail call optimzation|(hyperpage}{253}
+\indexentry{Tail call optimzation!with goto@with \texttt{goto}|(hyperpage}{253}
+\indexentry{goto statement@\texttt{goto} statement!tail call optimzation|)hyperpage}{254}
+\indexentry{Tail call optimzation!with goto@with \texttt{goto}|)hyperpage}{254}
+\indexentry{goto statement@\texttt{goto} statement!restarting system calls|(hyperpage}{254}
+\indexentry{goto statement@\texttt{goto} statement!restarting system calls|)hyperpage}{255}
+\indexentry{goto statement@\texttt{goto} statement!thread preemption|(hyperpage}{255}
+\indexentry{goto statement@\texttt{goto} statement!thread preemption|)hyperpage}{255}
+\indexentry{goto statement@\texttt{goto} statement!variable scope|(hyperpage}{255}
+\indexentry{goto statement@\texttt{goto} statement!variable scope|)hyperpage}{256}
+\indexentry{goto statement@\texttt{goto} statement!with variable-length arrays|(hyperpage}{256}
+\indexentry{goto statement@\texttt{goto} statement!with variable-length arrays|)hyperpage}{257}
+\indexentry{goto statement@\texttt{goto} statement|)hyperpage}{257}
+\indexentry{Compound literals|(hyperpage}{259}
+\indexentry{Compound literals!passing to functions|(hyperpage}{260}
+\indexentry{Compound literals!passing to functions|)hyperpage}{260}
+\indexentry{Compound literals!with struct@with \texttt{struct}|(hyperpage}{260}
+\indexentry{struct keyword@\texttt{struct} keyword!compound literals|(hyperpage}{260}
+\indexentry{struct keyword@\texttt{struct} keyword!compound literals|)hyperpage}{261}
+\indexentry{Compound literals!with struct@with \texttt{struct}|)hyperpage}{261}
+\indexentry{Compound literals!pointers to|(hyperpage}{261}
+\indexentry{Compound literals!pointers to|)hyperpage}{261}
+\indexentry{Compound literals!scope|(hyperpage}{261}
+\indexentry{Compound literals!scope|)hyperpage}{262}
+\indexentry{Compound literals|)hyperpage}{262}
+\indexentry{Generic selections|(hyperpage}{262}
+\indexentry{\_Generic keyword@\texttt{\_Generic} keyword|(hyperpage}{262}
+\indexentry{\_Generic keyword@\texttt{\_Generic} keyword|)hyperpage}{265}
+\indexentry{Generic selections|)hyperpage}{265}
+\indexentry{Type qualifiers!arrays in parameter lists|(hyperpage}{267}
+\indexentry{Arrays!type qualifiers in parameter lists|(hyperpage}{267}
+\indexentry{Type qualifiers!arrays in parameter lists|)hyperpage}{267}
+\indexentry{Arrays!type qualifiers in parameter lists|)hyperpage}{267}
+\indexentry{Arrays!static in parameter lists@\texttt{static} in parameter lists|(hyperpage}{267}
+\indexentry{Arrays!static in parameter lists@\texttt{static} in parameter lists|)hyperpage}{268}
+\indexentry{Arrays!multidimensional initializers|(hyperpage}{268}
+\indexentry{Arrays!multidimensional initializers|)hyperpage}{270}
+\indexentry{Long jumps|(hyperpage}{271}
+\indexentry{setjmp() function@\texttt{setjmp()} function|(hyperpage}{271}
+\indexentry{longjmp() function@\texttt{longjmp()} function|(hyperpage}{271}
+\indexentry{setjmp() function@\texttt{setjmp()} function|)hyperpage}{272}
+\indexentry{longjmp() function@\texttt{longjmp()} function|)hyperpage}{272}
+\indexentry{jmp\_buf type@\texttt{jmp\_buf} type|hyperpage}{272}
+\indexentry{setjmp() function@\texttt{setjmp()} function|(hyperpage}{272}
+\indexentry{longjmp()@\texttt{longjmp()}|hyperpage}{272}
+\indexentry{volatile type qualifier@\texttt{volatile} type qualifier!with setjmp()@with \texttt{setjmp()}|(hyperpage}{272}
+\indexentry{setjmp() function@\texttt{setjmp()} function|)hyperpage}{273}
+\indexentry{volatile type qualifier@\texttt{volatile} type qualifier!with setjmp()@with \texttt{setjmp()}|)hyperpage}{273}
+\indexentry{longjmp()@\texttt{longjmp()}|hyperpage}{273}
+\indexentry{setjmp() function@\texttt{setjmp()} function|(hyperpage}{273}
+\indexentry{longjmp() function@\texttt{longjmp()} function|(hyperpage}{273}
+\indexentry{setjmp() function@\texttt{setjmp()} function|)hyperpage}{273}
+\indexentry{longjmp() function@\texttt{longjmp()} function|)hyperpage}{273}
+\indexentry{setjmp()@\texttt{setjmp()}!in an expression|(hyperpage}{273}
+\indexentry{setjmp()@\texttt{setjmp()}!in an expression|)hyperpage}{274}
+\indexentry{lonjmp()@\texttt{lonjmp()}|(hyperpage}{274}
+\indexentry{lonjmp()@\texttt{lonjmp()}|)hyperpage}{274}
+\indexentry{Long jumps|)hyperpage}{274}
+\indexentry{Incomplete types|(hyperpage}{275}
+\indexentry{Incomplete types!self-referential structs@self-referential \texttt{struct}s|(hyperpage}{275}
+\indexentry{Incomplete types!self-referential structs@self-referential \texttt{struct}s|)hyperpage}{276}
+\indexentry{Incomplete types|(hyperpage}{278}
+\indexentry{Complex numbers|(hyperpage}{279}
+\indexentry{\_\_STDC\_NO\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_NO\_COMPLEX\_\_} macro|(hyperpage}{279}
+\indexentry{\_\_STDC\_NO\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_NO\_COMPLEX\_\_} macro|)hyperpage}{279}
+\indexentry{\_\_STDC\_IEC\_559\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_IEC\_559\_COMPLEX\_\_} macro|(hyperpage}{279}
+\indexentry{\_\_STDC\_IEC\_559\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_IEC\_559\_COMPLEX\_\_} macro|)hyperpage}{279}
+\indexentry{complex.h header file@\texttt{complex.h} header file|hyperpage}{279}
+\indexentry{\_Complex type@\texttt{\_Complex} type|hyperpage}{279}
+\indexentry{complex type@\texttt{complex} type|(hyperpage}{279}
+\indexentry{complex type@\texttt{complex} type|)hyperpage}{279}
+\indexentry{\_Imaginary type@\texttt{\_Imaginary} type|hyperpage}{280}
+\indexentry{imaginary type@\texttt{imaginary} type|(hyperpage}{280}
+\indexentry{imaginary type@\texttt{imaginary} type|)hyperpage}{280}
+\indexentry{I macro@\texttt{I} macro|(hyperpage}{280}
+\indexentry{\_Complex\_I macro@\texttt{\_Complex\_I} macro|(hyperpage}{280}
+\indexentry{\_Imaginary\_I macro@\texttt{\_Imaginary\_I} macro|(hyperpage}{280}
+\indexentry{I macro@\texttt{I} macro|)hyperpage}{280}
+\indexentry{\_Complex\_I macro@\texttt{\_Complex\_I} macro|)hyperpage}{280}
+\indexentry{\_\_STDC\_IEC\_559\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_IEC\_559\_COMPLEX\_\_} macro|(hyperpage}{280}
+\indexentry{\_\_STDC\_IEC\_559\_COMPLEX\_\_ macro@\texttt{\_\_STDC\_IEC\_559\_COMPLEX\_\_} macro|)hyperpage}{280}
+\indexentry{\_Imaginary\_I macro@\texttt{\_Imaginary\_I} macro|)hyperpage}{280}
+\indexentry{Complex numbers!declaring|(hyperpage}{280}
+\indexentry{complex float type@\texttt{complex float} type|(hyperpage}{280}
+\indexentry{complex double type@\texttt{complex double} type|(hyperpage}{280}
+\indexentry{complex long double type@\texttt{complex long double} type|(hyperpage}{280}
+\indexentry{complex long double type@\texttt{complex long double} type|)hyperpage}{280}
+\indexentry{I macro@\texttt{I} macro|(hyperpage}{280}
+\indexentry{I macro@\texttt{I} macro|)hyperpage}{280}
+\indexentry{complex float type@\texttt{complex float} type|)hyperpage}{280}
+\indexentry{complex double type@\texttt{complex double} type|)hyperpage}{280}
+\indexentry{Complex numbers!declaring|)hyperpage}{280}
+\indexentry{CMPLX() macro@\texttt{CMPLX()} macro|(hyperpage}{281}
+\indexentry{CMPLXF() macro@\texttt{CMPLXF()} macro|hyperpage}{281}
+\indexentry{CMPLXL() macro@\texttt{CMPLXL()} macro|hyperpage}{281}
+\indexentry{CMPLX() macro@\texttt{CMPLX()} macro|)hyperpage}{281}
+\indexentry{creal() function@\texttt{creal()} function|(hyperpage}{281}
+\indexentry{cimag() function@\texttt{cimag()} function|(hyperpage}{281}
+\indexentry{crealf() function@\texttt{crealf()} function|hyperpage}{281}
+\indexentry{cimagf() function@\texttt{cimagf()} function|hyperpage}{281}
+\indexentry{creall() function@\texttt{creall()} function|hyperpage}{281}
+\indexentry{cimagl() function@\texttt{cimagl()} function|hyperpage}{281}
+\indexentry{creal() function@\texttt{creal()} function|)hyperpage}{281}
+\indexentry{cimag() function@\texttt{cimag()} function|)hyperpage}{281}
+\indexentry{Complex numbers!arithmetic|(hyperpage}{281}
+\indexentry{Complex numbers!arithmetic|)hyperpage}{282}
+\indexentry{ccos() function@\texttt{ccos()} function|hyperpage}{283}
+\indexentry{csin() function@\texttt{csin()} function|hyperpage}{283}
+\indexentry{ctan() function@\texttt{ctan()} function|hyperpage}{283}
+\indexentry{cacos() function@\texttt{cacos()} function|hyperpage}{283}
+\indexentry{casin() function@\texttt{casin()} function|hyperpage}{283}
+\indexentry{catan() function@\texttt{catan()} function|hyperpage}{283}
+\indexentry{ccosh() function@\texttt{ccosh()} function|hyperpage}{283}
+\indexentry{csinh() function@\texttt{csinh()} function|hyperpage}{283}
+\indexentry{ctanh() function@\texttt{ctanh()} function|hyperpage}{283}
+\indexentry{cacosh() function@\texttt{cacosh()} function|hyperpage}{283}
+\indexentry{casinh() function@\texttt{casinh()} function|hyperpage}{283}
+\indexentry{catanh() function@\texttt{catanh()} function|hyperpage}{283}
+\indexentry{cexp() function@\texttt{cexp()} function|hyperpage}{283}
+\indexentry{clog() function@\texttt{clog()} function|hyperpage}{283}
+\indexentry{cabs() function@\texttt{cabs()} function|hyperpage}{283}
+\indexentry{cpow() function@\texttt{cpow()} function|hyperpage}{283}
+\indexentry{csqrt() function@\texttt{csqrt()} function|hyperpage}{283}
+\indexentry{creal() function@\texttt{creal()} function|hyperpage}{283}
+\indexentry{cimag() function@\texttt{cimag()} function|hyperpage}{283}
+\indexentry{CMPLX() macro@\texttt{CMPLX()} macro|hyperpage}{283}
+\indexentry{carg() function@\texttt{carg()} function|hyperpage}{283}
+\indexentry{conj() function@\texttt{conj()} function|hyperpage}{283}
+\indexentry{cproj() function@\texttt{cproj()} function|hyperpage}{283}
+\indexentry{Complex numbers|)hyperpage}{283}
+\indexentry{Fixed width integers|(hyperpage}{285}
+\indexentry{stdint.h header file@\texttt{stdint.h} header file|hyperpage}{285}
+\indexentry{int\_leastN\_t types@\texttt{int\_leastN\_t} types|(hyperpage}{285}
+\indexentry{uint\_leastN\_t types@\texttt{uint\_leastN\_t} types|(hyperpage}{285}
+\indexentry{int\_fastN\_t types@\texttt{int\_fastN\_t} types|(hyperpage}{285}
+\indexentry{uint\_fastN\_t types@\texttt{uint\_fastN\_t} types|(hyperpage}{285}
+\indexentry{intN\_t types@\texttt{intN\_t} types|(hyperpage}{285}
+\indexentry{uintN\_t types@\texttt{uintN\_t} types|(hyperpage}{285}
+\indexentry{int\_leastN\_t types@\texttt{int\_leastN\_t} types|)hyperpage}{286}
+\indexentry{uint\_leastN\_t types@\texttt{uint\_leastN\_t} types|)hyperpage}{286}
+\indexentry{int\_fastN\_t types@\texttt{int\_fastN\_t} types|)hyperpage}{286}
+\indexentry{uint\_fastN\_t types@\texttt{uint\_fastN\_t} types|)hyperpage}{286}
+\indexentry{intN\_t types@\texttt{intN\_t} types|)hyperpage}{286}
+\indexentry{uintN\_t types@\texttt{uintN\_t} types|)hyperpage}{286}
+\indexentry{intmax\_t type@\texttt{intmax\_t} type|(hyperpage}{286}
+\indexentry{uintmax\_t type@\texttt{uintmax\_t} type|(hyperpage}{286}
+\indexentry{intmax\_t type@\texttt{intmax\_t} type|)hyperpage}{286}
+\indexentry{uintmax\_t type@\texttt{uintmax\_t} type|)hyperpage}{286}
+\indexentry{INTn\_C() macros@\texttt{INTn\_C()} macros|(hyperpage}{286}
+\indexentry{UINTn\_C() macros@\texttt{UINTn\_C()} macros|(hyperpage}{286}
+\indexentry{INTMAX\_C() macro@\texttt{INTMAX\_C()} macro|(hyperpage}{286}
+\indexentry{UINTMAX\_C() macro@\texttt{UINTMAX\_C()} macro|(hyperpage}{286}
+\indexentry{INTn\_C() macros@\texttt{INTn\_C()} macros|)hyperpage}{286}
+\indexentry{UINTMAX\_C() macro@\texttt{UINTMAX\_C()} macro|)hyperpage}{286}
+\indexentry{UINTn\_C() macros@\texttt{UINTn\_C()} macros|)hyperpage}{287}
+\indexentry{INTMAX\_C() macro@\texttt{INTMAX\_C()} macro|)hyperpage}{287}
+\indexentry{INTn\_MAX macros@\texttt{INTn\_MAX} macros|(hyperpage}{287}
+\indexentry{INTn\_MIN macros@\texttt{INTn\_MIN} macros|(hyperpage}{287}
+\indexentry{UINTn\_MAX macros@\texttt{UINTn\_MAX} macros|(hyperpage}{287}
+\indexentry{INT\_LEASTn\_MAX macros@\texttt{INT\_LEASTn\_MAX} macros|(hyperpage}{287}
+\indexentry{INT\_LEASTn\_MIN macros@\texttt{INT\_LEASTn\_MIN} macros|(hyperpage}{287}
+\indexentry{UINT\_LEASTn\_MAX macros@\texttt{UINT\_LEASTn\_MAX} macros|(hyperpage}{287}
+\indexentry{INT\_FASTn\_MAX macros@\texttt{INT\_FASTn\_MAX} macros|(hyperpage}{287}
+\indexentry{INT\_FASTn\_MIN macros@\texttt{INT\_FASTn\_MIN} macros|(hyperpage}{287}
+\indexentry{UINT\_FASTn\_MAX macros@\texttt{UINT\_FASTn\_MAX} macros|(hyperpage}{287}
+\indexentry{INTMAX\_MAX macro@\texttt{INTMAX\_MAX} macro|(hyperpage}{287}
+\indexentry{INTMAX\_MIN macro@\texttt{INTMAX\_MIN} macro|(hyperpage}{287}
+\indexentry{UINTMAX\_MAX macro@\texttt{UINTMAX\_MAX} macro|(hyperpage}{287}
+\indexentry{INTn\_MAX macros@\texttt{INTn\_MAX} macros|)hyperpage}{287}
+\indexentry{UINTn\_MAX macros@\texttt{UINTn\_MAX} macros|)hyperpage}{287}
+\indexentry{INT\_LEASTn\_MAX macros@\texttt{INT\_LEASTn\_MAX} macros|)hyperpage}{287}
+\indexentry{UINT\_LEASTn\_MAX macros@\texttt{UINT\_LEASTn\_MAX} macros|)hyperpage}{287}
+\indexentry{INT\_FASTn\_MAX macros@\texttt{INT\_FASTn\_MAX} macros|)hyperpage}{287}
+\indexentry{UINT\_FASTn\_MAX macros@\texttt{UINT\_FASTn\_MAX} macros|)hyperpage}{287}
+\indexentry{INTMAX\_MAX macro@\texttt{INTMAX\_MAX} macro|)hyperpage}{287}
+\indexentry{UINTMAX\_MAX macro@\texttt{UINTMAX\_MAX} macro|)hyperpage}{287}
+\indexentry{INTn\_MIN macros@\texttt{INTn\_MIN} macros|)hyperpage}{287}
+\indexentry{INT\_LEASTn\_MIN macros@\texttt{INT\_LEASTn\_MIN} macros|)hyperpage}{287}
+\indexentry{INT\_FASTn\_MIN macros@\texttt{INT\_FASTn\_MIN} macros|)hyperpage}{287}
+\indexentry{INTMAX\_MIN macro@\texttt{INTMAX\_MIN} macro|)hyperpage}{287}
+\indexentry{printf() function@\texttt{printf()} function|hyperpage}{287}
+\indexentry{scanf() function@\texttt{scanf()} function|hyperpage}{287}
+\indexentry{PRIdn macros@\texttt{PRIdn} macros|(hyperpage}{287}
+\indexentry{PRIin macros@\texttt{PRIin} macros|(hyperpage}{287}
+\indexentry{PRIdLEASTn macros@\texttt{PRIdLEASTn} macros|(hyperpage}{287}
+\indexentry{PRIiLEASTn macros@\texttt{PRIiLEASTn} macros|(hyperpage}{287}
+\indexentry{PRIdFASTn macros@\texttt{PRIdFASTn} macros|(hyperpage}{287}
+\indexentry{PRIiFASTn macros@\texttt{PRIiFASTn} macros|(hyperpage}{287}
+\indexentry{PRIdMAX macro@\texttt{PRIdMAX} macro|(hyperpage}{287}
+\indexentry{PRIiMAX macro@\texttt{PRIiMAX} macro|(hyperpage}{287}
+\indexentry{PRIdn macros@\texttt{PRIdn} macros|)hyperpage}{288}
+\indexentry{PRIin macros@\texttt{PRIin} macros|)hyperpage}{288}
+\indexentry{PRIdLEASTn macros@\texttt{PRIdLEASTn} macros|)hyperpage}{288}
+\indexentry{PRIiLEASTn macros@\texttt{PRIiLEASTn} macros|)hyperpage}{288}
+\indexentry{PRIdFASTn macros@\texttt{PRIdFASTn} macros|)hyperpage}{288}
+\indexentry{PRIiFASTn macros@\texttt{PRIiFASTn} macros|)hyperpage}{288}
+\indexentry{PRIdMAX macro@\texttt{PRIdMAX} macro|)hyperpage}{288}
+\indexentry{PRIiMAX macro@\texttt{PRIiMAX} macro|)hyperpage}{288}
+\indexentry{PRIon macros@\texttt{PRIon} macros|(hyperpage}{288}
+\indexentry{PRIun macros@\texttt{PRIun} macros|(hyperpage}{288}
+\indexentry{PRIxn macros@\texttt{PRIxn} macros|(hyperpage}{288}
+\indexentry{PRIXn macros@\texttt{PRIXn} macros|(hyperpage}{288}
+\indexentry{PRIoLEASTn macros@\texttt{PRIoLEASTn} macros|(hyperpage}{288}
+\indexentry{PRIuLEASTn macros@\texttt{PRIuLEASTn} macros|(hyperpage}{288}
+\indexentry{PRIxLEASTn macros@\texttt{PRIxLEASTn} macros|(hyperpage}{288}
+\indexentry{PRIXLEASTn macros@\texttt{PRIXLEASTn} macros|(hyperpage}{288}
+\indexentry{PRIoFASTn macros@\texttt{PRIoFASTn} macros|(hyperpage}{288}
+\indexentry{PRIuFASTn macros@\texttt{PRIuFASTn} macros|(hyperpage}{288}
+\indexentry{PRIxFASTn macros@\texttt{PRIxFASTn} macros|(hyperpage}{288}
+\indexentry{PRIXFASTn macros@\texttt{PRIXFASTn} macros|(hyperpage}{288}
+\indexentry{PRIoMAX macros@\texttt{PRIoMAX} macros|(hyperpage}{288}
+\indexentry{PRIuMAX macros@\texttt{PRIuMAX} macros|(hyperpage}{288}
+\indexentry{PRIxMAX macros@\texttt{PRIxMAX} macros|(hyperpage}{288}
+\indexentry{PRIXMAX macros@\texttt{PRIXMAX} macros|(hyperpage}{288}
+\indexentry{PRIon macros@\texttt{PRIon} macros|)hyperpage}{288}
+\indexentry{PRIun macros@\texttt{PRIun} macros|)hyperpage}{288}
+\indexentry{PRIxn macros@\texttt{PRIxn} macros|)hyperpage}{288}
+\indexentry{PRIXn macros@\texttt{PRIXn} macros|)hyperpage}{288}
+\indexentry{PRIoLEASTn macros@\texttt{PRIoLEASTn} macros|)hyperpage}{288}
+\indexentry{PRIuLEASTn macros@\texttt{PRIuLEASTn} macros|)hyperpage}{288}
+\indexentry{PRIxLEASTn macros@\texttt{PRIxLEASTn} macros|)hyperpage}{288}
+\indexentry{PRIXLEASTn macros@\texttt{PRIXLEASTn} macros|)hyperpage}{288}
+\indexentry{PRIoFASTn macros@\texttt{PRIoFASTn} macros|)hyperpage}{288}
+\indexentry{PRIuFASTn macros@\texttt{PRIuFASTn} macros|)hyperpage}{288}
+\indexentry{PRIxFASTn macros@\texttt{PRIxFASTn} macros|)hyperpage}{288}
+\indexentry{PRIXFASTn macros@\texttt{PRIXFASTn} macros|)hyperpage}{288}
+\indexentry{PRIoMAX macros@\texttt{PRIoMAX} macros|)hyperpage}{288}
+\indexentry{PRIuMAX macros@\texttt{PRIuMAX} macros|)hyperpage}{288}
+\indexentry{PRIxMAX macros@\texttt{PRIxMAX} macros|)hyperpage}{288}
+\indexentry{PRIXMAX macros@\texttt{PRIXMAX} macros|)hyperpage}{288}
+\indexentry{scanf() function@\texttt{scanf()} function|hyperpage}{288}
+\indexentry{SCNdn macros@\texttt{SCNdn} macros|(hyperpage}{288}
+\indexentry{SCNin macros@\texttt{SCNin} macros|(hyperpage}{288}
+\indexentry{SCNon macros@\texttt{SCNon} macros|(hyperpage}{288}
+\indexentry{SCNun macros@\texttt{SCNun} macros|(hyperpage}{288}
+\indexentry{SCNxn macros@\texttt{SCNxn} macros|(hyperpage}{288}
+\indexentry{SCNdLEASTn macros@\texttt{SCNdLEASTn} macros|(hyperpage}{288}
+\indexentry{SCNiLEASTn macros@\texttt{SCNiLEASTn} macros|(hyperpage}{288}
+\indexentry{SCNoLEASTn macros@\texttt{SCNoLEASTn} macros|(hyperpage}{288}
+\indexentry{SCNuLEASTn macros@\texttt{SCNuLEASTn} macros|(hyperpage}{288}
+\indexentry{SCNxLEASTn macros@\texttt{SCNxLEASTn} macros|(hyperpage}{288}
+\indexentry{SCNdFASTn macros@\texttt{SCNdFASTn} macros|(hyperpage}{288}
+\indexentry{SCNiFASTn macros@\texttt{SCNiFASTn} macros|(hyperpage}{288}
+\indexentry{SCNoFASTn macros@\texttt{SCNoFASTn} macros|(hyperpage}{288}
+\indexentry{SCNuFASTn macros@\texttt{SCNuFASTn} macros|(hyperpage}{288}
+\indexentry{SCNxFASTn macros@\texttt{SCNxFASTn} macros|(hyperpage}{288}
+\indexentry{SCNdMAX macros@\texttt{SCNdMAX} macros|(hyperpage}{288}
+\indexentry{SCNiMAX macros@\texttt{SCNiMAX} macros|(hyperpage}{288}
+\indexentry{SCNoMAX macros@\texttt{SCNoMAX} macros|(hyperpage}{288}
+\indexentry{SCNuMAX macros@\texttt{SCNuMAX} macros|(hyperpage}{288}
+\indexentry{SCNxMAX macros@\texttt{SCNxMAX} macros|(hyperpage}{288}
+\indexentry{SCNdn macros@\texttt{SCNdn} macros|)hyperpage}{288}
+\indexentry{SCNin macros@\texttt{SCNin} macros|)hyperpage}{288}
+\indexentry{SCNon macros@\texttt{SCNon} macros|)hyperpage}{288}
+\indexentry{SCNun macros@\texttt{SCNun} macros|)hyperpage}{288}
+\indexentry{SCNxn macros@\texttt{SCNxn} macros|)hyperpage}{288}
+\indexentry{SCNdLEASTn macros@\texttt{SCNdLEASTn} macros|)hyperpage}{288}
+\indexentry{SCNiLEASTn macros@\texttt{SCNiLEASTn} macros|)hyperpage}{288}
+\indexentry{SCNoLEASTn macros@\texttt{SCNoLEASTn} macros|)hyperpage}{288}
+\indexentry{SCNuLEASTn macros@\texttt{SCNuLEASTn} macros|)hyperpage}{288}
+\indexentry{SCNxLEASTn macros@\texttt{SCNxLEASTn} macros|)hyperpage}{288}
+\indexentry{SCNdFASTn macros@\texttt{SCNdFASTn} macros|)hyperpage}{288}
+\indexentry{SCNiFASTn macros@\texttt{SCNiFASTn} macros|)hyperpage}{288}
+\indexentry{SCNoFASTn macros@\texttt{SCNoFASTn} macros|)hyperpage}{288}
+\indexentry{SCNuFASTn macros@\texttt{SCNuFASTn} macros|)hyperpage}{288}
+\indexentry{SCNxFASTn macros@\texttt{SCNxFASTn} macros|)hyperpage}{288}
+\indexentry{SCNdMAX macros@\texttt{SCNdMAX} macros|)hyperpage}{288}
+\indexentry{SCNiMAX macros@\texttt{SCNiMAX} macros|)hyperpage}{288}
+\indexentry{SCNoMAX macros@\texttt{SCNoMAX} macros|)hyperpage}{288}
+\indexentry{SCNuMAX macros@\texttt{SCNuMAX} macros|)hyperpage}{288}
+\indexentry{SCNxMAX macros@\texttt{SCNxMAX} macros|)hyperpage}{288}
+\indexentry{Fixed width integers|)hyperpage}{288}
+\indexentry{Date and time|(hyperpage}{289}
+\indexentry{Universal Coordinated Time|hyperpage}{289}
+\indexentry{Greenwich Mean time|hyperpage}{289}
+\indexentry{Local time|hyperpage}{289}
+\indexentry{Universal Coordinated Time|(hyperpage}{289}
+\indexentry{Local time|(hyperpage}{289}
+\indexentry{Local time|)hyperpage}{289}
+\indexentry{Universal Coordinated Time|)hyperpage}{289}
+\indexentry{time\_t type@\texttt{time\_t} type|hyperpage}{290}
+\indexentry{struct tm type@\texttt{struct tm} type|hyperpage}{290}
+\indexentry{time\_t type@\texttt{time\_t} type|(hyperpage}{290}
+\indexentry{time\_t type@\texttt{time\_t} type|)hyperpage}{290}
+\indexentry{struct tm type@\texttt{struct tm} type|(hyperpage}{290}
+\indexentry{struct tm type@\texttt{struct tm} type|)hyperpage}{290}
+\indexentry{time() function@\texttt{time()} function|(hyperpage}{290}
+\indexentry{time() function@\texttt{time()} function|)hyperpage}{290}
+\indexentry{ctime() function@\texttt{ctime()} function|(hyperpage}{290}
+\indexentry{ctime() function@\texttt{ctime()} function|)hyperpage}{291}
+\indexentry{time\_t type@\texttt{time\_t} type!conversion to struct tm@conversion to \texttt{struct tm}|(hyperpage}{291}
+\indexentry{localtime() function@\texttt{localtime()} function|(hyperpage}{291}
+\indexentry{gmtime() function@\texttt{gmtime()} function|(hyperpage}{291}
+\indexentry{asctime() function@\texttt{asctime()} function|(hyperpage}{291}
+\indexentry{asctime() function@\texttt{asctime()} function|)hyperpage}{291}
+\indexentry{localtime() function@\texttt{localtime()} function|)hyperpage}{291}
+\indexentry{gmtime() function@\texttt{gmtime()} function|)hyperpage}{291}
+\indexentry{time\_t type@\texttt{time\_t} type!conversion to struct tm@conversion to \texttt{struct tm}|)hyperpage}{291}
+\indexentry{struct tm type@\texttt{struct tm} type!conversion to time\_t@conversion to \texttt{time\_t}|(hyperpage}{291}
+\indexentry{mktime() function@\texttt{mktime()} function|(hyperpage}{291}
+\indexentry{mktime() function@\texttt{mktime()} function|)hyperpage}{292}
+\indexentry{timegm() Unix function@\texttt{timegm()} Unix function|hyperpage}{292}
+\indexentry{\_mkgmtime() Windows function@\texttt{\_mkgmtime()} Windows function|hyperpage}{292}
+\indexentry{struct tm type@\texttt{struct tm} type!conversion to time\_t@conversion to \texttt{time\_t}|)hyperpage}{292}
+\indexentry{strftime() function@\texttt{strftime()} function|(hyperpage}{292}
+\indexentry{strftime() function@\texttt{strftime()} function|)hyperpage}{293}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|(hyperpage}{293}
+\indexentry{struct timespec type@\texttt{struct timespec} type|(hyperpage}{293}
+\indexentry{struct timespec type@\texttt{struct timespec} type|)hyperpage}{294}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|)hyperpage}{294}
+\indexentry{Date and time!differences|(hyperpage}{294}
+\indexentry{difftime() function@\texttt{difftime()} function|(hyperpage}{294}
+\indexentry{difftime() function@\texttt{difftime()} function|)hyperpage}{295}
+\indexentry{Date and time!differences|)hyperpage}{295}
+\indexentry{Date and time|)hyperpage}{295}
+\indexentry{Multithreading|(hyperpage}{297}
+\indexentry{\_\_STDC\_NO\_THREADS\_\_ macro@\texttt{\_\_STDC\_NO\_THREADS\_\_} macro|(hyperpage}{297}
+\indexentry{\_\_STDC\_NO\_THREADS\_\_ macro@\texttt{\_\_STDC\_NO\_THREADS\_\_} macro|)hyperpage}{297}
+\indexentry{gcc compiler@\texttt{gcc} compiler!with threads|(hyperpage}{297}
+\indexentry{gcc compiler@\texttt{gcc} compiler!with threads|)hyperpage}{297}
+\indexentry{Multithreading!and the standard library|(hyperpage}{298}
+\indexentry{Multithreading!and the standard library|)hyperpage}{298}
+\indexentry{thrd\_t type@\texttt{thrd\_t} type|hyperpage}{298}
+\indexentry{thrd\_create() function@\texttt{thrd\_create()} function|hyperpage}{298}
+\indexentry{thrd\_join() function@\texttt{thrd\_join()} function|hyperpage}{298}
+\indexentry{thrd\_create() function@\texttt{thrd\_create()} function|(hyperpage}{299}
+\indexentry{thrd\_start\_t type@\texttt{thrd\_start\_t} type|(hyperpage}{299}
+\indexentry{thrd\_join() function@\texttt{thrd\_join()} function|(hyperpage}{299}
+\indexentry{thrd\_start\_t type@\texttt{thrd\_start\_t} type|)hyperpage}{299}
+\indexentry{thrd\_create() function@\texttt{thrd\_create()} function|)hyperpage}{299}
+\indexentry{thrd\_join() function@\texttt{thrd\_join()} function|)hyperpage}{299}
+\indexentry{thrd\_create() function@\texttt{thrd\_create()} function|(hyperpage}{300}
+\indexentry{thrd\_join() function@\texttt{thrd\_join()} function|(hyperpage}{300}
+\indexentry{thrd\_join() function@\texttt{thrd\_join()} function|)hyperpage}{300}
+\indexentry{thrd\_create() function@\texttt{thrd\_create()} function|)hyperpage}{301}
+\indexentry{Multithreading!race conditions|hyperpage}{301}
+\indexentry{thrd\_detach() function@\texttt{thrd\_detach()} function|(hyperpage}{302}
+\indexentry{thrd\_detach() function@\texttt{thrd\_detach()} function|)hyperpage}{303}
+\indexentry{Thread local data|(hyperpage}{303}
+\indexentry{\_Thread\_local storage class@\texttt{\_Thread\_local} storage class|(hyperpage}{305}
+\indexentry{thread\_local storage class@\texttt{thread\_local} storage class|(hyperpage}{305}
+\indexentry{threads.h header file@\texttt{threads.h} header file|hyperpage}{305}
+\indexentry{thread\_local storage class@\texttt{thread\_local} storage class|)hyperpage}{305}
+\indexentry{\_Thread\_local storage class@\texttt{\_Thread\_local} storage class|)hyperpage}{305}
+\indexentry{Thread local data|)hyperpage}{305}
+\indexentry{Thread-specific storage|(hyperpage}{305}
+\indexentry{tss\_dtor\_t type@\texttt{tss\_dtor\_t} type|hyperpage}{306}
+\indexentry{tss\_t type@\texttt{tss\_t} type|hyperpage}{306}
+\indexentry{tss\_create() function@\texttt{tss\_create()} function|hyperpage}{306}
+\indexentry{tss\_delete() function@\texttt{tss\_delete()} function|(hyperpage}{306}
+\indexentry{tss\_delete() function@\texttt{tss\_delete()} function|)hyperpage}{306}
+\indexentry{tss\_set() function@\texttt{tss\_set()} function|hyperpage}{306}
+\indexentry{tss\_get() function@\texttt{tss\_get()} function|hyperpage}{306}
+\indexentry{tss\_t type@\texttt{tss\_t} type|(hyperpage}{306}
+\indexentry{tss\_get() function@\texttt{tss\_get()} function|(hyperpage}{306}
+\indexentry{tss\_set() function@\texttt{tss\_set()} function|(hyperpage}{306}
+\indexentry{tss\_create() function@\texttt{tss\_create()} function|(hyperpage}{306}
+\indexentry{tss\_delete() function@\texttt{tss\_delete()} function|(hyperpage}{306}
+\indexentry{tss\_t type@\texttt{tss\_t} type|)hyperpage}{307}
+\indexentry{tss\_get() function@\texttt{tss\_get()} function|)hyperpage}{307}
+\indexentry{tss\_set() function@\texttt{tss\_set()} function|)hyperpage}{307}
+\indexentry{tss\_create() function@\texttt{tss\_create()} function|)hyperpage}{307}
+\indexentry{tss\_delete() function@\texttt{tss\_delete()} function|)hyperpage}{307}
+\indexentry{Thread-specific storage|)hyperpage}{307}
+\indexentry{Mutexes|(hyperpage}{307}
+\indexentry{mtx\_init() function@\texttt{mtx\_init()} function|hyperpage}{307}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|hyperpage}{307}
+\indexentry{mtx\_unlock function@\texttt{mtx\_unlock} function|hyperpage}{307}
+\indexentry{mtx\_destroy() function@\texttt{mtx\_destroy()} function|hyperpage}{307}
+\indexentry{mtx\_init() function@\texttt{mtx\_init()} function|hyperpage}{307}
+\indexentry{Multithreading!race conditions|(hyperpage}{307}
+\indexentry{Multithreading!race conditions|)hyperpage}{308}
+\indexentry{mtx\_t type@\texttt{mtx\_t} type|hyperpage}{308}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|(hyperpage}{308}
+\indexentry{mtx\_unlock() function@\texttt{mtx\_unlock()} function|(hyperpage}{308}
+\indexentry{mtx\_init() function@\texttt{mtx\_init()} function|(hyperpage}{308}
+\indexentry{mtx\_destroy() function@\texttt{mtx\_destroy()} function|(hyperpage}{308}
+\indexentry{mtx\_init() function@\texttt{mtx\_init()} function|)hyperpage}{309}
+\indexentry{mtx\_destroy() function@\texttt{mtx\_destroy()} function|)hyperpage}{309}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|)hyperpage}{309}
+\indexentry{mtx\_unlock() function@\texttt{mtx\_unlock()} function|)hyperpage}{309}
+\indexentry{Mutexes!types|(hyperpage}{310}
+\indexentry{Mutexes!timeouts|(hyperpage}{310}
+\indexentry{mtx\_plain macro@\texttt{mtx\_plain} macro|hyperpage}{310}
+\indexentry{mtx\_timed macro@\texttt{mtx\_timed} macro|hyperpage}{310}
+\indexentry{mtx\_plain macro@\texttt{mtx\_plain} macro|hyperpage}{310}
+\indexentry{mtx\_timed macro@\texttt{mtx\_timed} macro|hyperpage}{310}
+\indexentry{mtx\_recursive macro@\texttt{mtx\_recursive} macro|hyperpage}{310}
+\indexentry{mtx\_timed macro@\texttt{mtx\_timed} macro|(hyperpage}{310}
+\indexentry{mtx\_timed macro@\texttt{mtx\_timed} macro|)hyperpage}{310}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|(hyperpage}{310}
+\indexentry{mtx\_timedlock() function@\texttt{mtx\_timedlock()} function|(hyperpage}{310}
+\indexentry{mtx\_timedlock() function@\texttt{mtx\_timedlock()} function|)hyperpage}{311}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|)hyperpage}{311}
+\indexentry{Mutexes!timeouts|)hyperpage}{311}
+\indexentry{Mutexes!types|)hyperpage}{311}
+\indexentry{Mutexes|)hyperpage}{311}
+\indexentry{Condition variables|(hyperpage}{311}
+\indexentry{cnd\_t type@\texttt{cnd\_t} type|hyperpage}{311}
+\indexentry{cnd\_init() function@\texttt{cnd\_init()} function|hyperpage}{311}
+\indexentry{cnd\_destroy() function@\texttt{cnd\_destroy()} function|hyperpage}{311}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|(hyperpage}{311}
+\indexentry{mtx\_unlock() function@\texttt{mtx\_unlock()} function|(hyperpage}{311}
+\indexentry{cnd\_wait() function@\texttt{cnd\_wait()} function|(hyperpage}{311}
+\indexentry{cnd\_signal() function@\texttt{cnd\_signal()} function|(hyperpage}{311}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|)hyperpage}{311}
+\indexentry{mtx\_unlock() function@\texttt{mtx\_unlock()} function|)hyperpage}{311}
+\indexentry{cnd\_signal() function@\texttt{cnd\_signal()} function|)hyperpage}{312}
+\indexentry{Condition variables!spurious wakeup|hyperpage}{312}
+\indexentry{cnd\_wait() function@\texttt{cnd\_wait()} function|)hyperpage}{312}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|(hyperpage}{312}
+\indexentry{mtx\_unlock() function@\texttt{mtx\_unlock()} function|(hyperpage}{312}
+\indexentry{mtx\_init() function@\texttt{mtx\_init()} function|(hyperpage}{312}
+\indexentry{mtx\_destroy() function@\texttt{mtx\_destroy()} function|(hyperpage}{312}
+\indexentry{cnd\_init() function@\texttt{cnd\_init()} function|(hyperpage}{312}
+\indexentry{cnd\_destroy() function@\texttt{cnd\_destroy()} function|(hyperpage}{312}
+\indexentry{cnd\_wait() function@\texttt{cnd\_wait()} function|(hyperpage}{312}
+\indexentry{cnd\_signal() function@\texttt{cnd\_signal()} function|(hyperpage}{312}
+\indexentry{cnd\_t type@\texttt{cnd\_t} type|(hyperpage}{312}
+\indexentry{mtx\_lock() function@\texttt{mtx\_lock()} function|)hyperpage}{314}
+\indexentry{mtx\_unlock() function@\texttt{mtx\_unlock()} function|)hyperpage}{314}
+\indexentry{mtx\_init() function@\texttt{mtx\_init()} function|)hyperpage}{314}
+\indexentry{mtx\_destroy() function@\texttt{mtx\_destroy()} function|)hyperpage}{314}
+\indexentry{cnd\_init() function@\texttt{cnd\_init()} function|)hyperpage}{314}
+\indexentry{cnd\_destroy() function@\texttt{cnd\_destroy()} function|)hyperpage}{314}
+\indexentry{cnd\_wait() function@\texttt{cnd\_wait()} function|)hyperpage}{314}
+\indexentry{cnd\_signal() function@\texttt{cnd\_signal()} function|)hyperpage}{314}
+\indexentry{cnd\_t type@\texttt{cnd\_t} type|)hyperpage}{314}
+\indexentry{Condition variables!timeouts|(hyperpage}{314}
+\indexentry{cnd\_timedwait() function@\texttt{cnd\_timedwait()} function|hyperpage}{314}
+\indexentry{thrd\_timedout macro@\texttt{thrd\_timedout} macro|hyperpage}{314}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|hyperpage}{314}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|(hyperpage}{314}
+\indexentry{cnd\_timedwait() function@\texttt{cnd\_timedwait()} function|(hyperpage}{314}
+\indexentry{thrd\_timedout() macro@\texttt{thrd\_timedout()} macro|(hyperpage}{314}
+\indexentry{timespec\_get() function@\texttt{timespec\_get()} function|)hyperpage}{315}
+\indexentry{cnd\_timedwait() function@\texttt{cnd\_timedwait()} function|)hyperpage}{315}
+\indexentry{thrd\_timedout() macro@\texttt{thrd\_timedout()} macro|)hyperpage}{315}
+\indexentry{Condition variables!timeouts|)hyperpage}{315}
+\indexentry{Condition variables!broadcasting|(hyperpage}{315}
+\indexentry{cnd\_signal() function@\texttt{cnd\_signal()} function|)hyperpage}{315}
+\indexentry{cnd\_broadcast() function@\texttt{cnd\_broadcast()} function|(hyperpage}{315}
+\indexentry{cnd\_broadcast() function@\texttt{cnd\_broadcast()} function|)hyperpage}{315}
+\indexentry{Condition variables!broadcasting|)hyperpage}{315}
+\indexentry{Condition variables|)hyperpage}{315}
+\indexentry{Multithreading!one-time functions|(hyperpage}{315}
+\indexentry{call\_once() function@\texttt{call\_once()} function|hyperpage}{315}
+\indexentry{once\_flag type@\texttt{once\_flag} type|(hyperpage}{315}
+\indexentry{ONCE\_FLAG\_INIT macro@\texttt{ONCE\_FLAG\_INIT} macro|(hyperpage}{315}
+\indexentry{call\_once() function@\texttt{call\_once()} function|(hyperpage}{315}
+\indexentry{once\_flag type@\texttt{once\_flag} type|)hyperpage}{315}
+\indexentry{ONCE\_FLAG\_INIT macro@\texttt{ONCE\_FLAG\_INIT} macro|)hyperpage}{315}
+\indexentry{call\_once() function@\texttt{call\_once()} function|)hyperpage}{315}
+\indexentry{Multithreading!one-time functions|)hyperpage}{315}
+\indexentry{Multithreading|)hyperpage}{315}
+\indexentry{Atomic variables|(hyperpage}{317}
+\indexentry{\_\_STDC\_NO\_ATOMICS\_\_ macro@\texttt{\_\_STDC\_NO\_ATOMICS\_\_} macro|(hyperpage}{317}
+\indexentry{\_\_STDC\_NO\_ATOMICS\_\_ macro@\texttt{\_\_STDC\_NO\_ATOMICS\_\_} macro|)hyperpage}{317}
+\indexentry{Atomic variables!compiling with|(hyperpage}{317}
+\indexentry{Atomic variables!compiling with|)hyperpage}{317}
+\indexentry{stdatomic.h header@\texttt{stdatomic.h} header|hyperpage}{318}
+\indexentry{atomic\_int type@\texttt{atomic\_int} type|(hyperpage}{318}
+\indexentry{atomic\_int type@\texttt{atomic\_int} type|)hyperpage}{319}
+\indexentry{Atomic variables!synchronization|(hyperpage}{319}
+\indexentry{Atomic variables!synchronization|(hyperpage}{321}
+\indexentry{Atomic variables!acquire|(hyperpage}{321}
+\indexentry{Atomic variables!release|(hyperpage}{321}
+\indexentry{Atomic variables!acquire|)hyperpage}{322}
+\indexentry{Atomic variables!release|)hyperpage}{322}
+\indexentry{Atomic variables!sequential consistency|(hyperpage}{322}
+\indexentry{Atomic variables!sequential consistency|)hyperpage}{323}
+\indexentry{Atomic variables!assignments and operators|(hyperpage}{323}
+\indexentry{Atomic variables!assignments and operators|)hyperpage}{324}
+\indexentry{Atomic variables!synchronized library functions|(hyperpage}{324}
+\indexentry{Atomic variables!synchronized library functions|)hyperpage}{324}
+\indexentry{\_Atomic type qualifier@\texttt{\_Atomic} type qualifier|(hyperpage}{324}
+\indexentry{atomic\_bool type@\texttt{atomic\_bool} type|hyperpage}{324}
+\indexentry{atomic\_char type@\texttt{atomic\_char} type|hyperpage}{324}
+\indexentry{atomic\_schar type@\texttt{atomic\_schar} type|hyperpage}{324}
+\indexentry{atomic\_uchar type@\texttt{atomic\_uchar} type|hyperpage}{324}
+\indexentry{atomic\_short type@\texttt{atomic\_short} type|hyperpage}{324}
+\indexentry{atomic\_ushort type@\texttt{atomic\_ushort} type|hyperpage}{324}
+\indexentry{atomic\_int type@\texttt{atomic\_int} type|hyperpage}{324}
+\indexentry{atomic\_uint type@\texttt{atomic\_uint} type|hyperpage}{324}
+\indexentry{atomic\_long type@\texttt{atomic\_long} type|hyperpage}{324}
+\indexentry{atomic\_ulong type@\texttt{atomic\_ulong} type|hyperpage}{324}
+\indexentry{atomic\_llong type@\texttt{atomic\_llong} type|hyperpage}{324}
+\indexentry{atomic\_ullong type@\texttt{atomic\_ullong} type|hyperpage}{324}
+\indexentry{atomic\_char16\_t type@\texttt{atomic\_char16\_t} type|hyperpage}{324}
+\indexentry{atomic\_char32\_t type@\texttt{atomic\_char32\_t} type|hyperpage}{324}
+\indexentry{atomic\_wchar\_t type@\texttt{atomic\_wchar\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_least8\_t type@\texttt{atomic\_int\_least8\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_least8\_t type@\texttt{atomic\_uint\_least8\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_least16\_t type@\texttt{atomic\_int\_least16\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_least16\_t type@\texttt{atomic\_uint\_least16\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_least32\_t type@\texttt{atomic\_int\_least32\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_least32\_t type@\texttt{atomic\_uint\_least32\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_least64\_t type@\texttt{atomic\_int\_least64\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_least64\_t type@\texttt{atomic\_uint\_least64\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_fast8\_t type@\texttt{atomic\_int\_fast8\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_fast8\_t type@\texttt{atomic\_uint\_fast8\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_fast16\_t type@\texttt{atomic\_int\_fast16\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_fast16\_t type@\texttt{atomic\_uint\_fast16\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_fast32\_t type@\texttt{atomic\_int\_fast32\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_fast32\_t type@\texttt{atomic\_uint\_fast32\_t} type|hyperpage}{324}
+\indexentry{atomic\_int\_fast64\_t type@\texttt{atomic\_int\_fast64\_t} type|hyperpage}{324}
+\indexentry{atomic\_uint\_fast64\_t type@\texttt{atomic\_uint\_fast64\_t} type|hyperpage}{324}
+\indexentry{atomic\_intptr\_t type@\texttt{atomic\_intptr\_t} type|hyperpage}{324}
+\indexentry{atomic\_uintptr\_t type@\texttt{atomic\_uintptr\_t} type|hyperpage}{324}
+\indexentry{atomic\_size\_t type@\texttt{atomic\_size\_t} type|hyperpage}{324}
+\indexentry{atomic\_ptrdiff\_t type@\texttt{atomic\_ptrdiff\_t} type|hyperpage}{324}
+\indexentry{atomic\_intmax\_t type@\texttt{atomic\_intmax\_t} type|hyperpage}{324}
+\indexentry{atomic\_uintmax\_t type@\texttt{atomic\_uintmax\_t} type|hyperpage}{324}
+\indexentry{\_Atomic type qualifier@\texttt{\_Atomic} type qualifier|)hyperpage}{325}
+\indexentry{\_Atomic type specifier@\texttt{\_Atomic} type specifier|(hyperpage}{325}
+\indexentry{\_Atomic type specifier@\texttt{\_Atomic} type specifier|)hyperpage}{325}
+\indexentry{\_Atomic type qualifier@\texttt{\_Atomic} type qualifier|(hyperpage}{325}
+\indexentry{\_Atomic type qualifier@\texttt{\_Atomic} type qualifier|)hyperpage}{326}
+\indexentry{Atomic variables!lock-free|(hyperpage}{326}
+\indexentry{ATOMIC\_BOOL\_LOCK\_FREE macro@\texttt{ATOMIC\_BOOL\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_CHAR\_LOCK\_FREE macro@\texttt{ATOMIC\_CHAR\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_CHAR16\_T\_LOCK\_FREE macro@\texttt{ATOMIC\_CHAR16\_T\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_CHAR32\_T\_LOCK\_FREE macro@\texttt{ATOMIC\_CHAR32\_T\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_WCHAR\_T\_LOCK\_FREE macro@\texttt{ATOMIC\_WCHAR\_T\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_SHORT\_LOCK\_FREE macro@\texttt{ATOMIC\_SHORT\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_INT\_LOCK\_FREE macro@\texttt{ATOMIC\_INT\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_LONG\_LOCK\_FREE macro@\texttt{ATOMIC\_LONG\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_LLONG\_LOCK\_FREE macro@\texttt{ATOMIC\_LLONG\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{ATOMIC\_POINTER\_LOCK\_FREE macro@\texttt{ATOMIC\_POINTER\_LOCK\_FREE} macro|hyperpage}{326}
+\indexentry{atomic\_is\_lock\_free() function@\texttt{atomic\_is\_lock\_free()} function|hyperpage}{327}
+\indexentry{Atomic variables!lock-free|)hyperpage}{327}
+\indexentry{Signal handlers!with lock-free atomics|(hyperpage}{327}
+\indexentry{Atomic variables!with signal handlers|(hyperpage}{327}
+\indexentry{Signal handlers!with lock-free atomics|)hyperpage}{327}
+\indexentry{Atomic variables!with signal handlers|)hyperpage}{327}
+\indexentry{Atomic variables!atomic flags|(hyperpage}{327}
+\indexentry{atomic\_flag type@\texttt{atomic\_flag} type|(hyperpage}{327}
+\indexentry{ATOMIC\_FLAG\_INIT macro@\texttt{ATOMIC\_FLAG\_INIT} macro|(hyperpage}{327}
+\indexentry{ATOMIC\_FLAG\_INIT macro@\texttt{ATOMIC\_FLAG\_INIT} macro|)hyperpage}{327}
+\indexentry{atomic\_flag\_test\_and\_set() function@\texttt{atomic\_flag\_test\_and\_set()} function|(hyperpage}{327}
+\indexentry{atomic\_flag\_clear() function@\texttt{atomic\_flag\_clear()} function|(hyperpage}{327}
+\indexentry{raise() function@\texttt  {raise()} function|hyperpage}{327}
+\indexentry{atomic\_flag\_clear() function@\texttt{atomic\_flag\_clear()} function|)hyperpage}{328}
+\indexentry{atomic\_flag\_test\_and\_set() function@\texttt{atomic\_flag\_test\_and\_set()} function|)hyperpage}{328}
+\indexentry{Atomic variables!atomic flags|)hyperpage}{328}
+\indexentry{atomic\_flag type@\texttt{atomic\_flag} type|)hyperpage}{328}
+\indexentry{Atomic variables!struct and union@\texttt{struct} and \texttt{union}|(hyperpage}{328}
+\indexentry{Atomic variables!struct and union@\texttt{struct} and \texttt{union}|)hyperpage}{328}
+\indexentry{Atomic variables!pointers|(hyperpage}{328}
+\indexentry{Atomic variables!pointers|)hyperpage}{329}
+\indexentry{Atomic variables!memory order|(hyperpage}{329}
+\indexentry{Memory order|(hyperpage}{329}
+\indexentry{memory\_order\_seq\_cst enumerated type@\texttt{memory\_order\_seq\_cst} enumerated type|hyperpage}{329}
+\indexentry{memory\_order\_acq\_rel enumerated type@\texttt{memory\_order\_acq\_rel} enumerated type|hyperpage}{329}
+\indexentry{memory\_order\_release enumerated type@\texttt{memory\_order\_release} enumerated type|hyperpage}{329}
+\indexentry{memory\_order\_acquire enumerated type@\texttt{memory\_order\_acquire} enumerated type|hyperpage}{329}
+\indexentry{memory\_order\_consume enumerated type@\texttt{memory\_order\_consume} enumerated type|hyperpage}{329}
+\indexentry{memory\_order\_relaxed enumerated type@\texttt{memory\_order\_relaxed} enumerated type|hyperpage}{329}
+\indexentry{atomic\_fetch\_add() function@\texttt{atomic\_fetch\_add()} function|(hyperpage}{329}
+\indexentry{atomic\_fetch\_add() function@\texttt{atomic\_fetch\_add()} function|)hyperpage}{329}
+\indexentry{atomic\_fetch\_add\_explicit() function@\texttt{atomic\_fetch\_add\_explicit()} function|(hyperpage}{329}
+\indexentry{atomic\_fetch\_add\_explicit() function@\texttt{atomic\_fetch\_add\_explicit()} function|)hyperpage}{330}
+\indexentry{Atomic variables!sequential consistency|(hyperpage}{330}
+\indexentry{Memory order!sequential consistency|(hyperpage}{330}
+\indexentry{Memory order!sequential consistency|)hyperpage}{330}
+\indexentry{Atomic variables!sequential consistency|)hyperpage}{330}
+\indexentry{Atomic variables!acquire|(hyperpage}{330}
+\indexentry{Memory order!acquire|(hyperpage}{330}
+\indexentry{Memory order!acquire|)hyperpage}{330}
+\indexentry{Atomic variables!acquire|)hyperpage}{330}
+\indexentry{Atomic variables!release|(hyperpage}{330}
+\indexentry{Memory order!acquire|(hyperpage}{330}
+\indexentry{Atomic variables!release|)hyperpage}{330}
+\indexentry{Memory order!release|)}{330}
+\indexentry{Atomic variables!consume|(hyperpage}{330}
+\indexentry{Memory order!consume|(hyperpage}{330}
+\indexentry{Atomic variables!consume|)hyperpage}{330}
+\indexentry{Memory order!consume|)hyperpage}{330}
+\indexentry{Atomic variables!acquire/release|(hyperpage}{330}
+\indexentry{Memory order!acquire/release|(hyperpage}{330}
+\indexentry{Atomic variables!acquire/release|)hyperpage}{330}
+\indexentry{Memory order!acquire/release|)hyperpage}{330}
+\indexentry{Atomic variables!relaxed|(hyperpage}{331}
+\indexentry{Memory order!relaxed|(hyperpage}{331}
+\indexentry{Atomic variables!relaxed|)hyperpage}{331}
+\indexentry{Memory order!relaxed|)hyperpage}{331}
+\indexentry{Memory order|)hyperpage}{331}
+\indexentry{Atomic variables!memory order|)hyperpage}{331}
+\indexentry{Atomic variables!fences|(hyperpage}{331}
+\indexentry{atomic\_thread\_fence() function@\texttt{atomic\_thread\_fence()} function|(hyperpage}{331}
+\indexentry{atomic\_thread\_fence() function@\texttt{atomic\_thread\_fence()} function|)hyperpage}{331}
+\indexentry{atomic\_signal\_fence() function@\texttt{atomic\_signal\_fence()} function|(hyperpage}{331}
+\indexentry{atomic\_signal\_fence() function@\texttt{atomic\_signal\_fence()} function|)hyperpage}{331}
+\indexentry{Atomic variables!fences|)hyperpage}{331}
+\indexentry{Atomic variables|)hyperpage}{332}
+\indexentry{Function specifiers|(hyperpage}{333}
+\indexentry{inline function specifier@\texttt{inline} function specifier|(hyperpage}{333}
+\indexentry{inline function specifier@\texttt{inline} function specifier|)hyperpage}{334}
+\indexentry{noreturn function specifier@\texttt{noreturn} function specifier|(hyperpage}{334}
+\indexentry{\_Noreturn function specifier@\texttt{\_Noreturn} function specifier|(hyperpage}{334}
+\indexentry{noreturn function specifier@\texttt{noreturn} function specifier|)hyperpage}{335}
+\indexentry{\_Noreturn function specifier@\texttt{\_Noreturn} function specifier|)hyperpage}{335}
+\indexentry{Function specifiers|)hyperpage}{335}
+\indexentry{Alignment|(hyperpage}{335}
+\indexentry{alignas alignment specifier@\texttt{alignas} alignment specifier|(hyperpage}{335}
+\indexentry{\_Alignas alignment specifier@\texttt{\_Alignas} alignment specifier|(hyperpage}{335}
+\indexentry{alignas alignment specifier@\texttt{alignas} alignment specifier|)hyperpage}{335}
+\indexentry{\_Alignas alignment specifier@\texttt{\_Alignas} alignment specifier|)hyperpage}{335}
+\indexentry{alignof operator@\texttt{alignof} operator|(hyperpage}{335}
+\indexentry{\_Alignof operator@\texttt{\_Alignof} operator|(hyperpage}{335}
+\indexentry{alignof operator@\texttt{alignof} operator|)hyperpage}{336}
+\indexentry{\_Alignof operator@\texttt{\_Alignof} operator|)hyperpage}{336}
+\indexentry{memalignment() function@\texttt{memalignment()} function|(hyperpage}{336}
+\indexentry{memalignment() function@\texttt{memalignment()} function|)hyperpage}{337}
+\indexentry{Alignment|)hyperpage}{337}

@@ -1,0 +1,436 @@
+\contentsline {chapter}{\numberline {1}Kata Pengantar}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Pembaca}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Cara Membaca Buku Ini}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Platform dan Compiler}{2}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Halaman Utama Resmi}{2}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Kebijakan Email}{2}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Mirroring}{3}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Catatan untuk Penerjemah}{3}{section.1.7}%
+\contentsline {section}{\numberline {1.8}Hak Cipta dan Distribusi}{3}{section.1.8}%
+\contentsline {section}{\numberline {1.9}Dedikasi}{3}{section.1.9}%
+\contentsline {chapter}{\numberline {2}Hello, World!}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Apa yang Diharapkan dari C}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Hello, World!}{6}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Detail Kompilasi}{8}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Build dengan \colorbox {codecolor}{\mbox {\texttt {gcc}}}}{8}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Build dengan \colorbox {codecolor}{\mbox {\texttt {clang}}}}{8}{section.2.5}%
+\contentsline {section}{\numberline {2.6}Build dari IDE}{9}{section.2.6}%
+\contentsline {section}{\numberline {2.7}Versi C}{9}{section.2.7}%
+\contentsline {chapter}{\numberline {3}Variabel dan Pernyataan}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Variabel}{11}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Nama Variabel}{11}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Tipe Variabel}{12}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Tipe Boolean}{13}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Operator dan Ekspresi}{14}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Aritmetika}{14}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Operator Ternary}{15}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Pre-dan-Post Increment-dan-Decrement}{15}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Operator Koma}{16}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Operator Kondisional}{17}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Operator Boolean}{17}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Operator \colorbox {codecolor}{\mbox {\texttt {sizeof}}}}{18}{subsection.3.2.7}%
+\contentsline {section}{\numberline {3.3}Kendali Alur}{18}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Pernyataan \colorbox {codecolor}{\mbox {\texttt {if}}}-\colorbox {codecolor}{\mbox {\texttt {else}}}}{19}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Pernyataan \colorbox {codecolor}{\mbox {\texttt {while}}}}{20}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Pernyataan \colorbox {codecolor}{\mbox {\texttt {do}}}-\colorbox {codecolor}{\mbox {\texttt {while}}}}{21}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.3.4}Pernyataan \colorbox {codecolor}{\mbox {\texttt {for}}}}{22}{subsection.3.3.4}%
+\contentsline {subsection}{\numberline {3.3.5}Pernyataan \colorbox {codecolor}{\mbox {\texttt {switch}}}}{23}{subsection.3.3.5}%
+\contentsline {chapter}{\numberline {4}Fungsi}{27}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Passing by Value}{28}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Function Prototype}{29}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Daftar Parameter Kosong}{30}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Pointer---Gemetar Ketakutan!}{33}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Memori dan Variabel}{33}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Tipe Pointer}{35}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Dereferencing}{36}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Mengoper Pointer sebagai Argumen}{37}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Pointer \colorbox {codecolor}{\mbox {\texttt {NULL}}}}{38}{section.5.5}%
+\contentsline {section}{\numberline {5.6}Catatan tentang Mendeklarasikan Pointer}{39}{section.5.6}%
+\contentsline {section}{\numberline {5.7}\colorbox {codecolor}{\mbox {\texttt {sizeof}}} dan Pointer}{39}{section.5.7}%
+\contentsline {chapter}{\numberline {6}Arrays}{41}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Contoh Mudah}{41}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Mendapatkan Panjang Array}{42}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Array Initializer}{42}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Di Luar Batas!}{44}{section.6.4}%
+\contentsline {section}{\numberline {6.5}Array Multidimensi}{45}{section.6.5}%
+\contentsline {section}{\numberline {6.6}Array dan Pointer}{46}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Mendapatkan Pointer ke Array}{46}{subsection.6.6.1}%
+\contentsline {subsection}{\numberline {6.6.2}Mengoper Array Satu Dimensi ke Fungsi}{46}{subsection.6.6.2}%
+\contentsline {subsection}{\numberline {6.6.3}Mengubah Array di Dalam Fungsi}{47}{subsection.6.6.3}%
+\contentsline {subsection}{\numberline {6.6.4}Mengoper Array Multidimensi ke Fungsi}{48}{subsection.6.6.4}%
+\contentsline {chapter}{\numberline {7}Strings}{51}{chapter.7}%
+\contentsline {section}{\numberline {7.1}String Literal}{51}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Variabel String}{51}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Variabel String sebagai Array}{52}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Inisialisasi String}{52}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Mendapatkan Panjang String}{53}{section.7.5}%
+\contentsline {section}{\numberline {7.6}Terminasi String}{54}{section.7.6}%
+\contentsline {section}{\numberline {7.7}Menyalin String}{54}{section.7.7}%
+\contentsline {chapter}{\numberline {8}Structs}{57}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Mendeklarasikan Struct}{57}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Struct Initializer}{58}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Mengoper Struct ke Fungsi}{58}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Arrow Operator}{60}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Menyalin dan Mengembalikan \colorbox {codecolor}{\mbox {\texttt {struct}}}}{60}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Membandingkan \colorbox {codecolor}{\mbox {\texttt {struct}}}}{60}{section.8.6}%
+\contentsline {chapter}{\numberline {9}Input/Output File}{61}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Tipe Data \colorbox {codecolor}{\mbox {\texttt {FILE*}}}}{61}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Membaca File Teks}{62}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Akhir File: \colorbox {codecolor}{\mbox {\texttt {EOF}}}}{63}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}Membaca Satu Baris Sekaligus}{63}{subsection.9.3.1}%
+\contentsline {section}{\numberline {9.4}Input Terformat}{64}{section.9.4}%
+\contentsline {section}{\numberline {9.5}Menulis File Teks}{65}{section.9.5}%
+\contentsline {section}{\numberline {9.6}I/O File Biner}{66}{section.9.6}%
+\contentsline {subsection}{\numberline {9.6.1}Peringatan tentang \colorbox {codecolor}{\mbox {\texttt {struct}}} dan Angka}{68}{subsection.9.6.1}%
+\contentsline {chapter}{\numberline {10}\colorbox {codecolor}{\mbox {\texttt {typedef}}}: Membuat Tipe Baru}{69}{chapter.10}%
+\contentsline {section}{\numberline {10.1}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dalam Teori}{69}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}Scoping}{69}{subsection.10.1.1}%
+\contentsline {section}{\numberline {10.2}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dalam Praktik}{69}{section.10.2}%
+\contentsline {subsection}{\numberline {10.2.1}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dan \colorbox {codecolor}{\mbox {\texttt {struct}}}}{69}{subsection.10.2.1}%
+\contentsline {subsection}{\numberline {10.2.2}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dan Tipe Lain}{71}{subsection.10.2.2}%
+\contentsline {subsection}{\numberline {10.2.3}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dan Pointer}{71}{subsection.10.2.3}%
+\contentsline {subsection}{\numberline {10.2.4}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dan Kapitalisasi}{71}{subsection.10.2.4}%
+\contentsline {section}{\numberline {10.3}Array dan \colorbox {codecolor}{\mbox {\texttt {typedef}}}}{72}{section.10.3}%
+\contentsline {chapter}{\numberline {11}Pointer II: Aritmetika}{73}{chapter.11}%
+\contentsline {section}{\numberline {11.1}Aritmetika Pointer}{73}{section.11.1}%
+\contentsline {subsection}{\numberline {11.1.1}Menambah Pointer}{73}{subsection.11.1.1}%
+\contentsline {subsection}{\numberline {11.1.2}Mengubah Pointer}{74}{subsection.11.1.2}%
+\contentsline {subsection}{\numberline {11.1.3}Mengurangi Pointer}{75}{subsection.11.1.3}%
+\contentsline {section}{\numberline {11.2}Kesetaraan Array/Pointer}{76}{section.11.2}%
+\contentsline {subsection}{\numberline {11.2.1}Kesetaraan Array/Pointer pada Pemanggilan Fungsi}{77}{subsection.11.2.1}%
+\contentsline {section}{\numberline {11.3}Pointer \colorbox {codecolor}{\mbox {\texttt {void}}}}{77}{section.11.3}%
+\contentsline {chapter}{\numberline {12}Alokasi Memori Manual}{83}{chapter.12}%
+\contentsline {section}{\numberline {12.1}Mengalokasikan dan Mendealokasikan, \colorbox {codecolor}{\mbox {\texttt {malloc()}}} dan \colorbox {codecolor}{\mbox {\texttt {free()}}}}{83}{section.12.1}%
+\contentsline {section}{\numberline {12.2}Pengecekan Error}{84}{section.12.2}%
+\contentsline {section}{\numberline {12.3}Mengalokasikan Ruang untuk Array}{85}{section.12.3}%
+\contentsline {section}{\numberline {12.4}Alternatif: \colorbox {codecolor}{\mbox {\texttt {calloc()}}}}{86}{section.12.4}%
+\contentsline {section}{\numberline {12.5}Mengubah Ukuran Alokasi dengan \colorbox {codecolor}{\mbox {\texttt {realloc()}}}}{86}{section.12.5}%
+\contentsline {subsection}{\numberline {12.5.1}Membaca Baris dengan Panjang Sembarang}{87}{subsection.12.5.1}%
+\contentsline {subsection}{\numberline {12.5.2}\colorbox {codecolor}{\mbox {\texttt {realloc()}}} dengan \colorbox {codecolor}{\mbox {\texttt {NULL}}}}{89}{subsection.12.5.2}%
+\contentsline {section}{\numberline {12.6}Alokasi dengan Alignment}{90}{section.12.6}%
+\contentsline {chapter}{\numberline {13}Scope}{93}{chapter.13}%
+\contentsline {section}{\numberline {13.1}Block Scope}{93}{section.13.1}%
+\contentsline {subsection}{\numberline {13.1.1}Di Mana Variabel Didefinisikan}{93}{subsection.13.1.1}%
+\contentsline {subsection}{\numberline {13.1.2}Variable Hiding}{94}{subsection.13.1.2}%
+\contentsline {section}{\numberline {13.2}File Scope}{94}{section.13.2}%
+\contentsline {section}{\numberline {13.3}Scope pada Loop \colorbox {codecolor}{\mbox {\texttt {for}}}}{95}{section.13.3}%
+\contentsline {section}{\numberline {13.4}Catatan tentang Function Scope}{95}{section.13.4}%
+\contentsline {chapter}{\numberline {14}Tipe II: Jauh Lebih Banyak Tipe!}{97}{chapter.14}%
+\contentsline {section}{\numberline {14.1}Integer Signed dan Unsigned}{97}{section.14.1}%
+\contentsline {section}{\numberline {14.2}Tipe Karakter}{98}{section.14.2}%
+\contentsline {section}{\numberline {14.3}Tipe Integer Lainnya: \colorbox {codecolor}{\mbox {\texttt {short}}}, \colorbox {codecolor}{\mbox {\texttt {long}}}, \colorbox {codecolor}{\mbox {\texttt {long\ long}}}}{99}{section.14.3}%
+\contentsline {section}{\numberline {14.4}Float Lainnya: \colorbox {codecolor}{\mbox {\texttt {double}}} dan \colorbox {codecolor}{\mbox {\texttt {long\ double}}}}{101}{section.14.4}%
+\contentsline {subsection}{\numberline {14.4.1}Berapa Banyak Digit Desimal?}{102}{subsection.14.4.1}%
+\contentsline {subsection}{\numberline {14.4.2}Mengonversi ke Desimal dan Kembali}{104}{subsection.14.4.2}%
+\contentsline {section}{\numberline {14.5}Tipe Konstanta Numerik}{105}{section.14.5}%
+\contentsline {subsection}{\numberline {14.5.1}Heksadesimal dan Oktal}{105}{subsection.14.5.1}%
+\contentsline {subsubsection}{\numberline {14.5.1.1}Catatan tentang Biner}{105}{subsubsection.14.5.1.1}%
+\contentsline {subsection}{\numberline {14.5.2}Konstanta Integer}{105}{subsection.14.5.2}%
+\contentsline {subsection}{\numberline {14.5.3}Konstanta Floating Point}{107}{subsection.14.5.3}%
+\contentsline {subsubsection}{\numberline {14.5.3.1}Notasi Ilmiah}{107}{subsubsection.14.5.3.1}%
+\contentsline {subsubsection}{\numberline {14.5.3.2}Konstanta Floating Point Heksadesimal}{108}{subsubsection.14.5.3.2}%
+\contentsline {chapter}{\numberline {15}Tipe III: Konversi}{109}{chapter.15}%
+\contentsline {section}{\numberline {15.1}Konversi String}{109}{section.15.1}%
+\contentsline {subsection}{\numberline {15.1.1}Nilai Numerik ke String}{109}{subsection.15.1.1}%
+\contentsline {subsection}{\numberline {15.1.2}String ke Nilai Numerik}{110}{subsection.15.1.2}%
+\contentsline {section}{\numberline {15.2}Konversi \colorbox {codecolor}{\mbox {\texttt {char}}}}{112}{section.15.2}%
+\contentsline {section}{\numberline {15.3}Konversi Numerik}{113}{section.15.3}%
+\contentsline {subsection}{\numberline {15.3.1}Boolean}{113}{subsection.15.3.1}%
+\contentsline {subsection}{\numberline {15.3.2}Konversi Integer ke Integer}{113}{subsection.15.3.2}%
+\contentsline {subsection}{\numberline {15.3.3}Konversi Integer dan Floating Point}{114}{subsection.15.3.3}%
+\contentsline {section}{\numberline {15.4}Konversi Implisit}{114}{section.15.4}%
+\contentsline {subsection}{\numberline {15.4.1}Integer Promotion}{114}{subsection.15.4.1}%
+\contentsline {subsection}{\numberline {15.4.2}Usual Arithmetic Conversion}{114}{subsection.15.4.2}%
+\contentsline {subsection}{\numberline {15.4.3}\colorbox {codecolor}{\mbox {\texttt {void*}}}}{115}{subsection.15.4.3}%
+\contentsline {section}{\numberline {15.5}Konversi Eksplisit}{115}{section.15.5}%
+\contentsline {subsection}{\numberline {15.5.1}Casting}{115}{subsection.15.5.1}%
+\contentsline {chapter}{\numberline {16}Tipe IV: Qualifier dan Specifier}{117}{chapter.16}%
+\contentsline {section}{\numberline {16.1}Type Qualifier}{117}{section.16.1}%
+\contentsline {subsection}{\numberline {16.1.1}\colorbox {codecolor}{\mbox {\texttt {const}}}}{117}{subsection.16.1.1}%
+\contentsline {subsubsection}{\numberline {16.1.1.1}\colorbox {codecolor}{\mbox {\texttt {const}}} dan Pointer}{117}{subsubsection.16.1.1.1}%
+\contentsline {subsubsection}{\numberline {16.1.1.2}\colorbox {codecolor}{\mbox {\texttt {const}}} Correctness}{118}{subsubsection.16.1.1.2}%
+\contentsline {subsection}{\numberline {16.1.2}\colorbox {codecolor}{\mbox {\texttt {restrict}}}}{119}{subsection.16.1.2}%
+\contentsline {subsection}{\numberline {16.1.3}\colorbox {codecolor}{\mbox {\texttt {volatile}}}}{120}{subsection.16.1.3}%
+\contentsline {subsection}{\numberline {16.1.4}\colorbox {codecolor}{\mbox {\texttt {\_Atomic}}}}{120}{subsection.16.1.4}%
+\contentsline {section}{\numberline {16.2}Storage-Class Specifier}{121}{section.16.2}%
+\contentsline {subsection}{\numberline {16.2.1}\colorbox {codecolor}{\mbox {\texttt {auto}}}}{121}{subsection.16.2.1}%
+\contentsline {subsection}{\numberline {16.2.2}\colorbox {codecolor}{\mbox {\texttt {static}}}}{121}{subsection.16.2.2}%
+\contentsline {subsubsection}{\numberline {16.2.2.1}\colorbox {codecolor}{\mbox {\texttt {static}}} di Block Scope}{121}{subsubsection.16.2.2.1}%
+\contentsline {subsubsection}{\numberline {16.2.2.2}\colorbox {codecolor}{\mbox {\texttt {static}}} di File Scope}{122}{subsubsection.16.2.2.2}%
+\contentsline {subsection}{\numberline {16.2.3}\colorbox {codecolor}{\mbox {\texttt {extern}}}}{122}{subsection.16.2.3}%
+\contentsline {subsection}{\numberline {16.2.4}\colorbox {codecolor}{\mbox {\texttt {register}}}}{123}{subsection.16.2.4}%
+\contentsline {subsection}{\numberline {16.2.5}\colorbox {codecolor}{\mbox {\texttt {\_Thread\_local}}}}{124}{subsection.16.2.5}%
+\contentsline {chapter}{\numberline {17}Proyek Multifile}{125}{chapter.17}%
+\contentsline {section}{\numberline {17.1}Include dan Function Prototype}{125}{section.17.1}%
+\contentsline {section}{\numberline {17.2}Menangani Include yang Berulang}{127}{section.17.2}%
+\contentsline {section}{\numberline {17.3}\colorbox {codecolor}{\mbox {\texttt {static}}} dan \colorbox {codecolor}{\mbox {\texttt {extern}}}}{128}{section.17.3}%
+\contentsline {section}{\numberline {17.4}Mengompilasi dengan Object File}{128}{section.17.4}%
+\contentsline {chapter}{\numberline {18}Lingkungan di Luar Program}{131}{chapter.18}%
+\contentsline {section}{\numberline {18.1}Argumen Command Line}{131}{section.18.1}%
+\contentsline {subsection}{\numberline {18.1.1}\colorbox {codecolor}{\mbox {\texttt {argv}}} Terakhir adalah \colorbox {codecolor}{\mbox {\texttt {NULL}}}}{133}{subsection.18.1.1}%
+\contentsline {subsection}{\numberline {18.1.2}Alternatifnya: \colorbox {codecolor}{\mbox {\texttt {char\ **argv}}}}{133}{subsection.18.1.2}%
+\contentsline {subsection}{\numberline {18.1.3}Fakta Menarik}{134}{subsection.18.1.3}%
+\contentsline {section}{\numberline {18.2}Exit Status}{135}{section.18.2}%
+\contentsline {subsection}{\numberline {18.2.1}Nilai Exit Status Lainnya}{136}{subsection.18.2.1}%
+\contentsline {section}{\numberline {18.3}Environment Variable}{137}{section.18.3}%
+\contentsline {subsection}{\numberline {18.3.1}Mengatur Environment Variable}{138}{subsection.18.3.1}%
+\contentsline {subsection}{\numberline {18.3.2}Environment Variable Alternatif di Sistem Mirip Unix}{138}{subsection.18.3.2}%
+\contentsline {chapter}{\numberline {19}C Preprocessor}{141}{chapter.19}%
+\contentsline {section}{\numberline {19.1}\colorbox {codecolor}{\mbox {\texttt {\#include}}}}{141}{section.19.1}%
+\contentsline {section}{\numberline {19.2}Makro Sederhana}{142}{section.19.2}%
+\contentsline {section}{\numberline {19.3}Kompilasi Kondisional}{143}{section.19.3}%
+\contentsline {subsection}{\numberline {19.3.1}Jika Terdefinisi, \colorbox {codecolor}{\mbox {\texttt {\#ifdef}}} dan \colorbox {codecolor}{\mbox {\texttt {\#endif}}}}{143}{subsection.19.3.1}%
+\contentsline {subsection}{\numberline {19.3.2}Jika Tidak Terdefinisi, \colorbox {codecolor}{\mbox {\texttt {\#ifndef}}}}{143}{subsection.19.3.2}%
+\contentsline {subsection}{\numberline {19.3.3}\colorbox {codecolor}{\mbox {\texttt {\#else}}}}{144}{subsection.19.3.3}%
+\contentsline {subsection}{\numberline {19.3.4}Else-If: \colorbox {codecolor}{\mbox {\texttt {\#elifdef}}}, \colorbox {codecolor}{\mbox {\texttt {\#elifndef}}}}{144}{subsection.19.3.4}%
+\contentsline {subsection}{\numberline {19.3.5}Kondisional Umum: \colorbox {codecolor}{\mbox {\texttt {\#if}}}, \colorbox {codecolor}{\mbox {\texttt {\#elif}}}}{145}{subsection.19.3.5}%
+\contentsline {subsection}{\numberline {19.3.6}Menghapus Makro: \colorbox {codecolor}{\mbox {\texttt {\#undef}}}}{146}{subsection.19.3.6}%
+\contentsline {section}{\numberline {19.4}Makro Bawaan}{147}{section.19.4}%
+\contentsline {subsection}{\numberline {19.4.1}Makro Wajib}{147}{subsection.19.4.1}%
+\contentsline {subsubsection}{\numberline {19.4.1.1}\colorbox {codecolor}{\mbox {\texttt {\_\_STDC\_VERSION\_\_}}}}{148}{subsubsection.19.4.1.1}%
+\contentsline {subsection}{\numberline {19.4.2}Makro Opsional}{148}{subsection.19.4.2}%
+\contentsline {section}{\numberline {19.5}Makro dengan Argumen}{148}{section.19.5}%
+\contentsline {subsection}{\numberline {19.5.1}Makro dengan Satu Argumen}{149}{subsection.19.5.1}%
+\contentsline {subsection}{\numberline {19.5.2}Makro dengan Lebih dari Satu Argumen}{150}{subsection.19.5.2}%
+\contentsline {subsection}{\numberline {19.5.3}Makro dengan Argumen Variabel}{151}{subsection.19.5.3}%
+\contentsline {subsection}{\numberline {19.5.4}Stringification}{151}{subsection.19.5.4}%
+\contentsline {subsection}{\numberline {19.5.5}Concatenation}{152}{subsection.19.5.5}%
+\contentsline {section}{\numberline {19.6}Makro Multibaris}{152}{section.19.6}%
+\contentsline {section}{\numberline {19.7}Contoh: Makro Assert}{153}{section.19.7}%
+\contentsline {section}{\numberline {19.8}Directive \colorbox {codecolor}{\mbox {\texttt {\#error}}}}{155}{section.19.8}%
+\contentsline {section}{\numberline {19.9}Directive \colorbox {codecolor}{\mbox {\texttt {\#embed}}}}{155}{section.19.9}%
+\contentsline {subsection}{\numberline {19.9.1}Parameter \colorbox {codecolor}{\mbox {\texttt {\#embed}}}}{156}{subsection.19.9.1}%
+\contentsline {subsection}{\numberline {19.9.2}Parameter \colorbox {codecolor}{\mbox {\texttt {limit()}}}}{156}{subsection.19.9.2}%
+\contentsline {subsection}{\numberline {19.9.3}Parameter \colorbox {codecolor}{\mbox {\texttt {if\_empty}}}}{156}{subsection.19.9.3}%
+\contentsline {subsection}{\numberline {19.9.4}Parameter \colorbox {codecolor}{\mbox {\texttt {prefix()}}} dan \colorbox {codecolor}{\mbox {\texttt {suffix()}}}}{157}{subsection.19.9.4}%
+\contentsline {subsection}{\numberline {19.9.5}Identifier \colorbox {codecolor}{\mbox {\texttt {\_\_has\_embed()}}}}{158}{subsection.19.9.5}%
+\contentsline {subsection}{\numberline {19.9.6}Parameter Lainnya}{158}{subsection.19.9.6}%
+\contentsline {subsection}{\numberline {19.9.7}Menyematkan Nilai Multi-Byte}{159}{subsection.19.9.7}%
+\contentsline {section}{\numberline {19.10}Directive \colorbox {codecolor}{\mbox {\texttt {\#pragma}}}}{159}{section.19.10}%
+\contentsline {subsection}{\numberline {19.10.1}Pragma Non-Standar}{159}{subsection.19.10.1}%
+\contentsline {subsection}{\numberline {19.10.2}Pragma Standar}{159}{subsection.19.10.2}%
+\contentsline {subsection}{\numberline {19.10.3}Operator \colorbox {codecolor}{\mbox {\texttt {\_Pragma}}}}{160}{subsection.19.10.3}%
+\contentsline {section}{\numberline {19.11}Directive \colorbox {codecolor}{\mbox {\texttt {\#line}}}}{160}{section.19.11}%
+\contentsline {section}{\numberline {19.12}Null Directive}{161}{section.19.12}%
+\contentsline {chapter}{\numberline {20}\colorbox {codecolor}{\mbox {\texttt {struct}}} II: Lebih Seru dengan \colorbox {codecolor}{\mbox {\texttt {struct}}}}{163}{chapter.20}%
+\contentsline {section}{\numberline {20.1}Initializer untuk \colorbox {codecolor}{\mbox {\texttt {struct}}} Bersarang dan Array}{163}{section.20.1}%
+\contentsline {section}{\numberline {20.2}\colorbox {codecolor}{\mbox {\texttt {struct}}} Anonim}{165}{section.20.2}%
+\contentsline {section}{\numberline {20.3}\colorbox {codecolor}{\mbox {\texttt {struct}}} yang Merujuk Diri Sendiri}{166}{section.20.3}%
+\contentsline {section}{\numberline {20.4}Flexible Array Member}{166}{section.20.4}%
+\contentsline {section}{\numberline {20.5}Padding Byte}{168}{section.20.5}%
+\contentsline {section}{\numberline {20.6}\colorbox {codecolor}{\mbox {\texttt {offsetof}}}}{169}{section.20.6}%
+\contentsline {section}{\numberline {20.7}Fake OOP}{169}{section.20.7}%
+\contentsline {section}{\numberline {20.8}Bit-Field}{171}{section.20.8}%
+\contentsline {subsection}{\numberline {20.8.1}Bit-Field yang Tidak Berdekatan}{171}{subsection.20.8.1}%
+\contentsline {subsection}{\numberline {20.8.2}\colorbox {codecolor}{\mbox {\texttt {int}}} Signed atau Unsigned}{172}{subsection.20.8.2}%
+\contentsline {subsection}{\numberline {20.8.3}Bit-Field Tanpa Nama}{172}{subsection.20.8.3}%
+\contentsline {subsection}{\numberline {20.8.4}Bit-Field Tanpa Nama dengan Lebar Nol}{173}{subsection.20.8.4}%
+\contentsline {section}{\numberline {20.9}Union}{173}{section.20.9}%
+\contentsline {subsection}{\numberline {20.9.1}Union dan Type Punning}{174}{subsection.20.9.1}%
+\contentsline {subsection}{\numberline {20.9.2}Pointer ke \colorbox {codecolor}{\mbox {\texttt {union}}}}{174}{subsection.20.9.2}%
+\contentsline {subsection}{\numberline {20.9.3}Common Initial Sequence pada Union}{175}{subsection.20.9.3}%
+\contentsline {section}{\numberline {20.10}Union dan Struct Tanpa Nama}{178}{section.20.10}%
+\contentsline {section}{\numberline {20.11}Mengoper dan Mengembalikan \colorbox {codecolor}{\mbox {\texttt {struct}}} dan \colorbox {codecolor}{\mbox {\texttt {union}}}}{178}{section.20.11}%
+\contentsline {chapter}{\numberline {21}Karakter dan String II}{181}{chapter.21}%
+\contentsline {section}{\numberline {21.1}Escape Sequence}{181}{section.21.1}%
+\contentsline {subsection}{\numberline {21.1.1}Escape yang Sering Dipakai}{181}{subsection.21.1.1}%
+\contentsline {subsection}{\numberline {21.1.2}Escape yang Jarang Dipakai}{182}{subsection.21.1.2}%
+\contentsline {subsubsection}{\numberline {21.1.2.1}Pembaruan Status Satu Baris}{182}{subsubsection.21.1.2.1}%
+\contentsline {subsubsection}{\numberline {21.1.2.2}Escape Tanda Tanya}{183}{subsubsection.21.1.2.2}%
+\contentsline {subsection}{\numberline {21.1.3}Escape Numerik}{184}{subsection.21.1.3}%
+\contentsline {chapter}{\numberline {22}Enumerated Type: \colorbox {codecolor}{\mbox {\texttt {enum}}}}{185}{chapter.22}%
+\contentsline {section}{\numberline {22.1}Perilaku \colorbox {codecolor}{\mbox {\texttt {enum}}}}{185}{section.22.1}%
+\contentsline {subsection}{\numberline {22.1.1}Penomoran}{185}{subsection.22.1.1}%
+\contentsline {subsection}{\numberline {22.1.2}Koma di Akhir}{186}{subsection.22.1.2}%
+\contentsline {subsection}{\numberline {22.1.3}Scope}{186}{subsection.22.1.3}%
+\contentsline {subsection}{\numberline {22.1.4}Gaya Penulisan}{186}{subsection.22.1.4}%
+\contentsline {section}{\numberline {22.2}\colorbox {codecolor}{\mbox {\texttt {enum}}}-mu adalah Sebuah Tipe}{187}{section.22.2}%
+\contentsline {chapter}{\numberline {23}Pointer III: Pointer ke Pointer dan Lainnya}{189}{chapter.23}%
+\contentsline {section}{\numberline {23.1}Pointer ke Pointer}{189}{section.23.1}%
+\contentsline {subsection}{\numberline {23.1.1}Pointer Pointer dan \colorbox {codecolor}{\mbox {\texttt {const}}}}{191}{subsection.23.1.1}%
+\contentsline {section}{\numberline {23.2}Nilai Multibyte}{192}{section.23.2}%
+\contentsline {section}{\numberline {23.3}Pointer \colorbox {codecolor}{\mbox {\texttt {NULL}}} dan Nol}{194}{section.23.3}%
+\contentsline {section}{\numberline {23.4}Pointer sebagai Integer}{194}{section.23.4}%
+\contentsline {section}{\numberline {23.5}Meng-cast Pointer ke Pointer Lain}{195}{section.23.5}%
+\contentsline {section}{\numberline {23.6}Selisih Pointer}{197}{section.23.6}%
+\contentsline {section}{\numberline {23.7}Pointer ke Fungsi}{197}{section.23.7}%
+\contentsline {chapter}{\numberline {24}Operasi Bitwise}{201}{chapter.24}%
+\contentsline {section}{\numberline {24.1}Bitwise AND, OR, XOR, dan NOT}{201}{section.24.1}%
+\contentsline {section}{\numberline {24.2}Bitwise Shift}{201}{section.24.2}%
+\contentsline {chapter}{\numberline {25}Fungsi Variadic}{203}{chapter.25}%
+\contentsline {section}{\numberline {25.1}Elipsis pada Signature Fungsi}{204}{section.25.1}%
+\contentsline {section}{\numberline {25.2}Mengambil Argumen Tambahan}{204}{section.25.2}%
+\contentsline {section}{\numberline {25.3}Fungsionalitas \colorbox {codecolor}{\mbox {\texttt {va\_list}}}}{205}{section.25.3}%
+\contentsline {section}{\numberline {25.4}Fungsi Library yang Memakai \colorbox {codecolor}{\mbox {\texttt {va\_list}}}}{206}{section.25.4}%
+\contentsline {section}{\numberline {25.5}Jebakan Makro Variadic}{207}{section.25.5}%
+\contentsline {chapter}{\numberline {26}Locale dan Internasionalisasi}{209}{chapter.26}%
+\contentsline {section}{\numberline {26.1}Mengatur Lokalisasi, Cara Cepat dan Kotor}{209}{section.26.1}%
+\contentsline {section}{\numberline {26.2}Mengambil Pengaturan Locale Moneter}{210}{section.26.2}%
+\contentsline {subsection}{\numberline {26.2.1}Pengelompokan Digit Moneter}{211}{subsection.26.2.1}%
+\contentsline {subsection}{\numberline {26.2.2}Pemisah dan Posisi Tanda}{212}{subsection.26.2.2}%
+\contentsline {subsection}{\numberline {26.2.3}Contoh Nilai}{212}{subsection.26.2.3}%
+\contentsline {section}{\numberline {26.3}Spesifik Lokalisasi}{213}{section.26.3}%
+\contentsline {chapter}{\numberline {27}Unicode, Wide Character, dan Semacamnya}{215}{chapter.27}%
+\contentsline {section}{\numberline {27.1}Apa Itu Unicode?}{215}{section.27.1}%
+\contentsline {section}{\numberline {27.2}Code Point}{215}{section.27.2}%
+\contentsline {section}{\numberline {27.3}Encoding}{216}{section.27.3}%
+\contentsline {section}{\numberline {27.4}Source dan Execution Character Set}{217}{section.27.4}%
+\contentsline {section}{\numberline {27.5}Unicode di C}{218}{section.27.5}%
+\contentsline {section}{\numberline {27.6}Catatan Singkat tentang UTF-8 Sebelum Kita Terjun ke Semak-Semak}{219}{section.27.6}%
+\contentsline {section}{\numberline {27.7}Berbagai Tipe Karakter}{219}{section.27.7}%
+\contentsline {subsection}{\numberline {27.7.1}Karakter Multibyte}{219}{subsection.27.7.1}%
+\contentsline {subsection}{\numberline {27.7.2}Wide Character}{220}{subsection.27.7.2}%
+\contentsline {section}{\numberline {27.8}Memakai Wide Character dan \colorbox {codecolor}{\mbox {\texttt {wchar\_t}}}}{220}{section.27.8}%
+\contentsline {subsection}{\numberline {27.8.1}Konversi Multibyte ke \colorbox {codecolor}{\mbox {\texttt {wchar\_t}}}}{221}{subsection.27.8.1}%
+\contentsline {section}{\numberline {27.9}Fungsionalitas Wide Character}{222}{section.27.9}%
+\contentsline {subsection}{\numberline {27.9.1}\colorbox {codecolor}{\mbox {\texttt {wint\_t}}}}{222}{subsection.27.9.1}%
+\contentsline {subsection}{\numberline {27.9.2}Orientasi I/O Stream}{223}{subsection.27.9.2}%
+\contentsline {subsection}{\numberline {27.9.3}Fungsi I/O}{223}{subsection.27.9.3}%
+\contentsline {subsection}{\numberline {27.9.4}Fungsi Konversi Tipe}{223}{subsection.27.9.4}%
+\contentsline {subsection}{\numberline {27.9.5}Fungsi Penyalinan String dan Memori}{224}{subsection.27.9.5}%
+\contentsline {subsection}{\numberline {27.9.6}Fungsi Perbandingan String dan Memori}{224}{subsection.27.9.6}%
+\contentsline {subsection}{\numberline {27.9.7}Fungsi Pencarian String}{224}{subsection.27.9.7}%
+\contentsline {subsection}{\numberline {27.9.8}Fungsi Panjang/Lain-lain}{225}{subsection.27.9.8}%
+\contentsline {subsection}{\numberline {27.9.9}Fungsi Klasifikasi Karakter}{225}{subsection.27.9.9}%
+\contentsline {section}{\numberline {27.10}Parse State, Fungsi Restartable}{225}{section.27.10}%
+\contentsline {section}{\numberline {27.11}Encoding Unicode dan C}{227}{section.27.11}%
+\contentsline {subsection}{\numberline {27.11.1}UTF-8}{227}{subsection.27.11.1}%
+\contentsline {subsection}{\numberline {27.11.2}UTF-16, UTF-32, \colorbox {codecolor}{\mbox {\texttt {char16\_t}}}, dan \colorbox {codecolor}{\mbox {\texttt {char32\_t}}}}{228}{subsection.27.11.2}%
+\contentsline {subsection}{\numberline {27.11.3}Konversi Multibyte}{228}{subsection.27.11.3}%
+\contentsline {subsection}{\numberline {27.11.4}Library Pihak Ketiga}{229}{subsection.27.11.4}%
+\contentsline {chapter}{\numberline {28}Keluar dari Program}{231}{chapter.28}%
+\contentsline {section}{\numberline {28.1}Keluar Normal}{231}{section.28.1}%
+\contentsline {subsection}{\numberline {28.1.1}Return dari \colorbox {codecolor}{\mbox {\texttt {main()}}}}{231}{subsection.28.1.1}%
+\contentsline {subsection}{\numberline {28.1.2}\colorbox {codecolor}{\mbox {\texttt {exit()}}}}{231}{subsection.28.1.2}%
+\contentsline {subsection}{\numberline {28.1.3}Memasang Exit Handler dengan \colorbox {codecolor}{\mbox {\texttt {atexit()}}}}{232}{subsection.28.1.3}%
+\contentsline {section}{\numberline {28.2}Keluar Lebih Cepat dengan \colorbox {codecolor}{\mbox {\texttt {quick\_exit()}}}}{232}{section.28.2}%
+\contentsline {section}{\numberline {28.3}Nuke it from Orbit: \colorbox {codecolor}{\mbox {\texttt {\_Exit()}}}}{233}{section.28.3}%
+\contentsline {section}{\numberline {28.4}Keluar Kadang-kadang: \colorbox {codecolor}{\mbox {\texttt {assert()}}}}{233}{section.28.4}%
+\contentsline {section}{\numberline {28.5}Keluar Tidak Normal: \colorbox {codecolor}{\mbox {\texttt {abort()}}}}{234}{section.28.5}%
+\contentsline {chapter}{\numberline {29}Penanganan Signal}{235}{chapter.29}%
+\contentsline {section}{\numberline {29.1}Apa Itu Signal?}{235}{section.29.1}%
+\contentsline {section}{\numberline {29.2}Menangani Signal dengan \colorbox {codecolor}{\mbox {\texttt {signal()}}}}{235}{section.29.2}%
+\contentsline {section}{\numberline {29.3}Menulis Signal Handler}{236}{section.29.3}%
+\contentsline {section}{\numberline {29.4}Apa yang Sebenarnya Bisa Kita Lakukan?}{238}{section.29.4}%
+\contentsline {section}{\numberline {29.5}Teman Tidak Membiarkan Temannya \colorbox {codecolor}{\mbox {\texttt {signal()}}}}{240}{section.29.5}%
+\contentsline {chapter}{\numberline {30}Variable-Length Array (VLA)}{241}{chapter.30}%
+\contentsline {section}{\numberline {30.1}Dasar-Dasarnya}{241}{section.30.1}%
+\contentsline {section}{\numberline {30.2}\colorbox {codecolor}{\mbox {\texttt {sizeof}}} dan VLA}{242}{section.30.2}%
+\contentsline {section}{\numberline {30.3}VLA Multidimensi}{243}{section.30.3}%
+\contentsline {section}{\numberline {30.4}Mengoper VLA Satu Dimensi ke Fungsi}{243}{section.30.4}%
+\contentsline {section}{\numberline {30.5}Mengoper VLA Multidimensi ke Fungsi}{244}{section.30.5}%
+\contentsline {subsection}{\numberline {30.5.1}VLA Multidimensi Parsial}{245}{subsection.30.5.1}%
+\contentsline {section}{\numberline {30.6}Kompatibilitas dengan Array Biasa}{245}{section.30.6}%
+\contentsline {section}{\numberline {30.7}\colorbox {codecolor}{\mbox {\texttt {typedef}}} dan VLA}{246}{section.30.7}%
+\contentsline {section}{\numberline {30.8}Jebakan Lompatan}{246}{section.30.8}%
+\contentsline {section}{\numberline {30.9}Masalah Umum}{246}{section.30.9}%
+\contentsline {chapter}{\numberline {31}\colorbox {codecolor}{\mbox {\texttt {goto}}}}{249}{chapter.31}%
+\contentsline {section}{\numberline {31.1}Contoh Sederhana}{249}{section.31.1}%
+\contentsline {section}{\numberline {31.2}\colorbox {codecolor}{\mbox {\texttt {continue}}} Berlabel}{250}{section.31.2}%
+\contentsline {section}{\numberline {31.3}Keluar Darurat}{251}{section.31.3}%
+\contentsline {section}{\numberline {31.4}\colorbox {codecolor}{\mbox {\texttt {break}}} Berlabel}{252}{section.31.4}%
+\contentsline {section}{\numberline {31.5}Pembersihan Bertingkat}{252}{section.31.5}%
+\contentsline {section}{\numberline {31.6}Tail Call Optimization}{253}{section.31.6}%
+\contentsline {section}{\numberline {31.7}Memulai Ulang System Call yang Terinterupsi}{254}{section.31.7}%
+\contentsline {section}{\numberline {31.8}\colorbox {codecolor}{\mbox {\texttt {goto}}} dan Thread Preemption}{255}{section.31.8}%
+\contentsline {section}{\numberline {31.9}\colorbox {codecolor}{\mbox {\texttt {goto}}} dan Scope Variabel}{255}{section.31.9}%
+\contentsline {section}{\numberline {31.10}\colorbox {codecolor}{\mbox {\texttt {goto}}} dan Variable-Length Array}{256}{section.31.10}%
+\contentsline {chapter}{\numberline {32}Tipe Bagian V: Compound Literal dan Generic Selection}{259}{chapter.32}%
+\contentsline {section}{\numberline {32.1}Compound Literal}{259}{section.32.1}%
+\contentsline {subsection}{\numberline {32.1.1}Mengoper Object Tanpa Nama ke Fungsi}{260}{subsection.32.1.1}%
+\contentsline {subsection}{\numberline {32.1.2}\colorbox {codecolor}{\mbox {\texttt {struct}}} Tanpa Nama}{260}{subsection.32.1.2}%
+\contentsline {subsection}{\numberline {32.1.3}Pointer ke Object Tanpa Nama}{261}{subsection.32.1.3}%
+\contentsline {subsection}{\numberline {32.1.4}Object Tanpa Nama dan Scope}{261}{subsection.32.1.4}%
+\contentsline {subsection}{\numberline {32.1.5}Contoh Konyol Object Tanpa Nama}{262}{subsection.32.1.5}%
+\contentsline {section}{\numberline {32.2}Generic Selection}{262}{section.32.2}%
+\contentsline {chapter}{\numberline {33}Array Bagian II}{267}{chapter.33}%
+\contentsline {section}{\numberline {33.1}Type Qualifier untuk Array dalam Daftar Parameter}{267}{section.33.1}%
+\contentsline {section}{\numberline {33.2}\colorbox {codecolor}{\mbox {\texttt {static}}} untuk Array dalam Daftar Parameter}{267}{section.33.2}%
+\contentsline {section}{\numberline {33.3}Initializer yang Setara}{268}{section.33.3}%
+\contentsline {chapter}{\numberline {34}Long Jump dengan \colorbox {codecolor}{\mbox {\texttt {setjmp}}}, \colorbox {codecolor}{\mbox {\texttt {longjmp}}}}{271}{chapter.34}%
+\contentsline {section}{\numberline {34.1}Memakai \colorbox {codecolor}{\mbox {\texttt {setjmp}}} dan \colorbox {codecolor}{\mbox {\texttt {longjmp}}}}{271}{section.34.1}%
+\contentsline {section}{\numberline {34.2}Jebakan}{272}{section.34.2}%
+\contentsline {subsection}{\numberline {34.2.1}Nilai Variabel Lokal}{272}{subsection.34.2.1}%
+\contentsline {subsection}{\numberline {34.2.2}Berapa Banyak State yang Disimpan?}{273}{subsection.34.2.2}%
+\contentsline {subsection}{\numberline {34.2.3}Kamu Tidak Boleh Menamai Apa Pun \colorbox {codecolor}{\mbox {\texttt {setjmp}}}}{273}{subsection.34.2.3}%
+\contentsline {subsection}{\numberline {34.2.4}\colorbox {codecolor}{\mbox {\texttt {setjmp()}}} Tidak Boleh Berada dalam Ekspresi yang Lebih Besar}{273}{subsection.34.2.4}%
+\contentsline {subsection}{\numberline {34.2.5}Kapan \colorbox {codecolor}{\mbox {\texttt {longjmp()}}} Tidak Boleh Dilakukan?}{274}{subsection.34.2.5}%
+\contentsline {subsection}{\numberline {34.2.6}Kamu Tidak Boleh Mengoper \colorbox {codecolor}{\mbox {\texttt {0}}} ke \colorbox {codecolor}{\mbox {\texttt {longjmp()}}}}{274}{subsection.34.2.6}%
+\contentsline {subsection}{\numberline {34.2.7}\colorbox {codecolor}{\mbox {\texttt {longjmp()}}} dan Variable Length Array}{274}{subsection.34.2.7}%
+\contentsline {chapter}{\numberline {35}Incomplete Type}{275}{chapter.35}%
+\contentsline {section}{\numberline {35.1}Kasus Pemakaian: Struktur yang Merujuk Diri Sendiri}{275}{section.35.1}%
+\contentsline {section}{\numberline {35.2}Pesan Error Incomplete Type}{276}{section.35.2}%
+\contentsline {section}{\numberline {35.3}Incomplete Type Lainnya}{276}{section.35.3}%
+\contentsline {section}{\numberline {35.4}Kasus Pemakaian: Array di Header File}{277}{section.35.4}%
+\contentsline {section}{\numberline {35.5}Melengkapi Incomplete Type}{277}{section.35.5}%
+\contentsline {chapter}{\numberline {36}Bilangan Kompleks}{279}{chapter.36}%
+\contentsline {section}{\numberline {36.1}Tipe Kompleks}{279}{section.36.1}%
+\contentsline {section}{\numberline {36.2}Menugaskan Bilangan Kompleks}{280}{section.36.2}%
+\contentsline {section}{\numberline {36.3}Membentuk, Membongkar, dan Mencetak}{280}{section.36.3}%
+\contentsline {section}{\numberline {36.4}Aritmetika dan Perbandingan Kompleks}{281}{section.36.4}%
+\contentsline {section}{\numberline {36.5}Matematika Kompleks}{282}{section.36.5}%
+\contentsline {subsection}{\numberline {36.5.1}Fungsi Trigonometri}{283}{subsection.36.5.1}%
+\contentsline {subsection}{\numberline {36.5.2}Fungsi Eksponensial dan Logaritmik}{283}{subsection.36.5.2}%
+\contentsline {subsection}{\numberline {36.5.3}Fungsi Pangkat dan Nilai Mutlak}{283}{subsection.36.5.3}%
+\contentsline {subsection}{\numberline {36.5.4}Fungsi Manipulasi}{283}{subsection.36.5.4}%
+\contentsline {chapter}{\numberline {37}Tipe Integer Berlebar Tetap}{285}{chapter.37}%
+\contentsline {section}{\numberline {37.1}Tipe Berukuran Bit}{285}{section.37.1}%
+\contentsline {section}{\numberline {37.2}Tipe Ukuran Integer Maksimum}{286}{section.37.2}%
+\contentsline {section}{\numberline {37.3}Memakai Konstanta Berukuran Tetap}{286}{section.37.3}%
+\contentsline {section}{\numberline {37.4}Batas Integer Berukuran Tetap}{287}{section.37.4}%
+\contentsline {section}{\numberline {37.5}Format Specifier}{287}{section.37.5}%
+\contentsline {chapter}{\numberline {38}Fungsionalitas Tanggal dan Waktu}{289}{chapter.38}%
+\contentsline {section}{\numberline {38.1}Terminologi dan Informasi Singkat}{289}{section.38.1}%
+\contentsline {section}{\numberline {38.2}Tipe Tanggal}{290}{section.38.2}%
+\contentsline {section}{\numberline {38.3}Inisialisasi dan Konversi Antartipe}{290}{section.38.3}%
+\contentsline {subsection}{\numberline {38.3.1}Mengonversi \colorbox {codecolor}{\mbox {\texttt {time\_t}}} ke \colorbox {codecolor}{\mbox {\texttt {struct\ tm}}}}{291}{subsection.38.3.1}%
+\contentsline {subsection}{\numberline {38.3.2}Mengonversi \colorbox {codecolor}{\mbox {\texttt {struct\ tm}}} ke \colorbox {codecolor}{\mbox {\texttt {time\_t}}}}{291}{subsection.38.3.2}%
+\contentsline {section}{\numberline {38.4}Output Tanggal Terformat}{292}{section.38.4}%
+\contentsline {section}{\numberline {38.5}Resolusi Lebih Tinggi dengan \colorbox {codecolor}{\mbox {\texttt {timespec\_get()}}}}{293}{section.38.5}%
+\contentsline {section}{\numberline {38.6}Selisih Antarwaktu}{294}{section.38.6}%
+\contentsline {chapter}{\numberline {39}Multithreading}{297}{chapter.39}%
+\contentsline {section}{\numberline {39.1}Latar Belakang}{297}{section.39.1}%
+\contentsline {section}{\numberline {39.2}Hal-Hal yang Bisa Kamu Lakukan}{298}{section.39.2}%
+\contentsline {section}{\numberline {39.3}Data Race dan Standard Library}{298}{section.39.3}%
+\contentsline {section}{\numberline {39.4}Membuat dan Menunggu Thread}{298}{section.39.4}%
+\contentsline {section}{\numberline {39.5}Melepas Thread (Detach)}{302}{section.39.5}%
+\contentsline {section}{\numberline {39.6}Thread Local Data}{303}{section.39.6}%
+\contentsline {subsection}{\numberline {39.6.1}Storage-Class \colorbox {codecolor}{\mbox {\texttt {\_Thread\_local}}}}{305}{subsection.39.6.1}%
+\contentsline {subsection}{\numberline {39.6.2}Opsi Lain: Thread-Specific Storage}{305}{subsection.39.6.2}%
+\contentsline {section}{\numberline {39.7}Mutex}{307}{section.39.7}%
+\contentsline {subsection}{\numberline {39.7.1}Berbagai Tipe Mutex}{310}{subsection.39.7.1}%
+\contentsline {section}{\numberline {39.8}Condition Variable}{311}{section.39.8}%
+\contentsline {subsection}{\numberline {39.8.1}Condition Wait dengan Timeout}{314}{subsection.39.8.1}%
+\contentsline {subsection}{\numberline {39.8.2}Broadcast: Membangunkan Semua Thread yang Menunggu}{315}{subsection.39.8.2}%
+\contentsline {section}{\numberline {39.9}Menjalankan Fungsi Satu Kali}{315}{section.39.9}%
+\contentsline {chapter}{\numberline {40}Atomics}{317}{chapter.40}%
+\contentsline {section}{\numberline {40.1}Menguji Dukungan Atomic}{317}{section.40.1}%
+\contentsline {section}{\numberline {40.2}Variabel Atomic}{317}{section.40.2}%
+\contentsline {section}{\numberline {40.3}Sinkronisasi}{319}{section.40.3}%
+\contentsline {section}{\numberline {40.4}Acquire dan Release}{321}{section.40.4}%
+\contentsline {section}{\numberline {40.5}Sequential Consistency}{322}{section.40.5}%
+\contentsline {section}{\numberline {40.6}Penugasan dan Operator Atomic}{323}{section.40.6}%
+\contentsline {section}{\numberline {40.7}Fungsi Library yang Otomatis Menyinkronkan}{324}{section.40.7}%
+\contentsline {section}{\numberline {40.8}Type Specifier dan Qualifier Atomic}{324}{section.40.8}%
+\contentsline {section}{\numberline {40.9}Variabel Atomic Lock-Free}{326}{section.40.9}%
+\contentsline {subsection}{\numberline {40.9.1}Signal Handler dan Atomic Lock-Free}{327}{subsection.40.9.1}%
+\contentsline {section}{\numberline {40.10}Atomic Flag}{327}{section.40.10}%
+\contentsline {section}{\numberline {40.11}\colorbox {codecolor}{\mbox {\texttt {struct}}} dan \colorbox {codecolor}{\mbox {\texttt {union}}} Atomic}{328}{section.40.11}%
+\contentsline {section}{\numberline {40.12}Pointer Atomic}{328}{section.40.12}%
+\contentsline {section}{\numberline {40.13}Memory Order}{329}{section.40.13}%
+\contentsline {subsection}{\numberline {40.13.1}Sequential Consistency}{330}{subsection.40.13.1}%
+\contentsline {subsection}{\numberline {40.13.2}Acquire}{330}{subsection.40.13.2}%
+\contentsline {subsection}{\numberline {40.13.3}Release}{330}{subsection.40.13.3}%
+\contentsline {subsection}{\numberline {40.13.4}Consume}{330}{subsection.40.13.4}%
+\contentsline {subsection}{\numberline {40.13.5}Acquire/Release}{330}{subsection.40.13.5}%
+\contentsline {subsection}{\numberline {40.13.6}Relaxed}{331}{subsection.40.13.6}%
+\contentsline {section}{\numberline {40.14}Fence}{331}{section.40.14}%
+\contentsline {section}{\numberline {40.15}Referensi}{331}{section.40.15}%
+\contentsline {chapter}{\numberline {41}Function Specifier, Alignment Specifier dan Operator}{333}{chapter.41}%
+\contentsline {section}{\numberline {41.1}Function Specifier}{333}{section.41.1}%
+\contentsline {subsection}{\numberline {41.1.1}\colorbox {codecolor}{\mbox {\texttt {inline}}} untuk Kecepatan---Mungkin}{333}{subsection.41.1.1}%
+\contentsline {subsection}{\numberline {41.1.2}\colorbox {codecolor}{\mbox {\texttt {noreturn}}} dan \colorbox {codecolor}{\mbox {\texttt {\_Noreturn}}}}{334}{subsection.41.1.2}%
+\contentsline {section}{\numberline {41.2}Alignment Specifier dan Operator}{335}{section.41.2}%
+\contentsline {subsection}{\numberline {41.2.1}\colorbox {codecolor}{\mbox {\texttt {alignas}}} dan \colorbox {codecolor}{\mbox {\texttt {\_Alignas}}}}{335}{subsection.41.2.1}%
+\contentsline {subsection}{\numberline {41.2.2}\colorbox {codecolor}{\mbox {\texttt {alignof}}} dan \colorbox {codecolor}{\mbox {\texttt {\_Alignof}}}}{335}{subsection.41.2.2}%
+\contentsline {section}{\numberline {41.3}Fungsi \colorbox {codecolor}{\mbox {\texttt {memalignment()}}}}{336}{section.41.3}%

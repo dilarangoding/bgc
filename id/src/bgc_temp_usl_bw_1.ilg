@@ -1,0 +1,71 @@
+This is makeindex, version 2.18 [TeX Live 2026] (kpathsea + Thai support).
+Scanning input file bgc_temp_usl_bw_1.idx....
+!! Input index error (file = bgc_temp_usl_bw_1.idx, line = 683):
+   -- Incomplete first argument (premature LFD).
+.done (1652 entries accepted, 1 rejected).
+Sorting entries.................done (19935 comparisons).
+Generating output file bgc_temp_usl_bw_1.ind....
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1503; output = bgc_temp_usl_bw_1.ind, line = 183):
+   -- Extra range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1502; output = bgc_temp_usl_bw_1.ind, line = 183):
+   -- Unmatched range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 130; output = bgc_temp_usl_bw_1.ind, line = 258):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1479; output = bgc_temp_usl_bw_1.ind, line = 303):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 960; output = bgc_temp_usl_bw_1.ind, line = 380):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 230; output = bgc_temp_usl_bw_1.ind, line = 402):
+   -- Extra range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 223; output = bgc_temp_usl_bw_1.ind, line = 402):
+   -- Unmatched range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 39; output = bgc_temp_usl_bw_1.ind, line = 449):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1100; output = bgc_temp_usl_bw_1.ind, line = 463):
+   -- Extra range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1097; output = bgc_temp_usl_bw_1.ind, line = 463):
+   -- Unmatched range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 581; output = bgc_temp_usl_bw_1.ind, line = 516):
+   -- Extra range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1610; output = bgc_temp_usl_bw_1.ind, line = 558):
+   -- Unmatched range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1612; output = bgc_temp_usl_bw_1.ind, line = 562):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 78; output = bgc_temp_usl_bw_1.ind, line = 625):
+   -- Conflicting entries: multiple encaps for the same page under same key.
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 78; output = bgc_temp_usl_bw_1.ind, line = 625):
+   -- Unmatched range closing operator ).
+.
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 140; output = bgc_temp_usl_bw_1.ind, line = 633):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 162; output = bgc_temp_usl_bw_1.ind, line = 638):
+   -- Unmatched range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 985; output = bgc_temp_usl_bw_1.ind, line = 761):
+   -- Extra range opening operator (.
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 1000; output = bgc_temp_usl_bw_1.ind, line = 761):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 776; output = bgc_temp_usl_bw_1.ind, line = 938):
+   -- Unmatched range closing operator ).
+
+## Warning (input = bgc_temp_usl_bw_1.idx, line = 52; output = bgc_temp_usl_bw_1.ind, line = 939):
+   -- Extra range opening operator (.
+done (1008 lines written, 21 warnings).
+Output written in bgc_temp_usl_bw_1.ind.
+Transcript written in bgc_temp_usl_bw_1.ilg.

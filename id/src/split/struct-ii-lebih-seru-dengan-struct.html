@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="c-preprocessor.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="karakter-dan-string-ii.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="20" id="struct-ii-lebih-seru-dengan-struct"><span class="header-section-number">20</span> <code>struct</code> II: Lebih Seru dengan <code>struct</code></h1>
+<p></p>
+<p>Ternyata ada jauh lebih banyak yang bisa dilakukan dengan <code>struct</code> daripada yang sudah kita bahas, tapi isinya hanya tumpukan besar hal-hal serba-serbi. Jadi kita kumpulkan saja di bab ini.</p>
+<p>Kalau kamu sudah nyaman dengan dasar-dasar <code>struct</code>, kamu bisa melengkapi pengetahuanmu di sini.</p>
+<h2 data-number="20.1" id="initializer-untuk-struct-bersarang-dan-array"><span class="header-section-number">20.1</span> Initializer untuk <code>struct</code> Bersarang dan Array</h2>
+<p></p>
+<p>Ingat bagaimana kamu bisa <a href="structs.html#struct-initializers">menginisialisasi anggota struktur dengan cara seperti ini</a>?</p>
+<div class="sourceCode" id="cb428"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb428-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb428-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo x <span class="op">=</span> <span class="op">{.</span>a<span class="op">=</span><span class="dv">12</span><span class="op">,</span> <span class="op">.</span>b<span class="op">=</span><span class="fl">3.14</span><span class="op">};</span></span></code></pre></div>
+<p>Ternyata initializer ini punya kemampuan lebih daripada yang awalnya kita sampaikan. Seru!</p>
+<p>Untuk satu hal, kalau ada substruktur bersarang seperti berikut, kamu bisa menginisialisasi anggota substruktur itu dengan mengikuti nama variabel berurutan ke bawah:</p>
+<div class="sourceCode" id="cb429"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb429-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb429-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo x <span class="op">=</span> <span class="op">{.</span>a<span class="op">.</span>b<span class="op">.</span>c<span class="op">=</span><span class="dv">12</span><span class="op">};</span></span></code></pre></div>
+<p>Kita lihat contohnya:</p>
+<div class="sourceCode" id="cb430"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb430-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb430-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-2" aria-label="2"></a></span>
+<span id="cb430-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-3" aria-label="3"></a><span class="kw">struct</span> cabin_information <span class="op">{</span></span>
+<span id="cb430-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-4" aria-label="4"></a>    <span class="dt">int</span> window_count<span class="op">;</span></span>
+<span id="cb430-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-5" aria-label="5"></a>    <span class="dt">int</span> o2level<span class="op">;</span></span>
+<span id="cb430-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-6" aria-label="6"></a><span class="op">};</span></span>
+<span id="cb430-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-7" aria-label="7"></a></span>
+<span id="cb430-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-8" aria-label="8"></a><span class="kw">struct</span> spaceship <span class="op">{</span></span>
+<span id="cb430-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-9" aria-label="9"></a>    <span class="dt">char</span> <span class="op">*</span>manufacturer<span class="op">;</span></span>
+<span id="cb430-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-10" aria-label="10"></a>    <span class="kw">struct</span> cabin_information ci<span class="op">;</span></span>
+<span id="cb430-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-11" aria-label="11"></a><span class="op">};</span></span>
+<span id="cb430-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-12" aria-label="12"></a></span>
+<span id="cb430-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-13" aria-label="13"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb430-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-14" aria-label="14"></a><span class="op">{</span></span>
+<span id="cb430-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-15" aria-label="15"></a>    <span class="kw">struct</span> spaceship s <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb430-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-16" aria-label="16"></a>        <span class="op">.</span>manufacturer<span class="op">=</span><span class="st">&quot;General Products&quot;</span><span class="op">,</span></span>
+<span id="cb430-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-17" aria-label="17"></a>        <span class="op">.</span>ci<span class="op">.</span>window_count <span class="op">=</span> <span class="dv">8</span><span class="op">,</span>   <span class="co">// &lt;-- INITIALIZER BERSARANG!</span></span>
+<span id="cb430-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-18" aria-label="18"></a>        <span class="op">.</span>ci<span class="op">.</span>o2level <span class="op">=</span> <span class="dv">21</span></span>
+<span id="cb430-19"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-19" aria-label="19"></a>    <span class="op">};</span></span>
+<span id="cb430-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-20" aria-label="20"></a></span>
+<span id="cb430-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-21" aria-label="21"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">: </span><span class="sc">%d</span><span class="st"> seats, </span><span class="sc">%d%%</span><span class="st"> oxygen</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb430-22"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-22" aria-label="22"></a>        s<span class="op">.</span>manufacturer<span class="op">,</span> s<span class="op">.</span>ci<span class="op">.</span>window_count<span class="op">,</span> s<span class="op">.</span>ci<span class="op">.</span>o2level<span class="op">);</span></span>
+<span id="cb430-23"><a href="struct-ii-lebih-seru-dengan-struct.html#cb430-23" aria-label="23"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat baris 16-17! Di situlah kita menginisialisasi anggota <code>struct cabin_information</code> dalam definisi <code>s</code>, <code>struct spaceship</code> kita.</p>
+<p>Dan ini opsi lain untuk initializer yang sama—kali ini kita buat yang tampilannya lebih standar, tapi kedua cara berfungsi:</p>
+<div class="sourceCode" id="cb431" data-startfrom="15"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 14;"><span id="cb431-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-15" aria-label="15"></a>    <span class="kw">struct</span> spaceship s <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb431-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-16" aria-label="16"></a>        <span class="op">.</span>manufacturer<span class="op">=</span><span class="st">&quot;General Products&quot;</span><span class="op">,</span></span>
+<span id="cb431-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-17" aria-label="17"></a>        <span class="op">.</span>ci<span class="op">={</span></span>
+<span id="cb431-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-18" aria-label="18"></a>            <span class="op">.</span>window_count <span class="op">=</span> <span class="dv">8</span><span class="op">,</span></span>
+<span id="cb431-19"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-19" aria-label="19"></a>            <span class="op">.</span>o2level <span class="op">=</span> <span class="dv">21</span></span>
+<span id="cb431-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-20" aria-label="20"></a>        <span class="op">}</span></span>
+<span id="cb431-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb431-21" aria-label="21"></a>    <span class="op">};</span></span></code></pre></div>
+<p>Nah, seolah-olah informasi di atas belum cukup spektakuler, kita juga bisa mencampurkan array initializer di dalamnya.</p>
+<p>Mari kita ubah contohnya supaya ada array informasi penumpang di dalamnya, dan kita lihat bagaimana initializer bekerja di sana juga.</p>
+<div class="sourceCode" id="cb432"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb432-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb432-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-2" aria-label="2"></a></span>
+<span id="cb432-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-3" aria-label="3"></a><span class="kw">struct</span> passenger <span class="op">{</span></span>
+<span id="cb432-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-4" aria-label="4"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb432-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-5" aria-label="5"></a>    <span class="dt">int</span> covid_vaccinated<span class="op">;</span> <span class="co">// Boolean</span></span>
+<span id="cb432-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-6" aria-label="6"></a><span class="op">};</span></span>
+<span id="cb432-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-7" aria-label="7"></a></span>
+<span id="cb432-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-8" aria-label="8"></a><span class="pp">#define MAX_PASSENGERS </span><span class="dv">8</span></span>
+<span id="cb432-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-9" aria-label="9"></a></span>
+<span id="cb432-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-10" aria-label="10"></a><span class="kw">struct</span> spaceship <span class="op">{</span></span>
+<span id="cb432-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-11" aria-label="11"></a>    <span class="dt">char</span> <span class="op">*</span>manufacturer<span class="op">;</span></span>
+<span id="cb432-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-12" aria-label="12"></a>    <span class="kw">struct</span> passenger passenger<span class="op">[</span>MAX_PASSENGERS<span class="op">];</span></span>
+<span id="cb432-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-13" aria-label="13"></a><span class="op">};</span></span>
+<span id="cb432-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-14" aria-label="14"></a></span>
+<span id="cb432-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-15" aria-label="15"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb432-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-16" aria-label="16"></a><span class="op">{</span></span>
+<span id="cb432-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-17" aria-label="17"></a>    <span class="kw">struct</span> spaceship s <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb432-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-18" aria-label="18"></a>        <span class="op">.</span>manufacturer<span class="op">=</span><span class="st">&quot;General Products&quot;</span><span class="op">,</span></span>
+<span id="cb432-19"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-19" aria-label="19"></a>        <span class="op">.</span>passenger <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb432-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-20" aria-label="20"></a>            <span class="co">// Inisialisasi satu field per satu</span></span>
+<span id="cb432-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-21" aria-label="21"></a>            <span class="op">[</span><span class="dv">0</span><span class="op">].</span>name <span class="op">=</span> <span class="st">&quot;Gridley, Lewis&quot;</span><span class="op">,</span></span>
+<span id="cb432-22"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-22" aria-label="22"></a>            <span class="op">[</span><span class="dv">0</span><span class="op">].</span>covid_vaccinated <span class="op">=</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb432-23"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-23" aria-label="23"></a></span>
+<span id="cb432-24"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-24" aria-label="24"></a>            <span class="co">// Atau sekaligus</span></span>
+<span id="cb432-25"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-25" aria-label="25"></a>            <span class="op">[</span><span class="dv">7</span><span class="op">]</span> <span class="op">=</span> <span class="op">{.</span>name<span class="op">=</span><span class="st">&quot;Brown, Teela&quot;</span><span class="op">,</span> <span class="op">.</span>covid_vaccinated<span class="op">=</span><span class="dv">1</span><span class="op">},</span></span>
+<span id="cb432-26"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-26" aria-label="26"></a>        <span class="op">}</span></span>
+<span id="cb432-27"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-27" aria-label="27"></a>    <span class="op">};</span></span>
+<span id="cb432-28"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-28" aria-label="28"></a></span>
+<span id="cb432-29"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-29" aria-label="29"></a>    printf<span class="op">(</span><span class="st">&quot;Passengers for </span><span class="sc">%s</span><span class="st"> ship:</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">.</span>manufacturer<span class="op">);</span></span>
+<span id="cb432-30"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-30" aria-label="30"></a></span>
+<span id="cb432-31"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-31" aria-label="31"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> MAX_PASSENGERS<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb432-32"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-32" aria-label="32"></a>        <span class="cf">if</span> <span class="op">(</span>s<span class="op">.</span>passenger<span class="op">[</span>i<span class="op">].</span>name <span class="op">!=</span> NULL<span class="op">)</span></span>
+<span id="cb432-33"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-33" aria-label="33"></a>            printf<span class="op">(</span><span class="st">&quot;    </span><span class="sc">%s</span><span class="st"> (</span><span class="sc">%s</span><span class="st">vaccinated)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span></span>
+<span id="cb432-34"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-34" aria-label="34"></a>                s<span class="op">.</span>passenger<span class="op">[</span>i<span class="op">].</span>name<span class="op">,</span></span>
+<span id="cb432-35"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-35" aria-label="35"></a>                s<span class="op">.</span>passenger<span class="op">[</span>i<span class="op">].</span>covid_vaccinated<span class="op">?</span> <span class="st">&quot;&quot;</span><span class="op">:</span> <span class="st">&quot;not &quot;</span><span class="op">);</span></span>
+<span id="cb432-36"><a href="struct-ii-lebih-seru-dengan-struct.html#cb432-36" aria-label="36"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<h2 data-number="20.2" id="struct-anonim"><span class="header-section-number">20.2</span> <code>struct</code> Anonim</h2>
+<p></p>
+<p>Inilah “<code>struct</code> tanpa nama”. Kita juga menyinggungnya di bagian <a href="typedef-membuat-tipe-baru.html#typedef-struct"><code>typedef</code></a>, tapi kita segarkan lagi di sini.</p>
+<p>Ini <code>struct</code> biasa:</p>
+<div class="sourceCode" id="cb433"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb433-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb433-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> animal <span class="op">{</span></span>
+<span id="cb433-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb433-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb433-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb433-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
+<span id="cb433-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb433-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Dan ini padanannya yang anonim:</p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb434-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb434-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span>              <span class="co">// &lt;-- Tanpa nama!</span></span>
+<span id="cb434-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb434-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb434-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb434-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
+<span id="cb434-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb434-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Okeeee. Jadi kita punya <code>struct</code>, tapi tanpa nama, sehingga tidak ada cara memakainya nanti? Kelihatannya sia-sia.</p>
+<p>Harus diakui, pada contoh itu memang begitu. Tapi kita masih bisa memanfaatkannya dengan beberapa cara.</p>
+<p>Satu cara yang jarang: karena <code>struct</code> anonim merepresentasikan sebuah tipe, kita bisa menaruh nama variabel setelahnya dan memakainya.</p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb435-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span>                   <span class="co">// &lt;-- Tanpa nama!</span></span>
+<span id="cb435-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb435-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
+<span id="cb435-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span>                 <span class="co">// 3 variabel bertipe struct ini</span></span>
+<span id="cb435-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb435-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-6" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;antelope&quot;</span><span class="op">;</span></span>
+<span id="cb435-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb435-7" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>leg_count <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>           <span class="co">// misalnya</span></span></code></pre></div>
+<p>Tapi itu pun belum terlalu berguna.</p>
+<p>Jauh lebih umum adalah memakai <code>struct</code> anonim bersama <code>typedef</code> supaya bisa dipakai nanti (misalnya untuk mengoper variabel ke fungsi).</p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb436-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span>                   <span class="co">// &lt;-- Tanpa nama!</span></span>
+<span id="cb436-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb436-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> leg_count<span class="op">,</span> speed<span class="op">;</span></span>
+<span id="cb436-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> animal<span class="op">;</span>                          <span class="co">// Tipe baru: animal</span></span>
+<span id="cb436-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb436-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-6" aria-hidden="true" tabindex="-1"></a>animal a<span class="op">,</span> b<span class="op">,</span> c<span class="op">;</span></span>
+<span id="cb436-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb436-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-8" aria-hidden="true" tabindex="-1"></a>a<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;antelope&quot;</span><span class="op">;</span></span>
+<span id="cb436-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb436-9" aria-hidden="true" tabindex="-1"></a>c<span class="op">.</span>leg_count <span class="op">=</span> <span class="dv">4</span><span class="op">;</span>           <span class="co">// misalnya</span></span></code></pre></div>
+<p>Secara pribadi, aku tidak banyak memakai <code>struct</code> anonim. Menurutku lebih enak melihat seluruh <code>struct animal</code> sebelum nama variabel pada deklarasi.</p>
+<p>Tapi itu cuma, ya, pendapatku, kawan.</p>
+<p></p>
+<h2 data-number="20.3" id="struct-yang-merujuk-diri-sendiri"><span class="header-section-number">20.3</span> <code>struct</code> yang Merujuk Diri Sendiri</h2>
+<p></p>
+<p>Untuk struktur data apa pun yang mirip graf, berguna sekali punya pointer ke node/vertex yang terhubung. Tapi ini berarti pada definisi sebuah node, kamu perlu punya pointer ke node. Seperti ayam dan telur!</p>
+<p>Tapi ternyata di C ini bisa dilakukan tanpa masalah sama sekali.</p>
+<p>Misalnya, ini node linked list:</p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb437-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb437-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> node <span class="op">{</span></span>
+<span id="cb437-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb437-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> data<span class="op">;</span></span>
+<span id="cb437-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb437-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> node <span class="op">*</span>next<span class="op">;</span></span>
+<span id="cb437-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb437-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Penting dicatat bahwa <code>next</code> adalah pointer. Inilah yang membuat semuanya bisa dibangun. Walaupun compiler belum tahu seperti apa seluruh <code>struct node</code>, semua pointer berukuran sama.</p>
+<p>Berikut program linked list ala kadarnya untuk mengujinya:</p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb438-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb438-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb438-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-3" aria-label="3"></a></span>
+<span id="cb438-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-4" aria-label="4"></a><span class="kw">struct</span> node <span class="op">{</span></span>
+<span id="cb438-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-5" aria-label="5"></a>    <span class="dt">int</span> data<span class="op">;</span></span>
+<span id="cb438-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-6" aria-label="6"></a>    <span class="kw">struct</span> node <span class="op">*</span>next<span class="op">;</span></span>
+<span id="cb438-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-7" aria-label="7"></a><span class="op">};</span></span>
+<span id="cb438-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-8" aria-label="8"></a></span>
+<span id="cb438-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-9" aria-label="9"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb438-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-10" aria-label="10"></a><span class="op">{</span></span>
+<span id="cb438-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-11" aria-label="11"></a>    <span class="kw">struct</span> node <span class="op">*</span>head<span class="op">;</span></span>
+<span id="cb438-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-12" aria-label="12"></a></span>
+<span id="cb438-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-13" aria-label="13"></a>    <span class="co">// Susun linked list secara asal-asalan (11)-&gt;(22)-&gt;(33)</span></span>
+<span id="cb438-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-14" aria-label="14"></a>    head <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> node<span class="op">));</span></span>
+<span id="cb438-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-15" aria-label="15"></a>    head<span class="op">-&gt;</span>data <span class="op">=</span> <span class="dv">11</span><span class="op">;</span></span>
+<span id="cb438-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-16" aria-label="16"></a>    head<span class="op">-&gt;</span>next <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> node<span class="op">));</span></span>
+<span id="cb438-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-17" aria-label="17"></a>    head<span class="op">-&gt;</span>next<span class="op">-&gt;</span>data <span class="op">=</span> <span class="dv">22</span><span class="op">;</span></span>
+<span id="cb438-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-18" aria-label="18"></a>    head<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> node<span class="op">));</span></span>
+<span id="cb438-19"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-19" aria-label="19"></a>    head<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next<span class="op">-&gt;</span>data <span class="op">=</span> <span class="dv">33</span><span class="op">;</span></span>
+<span id="cb438-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-20" aria-label="20"></a>    head<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next<span class="op">-&gt;</span>next <span class="op">=</span> NULL<span class="op">;</span></span>
+<span id="cb438-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-21" aria-label="21"></a></span>
+<span id="cb438-22"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-22" aria-label="22"></a>    <span class="co">// Telusuri</span></span>
+<span id="cb438-23"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-23" aria-label="23"></a>    <span class="cf">for</span> <span class="op">(</span><span class="kw">struct</span> node <span class="op">*</span>cur <span class="op">=</span> head<span class="op">;</span> cur <span class="op">!=</span> NULL<span class="op">;</span> cur <span class="op">=</span> cur<span class="op">-&gt;</span>next<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb438-24"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-24" aria-label="24"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> cur<span class="op">-&gt;</span>data<span class="op">);</span></span>
+<span id="cb438-25"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-25" aria-label="25"></a>    <span class="op">}</span></span>
+<span id="cb438-26"><a href="struct-ii-lebih-seru-dengan-struct.html#cb438-26" aria-label="26"></a><span class="op">}</span></span></code></pre></div>
+<p>Menjalankannya mencetak:</p>
+<div class="sourceCode" id="cb439"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb439-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb439-1" aria-hidden="true" tabindex="-1"></a>11</span>
+<span id="cb439-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb439-2" aria-hidden="true" tabindex="-1"></a>22</span>
+<span id="cb439-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb439-3" aria-hidden="true" tabindex="-1"></a>33</span></code></pre></div>
+<p></p>
+<h2 data-number="20.4" id="flexible-array-member"><span class="header-section-number">20.4</span> Flexible Array Member</h2>
+<p></p>
+<p>Di zaman dahulu kala, ketika orang masih mengukir kode C dari kayu, sebagian orang berpikir alangkah kerennya kalau bisa mengalokasikan <code>struct</code> yang punya array dengan panjang bervariasi di ujungnya.</p>
+<p>Aku ingin menegaskan bahwa paruh pertama bagian ini adalah cara lama, dan setelah itu kita akan memakai cara baru.</p>
+<p>Misalnya, mungkin kamu bisa mendefinisikan <code>struct</code> untuk menyimpan string dan panjang string itu. Isinya sebuah panjang dan sebuah array untuk menampung data. Mungkin seperti ini:</p>
+<div class="sourceCode" id="cb440"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb440-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb440-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">{</span></span>
+<span id="cb440-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb440-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> length<span class="op">;</span></span>
+<span id="cb440-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb440-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> data<span class="op">[</span><span class="dv">8</span><span class="op">];</span></span>
+<span id="cb440-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb440-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Tapi itu menetapkan <code>8</code> sebagai panjang maksimum string, dan itu tidak banyak. Bagaimana kalau kita melakukan sesuatu yang <em>cerdik</em> dan <code>malloc()</code> sedikit ruang ekstra di ujung setelah struct, lalu membiarkan data meluap ke ruang itu?</p>
+<p>Mari kita lakukan, lalu alokasikan 40 byte lagi di atasnya:</p>
+<div class="sourceCode" id="cb441"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb441-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb441-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">*</span>s <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>s <span class="op">+</span> <span class="dv">40</span><span class="op">);</span></span></code></pre></div>
+<p>Karena <code>data</code> adalah field terakhir dari <code>struct</code>, kalau kita meluapi field itu, ia mengalir ke ruang yang sudah kita alokasikan! Karena alasan ini, trik ini hanya bekerja kalau array pendek itu adalah field <em>terakhir</em> dalam <code>struct</code>.</p>
+<div class="sourceCode" id="cb442"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb442-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb442-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Salin lebih dari 8 byte!</span></span>
+<span id="cb442-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb442-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb442-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb442-3" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>s<span class="op">-&gt;</span>data<span class="op">,</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">);</span>  <span class="co">// Tidak akan crash. Mungkin.</span></span></code></pre></div>
+<p></p>
+<p>Bahkan, dulu ada solusi umum dari compiler untuk ini, yaitu mengalokasikan array berukuran nol di ujung:</p>
+<div class="sourceCode" id="cb443"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb443-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb443-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">{</span></span>
+<span id="cb443-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb443-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> length<span class="op">;</span></span>
+<span id="cb443-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb443-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> data<span class="op">[</span><span class="dv">0</span><span class="op">];</span></span>
+<span id="cb443-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb443-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Lalu setiap byte ekstra yang kamu alokasikan siap dipakai untuk string itu.</p>
+<p>Karena <code>data</code> adalah field terakhir dari <code>struct</code>, kalau kita meluapi field itu, ia mengalir ke ruang yang sudah kita alokasikan!</p>
+<div class="sourceCode" id="cb444"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb444-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb444-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Salin lebih dari 8 byte!</span></span>
+<span id="cb444-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb444-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb444-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb444-3" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>s<span class="op">-&gt;</span>data<span class="op">,</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">);</span>  <span class="co">// Tidak akan crash. Mungkin.</span></span></code></pre></div>
+<p>Tapi, tentu saja, mengakses data di luar ujung array itu adalah undefined behavior! Di zaman modern ini, kita tidak lagi sudi memakai kebiadaban seperti itu.</p>
+<p></p>
+<p>Untungnya, kita masih bisa mendapat efek yang sama dengan C99 dan sesudahnya, tapi sekarang legal.</p>
+<p>Kita cukup mengubah definisi di atas agar array tidak punya ukuran<a href="function-specifier-alignment-specifier-dan-operator.html#fn134" class="footnote-ref" id="fnref134" role="doc-noteref"><sup>134</sup></a>:</p>
+<div class="sourceCode" id="cb445"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb445-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">{</span></span>
+<span id="cb445-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb445-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> length<span class="op">;</span></span>
+<span id="cb445-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb445-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> data<span class="op">[];</span></span>
+<span id="cb445-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb445-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Sekali lagi, ini hanya bekerja kalau flexible array member adalah field <em>terakhir</em> dalam <code>struct</code>.</p>
+<p>Lalu kita bisa mengalokasikan ruang sebanyak yang kita mau untuk string-string itu dengan <code>malloc()</code> lebih besar dari <code>struct len_string</code>, seperti pada contoh ini yang membuat <code>struct len_string</code> baru dari string C:</p>
+<div class="sourceCode" id="cb446"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb446-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> len_string <span class="op">*</span>len_string_from_c_string<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
+<span id="cb446-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb446-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> len <span class="op">=</span> strlen<span class="op">(</span>s<span class="op">);</span></span>
+<span id="cb446-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Alokasikan &quot;len&quot; byte lebih banyak dari yang biasanya dibutuhkan</span></span>
+<span id="cb446-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> len_string <span class="op">*</span>ls <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>ls <span class="op">+</span> len<span class="op">);</span></span>
+<span id="cb446-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-8" aria-hidden="true" tabindex="-1"></a>    ls<span class="op">-&gt;</span>length <span class="op">=</span> len<span class="op">;</span></span>
+<span id="cb446-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Salin string ke byte-byte ekstra itu</span></span>
+<span id="cb446-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-11" aria-hidden="true" tabindex="-1"></a>    memcpy<span class="op">(</span>ls<span class="op">-&gt;</span>data<span class="op">,</span> s<span class="op">,</span> len<span class="op">);</span></span>
+<span id="cb446-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb446-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ls<span class="op">;</span></span>
+<span id="cb446-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb446-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<h2 data-number="20.5" id="struct-padding-bytes"><span class="header-section-number">20.5</span> Padding Byte</h2>
+<p></p>
+<p>Waspadai bahwa C boleh menambahkan padding byte di dalam atau setelah <code>struct</code> sesuai kehendaknya. Kamu tidak bisa memastikan bahwa field-field itu berdekatan langsung di memori<a href="function-specifier-alignment-specifier-dan-operator.html#fn135" class="footnote-ref" id="fnref135" role="doc-noteref"><sup>135</sup></a>.</p>
+<p>Mari lihat program ini. Kita mengeluarkan dua angka. Satu adalah jumlah <code>sizeof</code> tipe-tipe field individual. Satunya lagi <code>sizeof</code> seluruh <code>struct</code>.</p>
+<p>Orang akan mengira keduanya sama. Ukuran total adalah ukuran jumlah bagian-bagiannya, kan?</p>
+<div class="sourceCode" id="cb447"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb447-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb447-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-2" aria-label="2"></a></span>
+<span id="cb447-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-3" aria-label="3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb447-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-4" aria-label="4"></a>    <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb447-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-5" aria-label="5"></a>    <span class="dt">char</span> b<span class="op">;</span></span>
+<span id="cb447-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-6" aria-label="6"></a>    <span class="dt">int</span> c<span class="op">;</span></span>
+<span id="cb447-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-7" aria-label="7"></a>    <span class="dt">char</span> d<span class="op">;</span></span>
+<span id="cb447-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-8" aria-label="8"></a><span class="op">};</span></span>
+<span id="cb447-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-9" aria-label="9"></a></span>
+<span id="cb447-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-10" aria-label="10"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb447-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-11" aria-label="11"></a><span class="op">{</span></span>
+<span id="cb447-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-12" aria-label="12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">+</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">)</span> <span class="op">+</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> <span class="op">+</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">));</span></span>
+<span id="cb447-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> foo<span class="op">));</span></span>
+<span id="cb447-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb447-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p>Tapi di sistemku, ini mengeluarkan:</p>
+<div class="sourceCode" id="cb448"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb448-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb448-1" aria-hidden="true" tabindex="-1"></a>10</span>
+<span id="cb448-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb448-2" aria-hidden="true" tabindex="-1"></a>16</span></code></pre></div>
+<p>Ternyata tidak sama! Compiler menambahkan 6 byte padding agar performanya lebih baik. Mungkin di compiler-mu hasilnya berbeda, tapi kecuali kamu memaksanya, kamu tidak bisa memastikan tidak ada padding.</p>
+<p></p>
+<h2 data-number="20.6" id="offsetof"><span class="header-section-number">20.6</span> <code>offsetof</code></h2>
+<p></p>
+<p>Di bagian sebelumnya, kita melihat bahwa compiler bisa menyisipkan padding byte sesukanya di dalam struktur.</p>
+<p>Bagaimana kalau kita perlu tahu di mana letaknya? Kita bisa mengukurnya dengan <code>offsetof</code>, yang didefinisikan di <code>&lt;stddef.h&gt;</code>.</p>
+<p>Mari kita ubah kode di atas untuk mencetak offset field-field individual dalam <code>struct</code>:</p>
+<div class="sourceCode" id="cb449"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb449-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb449-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
+<span id="cb449-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-3" aria-label="3"></a></span>
+<span id="cb449-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-4" aria-label="4"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb449-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-5" aria-label="5"></a>    <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb449-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-6" aria-label="6"></a>    <span class="dt">char</span> b<span class="op">;</span></span>
+<span id="cb449-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-7" aria-label="7"></a>    <span class="dt">int</span> c<span class="op">;</span></span>
+<span id="cb449-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-8" aria-label="8"></a>    <span class="dt">char</span> d<span class="op">;</span></span>
+<span id="cb449-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-9" aria-label="9"></a><span class="op">};</span></span>
+<span id="cb449-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-10" aria-label="10"></a></span>
+<span id="cb449-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-11" aria-label="11"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb449-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-12" aria-label="12"></a><span class="op">{</span></span>
+<span id="cb449-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> offsetof<span class="op">(</span><span class="kw">struct</span> foo<span class="op">,</span> a<span class="op">));</span></span>
+<span id="cb449-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> offsetof<span class="op">(</span><span class="kw">struct</span> foo<span class="op">,</span> b<span class="op">));</span></span>
+<span id="cb449-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-15" aria-label="15"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> offsetof<span class="op">(</span><span class="kw">struct</span> foo<span class="op">,</span> c<span class="op">));</span></span>
+<span id="cb449-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> offsetof<span class="op">(</span><span class="kw">struct</span> foo<span class="op">,</span> d<span class="op">));</span></span>
+<span id="cb449-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb449-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p>Di komputerku, ini mengeluarkan:</p>
+<div class="sourceCode" id="cb450"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb450-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb450-1" aria-hidden="true" tabindex="-1"></a>0</span>
+<span id="cb450-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb450-2" aria-hidden="true" tabindex="-1"></a>4</span>
+<span id="cb450-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb450-3" aria-hidden="true" tabindex="-1"></a>8</span>
+<span id="cb450-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb450-4" aria-hidden="true" tabindex="-1"></a>12</span></code></pre></div>
+<p>yang menunjukkan bahwa kita memakai 4 byte untuk setiap field. Agak aneh, karena <code>char</code> hanya 1 byte, kan? Compiler menaruh 3 padding byte setelah setiap <code>char</code> agar semua field berukuran 4 byte. Mungkin ini akan berjalan lebih cepat di CPU-ku.</p>
+<p></p>
+<!--
+
+6.7.2.1
+
+15 Within a structure object, the non-bit-field members and the units in which bit-fields reside have addresses that increase in the order in which they are declared. A pointer to a structure object, suitably converted, points to its initial member (or if that member is a bit-field, then to the unit in which it resides), and vice versa. There may be unnamed padding within a structure object, but not at its beginning.
+
+6.2.7 Compatible type and composite type
+
+1 Two types have compatible type if their types are the same.
+
+6.5
+
+7 An object shall have its stored value accessed only by an lvalue expression that has one of the following types:
+
+- a type compatible with the effective type of the object
+
+-->
+<h2 data-number="20.7" id="fake-oop"><span class="header-section-number">20.7</span> Fake OOP</h2>
+<p>Ada hal yang agak kurang ajar dan mirip OOP yang bisa dilakukan dengan <code>struct</code>.</p>
+<p>Karena pointer ke <code>struct</code> sama dengan pointer ke elemen pertama <code>struct</code>, kamu bebas meng-cast pointer ke <code>struct</code> menjadi pointer ke elemen pertama.</p>
+<p>Artinya kita bisa menyusun situasi seperti ini:</p>
+<div class="sourceCode" id="cb451"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb451-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> parent <span class="op">{</span></span>
+<span id="cb451-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">;</span></span>
+<span id="cb451-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb451-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb451-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-5" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> child <span class="op">{</span></span>
+<span id="cb451-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> parent super<span class="op">;</span>  <span class="co">// HARUS yang pertama</span></span>
+<span id="cb451-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> c<span class="op">,</span> d<span class="op">;</span></span>
+<span id="cb451-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb451-8" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Lalu kita bisa mengoper pointer ke <code>struct child</code> ke fungsi yang mengharapkan itu <em>atau</em> pointer ke <code>struct parent</code>!</p>
+<p>Karena <code>struct parent super</code> adalah item pertama dalam <code>struct child</code>, pointer ke <code>struct child</code> mana pun sama dengan pointer ke field <code>super</code> itu<a href="function-specifier-alignment-specifier-dan-operator.html#fn136" class="footnote-ref" id="fnref136" role="doc-noteref"><sup>136</sup></a>.</p>
+<p>Mari kita buat contohnya. Kita buat <code>struct</code> seperti di atas, lalu kita oper pointer ke <code>struct child</code> ke fungsi yang butuh pointer ke <code>struct parent</code>… dan itu tetap berfungsi.</p>
+<div class="sourceCode" id="cb452"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb452-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb452-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-2" aria-label="2"></a></span>
+<span id="cb452-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-3" aria-label="3"></a><span class="kw">struct</span> parent <span class="op">{</span></span>
+<span id="cb452-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-4" aria-label="4"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">;</span></span>
+<span id="cb452-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-5" aria-label="5"></a><span class="op">};</span></span>
+<span id="cb452-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-6" aria-label="6"></a></span>
+<span id="cb452-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-7" aria-label="7"></a><span class="kw">struct</span> child <span class="op">{</span></span>
+<span id="cb452-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-8" aria-label="8"></a>    <span class="kw">struct</span> parent super<span class="op">;</span>  <span class="co">// HARUS yang pertama</span></span>
+<span id="cb452-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-9" aria-label="9"></a>    <span class="dt">int</span> c<span class="op">,</span> d<span class="op">;</span></span>
+<span id="cb452-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-10" aria-label="10"></a><span class="op">};</span></span>
+<span id="cb452-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-11" aria-label="11"></a></span>
+<span id="cb452-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-12" aria-label="12"></a><span class="co">// Menjadikan argumen `void*` supaya kita bisa mengoper tipe apa pun</span></span>
+<span id="cb452-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-13" aria-label="13"></a><span class="co">// (yaitu struct parent atau struct child)</span></span>
+<span id="cb452-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-14" aria-label="14"></a><span class="dt">void</span> print_parent<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>p<span class="op">)</span></span>
+<span id="cb452-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-15" aria-label="15"></a><span class="op">{</span></span>
+<span id="cb452-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-16" aria-label="16"></a>    <span class="co">// Mengharapkan struct parent--tapi struct child juga berfungsi</span></span>
+<span id="cb452-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-17" aria-label="17"></a>    <span class="co">// karena pointer-nya menunjuk ke struct parent di field</span></span>
+<span id="cb452-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-18" aria-label="18"></a>    <span class="co">// pertama:</span></span>
+<span id="cb452-19"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-19" aria-label="19"></a>    <span class="kw">struct</span> parent <span class="op">*</span>self <span class="op">=</span> p<span class="op">;</span></span>
+<span id="cb452-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-20" aria-label="20"></a></span>
+<span id="cb452-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-21" aria-label="21"></a>    printf<span class="op">(</span><span class="st">&quot;Parent: </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> self<span class="op">-&gt;</span>a<span class="op">,</span> self<span class="op">-&gt;</span>b<span class="op">);</span></span>
+<span id="cb452-22"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-22" aria-label="22"></a><span class="op">}</span></span>
+<span id="cb452-23"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-23" aria-label="23"></a></span>
+<span id="cb452-24"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-24" aria-label="24"></a><span class="dt">void</span> print_child<span class="op">(</span><span class="kw">struct</span> child <span class="op">*</span>self<span class="op">)</span></span>
+<span id="cb452-25"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-25" aria-label="25"></a><span class="op">{</span></span>
+<span id="cb452-26"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-26" aria-label="26"></a>    printf<span class="op">(</span><span class="st">&quot;Child: </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> self<span class="op">-&gt;</span>c<span class="op">,</span> self<span class="op">-&gt;</span>d<span class="op">);</span></span>
+<span id="cb452-27"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-27" aria-label="27"></a><span class="op">}</span></span>
+<span id="cb452-28"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-28" aria-label="28"></a></span>
+<span id="cb452-29"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-29" aria-label="29"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb452-30"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-30" aria-label="30"></a><span class="op">{</span></span>
+<span id="cb452-31"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-31" aria-label="31"></a>    <span class="kw">struct</span> child c <span class="op">=</span> <span class="op">{.</span>super<span class="op">.</span>a<span class="op">=</span><span class="dv">1</span><span class="op">,</span> <span class="op">.</span>super<span class="op">.</span>b<span class="op">=</span><span class="dv">2</span><span class="op">,</span> <span class="op">.</span>c<span class="op">=</span><span class="dv">3</span><span class="op">,</span> <span class="op">.</span>d<span class="op">=</span><span class="dv">4</span><span class="op">};</span></span>
+<span id="cb452-32"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-32" aria-label="32"></a></span>
+<span id="cb452-33"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-33" aria-label="33"></a>    print_child<span class="op">(&amp;</span>c<span class="op">);</span></span>
+<span id="cb452-34"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-34" aria-label="34"></a>    print_parent<span class="op">(&amp;</span>c<span class="op">);</span>  <span class="co">// Juga berfungsi meskipun ini struct child!</span></span>
+<span id="cb452-35"><a href="struct-ii-lebih-seru-dengan-struct.html#cb452-35" aria-label="35"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat apa yang kita lakukan di baris terakhir <code>main()</code>? Kita memanggil <code>print_parent()</code> tapi mengoper <code>struct child*</code> sebagai argumen! Walaupun <code>print_parent()</code> butuh argumen yang menunjuk ke <code>struct parent</code>, kita <em>lolos</em> karena field pertama dalam <code>struct child</code> adalah <code>struct parent</code>.</p>
+<p>Sekali lagi, ini berfungsi karena pointer ke <code>struct</code> bernilai sama dengan pointer ke field pertama dalam <code>struct</code> itu.</p>
+<p>Semua ini bergantung pada bagian spesifikasi ini:</p>
+<blockquote>
+<p><strong>§6.7.2.1¶15</strong> […] A pointer to a structure object, suitably converted, points to its initial member […], and vice versa.</p>
+</blockquote>
+<p>dan</p>
+<blockquote>
+<p><strong>§6.5¶7</strong> An object shall have its stored value accessed only by an lvalue expression that has one of the following types:</p>
+<ul>
+<li>a type compatible with the effective type of the object</li>
+<li>[…]</li>
+</ul>
+</blockquote>
+<p>serta asumsiku bahwa “suitably converted” berarti “di-cast ke effective type dari anggota pertama”.</p>
+<h2 data-number="20.8" id="bit-field"><span class="header-section-number">20.8</span> Bit-Field</h2>
+<p></p>
+<p>Menurut pengalamanku, ini jarang dipakai, tapi kamu mungkin melihatnya sesekali, terutama pada aplikasi level rendah yang mengemas bit-bit bersama ke dalam ruang yang lebih besar.</p>
+<p>Mari kita lihat kode untuk mendemonstrasikan satu kasus pemakaian:</p>
+<div class="sourceCode" id="cb453"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb453-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb453-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-2" aria-label="2"></a></span>
+<span id="cb453-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-3" aria-label="3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb453-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-4" aria-label="4"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">;</span></span>
+<span id="cb453-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-5" aria-label="5"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb453-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-6" aria-label="6"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">;</span></span>
+<span id="cb453-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-7" aria-label="7"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">;</span></span>
+<span id="cb453-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-8" aria-label="8"></a><span class="op">};</span></span>
+<span id="cb453-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-9" aria-label="9"></a></span>
+<span id="cb453-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-10" aria-label="10"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb453-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-11" aria-label="11"></a><span class="op">{</span></span>
+<span id="cb453-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-12" aria-label="12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="kw">struct</span> foo<span class="op">));</span></span>
+<span id="cb453-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb453-13" aria-label="13"></a><span class="op">}</span></span></code></pre></div>
+<p>Di sistemku, ini mencetak <code>16</code>. Itu masuk akal, karena <code>unsigned</code> berukuran 4 byte di sistemku.</p>
+<p>Tapi bagaimana kalau kita tahu bahwa semua nilai yang akan disimpan di <code>a</code> dan <code>b</code> bisa disimpan dalam 5 bit, dan nilai di <code>c</code> dan <code>d</code> bisa disimpan dalam 3 bit? Totalnya hanya 16 bit. Kenapa mencadangkan 128 bit untuk mereka kalau kita hanya akan memakai 16?</p>
+<p>Nah, kita bisa meminta C dengan sangat sopan untuk mencoba mengemas nilai-nilai ini. Kita bisa menentukan jumlah bit maksimum yang bisa dipakai nilai (dari 1 sampai ukuran tipe penampungnya).</p>
+<p>Caranya dengan menaruh titik dua setelah nama field, diikuti lebar field dalam bit.</p>
+<div class="sourceCode" id="cb454" data-startfrom="3"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 2;"><span id="cb454-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb454-3" aria-label="3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb454-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb454-4" aria-label="4"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">5</span><span class="op">;</span></span>
+<span id="cb454-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb454-5" aria-label="5"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">:</span><span class="dv">5</span><span class="op">;</span></span>
+<span id="cb454-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb454-6" aria-label="6"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb454-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb454-7" aria-label="7"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb454-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb454-8" aria-label="8"></a><span class="op">};</span></span></code></pre></div>
+<p>Sekarang kalau aku bertanya ke C seberapa besar <code>struct foo</code>-ku, jawabannya 4! Tadinya 16 byte, sekarang hanya 4. Keempat nilai itu “dikemas” menjadi 4 byte, penghematan memori empat kali lipat.</p>
+<p>Konsekuensinya, tentu saja, field 5-bit hanya bisa menampung nilai 0-31 dan field 3-bit hanya bisa menampung nilai 0-7. Tapi toh hidup memang soal kompromi.</p>
+<h3 data-number="20.8.1" id="bit-field-yang-tidak-berdekatan"><span class="header-section-number">20.8.1</span> Bit-Field yang Tidak Berdekatan</h3>
+<p>Satu jebakan: C hanya menggabungkan bit-field yang <strong>berdekatan</strong>. Kalau mereka disela oleh non-bit-field, tidak ada penghematan:</p>
+<div class="sourceCode" id="cb455"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb455-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb455-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span>            <span class="co">// sizeof(struct foo) == 16 (di sistemku)</span></span>
+<span id="cb455-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb455-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span>   <span class="co">// karena a tidak berdekatan dengan c.</span></span>
+<span id="cb455-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb455-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb455-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb455-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb455-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb455-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">;</span></span>
+<span id="cb455-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb455-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Pada contoh itu, karena <code>a</code> tidak berdekatan dengan <code>c</code>, keduanya “dikemas” dalam <code>int</code>-nya masing-masing.</p>
+<p>Jadi kita punya satu <code>int</code> masing-masing untuk <code>a</code>, <code>b</code>, <code>c</code>, dan <code>d</code>. Karena <code>int</code> di sistemku 4 byte, totalnya 16 byte.</p>
+<p>Penataan ulang singkat menghemat ruang dari 16 byte menjadi 12 byte (di sistemku):</p>
+<div class="sourceCode" id="cb456"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb456-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb456-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span>            <span class="co">// sizeof(struct foo) == 12 (di sistemku)</span></span>
+<span id="cb456-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb456-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb456-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb456-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb456-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb456-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb456-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb456-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">;</span></span>
+<span id="cb456-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb456-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Dan sekarang, karena <code>a</code> bersebelahan dengan <code>c</code>, compiler menaruh keduanya dalam satu <code>int</code>.</p>
+<p>Jadi kita punya satu <code>int</code> untuk gabungan <code>a</code> dan <code>c</code>, dan satu <code>int</code> masing-masing untuk <code>b</code> dan <code>d</code>. Total 3 <code>int</code>, atau 12 byte.</p>
+<p>Taruh semua bitfield-mu berdekatan supaya compiler menggabungkannya.</p>
+<h3 data-number="20.8.2" id="int-signed-atau-unsigned"><span class="header-section-number">20.8.2</span> <code>int</code> Signed atau Unsigned</h3>
+<p>Kalau kamu hanya mendeklarasikan bit-field sebagai <code>int</code>, compiler yang berbeda akan memperlakukannya sebagai <code>signed</code> atau <code>unsigned</code>. Sama seperti situasi pada <code>char</code>.</p>
+<p>Jelaskan tanda (signedness)-nya secara spesifik saat memakai bit-field.</p>
+<h3 data-number="20.8.3" id="bit-field-tanpa-nama"><span class="header-section-number">20.8.3</span> Bit-Field Tanpa Nama</h3>
+<p>Pada keadaan tertentu, kamu mungkin perlu mencadangkan beberapa bit untuk alasan hardware, tapi tidak perlu memakainya di kode.</p>
+<p>Misalnya, katakanlah ada satu byte yang 2 bit teratasnya punya makna, 1 bit terbawahnya punya makna, tapi 5 bit di tengah tidak kamu pakai<a href="function-specifier-alignment-specifier-dan-operator.html#fn137" class="footnote-ref" id="fnref137" role="doc-noteref"><sup>137</sup></a>.</p>
+<p>Kita <em>bisa</em> melakukan sesuatu seperti ini:</p>
+<div class="sourceCode" id="cb457"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb457-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb457-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb457-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb457-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> a<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
+<span id="cb457-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb457-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> dummy<span class="op">:</span><span class="dv">5</span><span class="op">;</span></span>
+<span id="cb457-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb457-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> b<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb457-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb457-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Dan itu berfungsi—di kode kita memakai <code>a</code> dan <code>b</code>, tapi tidak pernah <code>dummy</code>. Ia hanya ada untuk menghabiskan 5 bit supaya <code>a</code> dan <code>b</code> berada di posisi “yang dibutuhkan” (oleh contoh yang dibuat-buat ini) di dalam byte.</p>
+<p>C menyediakan cara untuk merapikannya: <em>bit-field tanpa nama</em>. Kamu cukup menghilangkan nama (<code>dummy</code>) dalam kasus ini, dan C tetap senang dengan efek yang sama:</p>
+<div class="sourceCode" id="cb458"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb458-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb458-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb458-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb458-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> a<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
+<span id="cb458-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb458-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">:</span><span class="dv">5</span><span class="op">;</span>   <span class="co">// &lt;-- bit-field tanpa nama!</span></span>
+<span id="cb458-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb458-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> b<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb458-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb458-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<h3 data-number="20.8.4" id="bit-field-tanpa-nama-dengan-lebar-nol"><span class="header-section-number">20.8.4</span> Bit-Field Tanpa Nama dengan Lebar Nol</h3>
+<p>Esoterika lagi di sini… Katakanlah kamu mengemas bit ke dalam <code>unsigned int</code>, dan kamu butuh beberapa bit-field berdekatan untuk dikemas ke <code>unsigned int</code> <em>berikutnya</em>.</p>
+<p>Artinya, kalau kamu menulis ini:</p>
+<div class="sourceCode" id="cb459"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb459-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb459-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb459-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb459-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb459-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb459-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
+<span id="cb459-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb459-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb459-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb459-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">:</span><span class="dv">4</span><span class="op">;</span></span>
+<span id="cb459-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb459-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>compiler mengemas semuanya ke dalam satu <code>unsigned int</code>. Tapi bagaimana kalau kamu butuh <code>a</code> dan <code>b</code> dalam satu <code>int</code>, dan <code>c</code> dan <code>d</code> dalam <code>int</code> yang lain?</p>
+<p>Ada solusinya: taruh bit-field tanpa nama berlebar <code>0</code> di tempat kamu ingin compiler mulai mengemas bit dari awal pada <code>int</code> yang berbeda:</p>
+<div class="sourceCode" id="cb460"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb460-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb460-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> a<span class="op">:</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb460-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">:</span><span class="dv">2</span><span class="op">;</span></span>
+<span id="cb460-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> <span class="op">:</span><span class="dv">0</span><span class="op">;</span>   <span class="co">// &lt;--Bit-field tanpa nama berlebar nol</span></span>
+<span id="cb460-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> c<span class="op">:</span><span class="dv">3</span><span class="op">;</span></span>
+<span id="cb460-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">int</span> d<span class="op">:</span><span class="dv">4</span><span class="op">;</span></span>
+<span id="cb460-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb460-7" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Ini seperti page break eksplisit di word processor. Kamu memberi tahu compiler, “Berhenti mengemas bit di <code>unsigned</code> ini, dan mulai mengemas di yang berikutnya.”</p>
+<p>Dengan menambahkan bit-field tanpa nama berlebar nol di tempat itu, compiler menaruh <code>a</code> dan <code>b</code> dalam satu <code>unsigned int</code>, dan <code>c</code> dan <code>d</code> dalam <code>unsigned int</code> lain. Total dua, dengan ukuran 8 byte di sistemku (<code>unsigned int</code> masing-masing 4 byte).</p>
+<p></p>
+<h2 data-number="20.9" id="union"><span class="header-section-number">20.9</span> Union</h2>
+<p></p>
+<p>Pada dasarnya ini sama seperti <code>struct</code>, hanya saja field-nya saling tumpang tindih di memori. <code>union</code> hanya akan sebesar field terbesarnya, dan kamu hanya bisa memakai satu field dalam satu waktu.</p>
+<p>Ini cara untuk memakai ulang ruang memori yang sama untuk berbagai jenis data.</p>
+<p>Deklarasinya sama seperti <code>struct</code>, hanya saja memakai <code>union</code>. Lihat ini:</p>
+<div class="sourceCode" id="cb461"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb461-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb461-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">{</span></span>
+<span id="cb461-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb461-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">,</span> d<span class="op">,</span> e<span class="op">,</span> f<span class="op">;</span></span>
+<span id="cb461-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb461-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> g<span class="op">,</span> h<span class="op">;</span></span>
+<span id="cb461-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb461-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> i<span class="op">,</span> j<span class="op">,</span> k<span class="op">,</span> l<span class="op">;</span></span>
+<span id="cb461-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb461-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Nah, itu banyak sekali field. Kalau ini <code>struct</code>, sistemku akan bilang dibutuhkan 36 byte untuk menampung semuanya.</p>
+<p>Tapi ini <code>union</code>, jadi semua field itu saling tumpang tindih dalam bentangan memori yang sama. Field terbesarnya <code>int</code> (atau <code>float</code>), yang memakai 4 byte di sistemku. Dan memang, kalau kutanya <code>sizeof</code> dari <code>union foo</code>, jawabannya 4!</p>
+<p>Konsekuensinya, hanya satu field yang bisa dipakai secara portabel dalam satu waktu. Namun…</p>
+<h3 data-number="20.9.1" id="union-type-punning"><span class="header-section-number">20.9.1</span> Union dan Type Punning</h3>
+<p></p>
+<p>Kamu bisa menulis ke satu field <code>union</code> dan membaca dari field lain secara non-portabel!</p>
+<p>Melakukannya disebut <a href="https://en.wikipedia.org/wiki/Type_punning">type punning</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn138" class="footnote-ref" id="fnref138" role="doc-noteref"><sup>138</sup></a>, dan kamu memakainya kalau benar-benar tahu apa yang kamu lakukan, biasanya pada pemrograman level rendah.</p>
+<p>Karena anggota union berbagi memori yang sama, menulis ke satu anggota pasti memengaruhi yang lain. Dan kalau kamu membaca dari satu anggota sesuatu yang ditulis ke anggota lain, kamu mendapat efek yang aneh.</p>
+<div class="sourceCode" id="cb462"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb462-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb462-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-2" aria-label="2"></a></span>
+<span id="cb462-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-3" aria-label="3"></a><span class="kw">union</span> foo <span class="op">{</span></span>
+<span id="cb462-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-4" aria-label="4"></a>    <span class="dt">float</span> b<span class="op">;</span></span>
+<span id="cb462-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-5" aria-label="5"></a>    <span class="dt">short</span> a<span class="op">;</span></span>
+<span id="cb462-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-6" aria-label="6"></a><span class="op">};</span></span>
+<span id="cb462-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-7" aria-label="7"></a></span>
+<span id="cb462-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb462-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb462-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-10" aria-label="10"></a>    <span class="kw">union</span> foo x<span class="op">;</span></span>
+<span id="cb462-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-11" aria-label="11"></a></span>
+<span id="cb462-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-12" aria-label="12"></a>    x<span class="op">.</span>b <span class="op">=</span> <span class="fl">3.14159</span><span class="op">;</span></span>
+<span id="cb462-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-13" aria-label="13"></a></span>
+<span id="cb462-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>b<span class="op">);</span>  <span class="co">// 3.14159, wajar</span></span>
+<span id="cb462-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-15" aria-label="15"></a></span>
+<span id="cb462-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>a<span class="op">);</span>  <span class="co">// Tapi bagaimana dengan ini?</span></span>
+<span id="cb462-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb462-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p>Di sistemku, ini mencetak:</p>
+<pre><code>3.141590
+4048</code></pre>
+<p>karena di balik layar, representasi object dari float <code>3.14159</code> sama dengan representasi object dari short <code>4048</code>. Di sistemku. Hasilmu mungkin berbeda.</p>
+<p></p>
+<h3 data-number="20.9.2" id="pointer-ke-union"><span class="header-section-number">20.9.2</span> Pointer ke <code>union</code></h3>
+<p></p>
+<p>Kalau kamu punya pointer ke <code>union</code>, kamu bisa meng-cast pointer itu ke tipe field mana pun dalam <code>union</code> itu dan mengambil nilainya dengan cara itu.</p>
+<p>Pada contoh ini, kita lihat <code>union</code> berisi <code>int</code> dan <code>float</code>. Kita ambil pointer ke <code>union</code>, tapi kita cast ke tipe <code>int*</code> dan <code>float*</code> (cast membungkam peringatan compiler). Lalu kalau kita men-dereference pointer-pointer itu, kita lihat bahwa nilainya sama dengan yang kita simpan langsung di <code>union</code>.</p>
+<div class="sourceCode" id="cb464"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb464-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb464-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-2" aria-label="2"></a></span>
+<span id="cb464-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-3" aria-label="3"></a><span class="kw">union</span> foo <span class="op">{</span></span>
+<span id="cb464-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-4" aria-label="4"></a>    <span class="dt">int</span> a<span class="op">,</span> b<span class="op">,</span> c<span class="op">,</span> d<span class="op">,</span> e<span class="op">,</span> f<span class="op">;</span></span>
+<span id="cb464-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-5" aria-label="5"></a>    <span class="dt">float</span> g<span class="op">,</span> h<span class="op">;</span></span>
+<span id="cb464-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-6" aria-label="6"></a>    <span class="dt">char</span> i<span class="op">,</span> j<span class="op">,</span> k<span class="op">,</span> l<span class="op">;</span></span>
+<span id="cb464-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-7" aria-label="7"></a><span class="op">};</span></span>
+<span id="cb464-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-8" aria-label="8"></a></span>
+<span id="cb464-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-9" aria-label="9"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb464-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-10" aria-label="10"></a><span class="op">{</span></span>
+<span id="cb464-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-11" aria-label="11"></a>    <span class="kw">union</span> foo x<span class="op">;</span></span>
+<span id="cb464-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-12" aria-label="12"></a></span>
+<span id="cb464-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-13" aria-label="13"></a>    <span class="dt">int</span> <span class="op">*</span>foo_int_p <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)&amp;</span>x<span class="op">;</span></span>
+<span id="cb464-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-14" aria-label="14"></a>    <span class="dt">float</span> <span class="op">*</span>foo_float_p <span class="op">=</span> <span class="op">(</span><span class="dt">float</span> <span class="op">*)&amp;</span>x<span class="op">;</span></span>
+<span id="cb464-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-15" aria-label="15"></a></span>
+<span id="cb464-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-16" aria-label="16"></a>    x<span class="op">.</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span></span>
+<span id="cb464-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>a<span class="op">);</span>           <span class="co">// 12</span></span>
+<span id="cb464-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-18" aria-label="18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>foo_int_p<span class="op">);</span>    <span class="co">// 12, lagi</span></span>
+<span id="cb464-19"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-19" aria-label="19"></a></span>
+<span id="cb464-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-20" aria-label="20"></a>    x<span class="op">.</span>g <span class="op">=</span> <span class="fl">3.141592</span><span class="op">;</span></span>
+<span id="cb464-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-21" aria-label="21"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">.</span>g<span class="op">);</span>           <span class="co">// 3.141592</span></span>
+<span id="cb464-22"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-22" aria-label="22"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>foo_float_p<span class="op">);</span>  <span class="co">// 3.141592, lagi</span></span>
+<span id="cb464-23"><a href="struct-ii-lebih-seru-dengan-struct.html#cb464-23" aria-label="23"></a><span class="op">}</span></span></code></pre></div>
+<p>Kebalikannya juga benar. Kalau kita punya pointer ke tipe di dalam <code>union</code>, kita bisa meng-cast-nya ke pointer ke <code>union</code> dan mengakses anggotanya.</p>
+<div class="sourceCode" id="cb465"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb465-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb465-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo x<span class="op">;</span></span>
+<span id="cb465-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb465-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>foo_int_p <span class="op">=</span> <span class="op">(</span><span class="dt">int</span> <span class="op">*)&amp;</span>x<span class="op">;</span>             <span class="co">// Pointer ke field int</span></span>
+<span id="cb465-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb465-3" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">*</span>p <span class="op">=</span> <span class="op">(</span><span class="kw">union</span> foo <span class="op">*)</span>foo_int_p<span class="op">;</span>  <span class="co">// Kembali ke pointer ke union</span></span>
+<span id="cb465-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb465-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb465-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb465-5" aria-hidden="true" tabindex="-1"></a>p<span class="op">-&gt;</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>  <span class="co">// Baris ini sama dengan...</span></span>
+<span id="cb465-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb465-6" aria-hidden="true" tabindex="-1"></a>x<span class="op">.</span>a <span class="op">=</span> <span class="dv">12</span><span class="op">;</span>   <span class="co">// yang ini.</span></span></code></pre></div>
+<p>Semua ini hanya memberi tahu bahwa, di balik layar, semua nilai dalam <code>union</code> dimulai di tempat yang sama di memori, dan itu sama dengan lokasi seluruh <code>union</code>.</p>
+<p></p>
+<h3 data-number="20.9.3" id="common-initial-sequence-pada-union"><span class="header-section-number">20.9.3</span> Common Initial Sequence pada Union</h3>
+<p></p>
+<p>Kalau kamu punya <code>union</code> berisi <code>struct</code>, dan semua <code>struct</code> itu diawali dengan <em>common initial sequence</em>, boleh mengakses anggota urutan itu dari anggota <code>union</code> mana pun.</p>
+<p>Apa?</p>
+<p>Berikut dua <code>struct</code> dengan common initial sequence:</p>
+<div class="sourceCode" id="cb466"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb466-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> a <span class="op">{</span></span>
+<span id="cb466-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">;</span>     <span class="co">//</span></span>
+<span id="cb466-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">;</span>   <span class="co">// Common initial sequence</span></span>
+<span id="cb466-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>p<span class="op">;</span></span>
+<span id="cb466-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-6" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb466-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> b <span class="op">{</span></span>
+<span id="cb466-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">;</span>     <span class="co">//</span></span>
+<span id="cb466-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> y<span class="op">;</span>   <span class="co">// Common initial sequence</span></span>
+<span id="cb466-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb466-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">double</span> <span class="op">*</span>p<span class="op">;</span></span>
+<span id="cb466-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">short</span> z<span class="op">;</span></span>
+<span id="cb466-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb466-14" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Kamu lihat? Keduanya diawali <code>int</code> diikuti <code>float</code>—itulah common initial sequence. Anggota-anggota dalam urutan pada <code>struct</code> harus bertipe kompatibel. Dan kita lihat itu pada <code>x</code> dan <code>y</code>, yaitu <code>int</code> dan <code>float</code> masing-masing.</p>
+<p>Sekarang kita buat union dari keduanya:</p>
+<div class="sourceCode" id="cb467"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb467-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb467-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">{</span></span>
+<span id="cb467-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb467-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> a sa<span class="op">;</span></span>
+<span id="cb467-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb467-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> b sb<span class="op">;</span></span>
+<span id="cb467-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb467-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Aturan ini menjamin bahwa anggota common initial sequence bisa saling menggantikan di kode. Artinya:</p>
+<ul>
+<li><code>f.sa.x</code> sama dengan <code>f.sb.x</code>.</li>
+</ul>
+<p>dan</p>
+<ul>
+<li><code>f.sa.y</code> sama dengan <code>f.sb.y</code>.</li>
+</ul>
+<p>Karena field <code>x</code> dan <code>y</code> sama-sama ada di common initial sequence.</p>
+<p>Selain itu, nama anggota dalam common initial sequence tidak penting—yang penting hanyalah tipenya sama.</p>
+<p>Secara keseluruhan, ini memberi kita cara untuk menambahkan informasi bersama di antara <code>struct</code> dalam <code>union</code> secara aman. Contoh terbaiknya mungkin memakai sebuah field untuk menentukan <code>struct</code> mana, dari semua <code>struct</code> dalam <code>union</code>, yang sedang “dipakai”.</p>
+<p>Artinya, kalau ini tidak diizinkan dan kita mengoper <code>union</code> ke suatu fungsi, bagaimana fungsi itu tahu anggota <code>union</code> mana yang harus dilihatnya?</p>
+<p>Lihat <code>struct</code>-<code>struct</code> ini. Perhatikan common initial sequence-nya:</p>
+<div class="sourceCode" id="cb468"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb468-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb468-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-2" aria-label="2"></a></span>
+<span id="cb468-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-3" aria-label="3"></a><span class="kw">struct</span> common <span class="op">{</span></span>
+<span id="cb468-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-4" aria-label="4"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// common initial sequence</span></span>
+<span id="cb468-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-5" aria-label="5"></a><span class="op">};</span></span>
+<span id="cb468-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-6" aria-label="6"></a></span>
+<span id="cb468-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-7" aria-label="7"></a><span class="kw">struct</span> antelope <span class="op">{</span></span>
+<span id="cb468-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-8" aria-label="8"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// common initial sequence</span></span>
+<span id="cb468-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-9" aria-label="9"></a></span>
+<span id="cb468-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-10" aria-label="10"></a>    <span class="dt">int</span> loudness<span class="op">;</span></span>
+<span id="cb468-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-11" aria-label="11"></a><span class="op">};</span></span>
+<span id="cb468-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-12" aria-label="12"></a></span>
+<span id="cb468-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-13" aria-label="13"></a><span class="kw">struct</span> octopus <span class="op">{</span></span>
+<span id="cb468-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-14" aria-label="14"></a>    <span class="dt">int</span> type<span class="op">;</span>   <span class="co">// common initial sequence</span></span>
+<span id="cb468-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-15" aria-label="15"></a></span>
+<span id="cb468-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-16" aria-label="16"></a>    <span class="dt">int</span> sea_creature<span class="op">;</span></span>
+<span id="cb468-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-17" aria-label="17"></a>    <span class="dt">float</span> intelligence<span class="op">;</span></span>
+<span id="cb468-18"><a href="struct-ii-lebih-seru-dengan-struct.html#cb468-18" aria-label="18"></a><span class="op">};</span></span></code></pre></div>
+<p>Sekarang kita masukkan ke dalam <code>union</code>:</p>
+<div class="sourceCode" id="cb469" data-startfrom="20"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 19;"><span id="cb469-20"><a href="struct-ii-lebih-seru-dengan-struct.html#cb469-20" aria-label="20"></a><span class="kw">union</span> animal <span class="op">{</span></span>
+<span id="cb469-21"><a href="struct-ii-lebih-seru-dengan-struct.html#cb469-21" aria-label="21"></a>    <span class="kw">struct</span> common common<span class="op">;</span></span>
+<span id="cb469-22"><a href="struct-ii-lebih-seru-dengan-struct.html#cb469-22" aria-label="22"></a>    <span class="kw">struct</span> antelope antelope<span class="op">;</span></span>
+<span id="cb469-23"><a href="struct-ii-lebih-seru-dengan-struct.html#cb469-23" aria-label="23"></a>    <span class="kw">struct</span> octopus octopus<span class="op">;</span></span>
+<span id="cb469-24"><a href="struct-ii-lebih-seru-dengan-struct.html#cb469-24" aria-label="24"></a><span class="op">};</span></span></code></pre></div>
+<p>Mohon dimaklumi dua <code>#define</code> untuk demo ini:</p>
+<div class="sourceCode" id="cb470" data-startfrom="26"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 25;"><span id="cb470-26"><a href="struct-ii-lebih-seru-dengan-struct.html#cb470-26" aria-label="26"></a><span class="pp">#define ANTELOPE </span><span class="dv">1</span></span>
+<span id="cb470-27"><a href="struct-ii-lebih-seru-dengan-struct.html#cb470-27" aria-label="27"></a><span class="pp">#define OCTOPUS  </span><span class="dv">2</span></span></code></pre></div>
+<p>Sejauh ini, belum ada yang istimewa. Tampaknya field <code>type</code> sama sekali tidak berguna.</p>
+<p>Tapi sekarang mari kita buat fungsi generik yang mencetak <code>union animal</code>. Ia harus bisa membedakan apakah yang dilihatnya <code>struct antelope</code> atau <code>struct octopus</code>.</p>
+<p>Berkat keajaiban common initial sequence, ia bisa mencari tipe hewan di salah satu dari tempat-tempat ini untuk <code>union animal x</code> tertentu:</p>
+<div class="sourceCode" id="cb471"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb471-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb471-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>common<span class="op">.</span>type<span class="op">;</span>    <span class="co">// atau...</span></span>
+<span id="cb471-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb471-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>antelope<span class="op">.</span>type<span class="op">;</span>  <span class="co">// atau...</span></span>
+<span id="cb471-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb471-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> type <span class="op">=</span> x<span class="op">.</span>octopus<span class="op">.</span>type<span class="op">;</span></span></code></pre></div>
+<p>Semuanya merujuk ke nilai yang sama di memori.</p>
+<p>Dan, seperti yang mungkin sudah kamu duga, <code>struct common</code> ada di sana supaya kode bisa melihat tipe secara agnostik tanpa menyebut hewan tertentu.</p>
+<p>Mari kita lihat kode untuk mencetak <code>union animal</code>:</p>
+<div class="sourceCode" id="cb472" data-startfrom="29"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 28;"><span id="cb472-29"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-29" aria-label="29"></a><span class="dt">void</span> print_animal<span class="op">(</span><span class="kw">union</span> animal <span class="op">*</span>x<span class="op">)</span></span>
+<span id="cb472-30"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-30" aria-label="30"></a><span class="op">{</span></span>
+<span id="cb472-31"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-31" aria-label="31"></a>    <span class="cf">switch</span> <span class="op">(</span>x<span class="op">-&gt;</span>common<span class="op">.</span>type<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb472-32"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-32" aria-label="32"></a>        <span class="cf">case</span> ANTELOPE<span class="op">:</span></span>
+<span id="cb472-33"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-33" aria-label="33"></a>            printf<span class="op">(</span><span class="st">&quot;Antelope: loudness=</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">-&gt;</span>antelope<span class="op">.</span>loudness<span class="op">);</span></span>
+<span id="cb472-34"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-34" aria-label="34"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb472-35"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-35" aria-label="35"></a></span>
+<span id="cb472-36"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-36" aria-label="36"></a>        <span class="cf">case</span> OCTOPUS<span class="op">:</span></span>
+<span id="cb472-37"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-37" aria-label="37"></a>            printf<span class="op">(</span><span class="st">&quot;Octopus : sea_creature=</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">-&gt;</span>octopus<span class="op">.</span>sea_creature<span class="op">);</span></span>
+<span id="cb472-38"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-38" aria-label="38"></a>            printf<span class="op">(</span><span class="st">&quot;          intelligence=</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">-&gt;</span>octopus<span class="op">.</span>intelligence<span class="op">);</span></span>
+<span id="cb472-39"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-39" aria-label="39"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb472-40"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-40" aria-label="40"></a>        </span>
+<span id="cb472-41"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-41" aria-label="41"></a>        <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb472-42"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-42" aria-label="42"></a>            printf<span class="op">(</span><span class="st">&quot;Unknown animal type</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb472-43"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-43" aria-label="43"></a>    <span class="op">}</span></span>
+<span id="cb472-44"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-44" aria-label="44"></a></span>
+<span id="cb472-45"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-45" aria-label="45"></a><span class="op">}</span></span>
+<span id="cb472-46"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-46" aria-label="46"></a></span>
+<span id="cb472-47"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-47" aria-label="47"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb472-48"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-48" aria-label="48"></a><span class="op">{</span></span>
+<span id="cb472-49"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-49" aria-label="49"></a>    <span class="kw">union</span> animal a <span class="op">=</span> <span class="op">{.</span>antelope<span class="op">.</span>type<span class="op">=</span>ANTELOPE<span class="op">,</span> <span class="op">.</span>antelope<span class="op">.</span>loudness<span class="op">=</span><span class="dv">12</span><span class="op">};</span></span>
+<span id="cb472-50"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-50" aria-label="50"></a>    <span class="kw">union</span> animal b <span class="op">=</span> <span class="op">{.</span>octopus<span class="op">.</span>type<span class="op">=</span>OCTOPUS<span class="op">,</span> <span class="op">.</span>octopus<span class="op">.</span>sea_creature<span class="op">=</span><span class="dv">1</span><span class="op">,</span></span>
+<span id="cb472-51"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-51" aria-label="51"></a>                                       <span class="op">.</span>octopus<span class="op">.</span>intelligence<span class="op">=</span><span class="fl">12.8</span><span class="op">};</span></span>
+<span id="cb472-52"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-52" aria-label="52"></a></span>
+<span id="cb472-53"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-53" aria-label="53"></a>    print_animal<span class="op">(&amp;</span>a<span class="op">);</span></span>
+<span id="cb472-54"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-54" aria-label="54"></a>    print_animal<span class="op">(&amp;</span>b<span class="op">);</span></span>
+<span id="cb472-55"><a href="struct-ii-lebih-seru-dengan-struct.html#cb472-55" aria-label="55"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat bagaimana di baris 29 kita hanya mengoper <code>union</code>-nya—kita tidak tahu <code>struct</code> hewan apa yang sedang dipakai di dalamnya.</p>
+<p>Tapi tidak apa-apa! Karena di baris 31 kita memeriksa tipenya untuk melihat apakah itu antelope atau octopus. Lalu kita bisa melihat <code>struct</code> yang tepat untuk mengambil anggotanya.</p>
+<p>Efek yang sama pasti bisa didapat hanya dengan <code>struct</code>, tapi kamu bisa memakai cara ini kalau menginginkan efek hemat memori dari <code>union</code>.</p>
+<p></p>
+<h2 data-number="20.10" id="union-dan-struct-tanpa-nama"><span class="header-section-number">20.10</span> Union dan Struct Tanpa Nama</h2>
+<p></p>
+<p>Kamu tahu bahwa kamu bisa punya struct tanpa nama, seperti ini:</p>
+<div class="sourceCode" id="cb473"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb473-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb473-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb473-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb473-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb473-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb473-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> s<span class="op">;</span></span></code></pre></div>
+<p>Itu mendefinisikan variabel <code>s</code> bertipe <code>struct</code> anonim (karena <code>struct</code> itu tidak punya name tag), dengan anggota <code>x</code> dan <code>y</code>.</p>
+<p>Jadi hal seperti ini valid:</p>
+<div class="sourceCode" id="cb474"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb474-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb474-1" aria-hidden="true" tabindex="-1"></a>s<span class="op">.</span>x <span class="op">=</span> <span class="dv">34</span><span class="op">;</span></span>
+<span id="cb474-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb474-2" aria-hidden="true" tabindex="-1"></a>s<span class="op">.</span>y <span class="op">=</span> <span class="dv">90</span><span class="op">;</span></span>
+<span id="cb474-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb474-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb474-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb474-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">.</span>x<span class="op">,</span> s<span class="op">.</span>y<span class="op">);</span></span></code></pre></div>
+<p>Ternyata <code>struct</code> tanpa nama itu bisa ditaruh dalam <code>union</code> seperti yang mungkin kamu duga:</p>
+<div class="sourceCode" id="cb475"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb475-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo <span class="op">{</span></span>
+<span id="cb475-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span>       <span class="co">// tanpa nama!</span></span>
+<span id="cb475-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb475-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> a<span class="op">;</span></span>
+<span id="cb475-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb475-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">struct</span> <span class="op">{</span>       <span class="co">// tanpa nama!</span></span>
+<span id="cb475-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> z<span class="op">,</span> w<span class="op">;</span></span>
+<span id="cb475-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span> b<span class="op">;</span></span>
+<span id="cb475-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb475-9" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Lalu diakses seperti biasa:</p>
+<div class="sourceCode" id="cb476"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb476-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb476-1" aria-hidden="true" tabindex="-1"></a><span class="kw">union</span> foo f<span class="op">;</span></span>
+<span id="cb476-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb476-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb476-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb476-3" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>a<span class="op">.</span>x <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb476-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb476-4" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>a<span class="op">.</span>y <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb476-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb476-5" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>b<span class="op">.</span>z <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb476-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb476-6" aria-hidden="true" tabindex="-1"></a>f<span class="op">.</span>b<span class="op">.</span>w <span class="op">=</span> <span class="dv">4</span><span class="op">;</span></span></code></pre></div>
+<p>Tidak ada masalah!</p>
+<p></p>
+<h2 data-number="20.11" id="mengoper-dan-mengembalikan-struct-dan-union"><span class="header-section-number">20.11</span> Mengoper dan Mengembalikan <code>struct</code> dan <code>union</code></h2>
+<p> </p>
+<p>Kamu bisa mengoper <code>struct</code> atau <code>union</code> ke fungsi secara by value (bukan pointer ke objeknya)—salinan objek itu ke parameter dibuat seperti pada penugasan biasa.</p>
+<p>Kamu juga bisa mengembalikan <code>struct</code> atau <code>union</code> dari fungsi dan ia juga dioper balik secara by value.</p>
+<div class="sourceCode" id="cb477"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb477-1"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb477-2"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-2" aria-label="2"></a></span>
+<span id="cb477-3"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-3" aria-label="3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb477-4"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-4" aria-label="4"></a>    <span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb477-5"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-5" aria-label="5"></a><span class="op">};</span></span>
+<span id="cb477-6"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-6" aria-label="6"></a></span>
+<span id="cb477-7"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-7" aria-label="7"></a><span class="kw">struct</span> foo f<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb477-8"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-8" aria-label="8"></a><span class="op">{</span></span>
+<span id="cb477-9"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-9" aria-label="9"></a>    <span class="cf">return</span> <span class="op">(</span><span class="kw">struct</span> foo<span class="op">){.</span>x<span class="op">=</span><span class="dv">34</span><span class="op">,</span> <span class="op">.</span>y<span class="op">=</span><span class="dv">90</span><span class="op">};</span></span>
+<span id="cb477-10"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-10" aria-label="10"></a><span class="op">}</span></span>
+<span id="cb477-11"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-11" aria-label="11"></a></span>
+<span id="cb477-12"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-12" aria-label="12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb477-13"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-13" aria-label="13"></a><span class="op">{</span></span>
+<span id="cb477-14"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-14" aria-label="14"></a>    <span class="kw">struct</span> foo a <span class="op">=</span> f<span class="op">();</span>  <span class="co">// Salinan dibuat</span></span>
+<span id="cb477-15"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-15" aria-label="15"></a></span>
+<span id="cb477-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">.</span>x<span class="op">,</span> a<span class="op">.</span>y<span class="op">);</span></span>
+<span id="cb477-17"><a href="struct-ii-lebih-seru-dengan-struct.html#cb477-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p>Fakta menarik: kalau kamu melakukan ini, kamu bisa memakai operator <code>.</code> langsung pada pemanggilan fungsi:</p>
+<div class="sourceCode" id="cb478" data-startfrom="16"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 15;"><span id="cb478-16"><a href="struct-ii-lebih-seru-dengan-struct.html#cb478-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">().</span>x<span class="op">,</span> f<span class="op">().</span>y<span class="op">);</span></span></code></pre></div>
+<p>(Tentu saja contoh itu memanggil fungsi dua kali, secara tidak efisien.)</p>
+<p>Dan hal yang sama berlaku untuk mengembalikan pointer ke <code>struct</code> dan <code>union</code>—pastikan saja memakai arrow operator <code>-&gt;</code> dalam kasus itu.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="c-preprocessor.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="karakter-dan-string-ii.html" rel="next">Next</a></span></div></body>
+</html>

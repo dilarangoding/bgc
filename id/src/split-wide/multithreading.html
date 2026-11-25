@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="fungsionalitas-tanggal-dan-waktu.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="chapter-atomics.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="39" id="multithreading"><span class="header-section-number">39</span> Multithreading</h1>
+<p></p>
+<p>C11 secara resmi memperkenalkan multithreading ke bahasa C. Rasanya sangat mirip dengan <a href="https://en.wikipedia.org/wiki/POSIX_Threads">POSIX threads</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn196" class="footnote-ref" id="fnref196" role="doc-noteref"><sup>196</sup></a>, kalau kamu pernah memakainya.</p>
+<p>Dan kalau belum, tidak apa-apa. Kita akan membahasnya.</p>
+<p>Namun perlu dicatat, aku tidak bermaksud membuat panduan multithreading klasik yang lengkap<a href="function-specifier-alignment-specifier-dan-operator.html#fn197" class="footnote-ref" id="fnref197" role="doc-noteref"><sup>197</sup></a>; untuk itu kamu harus mencari buku lain yang sangat tebal. Maaf!</p>
+<p></p>
+<p>Threading adalah fitur opsional. Kalau compiler C11+ mendefinisikan <code>__STDC_NO_THREADS__</code>, thread <strong>tidak</strong> ada di library. Kenapa mereka memilih makna negatif pada makro itu, aku tidak mengerti, tapi begitulah adanya.</p>
+<p>Kamu bisa mengujinya seperti ini:</p>
+<div class="sourceCode" id="cb745"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb745-1"><a href="multithreading.html#cb745-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef __STDC_NO_THREADS__</span></span>
+<span id="cb745-2"><a href="multithreading.html#cb745-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#error I need threads to build this program!</span></span>
+<span id="cb745-3"><a href="multithreading.html#cb745-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p></p>
+<p></p>
+<p>Selain itu, kamu mungkin perlu menentukan opsi linker tertentu saat membangun. Di sistem mirip Unix, coba tambahkan <code>-lpthreads</code> di akhir command line untuk me-link library <code>pthreads</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn198" class="footnote-ref" id="fnref198" role="doc-noteref"><sup>198</sup></a>:</p>
+<div class="sourceCode" id="cb746"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb746-1"><a href="multithreading.html#cb746-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-std</span><span class="op">=</span>c11 <span class="at">-o</span> foo foo.c <span class="at">-lpthreads</span></span></code></pre></div>
+<p></p>
+<p>Kalau kamu mendapat error linker di sistemmu, bisa jadi karena library yang sesuai tidak disertakan.</p>
+<h2 data-number="39.1" id="latar-belakang"><span class="header-section-number">39.1</span> Latar Belakang</h2>
+<p>Thread adalah cara agar semua core CPU mengilap yang sudah kamu bayar bekerja untukmu dalam program yang sama.</p>
+<p>Biasanya, program C hanya berjalan di satu core CPU. Tapi kalau kamu tahu cara membagi pekerjaan, kamu bisa memberikan potongannya ke sejumlah thread dan menyuruh mereka mengerjakannya secara bersamaan.</p>
+<p>Walaupun spesifikasi tidak menyebutnya, di sistemmu kemungkinan besar C (atau OS atas perintahnya) akan berusaha menyeimbangkan thread di semua core CPU-mu.</p>
+<p>Dan kalau thread-nya lebih banyak daripada core, tidak apa-apa. Hanya saja kamu tidak akan merasakan semua keuntungannya kalau semuanya berebut waktu CPU.</p>
+<h2 data-number="39.2" id="hal-hal-yang-bisa-kamu-lakukan"><span class="header-section-number">39.2</span> Hal-Hal yang Bisa Kamu Lakukan</h2>
+<p>Kamu bisa membuat thread. Ia akan mulai menjalankan fungsi yang kamu tentukan. Parent thread yang melahirkannya juga tetap berjalan.</p>
+<p>Dan kamu bisa menunggu thread selesai. Ini disebut <em>joining</em>.</p>
+<p>Atau kalau kamu tidak peduli kapan thread selesai dan tidak mau menunggu, kamu bisa <em>melepasnya (detach)</em>.</p>
+<p>Sebuah thread bisa secara eksplisit <em>keluar</em>, atau secara implisit berhenti dengan return dari fungsi utamanya.</p>
+<p>Sebuah thread juga bisa <em>tidur</em> selama jangka waktu tertentu, tidak melakukan apa-apa selagi thread lain berjalan.</p>
+<p>Program <code>main()</code> juga sebuah thread.</p>
+<p>Selain itu, kita punya thread local storage, mutex, dan conditional variable. Tapi soal itu nanti. Untuk sekarang kita lihat dasar-dasarnya saja.</p>
+<h2 data-number="39.3" id="data-race-dan-standard-library"><span class="header-section-number">39.3</span> Data Race dan Standard Library</h2>
+<p></p>
+<p>Sebagian fungsi di standard library (mis. <code>asctime()</code> dan <code>strtok()</code>) mengembalikan atau memakai elemen data <code>static</code> yang tidak threadsafe. Tapi secara umum, kecuali dinyatakan lain, standard library berusaha agar threadsafe<a href="function-specifier-alignment-specifier-dan-operator.html#fn199" class="footnote-ref" id="fnref199" role="doc-noteref"><sup>199</sup></a>.</p>
+<p>Tapi tetap waspada. Kalau sebuah fungsi standard library menyimpan state antarpemanggilan di variabel yang bukan milikmu, atau kalau sebuah fungsi mengembalikan pointer ke sesuatu yang tidak kamu oper, ia tidak threadsafe.</p>
+<p></p>
+<h2 data-number="39.4" id="membuat-dan-menunggu-thread"><span class="header-section-number">39.4</span> Membuat dan Menunggu Thread</h2>
+<p>Mari kita buat sesuatu!</p>
+<p>Kita akan membuat beberapa thread (create) dan menunggu mereka selesai (join).</p>
+<p>Tapi ada sedikit hal yang perlu dipahami dulu.</p>
+<p>Setiap thread diidentifikasi oleh variabel opaque bertipe <code>thrd_t</code>. Ini identifier unik per thread di programmu. Saat kamu membuat thread, ia diberi ID baru.</p>
+<p>Saat membuat thread, kamu juga harus memberinya pointer ke fungsi yang akan dijalankan, dan pointer ke argumen yang dioper kepadanya (atau <code>NULL</code> kalau tidak ada yang dioper).</p>
+<p>Thread akan mulai mengeksekusi fungsi yang kamu tentukan.</p>
+<p>Saat ingin menunggu sebuah thread selesai, kamu harus menyebutkan ID thread-nya supaya C tahu yang mana yang ditunggu.</p>
+<p>Jadi gagasan dasarnya:</p>
+<ol type="1">
+<li>Tulis fungsi yang berperan sebagai “<code>main</code>” thread. Ini bukan <code>main()</code> yang sebenarnya, tapi analog dengannya. Thread akan mulai berjalan di sana.</li>
+<li>Dari thread utama, jalankan thread baru dengan <code>thrd_create()</code>, dan oper pointer ke fungsi yang akan dijalankan.</li>
+<li>Di fungsi itu, biarkan thread mengerjakan apa pun yang harus dikerjakannya.</li>
+<li>Sementara itu, thread utama bisa melanjutkan apa pun yang harus dikerjakan <em>olehnya</em>.</li>
+<li>Ketika thread utama memutuskan, ia bisa menunggu child thread selesai dengan memanggil <code>thrd_join()</code>. Pada umumnya kamu <strong>harus</strong> me-<code>thrd_join()</code> thread itu untuk membersihkan sisanya, kalau tidak memori akan bocor<a href="function-specifier-alignment-specifier-dan-operator.html#fn200" class="footnote-ref" id="fnref200" role="doc-noteref"><sup>200</sup></a></li>
+</ol>
+<p> </p>
+<p><code>thrd_create()</code> menerima pointer ke fungsi yang akan dijalankan, dan bertipe <code>thrd_start_t</code>, yaitu <code>int (*)(void *)</code>. Itu bahasa Yunani untuk “pointer ke fungsi yang menerima <code>void*</code> sebagai argumen, dan mengembalikan <code>int</code>.”</p>
+<p></p>
+<p>Mari kita buat thread! Kita akan menjalankannya dari thread utama dengan <code>thrd_create()</code> untuk menjalankan sebuah fungsi, mengerjakan hal lain, lalu menunggunya selesai dengan <code>thrd_join()</code>. Aku menamai fungsi utama thread ini <code>run()</code>, tapi kamu bisa menamainya apa saja asalkan tipenya cocok dengan <code>thrd_start_t</code>.</p>
+<div class="sourceCode" id="cb747"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb747-1"><a href="multithreading.html#cb747-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb747-2"><a href="multithreading.html#cb747-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb747-3"><a href="multithreading.html#cb747-3" aria-label="3"></a></span>
+<span id="cb747-4"><a href="multithreading.html#cb747-4" aria-label="4"></a><span class="co">// Ini fungsi yang akan dijalankan thread. Boleh diberi nama apa saja.</span></span>
+<span id="cb747-5"><a href="multithreading.html#cb747-5" aria-label="5"></a><span class="co">//</span></span>
+<span id="cb747-6"><a href="multithreading.html#cb747-6" aria-label="6"></a><span class="co">// arg adalah pointer argumen yang dioper ke `thrd_create()`.</span></span>
+<span id="cb747-7"><a href="multithreading.html#cb747-7" aria-label="7"></a><span class="co">//</span></span>
+<span id="cb747-8"><a href="multithreading.html#cb747-8" aria-label="8"></a><span class="co">// Parent thread akan mendapat nilai kembaliannya dari `thrd_join()`&#39;</span></span>
+<span id="cb747-9"><a href="multithreading.html#cb747-9" aria-label="9"></a><span class="co">// nanti.</span></span>
+<span id="cb747-10"><a href="multithreading.html#cb747-10" aria-label="10"></a></span>
+<span id="cb747-11"><a href="multithreading.html#cb747-11" aria-label="11"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb747-12"><a href="multithreading.html#cb747-12" aria-label="12"></a><span class="op">{</span></span>
+<span id="cb747-13"><a href="multithreading.html#cb747-13" aria-label="13"></a>    <span class="dt">int</span> <span class="op">*</span>a <span class="op">=</span> arg<span class="op">;</span>  <span class="co">// Kita akan mengoper int* dari thrd_create()</span></span>
+<span id="cb747-14"><a href="multithreading.html#cb747-14" aria-label="14"></a></span>
+<span id="cb747-15"><a href="multithreading.html#cb747-15" aria-label="15"></a>    printf<span class="op">(</span><span class="st">&quot;THREAD: Running thread with arg </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>a<span class="op">);</span></span>
+<span id="cb747-16"><a href="multithreading.html#cb747-16" aria-label="16"></a></span>
+<span id="cb747-17"><a href="multithreading.html#cb747-17" aria-label="17"></a>    <span class="cf">return</span> <span class="dv">12</span><span class="op">;</span>  <span class="co">// Nilai yang akan diambil thrd_join() (12 dipilih acak)</span></span>
+<span id="cb747-18"><a href="multithreading.html#cb747-18" aria-label="18"></a><span class="op">}</span></span>
+<span id="cb747-19"><a href="multithreading.html#cb747-19" aria-label="19"></a></span>
+<span id="cb747-20"><a href="multithreading.html#cb747-20" aria-label="20"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb747-21"><a href="multithreading.html#cb747-21" aria-label="21"></a><span class="op">{</span></span>
+<span id="cb747-22"><a href="multithreading.html#cb747-22" aria-label="22"></a>    thrd_t t<span class="op">;</span>  <span class="co">// t akan menampung ID thread</span></span>
+<span id="cb747-23"><a href="multithreading.html#cb747-23" aria-label="23"></a>    <span class="dt">int</span> arg <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb747-24"><a href="multithreading.html#cb747-24" aria-label="24"></a></span>
+<span id="cb747-25"><a href="multithreading.html#cb747-25" aria-label="25"></a>    printf<span class="op">(</span><span class="st">&quot;Launching a thread</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb747-26"><a href="multithreading.html#cb747-26" aria-label="26"></a></span>
+<span id="cb747-27"><a href="multithreading.html#cb747-27" aria-label="27"></a>    <span class="co">// Jalankan thread ke fungsi run(), dengan mengoper pointer ke 3490</span></span>
+<span id="cb747-28"><a href="multithreading.html#cb747-28" aria-label="28"></a>    <span class="co">// sebagai argumen. ID thread juga disimpan di t:</span></span>
+<span id="cb747-29"><a href="multithreading.html#cb747-29" aria-label="29"></a></span>
+<span id="cb747-30"><a href="multithreading.html#cb747-30" aria-label="30"></a>    thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> <span class="op">&amp;</span>arg<span class="op">);</span></span>
+<span id="cb747-31"><a href="multithreading.html#cb747-31" aria-label="31"></a></span>
+<span id="cb747-32"><a href="multithreading.html#cb747-32" aria-label="32"></a>    printf<span class="op">(</span><span class="st">&quot;Doing other things while the thread runs</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb747-33"><a href="multithreading.html#cb747-33" aria-label="33"></a></span>
+<span id="cb747-34"><a href="multithreading.html#cb747-34" aria-label="34"></a>    printf<span class="op">(</span><span class="st">&quot;Waiting for thread to complete...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb747-35"><a href="multithreading.html#cb747-35" aria-label="35"></a></span>
+<span id="cb747-36"><a href="multithreading.html#cb747-36" aria-label="36"></a>    <span class="dt">int</span> res<span class="op">;</span>  <span class="co">// Menampung nilai kembalian dari keluarnya thread</span></span>
+<span id="cb747-37"><a href="multithreading.html#cb747-37" aria-label="37"></a></span>
+<span id="cb747-38"><a href="multithreading.html#cb747-38" aria-label="38"></a>    <span class="co">// Tunggu di sini sampai thread selesai; simpan nilai kembalian</span></span>
+<span id="cb747-39"><a href="multithreading.html#cb747-39" aria-label="39"></a>    <span class="co">// di res:</span></span>
+<span id="cb747-40"><a href="multithreading.html#cb747-40" aria-label="40"></a></span>
+<span id="cb747-41"><a href="multithreading.html#cb747-41" aria-label="41"></a>    thrd_join<span class="op">(</span>t<span class="op">,</span> <span class="op">&amp;</span>res<span class="op">);</span></span>
+<span id="cb747-42"><a href="multithreading.html#cb747-42" aria-label="42"></a></span>
+<span id="cb747-43"><a href="multithreading.html#cb747-43" aria-label="43"></a>    printf<span class="op">(</span><span class="st">&quot;Thread exited with return value </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> res<span class="op">);</span></span>
+<span id="cb747-44"><a href="multithreading.html#cb747-44" aria-label="44"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Lihat bagaimana kita memakai <code>thrd_create()</code> di situ untuk memanggil fungsi <code>run()</code>? Lalu kita mengerjakan hal lain di <code>main()</code> dan kemudian berhenti dan menunggu thread selesai dengan <code>thrd_join()</code>.</p>
+<p> </p>
+<p>Contoh output (hasilmu mungkin berbeda):</p>
+<div class="sourceCode" id="cb748"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb748-1"><a href="multithreading.html#cb748-1" aria-hidden="true" tabindex="-1"></a>Launching a thread</span>
+<span id="cb748-2"><a href="multithreading.html#cb748-2" aria-hidden="true" tabindex="-1"></a>Doing other things while the thread runs</span>
+<span id="cb748-3"><a href="multithreading.html#cb748-3" aria-hidden="true" tabindex="-1"></a>Waiting for thread to complete...</span>
+<span id="cb748-4"><a href="multithreading.html#cb748-4" aria-hidden="true" tabindex="-1"></a>THREAD: Running thread with arg 3490</span>
+<span id="cb748-5"><a href="multithreading.html#cb748-5" aria-hidden="true" tabindex="-1"></a>Thread exited with return value 12</span></code></pre></div>
+<p><code>arg</code> yang dioper ke fungsi harus punya masa hidup yang cukup panjang agar thread bisa mengambilnya sebelum ia hilang. Selain itu, ia tidak boleh tertimpa oleh thread utama sebelum thread baru sempat memakainya.</p>
+<p>Mari kita lihat contoh yang menjalankan 5 thread. Satu hal yang perlu dicatat di sini adalah cara kita memakai array <code>thrd_t</code> untuk melacak semua ID thread.</p>
+<p> </p>
+<div class="sourceCode" id="cb749"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb749-1"><a href="multithreading.html#cb749-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb749-2"><a href="multithreading.html#cb749-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb749-3"><a href="multithreading.html#cb749-3" aria-label="3"></a></span>
+<span id="cb749-4"><a href="multithreading.html#cb749-4" aria-label="4"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb749-5"><a href="multithreading.html#cb749-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb749-6"><a href="multithreading.html#cb749-6" aria-label="6"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span></span>
+<span id="cb749-7"><a href="multithreading.html#cb749-7" aria-label="7"></a></span>
+<span id="cb749-8"><a href="multithreading.html#cb749-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;THREAD </span><span class="sc">%d</span><span class="st">: running!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb749-9"><a href="multithreading.html#cb749-9" aria-label="9"></a></span>
+<span id="cb749-10"><a href="multithreading.html#cb749-10" aria-label="10"></a>    <span class="cf">return</span> i<span class="op">;</span></span>
+<span id="cb749-11"><a href="multithreading.html#cb749-11" aria-label="11"></a><span class="op">}</span></span>
+<span id="cb749-12"><a href="multithreading.html#cb749-12" aria-label="12"></a></span>
+<span id="cb749-13"><a href="multithreading.html#cb749-13" aria-label="13"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">5</span></span>
+<span id="cb749-14"><a href="multithreading.html#cb749-14" aria-label="14"></a></span>
+<span id="cb749-15"><a href="multithreading.html#cb749-15" aria-label="15"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb749-16"><a href="multithreading.html#cb749-16" aria-label="16"></a><span class="op">{</span></span>
+<span id="cb749-17"><a href="multithreading.html#cb749-17" aria-label="17"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb749-18"><a href="multithreading.html#cb749-18" aria-label="18"></a></span>
+<span id="cb749-19"><a href="multithreading.html#cb749-19" aria-label="19"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb749-20"><a href="multithreading.html#cb749-20" aria-label="20"></a></span>
+<span id="cb749-21"><a href="multithreading.html#cb749-21" aria-label="21"></a>    printf<span class="op">(</span><span class="st">&quot;Launching threads...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb749-22"><a href="multithreading.html#cb749-22" aria-label="22"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb749-23"><a href="multithreading.html#cb749-23" aria-label="23"></a></span>
+<span id="cb749-24"><a href="multithreading.html#cb749-24" aria-label="24"></a>        <span class="co">// PERHATIAN! Pada baris berikut, kita mengoper pointer ke i,</span></span>
+<span id="cb749-25"><a href="multithreading.html#cb749-25" aria-label="25"></a>        <span class="co">// tapi setiap thread melihat pointer yang sama. Jadi mereka akan</span></span>
+<span id="cb749-26"><a href="multithreading.html#cb749-26" aria-label="26"></a>        <span class="co">// mencetak hal-hal aneh saat i berubah nilai di sini di</span></span>
+<span id="cb749-27"><a href="multithreading.html#cb749-27" aria-label="27"></a>        <span class="co">// thread utama! (Lebih lanjut di teks, di bawah.)</span></span>
+<span id="cb749-28"><a href="multithreading.html#cb749-28" aria-label="28"></a></span>
+<span id="cb749-29"><a href="multithreading.html#cb749-29" aria-label="29"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> <span class="op">&amp;</span>i<span class="op">);</span></span>
+<span id="cb749-30"><a href="multithreading.html#cb749-30" aria-label="30"></a></span>
+<span id="cb749-31"><a href="multithreading.html#cb749-31" aria-label="31"></a>    printf<span class="op">(</span><span class="st">&quot;Doing other things while the thread runs...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb749-32"><a href="multithreading.html#cb749-32" aria-label="32"></a>    printf<span class="op">(</span><span class="st">&quot;Waiting for thread to complete...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb749-33"><a href="multithreading.html#cb749-33" aria-label="33"></a></span>
+<span id="cb749-34"><a href="multithreading.html#cb749-34" aria-label="34"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb749-35"><a href="multithreading.html#cb749-35" aria-label="35"></a>        <span class="dt">int</span> res<span class="op">;</span></span>
+<span id="cb749-36"><a href="multithreading.html#cb749-36" aria-label="36"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> <span class="op">&amp;</span>res<span class="op">);</span></span>
+<span id="cb749-37"><a href="multithreading.html#cb749-37" aria-label="37"></a></span>
+<span id="cb749-38"><a href="multithreading.html#cb749-38" aria-label="38"></a>        printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%d</span><span class="st"> complete!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> res<span class="op">);</span></span>
+<span id="cb749-39"><a href="multithreading.html#cb749-39" aria-label="39"></a>    <span class="op">}</span></span>
+<span id="cb749-40"><a href="multithreading.html#cb749-40" aria-label="40"></a></span>
+<span id="cb749-41"><a href="multithreading.html#cb749-41" aria-label="41"></a>    printf<span class="op">(</span><span class="st">&quot;All threads complete!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb749-42"><a href="multithreading.html#cb749-42" aria-label="42"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Saat aku menjalankan thread, aku menghitung <code>i</code> naik dari 0 sampai 4. Lalu aku mengoper pointer ke <code>i</code> ke <code>thrd_create()</code>. Pointer ini berakhir di rutin <code>run()</code> tempat kita membuat salinannya.</p>
+<p></p>
+<p>Cukup sederhana? Berikut outputnya:</p>
+<div class="sourceCode" id="cb750"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb750-1"><a href="multithreading.html#cb750-1" aria-hidden="true" tabindex="-1"></a>Launching threads...</span>
+<span id="cb750-2"><a href="multithreading.html#cb750-2" aria-hidden="true" tabindex="-1"></a>THREAD 2: running!</span>
+<span id="cb750-3"><a href="multithreading.html#cb750-3" aria-hidden="true" tabindex="-1"></a>THREAD 3: running!</span>
+<span id="cb750-4"><a href="multithreading.html#cb750-4" aria-hidden="true" tabindex="-1"></a>THREAD 4: running!</span>
+<span id="cb750-5"><a href="multithreading.html#cb750-5" aria-hidden="true" tabindex="-1"></a>THREAD 2: running!</span>
+<span id="cb750-6"><a href="multithreading.html#cb750-6" aria-hidden="true" tabindex="-1"></a>Doing other things while the thread runs...</span>
+<span id="cb750-7"><a href="multithreading.html#cb750-7" aria-hidden="true" tabindex="-1"></a>Waiting for thread to complete...</span>
+<span id="cb750-8"><a href="multithreading.html#cb750-8" aria-hidden="true" tabindex="-1"></a>Thread 2 complete!</span>
+<span id="cb750-9"><a href="multithreading.html#cb750-9" aria-hidden="true" tabindex="-1"></a>Thread 2 complete!</span>
+<span id="cb750-10"><a href="multithreading.html#cb750-10" aria-hidden="true" tabindex="-1"></a>THREAD 5: running!</span>
+<span id="cb750-11"><a href="multithreading.html#cb750-11" aria-hidden="true" tabindex="-1"></a>Thread 3 complete!</span>
+<span id="cb750-12"><a href="multithreading.html#cb750-12" aria-hidden="true" tabindex="-1"></a>Thread 4 complete!</span>
+<span id="cb750-13"><a href="multithreading.html#cb750-13" aria-hidden="true" tabindex="-1"></a>Thread 5 complete!</span>
+<span id="cb750-14"><a href="multithreading.html#cb750-14" aria-hidden="true" tabindex="-1"></a>All threads complete!</span></code></pre></div>
+<p>Haaah—? Di mana <code>THREAD 0</code>? Dan kenapa ada <code>THREAD 5</code> padahal jelas <code>i</code> tidak pernah lebih dari <code>4</code> saat kita memanggil <code>thrd_create()</code>? Dan ada dua <code>THREAD 2</code>? Gila!</p>
+<p>Ini sudah masuk ke wilayah seru <em>race condition</em>. Thread utama mengubah <code>i</code> sebelum thread sempat menyalinnya. Bahkan, <code>i</code> sampai ke <code>5</code> dan loop berakhir sebelum thread terakhir sempat menyalinnya.</p>
+<p>Kita harus punya variabel per-thread yang bisa dirujuk agar bisa dioper sebagai <code>arg</code>.</p>
+<p>Kita bisa membuat array besar berisi variabel itu. Atau kita bisa <code>malloc()</code> ruangnya (dan membebaskannya di suatu tempat—mungkin di dalam thread itu sendiri).</p>
+<p>Kita coba:</p>
+<div class="sourceCode" id="cb751"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb751-1"><a href="multithreading.html#cb751-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb751-2"><a href="multithreading.html#cb751-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb751-3"><a href="multithreading.html#cb751-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb751-4"><a href="multithreading.html#cb751-4" aria-label="4"></a></span>
+<span id="cb751-5"><a href="multithreading.html#cb751-5" aria-label="5"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb751-6"><a href="multithreading.html#cb751-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb751-7"><a href="multithreading.html#cb751-7" aria-label="7"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Salin arg</span></span>
+<span id="cb751-8"><a href="multithreading.html#cb751-8" aria-label="8"></a></span>
+<span id="cb751-9"><a href="multithreading.html#cb751-9" aria-label="9"></a>    free<span class="op">(</span>arg<span class="op">);</span>  <span class="co">// Sudah selesai dengan ini</span></span>
+<span id="cb751-10"><a href="multithreading.html#cb751-10" aria-label="10"></a></span>
+<span id="cb751-11"><a href="multithreading.html#cb751-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;THREAD </span><span class="sc">%d</span><span class="st">: running!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb751-12"><a href="multithreading.html#cb751-12" aria-label="12"></a></span>
+<span id="cb751-13"><a href="multithreading.html#cb751-13" aria-label="13"></a>    <span class="cf">return</span> i<span class="op">;</span></span>
+<span id="cb751-14"><a href="multithreading.html#cb751-14" aria-label="14"></a><span class="op">}</span></span>
+<span id="cb751-15"><a href="multithreading.html#cb751-15" aria-label="15"></a></span>
+<span id="cb751-16"><a href="multithreading.html#cb751-16" aria-label="16"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">5</span></span>
+<span id="cb751-17"><a href="multithreading.html#cb751-17" aria-label="17"></a></span>
+<span id="cb751-18"><a href="multithreading.html#cb751-18" aria-label="18"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb751-19"><a href="multithreading.html#cb751-19" aria-label="19"></a><span class="op">{</span></span>
+<span id="cb751-20"><a href="multithreading.html#cb751-20" aria-label="20"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb751-21"><a href="multithreading.html#cb751-21" aria-label="21"></a></span>
+<span id="cb751-22"><a href="multithreading.html#cb751-22" aria-label="22"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb751-23"><a href="multithreading.html#cb751-23" aria-label="23"></a></span>
+<span id="cb751-24"><a href="multithreading.html#cb751-24" aria-label="24"></a>    printf<span class="op">(</span><span class="st">&quot;Launching threads...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb751-25"><a href="multithreading.html#cb751-25" aria-label="25"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb751-26"><a href="multithreading.html#cb751-26" aria-label="26"></a></span>
+<span id="cb751-27"><a href="multithreading.html#cb751-27" aria-label="27"></a>        <span class="co">// Siapkan ruang untuk argumen per-thread:</span></span>
+<span id="cb751-28"><a href="multithreading.html#cb751-28" aria-label="28"></a></span>
+<span id="cb751-29"><a href="multithreading.html#cb751-29" aria-label="29"></a>        <span class="dt">int</span> <span class="op">*</span>arg <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>arg<span class="op">);</span></span>
+<span id="cb751-30"><a href="multithreading.html#cb751-30" aria-label="30"></a>        <span class="op">*</span>arg <span class="op">=</span> i<span class="op">;</span></span>
+<span id="cb751-31"><a href="multithreading.html#cb751-31" aria-label="31"></a></span>
+<span id="cb751-32"><a href="multithreading.html#cb751-32" aria-label="32"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> arg<span class="op">);</span></span>
+<span id="cb751-33"><a href="multithreading.html#cb751-33" aria-label="33"></a>    <span class="op">}</span></span>
+<span id="cb751-34"><a href="multithreading.html#cb751-34" aria-label="34"></a></span>
+<span id="cb751-35"><a href="multithreading.html#cb751-35" aria-label="35"></a>    <span class="co">// ...</span></span></code></pre></div>
+<p>Perhatikan di baris 27-30 kita <code>malloc()</code> ruang untuk <code>int</code> dan menyalin nilai <code>i</code> ke dalamnya. Setiap thread baru mendapat variabel hasil <code>malloc()</code> yang masih baru untuk dirinya sendiri, dan kita mengoper pointer ke variabel itu ke fungsi <code>run()</code>.</p>
+<p>Setelah <code>run()</code> membuat salinannya sendiri dari <code>arg</code> di baris 7, ia men-<code>free()</code> <code>int</code> hasil <code>malloc()</code> itu. Dan karena sudah punya salinan sendiri, ia bebas melakukan apa pun padanya.</p>
+<p>Dan saat dijalankan, hasilnya:</p>
+<div class="sourceCode" id="cb752"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb752-1"><a href="multithreading.html#cb752-1" aria-hidden="true" tabindex="-1"></a>Launching threads...</span>
+<span id="cb752-2"><a href="multithreading.html#cb752-2" aria-hidden="true" tabindex="-1"></a>THREAD 0: running!</span>
+<span id="cb752-3"><a href="multithreading.html#cb752-3" aria-hidden="true" tabindex="-1"></a>THREAD 1: running!</span>
+<span id="cb752-4"><a href="multithreading.html#cb752-4" aria-hidden="true" tabindex="-1"></a>THREAD 2: running!</span>
+<span id="cb752-5"><a href="multithreading.html#cb752-5" aria-hidden="true" tabindex="-1"></a>THREAD 3: running!</span>
+<span id="cb752-6"><a href="multithreading.html#cb752-6" aria-hidden="true" tabindex="-1"></a>Doing other things while the thread runs...</span>
+<span id="cb752-7"><a href="multithreading.html#cb752-7" aria-hidden="true" tabindex="-1"></a>Waiting for thread to complete...</span>
+<span id="cb752-8"><a href="multithreading.html#cb752-8" aria-hidden="true" tabindex="-1"></a>Thread 0 complete!</span>
+<span id="cb752-9"><a href="multithreading.html#cb752-9" aria-hidden="true" tabindex="-1"></a>Thread 1 complete!</span>
+<span id="cb752-10"><a href="multithreading.html#cb752-10" aria-hidden="true" tabindex="-1"></a>Thread 2 complete!</span>
+<span id="cb752-11"><a href="multithreading.html#cb752-11" aria-hidden="true" tabindex="-1"></a>Thread 3 complete!</span>
+<span id="cb752-12"><a href="multithreading.html#cb752-12" aria-hidden="true" tabindex="-1"></a>THREAD 4: running!</span>
+<span id="cb752-13"><a href="multithreading.html#cb752-13" aria-hidden="true" tabindex="-1"></a>Thread 4 complete!</span>
+<span id="cb752-14"><a href="multithreading.html#cb752-14" aria-hidden="true" tabindex="-1"></a>All threads complete!</span></code></pre></div>
+<p>Nah begitu! Thread 0-4 semuanya berjalan!</p>
+<p>Hasil jalanmu mungkin berbeda—bagaimana thread dijadwalkan berada di luar spesifikasi C. Pada contoh di atas kita lihat thread 4 bahkan belum mulai sampai thread 0-1 selesai. Bahkan, kalau kujalankan lagi, kemungkinan besar aku mendapat output berbeda. Kita tidak bisa menjamin urutan eksekusi thread.</p>
+<h2 data-number="39.5" id="melepas-thread-detach"><span class="header-section-number">39.5</span> Melepas Thread (Detach)</h2>
+<p>Kalau kamu ingin melepas thread begitu saja (fire-and-forget), yaitu supaya tidak perlu me-<code>thrd_join()</code>-nya nanti, kamu bisa melakukannya dengan <code>thrd_detach()</code>.</p>
+<p>Ini menghilangkan kemampuan parent thread untuk mengambil nilai kembalian dari child thread, tapi kalau kamu tidak peduli soal itu dan hanya ingin thread membereskan dirinya sendiri dengan rapi, inilah caranya.</p>
+<p>Pada dasarnya kita akan melakukan ini:</p>
+<p></p>
+<div class="sourceCode" id="cb753"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb753-1"><a href="multithreading.html#cb753-1" aria-hidden="true" tabindex="-1"></a>thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb753-2"><a href="multithreading.html#cb753-2" aria-hidden="true" tabindex="-1"></a>thrd_detach<span class="op">(</span>t<span class="op">);</span></span></code></pre></div>
+<p>Pemanggilan <code>thrd_detach()</code> adalah parent thread yang berkata, “Hei, aku tidak akan menunggu child thread ini selesai dengan <code>thrd_join()</code>. Jadi silakan bereskan sendiri saat selesai.”</p>
+<div class="sourceCode" id="cb754"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb754-1"><a href="multithreading.html#cb754-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb754-2"><a href="multithreading.html#cb754-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb754-3"><a href="multithreading.html#cb754-3" aria-label="3"></a></span>
+<span id="cb754-4"><a href="multithreading.html#cb754-4" aria-label="4"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb754-5"><a href="multithreading.html#cb754-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb754-6"><a href="multithreading.html#cb754-6" aria-label="6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb754-7"><a href="multithreading.html#cb754-7" aria-label="7"></a></span>
+<span id="cb754-8"><a href="multithreading.html#cb754-8" aria-label="8"></a>    <span class="co">//printf(&quot;Thread running! %lu\n&quot;, thrd_current()); // tidak portabel!</span></span>
+<span id="cb754-9"><a href="multithreading.html#cb754-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb754-10"><a href="multithreading.html#cb754-10" aria-label="10"></a></span>
+<span id="cb754-11"><a href="multithreading.html#cb754-11" aria-label="11"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb754-12"><a href="multithreading.html#cb754-12" aria-label="12"></a><span class="op">}</span></span>
+<span id="cb754-13"><a href="multithreading.html#cb754-13" aria-label="13"></a></span>
+<span id="cb754-14"><a href="multithreading.html#cb754-14" aria-label="14"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">10</span></span>
+<span id="cb754-15"><a href="multithreading.html#cb754-15" aria-label="15"></a></span>
+<span id="cb754-16"><a href="multithreading.html#cb754-16" aria-label="16"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb754-17"><a href="multithreading.html#cb754-17" aria-label="17"></a><span class="op">{</span></span>
+<span id="cb754-18"><a href="multithreading.html#cb754-18" aria-label="18"></a>    thrd_t t<span class="op">;</span></span>
+<span id="cb754-19"><a href="multithreading.html#cb754-19" aria-label="19"></a></span>
+<span id="cb754-20"><a href="multithreading.html#cb754-20" aria-label="20"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb754-21"><a href="multithreading.html#cb754-21" aria-label="21"></a>        thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb754-22"><a href="multithreading.html#cb754-22" aria-label="22"></a>        thrd_detach<span class="op">(</span>t<span class="op">);</span>               <span class="co">// &lt;-- DETACH!</span></span>
+<span id="cb754-23"><a href="multithreading.html#cb754-23" aria-label="23"></a>    <span class="op">}</span></span>
+<span id="cb754-24"><a href="multithreading.html#cb754-24" aria-label="24"></a></span>
+<span id="cb754-25"><a href="multithreading.html#cb754-25" aria-label="25"></a>    <span class="co">// Tidur selama satu detik supaya semua thread sempat selesai</span></span>
+<span id="cb754-26"><a href="multithreading.html#cb754-26" aria-label="26"></a>    thrd_sleep<span class="op">(&amp;(</span><span class="kw">struct</span> timespec<span class="op">){.</span>tv_sec<span class="op">=</span><span class="dv">1</span><span class="op">},</span> NULL<span class="op">);</span></span>
+<span id="cb754-27"><a href="multithreading.html#cb754-27" aria-label="27"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Perhatikan bahwa pada kode ini, thread utama ditidurkan selama 1 detik dengan <code>thrd_sleep()</code>—soal itu dibahas nanti.</p>
+<p>Di fungsi <code>run()</code> aku juga menaruh baris yang dikomentari untuk mencetak ID thread sebagai <code>unsigned long</code>. Ini tidak portabel, karena spesifikasi tidak menyebut tipe <code>thrd_t</code> sebenarnya apa—bisa saja ia <code>struct</code>. Tapi baris itu berfungsi di sistemku.</p>
+<p>Hal menarik yang kulihat saat menjalankan kode di atas dan mencetak ID thread: sebagian thread punya ID kembar! Ini seharusnya mustahil, tapi C boleh <em>memakai ulang</em> ID thread setelah thread yang bersangkutan keluar. Jadi yang kulihat adalah sebagian thread selesai berjalan sebelum thread lain diluncurkan.</p>
+<h2 data-number="39.6" id="thread-local-data"><span class="header-section-number">39.6</span> Thread Local Data</h2>
+<p></p>
+<p>Thread itu menarik karena mereka tidak punya memori sendiri di luar variabel lokal. Kalau ada variabel <code>static</code> atau variabel file scope, semua thread akan melihat variabel yang sama.</p>
+<p>Ini bisa menyebabkan race condition, ketika <em>Hal-Hal Aneh</em>™ terjadi.</p>
+<p>Lihat contoh ini. Ada variabel <code>static</code> <code>foo</code> di block scope pada <code>run()</code>. Variabel ini terlihat oleh semua thread yang melewati fungsi <code>run()</code>. Dan berbagai thread secara efektif bisa saling menginjak kaki.</p>
+<p>Setiap thread menyalin <code>foo</code> ke variabel lokal <code>x</code> (yang tidak dibagi antar thread—semua thread punya call stack sendiri). Jadi mereka <em>seharusnya</em> sama, kan?</p>
+<p>Dan pada pencetakan pertama, memang sama<a href="function-specifier-alignment-specifier-dan-operator.html#fn201" class="footnote-ref" id="fnref201" role="doc-noteref"><sup>201</sup></a>. Tapi tepat setelah itu, kita periksa untuk memastikan keduanya masih sama.</p>
+<p>Dan <em>biasanya</em> memang sama. Tapi tidak selalu!</p>
+<div class="sourceCode" id="cb755"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb755-1"><a href="multithreading.html#cb755-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb755-2"><a href="multithreading.html#cb755-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb755-3"><a href="multithreading.html#cb755-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb755-4"><a href="multithreading.html#cb755-4" aria-label="4"></a></span>
+<span id="cb755-5"><a href="multithreading.html#cb755-5" aria-label="5"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb755-6"><a href="multithreading.html#cb755-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb755-7"><a href="multithreading.html#cb755-7" aria-label="7"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Nomor thread agar manusia bisa membedakan</span></span>
+<span id="cb755-8"><a href="multithreading.html#cb755-8" aria-label="8"></a></span>
+<span id="cb755-9"><a href="multithreading.html#cb755-9" aria-label="9"></a>    free<span class="op">(</span>arg<span class="op">);</span></span>
+<span id="cb755-10"><a href="multithreading.html#cb755-10" aria-label="10"></a></span>
+<span id="cb755-11"><a href="multithreading.html#cb755-11" aria-label="11"></a>    <span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>  <span class="co">// Nilai static yang dibagi antar thread</span></span>
+<span id="cb755-12"><a href="multithreading.html#cb755-12" aria-label="12"></a></span>
+<span id="cb755-13"><a href="multithreading.html#cb755-13" aria-label="13"></a>    <span class="dt">int</span> x <span class="op">=</span> foo<span class="op">;</span>  <span class="co">// Variabel lokal otomatis--tiap thread punya sendiri</span></span>
+<span id="cb755-14"><a href="multithreading.html#cb755-14" aria-label="14"></a></span>
+<span id="cb755-15"><a href="multithreading.html#cb755-15" aria-label="15"></a>    <span class="co">// Kita baru saja menugaskan x dari foo, jadi mereka harus sama di sini.</span></span>
+<span id="cb755-16"><a href="multithreading.html#cb755-16" aria-label="16"></a>    <span class="co">// (Di semua percobaanku memang sama, tapi bahkan ini tidak</span></span>
+<span id="cb755-17"><a href="multithreading.html#cb755-17" aria-label="17"></a>    <span class="co">// dijamin!)</span></span>
+<span id="cb755-18"><a href="multithreading.html#cb755-18" aria-label="18"></a></span>
+<span id="cb755-19"><a href="multithreading.html#cb755-19" aria-label="19"></a>    printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%d</span><span class="st">: x = </span><span class="sc">%d</span><span class="st">, foo = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">,</span> x<span class="op">,</span> foo<span class="op">);</span></span>
+<span id="cb755-20"><a href="multithreading.html#cb755-20" aria-label="20"></a></span>
+<span id="cb755-21"><a href="multithreading.html#cb755-21" aria-label="21"></a>    <span class="co">// Dan mereka seharusnya sama di sini, tapi tidak selalu!</span></span>
+<span id="cb755-22"><a href="multithreading.html#cb755-22" aria-label="22"></a>    <span class="co">// (Kadang sama, kadang tidak!)</span></span>
+<span id="cb755-23"><a href="multithreading.html#cb755-23" aria-label="23"></a></span>
+<span id="cb755-24"><a href="multithreading.html#cb755-24" aria-label="24"></a>    <span class="co">// Yang terjadi: thread lain masuk dan meng-increment foo</span></span>
+<span id="cb755-25"><a href="multithreading.html#cb755-25" aria-label="25"></a>    <span class="co">// saat ini juga, tapi x milik thread ini tetap seperti sebelumnya!</span></span>
+<span id="cb755-26"><a href="multithreading.html#cb755-26" aria-label="26"></a></span>
+<span id="cb755-27"><a href="multithreading.html#cb755-27" aria-label="27"></a>    <span class="cf">if</span> <span class="op">(</span>x <span class="op">!=</span> foo<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb755-28"><a href="multithreading.html#cb755-28" aria-label="28"></a>        printf<span class="op">(</span><span class="st">&quot;Thread </span><span class="sc">%d</span><span class="st">: Craziness! x != foo! </span><span class="sc">%d</span><span class="st"> != </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">,</span> x<span class="op">,</span> foo<span class="op">);</span></span>
+<span id="cb755-29"><a href="multithreading.html#cb755-29" aria-label="29"></a>    <span class="op">}</span></span>
+<span id="cb755-30"><a href="multithreading.html#cb755-30" aria-label="30"></a></span>
+<span id="cb755-31"><a href="multithreading.html#cb755-31" aria-label="31"></a>    foo<span class="op">++;</span>  <span class="co">// Increment nilai yang dibagi</span></span>
+<span id="cb755-32"><a href="multithreading.html#cb755-32" aria-label="32"></a></span>
+<span id="cb755-33"><a href="multithreading.html#cb755-33" aria-label="33"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb755-34"><a href="multithreading.html#cb755-34" aria-label="34"></a><span class="op">}</span></span>
+<span id="cb755-35"><a href="multithreading.html#cb755-35" aria-label="35"></a></span>
+<span id="cb755-36"><a href="multithreading.html#cb755-36" aria-label="36"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">5</span></span>
+<span id="cb755-37"><a href="multithreading.html#cb755-37" aria-label="37"></a></span>
+<span id="cb755-38"><a href="multithreading.html#cb755-38" aria-label="38"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb755-39"><a href="multithreading.html#cb755-39" aria-label="39"></a><span class="op">{</span></span>
+<span id="cb755-40"><a href="multithreading.html#cb755-40" aria-label="40"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb755-41"><a href="multithreading.html#cb755-41" aria-label="41"></a></span>
+<span id="cb755-42"><a href="multithreading.html#cb755-42" aria-label="42"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb755-43"><a href="multithreading.html#cb755-43" aria-label="43"></a>        <span class="dt">int</span> <span class="op">*</span>n <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>n<span class="op">);</span>  <span class="co">// Menampung nomor seri thread</span></span>
+<span id="cb755-44"><a href="multithreading.html#cb755-44" aria-label="44"></a>        <span class="op">*</span>n <span class="op">=</span> i<span class="op">;</span></span>
+<span id="cb755-45"><a href="multithreading.html#cb755-45" aria-label="45"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb755-46"><a href="multithreading.html#cb755-46" aria-label="46"></a>    <span class="op">}</span></span>
+<span id="cb755-47"><a href="multithreading.html#cb755-47" aria-label="47"></a></span>
+<span id="cb755-48"><a href="multithreading.html#cb755-48" aria-label="48"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb755-49"><a href="multithreading.html#cb755-49" aria-label="49"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
+<span id="cb755-50"><a href="multithreading.html#cb755-50" aria-label="50"></a>    <span class="op">}</span></span>
+<span id="cb755-51"><a href="multithreading.html#cb755-51" aria-label="51"></a><span class="op">}</span></span></code></pre></div>
+<p>Berikut contoh outputnya (walau ini berbeda dari satu eksekusi ke eksekusi lain):</p>
+<div class="sourceCode" id="cb756"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb756-1"><a href="multithreading.html#cb756-1" aria-hidden="true" tabindex="-1"></a>Thread 0: x = 10, foo = 10</span>
+<span id="cb756-2"><a href="multithreading.html#cb756-2" aria-hidden="true" tabindex="-1"></a>Thread 1: x = 10, foo = 10</span>
+<span id="cb756-3"><a href="multithreading.html#cb756-3" aria-hidden="true" tabindex="-1"></a>Thread 1: Craziness! x != foo! 10 != 11</span>
+<span id="cb756-4"><a href="multithreading.html#cb756-4" aria-hidden="true" tabindex="-1"></a>Thread 2: x = 12, foo = 12</span>
+<span id="cb756-5"><a href="multithreading.html#cb756-5" aria-hidden="true" tabindex="-1"></a>Thread 4: x = 13, foo = 13</span>
+<span id="cb756-6"><a href="multithreading.html#cb756-6" aria-hidden="true" tabindex="-1"></a>Thread 3: x = 14, foo = 14</span></code></pre></div>
+<p>Pada thread 1, di antara dua <code>printf()</code>, nilai <code>foo</code> entah bagaimana berubah dari <code>10</code> menjadi <code>11</code>, padahal jelas tidak ada increment di antara kedua <code>printf()</code>!</p>
+<p>Ada thread lain yang masuk ke sana (kemungkinan thread 0, kalau dilihat dari hasilnya) dan meng-increment nilai <code>foo</code> di belakang punggung thread 1!</p>
+<p>Mari kita selesaikan masalah ini dengan dua cara berbeda. (Kalau kamu ingin semua thread berbagi variabel <em>dan</em> tidak saling menginjak kaki, kamu harus lanjut membaca bagian <a href="multithreading.html#mutex">mutex</a>.)</p>
+<h3 data-number="39.6.1" id="thread-local"><span class="header-section-number">39.6.1</span> Storage-Class <code>_Thread_local</code></h3>
+<p></p>
+<p>Pertama-tama, mari kita lihat cara mudah mengatasinya: storage-class <code>_Thread_local</code>.</p>
+<p>Pada dasarnya kita tinggal menempelkannya di depan variabel <code>static</code> block scope kita dan semuanya berfungsi! Ia memberi tahu C bahwa setiap thread harus punya versinya sendiri dari variabel ini, sehingga tidak ada yang saling menginjak kaki.</p>
+<p></p>
+<p>Header <code>&lt;threads.h&gt;</code> mendefinisikan <code>thread_local</code> sebagai alias untuk <code>_Thread_local</code> supaya kodemu tidak perlu tampak begitu jelek.</p>
+<p>Mari kita ambil contoh sebelumnya dan jadikan <code>foo</code> variabel <code>thread_local</code> agar data itu tidak dibagi.</p>
+<div class="sourceCode" id="cb757" data-startfrom="5"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 4;"><span id="cb757-5"><a href="multithreading.html#cb757-5" aria-label="5"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb757-6"><a href="multithreading.html#cb757-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb757-7"><a href="multithreading.html#cb757-7" aria-label="7"></a>    <span class="dt">int</span> n <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Nomor thread agar manusia bisa membedakan</span></span>
+<span id="cb757-8"><a href="multithreading.html#cb757-8" aria-label="8"></a></span>
+<span id="cb757-9"><a href="multithreading.html#cb757-9" aria-label="9"></a>    free<span class="op">(</span>arg<span class="op">);</span></span>
+<span id="cb757-10"><a href="multithreading.html#cb757-10" aria-label="10"></a></span>
+<span id="cb757-11"><a href="multithreading.html#cb757-11" aria-label="11"></a>    <span class="dt">thread_local</span> <span class="dt">static</span> <span class="dt">int</span> foo <span class="op">=</span> <span class="dv">10</span><span class="op">;</span>  <span class="co">// &lt;-- Tidak lagi dibagi!!</span></span></code></pre></div>
+<p>Dan saat dijalankan, kita mendapat:</p>
+<div class="sourceCode" id="cb758"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb758-1"><a href="multithreading.html#cb758-1" aria-hidden="true" tabindex="-1"></a>Thread 0: x = 10, foo = 10</span>
+<span id="cb758-2"><a href="multithreading.html#cb758-2" aria-hidden="true" tabindex="-1"></a>Thread 1: x = 10, foo = 10</span>
+<span id="cb758-3"><a href="multithreading.html#cb758-3" aria-hidden="true" tabindex="-1"></a>Thread 2: x = 10, foo = 10</span>
+<span id="cb758-4"><a href="multithreading.html#cb758-4" aria-hidden="true" tabindex="-1"></a>Thread 4: x = 10, foo = 10</span>
+<span id="cb758-5"><a href="multithreading.html#cb758-5" aria-hidden="true" tabindex="-1"></a>Thread 3: x = 10, foo = 10</span></code></pre></div>
+<p>Tidak ada lagi masalah aneh!</p>
+<p>Satu hal: kalau variabel <code>thread_local</code> berada di block scope, ia <strong>harus</strong> <code>static</code>. Begitulah aturannya. (Tapi ini tidak masalah karena variabel non-<code>static</code> memang sudah per-thread, sebab tiap thread punya variabel non-<code>static</code>-nya sendiri.)</p>
+<p>Sedikit kebohongan di situ: variabel <code>thread_local</code> di block scope juga boleh <code>extern</code>.</p>
+<p> </p>
+<h3 data-number="39.6.2" id="opsi-lain-thread-specific-storage"><span class="header-section-number">39.6.2</span> Opsi Lain: Thread-Specific Storage</h3>
+<p></p>
+<p>Thread-specific storage (TSS) adalah cara lain untuk mendapatkan data per-thread.</p>
+<p>Satu fitur tambahan: fungsi-fungsi ini memungkinkanmu menentukan destructor yang akan dipanggil pada data saat variabel TSS dihapus. Biasanya destructor ini adalah <code>free()</code> untuk membersihkan data per-thread hasil <code>malloc()</code> secara otomatis. Atau <code>NULL</code> kalau tidak ada yang perlu dihancurkan.</p>
+<p>Destructor bertipe <code>tss_dtor_t</code>, yaitu pointer ke fungsi yang mengembalikan <code>void</code> dan menerima <code>void*</code> sebagai argumen (<code>void*</code> itu menunjuk ke data yang disimpan di variabel). Dengan kata lain, ia <code>void (*)(void*)</code>, kalau itu membantu menjelaskan. Dan aku akui, kemungkinan itu tidak membantu. Lihat contoh di bawah.</p>
+<p>Secara umum, <code>thread_local</code> kemungkinan pilihan utamamu, tapi kalau kamu menyukai gagasan destructor, kamu bisa memanfaatkannya.</p>
+<p>Pemakaiannya agak aneh karena kita butuh variabel bertipe <code>tss_t</code> yang tetap hidup untuk mewakili nilai per thread. Lalu kita menginisialisasinya dengan <code>tss_create()</code>. Akhirnya kita membuangnya dengan <code>tss_delete()</code>. Perhatikan bahwa memanggil <code>tss_delete()</code> tidak menjalankan semua destructor—yang melakukannya adalah <code>thrd_exit()</code> (atau return dari fungsi run). <code>tss_delete()</code> hanya melepas memori yang dialokasikan oleh <code>tss_create()</code>. </p>
+<p>Di tengah-tengahnya, thread bisa memanggil <code>tss_set()</code> dan <code>tss_get()</code> untuk mengisi dan mengambil nilai.</p>
+<p>Pada kode berikut, kita menyiapkan variabel TSS sebelum membuat thread, lalu membersihkan setelah thread selesai.</p>
+<p>Pada fungsi <code>run()</code>, thread melakukan <code>malloc()</code> ruang untuk string dan menyimpan pointer itu di variabel TSS.</p>
+<p>Saat thread keluar, fungsi destructor (<code>free()</code> dalam kasus ini) dipanggil untuk <em>semua</em> thread.</p>
+<p> </p>
+<div class="sourceCode" id="cb759"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb759-1"><a href="multithreading.html#cb759-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb759-2"><a href="multithreading.html#cb759-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb759-3"><a href="multithreading.html#cb759-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb759-4"><a href="multithreading.html#cb759-4" aria-label="4"></a></span>
+<span id="cb759-5"><a href="multithreading.html#cb759-5" aria-label="5"></a>tss_t str<span class="op">;</span></span>
+<span id="cb759-6"><a href="multithreading.html#cb759-6" aria-label="6"></a></span>
+<span id="cb759-7"><a href="multithreading.html#cb759-7" aria-label="7"></a><span class="dt">void</span> some_function<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb759-8"><a href="multithreading.html#cb759-8" aria-label="8"></a><span class="op">{</span></span>
+<span id="cb759-9"><a href="multithreading.html#cb759-9" aria-label="9"></a>    <span class="co">// Ambil nilai per-thread dari string ini</span></span>
+<span id="cb759-10"><a href="multithreading.html#cb759-10" aria-label="10"></a>    <span class="dt">char</span> <span class="op">*</span>tss_string <span class="op">=</span> tss_get<span class="op">(</span>str<span class="op">);</span></span>
+<span id="cb759-11"><a href="multithreading.html#cb759-11" aria-label="11"></a></span>
+<span id="cb759-12"><a href="multithreading.html#cb759-12" aria-label="12"></a>    <span class="co">// Lalu cetak</span></span>
+<span id="cb759-13"><a href="multithreading.html#cb759-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;TSS string: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> tss_string<span class="op">);</span></span>
+<span id="cb759-14"><a href="multithreading.html#cb759-14" aria-label="14"></a><span class="op">}</span></span>
+<span id="cb759-15"><a href="multithreading.html#cb759-15" aria-label="15"></a></span>
+<span id="cb759-16"><a href="multithreading.html#cb759-16" aria-label="16"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb759-17"><a href="multithreading.html#cb759-17" aria-label="17"></a><span class="op">{</span></span>
+<span id="cb759-18"><a href="multithreading.html#cb759-18" aria-label="18"></a>    <span class="dt">int</span> serial <span class="op">=</span> <span class="op">*(</span><span class="dt">int</span><span class="op">*)</span>arg<span class="op">;</span>  <span class="co">// Ambil nomor seri thread ini</span></span>
+<span id="cb759-19"><a href="multithreading.html#cb759-19" aria-label="19"></a>    free<span class="op">(</span>arg<span class="op">);</span></span>
+<span id="cb759-20"><a href="multithreading.html#cb759-20" aria-label="20"></a></span>
+<span id="cb759-21"><a href="multithreading.html#cb759-21" aria-label="21"></a>    <span class="co">// malloc() ruang untuk menampung data thread ini</span></span>
+<span id="cb759-22"><a href="multithreading.html#cb759-22" aria-label="22"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> malloc<span class="op">(</span><span class="dv">64</span><span class="op">);</span></span>
+<span id="cb759-23"><a href="multithreading.html#cb759-23" aria-label="23"></a>    sprintf<span class="op">(</span>s<span class="op">,</span> <span class="st">&quot;thread </span><span class="sc">%d</span><span class="st">! :)&quot;</span><span class="op">,</span> serial<span class="op">);</span>  <span class="co">// String kecil yang riang</span></span>
+<span id="cb759-24"><a href="multithreading.html#cb759-24" aria-label="24"></a></span>
+<span id="cb759-25"><a href="multithreading.html#cb759-25" aria-label="25"></a>    <span class="co">// Atur variabel TSS ini agar menunjuk ke string</span></span>
+<span id="cb759-26"><a href="multithreading.html#cb759-26" aria-label="26"></a>    tss_set<span class="op">(</span>str<span class="op">,</span> s<span class="op">);</span></span>
+<span id="cb759-27"><a href="multithreading.html#cb759-27" aria-label="27"></a></span>
+<span id="cb759-28"><a href="multithreading.html#cb759-28" aria-label="28"></a>    <span class="co">// Panggil fungsi yang akan mengambil variabelnya</span></span>
+<span id="cb759-29"><a href="multithreading.html#cb759-29" aria-label="29"></a>    some_function<span class="op">();</span></span>
+<span id="cb759-30"><a href="multithreading.html#cb759-30" aria-label="30"></a></span>
+<span id="cb759-31"><a href="multithreading.html#cb759-31" aria-label="31"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Setara dengan thrd_exit(0)</span></span>
+<span id="cb759-32"><a href="multithreading.html#cb759-32" aria-label="32"></a><span class="op">}</span></span>
+<span id="cb759-33"><a href="multithreading.html#cb759-33" aria-label="33"></a></span>
+<span id="cb759-34"><a href="multithreading.html#cb759-34" aria-label="34"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">15</span></span>
+<span id="cb759-35"><a href="multithreading.html#cb759-35" aria-label="35"></a></span>
+<span id="cb759-36"><a href="multithreading.html#cb759-36" aria-label="36"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb759-37"><a href="multithreading.html#cb759-37" aria-label="37"></a><span class="op">{</span></span>
+<span id="cb759-38"><a href="multithreading.html#cb759-38" aria-label="38"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb759-39"><a href="multithreading.html#cb759-39" aria-label="39"></a></span>
+<span id="cb759-40"><a href="multithreading.html#cb759-40" aria-label="40"></a>    <span class="co">// Buat variabel TSS baru, fungsi free() adalah destructor-nya</span></span>
+<span id="cb759-41"><a href="multithreading.html#cb759-41" aria-label="41"></a>    tss_create<span class="op">(&amp;</span>str<span class="op">,</span> free<span class="op">);</span></span>
+<span id="cb759-42"><a href="multithreading.html#cb759-42" aria-label="42"></a></span>
+<span id="cb759-43"><a href="multithreading.html#cb759-43" aria-label="43"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb759-44"><a href="multithreading.html#cb759-44" aria-label="44"></a>        <span class="dt">int</span> <span class="op">*</span>n <span class="op">=</span> malloc<span class="op">(</span><span class="kw">sizeof</span> <span class="op">*</span>n<span class="op">);</span>  <span class="co">// Menampung nomor seri thread</span></span>
+<span id="cb759-45"><a href="multithreading.html#cb759-45" aria-label="45"></a>        <span class="op">*</span>n <span class="op">=</span> i<span class="op">;</span></span>
+<span id="cb759-46"><a href="multithreading.html#cb759-46" aria-label="46"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb759-47"><a href="multithreading.html#cb759-47" aria-label="47"></a>    <span class="op">}</span></span>
+<span id="cb759-48"><a href="multithreading.html#cb759-48" aria-label="48"></a></span>
+<span id="cb759-49"><a href="multithreading.html#cb759-49" aria-label="49"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb759-50"><a href="multithreading.html#cb759-50" aria-label="50"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
+<span id="cb759-51"><a href="multithreading.html#cb759-51" aria-label="51"></a>    <span class="op">}</span></span>
+<span id="cb759-52"><a href="multithreading.html#cb759-52" aria-label="52"></a></span>
+<span id="cb759-53"><a href="multithreading.html#cb759-53" aria-label="53"></a>    <span class="co">// Semua thread sudah selesai, jadi kita selesai dengan ini</span></span>
+<span id="cb759-54"><a href="multithreading.html#cb759-54" aria-label="54"></a>    tss_delete<span class="op">(</span>str<span class="op">);</span></span>
+<span id="cb759-55"><a href="multithreading.html#cb759-55" aria-label="55"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Sekali lagi, ini cara yang agak menyakitkan dibanding <code>thread_local</code>, jadi kecuali kamu benar-benar membutuhkan fungsionalitas destructor itu, aku akan memakai <code>thread_local</code> saja.</p>
+<p></p>
+<h2 data-number="39.7" id="mutex"><span class="header-section-number">39.7</span> Mutex</h2>
+<p></p>
+<p>Kalau kamu hanya ingin mengizinkan satu thread masuk ke bagian kritis kode pada satu waktu, kamu bisa melindungi bagian itu dengan mutex<a href="function-specifier-alignment-specifier-dan-operator.html#fn202" class="footnote-ref" id="fnref202" role="doc-noteref"><sup>202</sup></a>.</p>
+<p>Misalnya, kalau ada variabel <code>static</code> dan kita ingin bisa mengambil dan mengisinya dalam dua operasi tanpa thread lain melompat ke tengah dan merusaknya, kita bisa memakai mutex untuk itu.</p>
+<p>Kamu bisa memperoleh (acquire) mutex atau melepasnya. Kalau kamu mencoba memperoleh mutex dan berhasil, kamu boleh melanjutkan eksekusi. Kalau mencoba dan gagal (karena orang lain memegangnya), kamu akan <em>block</em><a href="function-specifier-alignment-specifier-dan-operator.html#fn203" class="footnote-ref" id="fnref203" role="doc-noteref"><sup>203</sup></a> sampai mutex dilepas.</p>
+<p>Kalau beberapa thread diblokir menunggu mutex dilepas, salah satunya akan dipilih untuk berjalan (secara acak, dari sudut pandang kita), dan yang lain tetap tidur.</p>
+<p>Rencana permainannya: pertama kita inisialisasi variabel mutex agar siap dipakai dengan <code>mtx_init()</code>.</p>
+<p>Lalu thread-thread berikutnya bisa memanggil <code>mtx_lock()</code> dan <code>mtx_unlock()</code> untuk memperoleh dan melepas mutex.</p>
+<p>Saat kita benar-benar selesai dengan mutex, kita bisa menghancurkannya dengan <code>mtx_destroy()</code>, kebalikan logis dari <code>mtx_init()</code>.</p>
+<p></p>
+<p>Pertama, mari kita lihat kode yang <em>tidak</em> memakai mutex, dan berusaha mencetak nomor seri yang dibagi (<code>static</code>) lalu meng-increment-nya. Karena kita tidak memakai mutex pada pengambilan nilai (untuk dicetak) dan pengisiannya (untuk di-increment), thread bisa saling menghalangi di bagian kritis itu.</p>
+<div class="sourceCode" id="cb760"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb760-1"><a href="multithreading.html#cb760-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb760-2"><a href="multithreading.html#cb760-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb760-3"><a href="multithreading.html#cb760-3" aria-label="3"></a></span>
+<span id="cb760-4"><a href="multithreading.html#cb760-4" aria-label="4"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb760-5"><a href="multithreading.html#cb760-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb760-6"><a href="multithreading.html#cb760-6" aria-label="6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb760-7"><a href="multithreading.html#cb760-7" aria-label="7"></a></span>
+<span id="cb760-8"><a href="multithreading.html#cb760-8" aria-label="8"></a>    <span class="dt">static</span> <span class="dt">int</span> serial <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Variabel static yang dibagi!</span></span>
+<span id="cb760-9"><a href="multithreading.html#cb760-9" aria-label="9"></a></span>
+<span id="cb760-10"><a href="multithreading.html#cb760-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running! </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
+<span id="cb760-11"><a href="multithreading.html#cb760-11" aria-label="11"></a></span>
+<span id="cb760-12"><a href="multithreading.html#cb760-12" aria-label="12"></a>    serial<span class="op">++;</span></span>
+<span id="cb760-13"><a href="multithreading.html#cb760-13" aria-label="13"></a></span>
+<span id="cb760-14"><a href="multithreading.html#cb760-14" aria-label="14"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb760-15"><a href="multithreading.html#cb760-15" aria-label="15"></a><span class="op">}</span></span>
+<span id="cb760-16"><a href="multithreading.html#cb760-16" aria-label="16"></a></span>
+<span id="cb760-17"><a href="multithreading.html#cb760-17" aria-label="17"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">10</span></span>
+<span id="cb760-18"><a href="multithreading.html#cb760-18" aria-label="18"></a></span>
+<span id="cb760-19"><a href="multithreading.html#cb760-19" aria-label="19"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb760-20"><a href="multithreading.html#cb760-20" aria-label="20"></a><span class="op">{</span></span>
+<span id="cb760-21"><a href="multithreading.html#cb760-21" aria-label="21"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb760-22"><a href="multithreading.html#cb760-22" aria-label="22"></a></span>
+<span id="cb760-23"><a href="multithreading.html#cb760-23" aria-label="23"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb760-24"><a href="multithreading.html#cb760-24" aria-label="24"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb760-25"><a href="multithreading.html#cb760-25" aria-label="25"></a>    <span class="op">}</span></span>
+<span id="cb760-26"><a href="multithreading.html#cb760-26" aria-label="26"></a></span>
+<span id="cb760-27"><a href="multithreading.html#cb760-27" aria-label="27"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb760-28"><a href="multithreading.html#cb760-28" aria-label="28"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
+<span id="cb760-29"><a href="multithreading.html#cb760-29" aria-label="29"></a>    <span class="op">}</span></span>
+<span id="cb760-30"><a href="multithreading.html#cb760-30" aria-label="30"></a><span class="op">}</span></span></code></pre></div>
+<p>Waktu kujalankan, hasilnya kira-kira seperti ini:</p>
+<div class="sourceCode" id="cb761"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb761-1"><a href="multithreading.html#cb761-1" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
+<span id="cb761-2"><a href="multithreading.html#cb761-2" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
+<span id="cb761-3"><a href="multithreading.html#cb761-3" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
+<span id="cb761-4"><a href="multithreading.html#cb761-4" aria-hidden="true" tabindex="-1"></a>Thread running! 3</span>
+<span id="cb761-5"><a href="multithreading.html#cb761-5" aria-hidden="true" tabindex="-1"></a>Thread running! 4</span>
+<span id="cb761-6"><a href="multithreading.html#cb761-6" aria-hidden="true" tabindex="-1"></a>Thread running! 5</span>
+<span id="cb761-7"><a href="multithreading.html#cb761-7" aria-hidden="true" tabindex="-1"></a>Thread running! 6</span>
+<span id="cb761-8"><a href="multithreading.html#cb761-8" aria-hidden="true" tabindex="-1"></a>Thread running! 7</span>
+<span id="cb761-9"><a href="multithreading.html#cb761-9" aria-hidden="true" tabindex="-1"></a>Thread running! 8</span>
+<span id="cb761-10"><a href="multithreading.html#cb761-10" aria-hidden="true" tabindex="-1"></a>Thread running! 9</span></code></pre></div>
+<p>Jelas beberapa thread masuk ke sana dan menjalankan <code>printf()</code> sebelum ada yang sempat memperbarui variabel <code>serial</code>.</p>
+<p></p>
+<p>Yang ingin kita lakukan adalah membungkus pengambilan variabel dan pengisiannya ke dalam satu bentangan kode yang dilindungi mutex.</p>
+<p>Kita tambahkan variabel baru untuk mewakili mutex bertipe <code>mtx_t</code> di file scope, menginisialisasinya, lalu thread bisa mengunci dan membukanya di fungsi <code>run()</code>.</p>
+<p> </p>
+<div class="sourceCode" id="cb762"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb762-1"><a href="multithreading.html#cb762-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb762-2"><a href="multithreading.html#cb762-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb762-3"><a href="multithreading.html#cb762-3" aria-label="3"></a></span>
+<span id="cb762-4"><a href="multithreading.html#cb762-4" aria-label="4"></a>mtx_t serial_mtx<span class="op">;</span>     <span class="co">// &lt;-- VARIABEL MUTEX</span></span>
+<span id="cb762-5"><a href="multithreading.html#cb762-5" aria-label="5"></a></span>
+<span id="cb762-6"><a href="multithreading.html#cb762-6" aria-label="6"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb762-7"><a href="multithreading.html#cb762-7" aria-label="7"></a><span class="op">{</span></span>
+<span id="cb762-8"><a href="multithreading.html#cb762-8" aria-label="8"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb762-9"><a href="multithreading.html#cb762-9" aria-label="9"></a></span>
+<span id="cb762-10"><a href="multithreading.html#cb762-10" aria-label="10"></a>    <span class="dt">static</span> <span class="dt">int</span> serial <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Variabel static yang dibagi!</span></span>
+<span id="cb762-11"><a href="multithreading.html#cb762-11" aria-label="11"></a></span>
+<span id="cb762-12"><a href="multithreading.html#cb762-12" aria-label="12"></a>    <span class="co">// Peroleh mutex--semua thread akan terblokir di pemanggilan ini</span></span>
+<span id="cb762-13"><a href="multithreading.html#cb762-13" aria-label="13"></a>    <span class="co">// sampai mereka mendapat lock:</span></span>
+<span id="cb762-14"><a href="multithreading.html#cb762-14" aria-label="14"></a></span>
+<span id="cb762-15"><a href="multithreading.html#cb762-15" aria-label="15"></a>    mtx_lock<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>           <span class="co">// &lt;-- PEROLEH MUTEX</span></span>
+<span id="cb762-16"><a href="multithreading.html#cb762-16" aria-label="16"></a></span>
+<span id="cb762-17"><a href="multithreading.html#cb762-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;Thread running! </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> serial<span class="op">);</span></span>
+<span id="cb762-18"><a href="multithreading.html#cb762-18" aria-label="18"></a></span>
+<span id="cb762-19"><a href="multithreading.html#cb762-19" aria-label="19"></a>    serial<span class="op">++;</span></span>
+<span id="cb762-20"><a href="multithreading.html#cb762-20" aria-label="20"></a></span>
+<span id="cb762-21"><a href="multithreading.html#cb762-21" aria-label="21"></a>    <span class="co">// Selesai mengambil dan mengisi data, jadi lepas lock. Ini akan</span></span>
+<span id="cb762-22"><a href="multithreading.html#cb762-22" aria-label="22"></a>    <span class="co">// membuka blokir thread pada pemanggilan mtx_lock():</span></span>
+<span id="cb762-23"><a href="multithreading.html#cb762-23" aria-label="23"></a></span>
+<span id="cb762-24"><a href="multithreading.html#cb762-24" aria-label="24"></a>    mtx_unlock<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>         <span class="co">// &lt;-- LEPAS MUTEX</span></span>
+<span id="cb762-25"><a href="multithreading.html#cb762-25" aria-label="25"></a></span>
+<span id="cb762-26"><a href="multithreading.html#cb762-26" aria-label="26"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb762-27"><a href="multithreading.html#cb762-27" aria-label="27"></a><span class="op">}</span></span>
+<span id="cb762-28"><a href="multithreading.html#cb762-28" aria-label="28"></a></span>
+<span id="cb762-29"><a href="multithreading.html#cb762-29" aria-label="29"></a><span class="pp">#define THREAD_COUNT </span><span class="dv">10</span></span>
+<span id="cb762-30"><a href="multithreading.html#cb762-30" aria-label="30"></a></span>
+<span id="cb762-31"><a href="multithreading.html#cb762-31" aria-label="31"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb762-32"><a href="multithreading.html#cb762-32" aria-label="32"></a><span class="op">{</span></span>
+<span id="cb762-33"><a href="multithreading.html#cb762-33" aria-label="33"></a>    thrd_t t<span class="op">[</span>THREAD_COUNT<span class="op">];</span></span>
+<span id="cb762-34"><a href="multithreading.html#cb762-34" aria-label="34"></a></span>
+<span id="cb762-35"><a href="multithreading.html#cb762-35" aria-label="35"></a>    <span class="co">// Inisialisasi variabel mutex, menandakan ini mutex biasa tanpa</span></span>
+<span id="cb762-36"><a href="multithreading.html#cb762-36" aria-label="36"></a>    <span class="co">// embel-embel:</span></span>
+<span id="cb762-37"><a href="multithreading.html#cb762-37" aria-label="37"></a></span>
+<span id="cb762-38"><a href="multithreading.html#cb762-38" aria-label="38"></a>    mtx_init<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> mtx_plain<span class="op">);</span>        <span class="co">// &lt;-- BUAT MUTEX</span></span>
+<span id="cb762-39"><a href="multithreading.html#cb762-39" aria-label="39"></a></span>
+<span id="cb762-40"><a href="multithreading.html#cb762-40" aria-label="40"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb762-41"><a href="multithreading.html#cb762-41" aria-label="41"></a>        thrd_create<span class="op">(</span>t <span class="op">+</span> i<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb762-42"><a href="multithreading.html#cb762-42" aria-label="42"></a>    <span class="op">}</span></span>
+<span id="cb762-43"><a href="multithreading.html#cb762-43" aria-label="43"></a></span>
+<span id="cb762-44"><a href="multithreading.html#cb762-44" aria-label="44"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> THREAD_COUNT<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb762-45"><a href="multithreading.html#cb762-45" aria-label="45"></a>        thrd_join<span class="op">(</span>t<span class="op">[</span>i<span class="op">],</span> NULL<span class="op">);</span></span>
+<span id="cb762-46"><a href="multithreading.html#cb762-46" aria-label="46"></a>    <span class="op">}</span></span>
+<span id="cb762-47"><a href="multithreading.html#cb762-47" aria-label="47"></a></span>
+<span id="cb762-48"><a href="multithreading.html#cb762-48" aria-label="48"></a>    <span class="co">// Selesai dengan mutex, hancurkan:</span></span>
+<span id="cb762-49"><a href="multithreading.html#cb762-49" aria-label="49"></a></span>
+<span id="cb762-50"><a href="multithreading.html#cb762-50" aria-label="50"></a>    mtx_destroy<span class="op">(&amp;</span>serial_mtx<span class="op">);</span>                <span class="co">// &lt;-- HANCURKAN MUTEX</span></span>
+<span id="cb762-51"><a href="multithreading.html#cb762-51" aria-label="51"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat bagaimana di baris 38 dan 50 pada <code>main()</code> kita menginisialisasi dan menghancurkan mutex.</p>
+<p> </p>
+<p>Tapi setiap thread memperoleh mutex di baris 15 dan melepasnya di baris 24.</p>
+<p>Di antara <code>mtx_lock()</code> dan <code>mtx_unlock()</code> adalah <em>critical section</em>, bagian kode yang tidak ingin kita biarkan dikacau beberapa thread sekaligus.</p>
+<p> </p>
+<p>Dan sekarang kita mendapat output yang benar!</p>
+<div class="sourceCode" id="cb763"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb763-1"><a href="multithreading.html#cb763-1" aria-hidden="true" tabindex="-1"></a>Thread running! 0</span>
+<span id="cb763-2"><a href="multithreading.html#cb763-2" aria-hidden="true" tabindex="-1"></a>Thread running! 1</span>
+<span id="cb763-3"><a href="multithreading.html#cb763-3" aria-hidden="true" tabindex="-1"></a>Thread running! 2</span>
+<span id="cb763-4"><a href="multithreading.html#cb763-4" aria-hidden="true" tabindex="-1"></a>Thread running! 3</span>
+<span id="cb763-5"><a href="multithreading.html#cb763-5" aria-hidden="true" tabindex="-1"></a>Thread running! 4</span>
+<span id="cb763-6"><a href="multithreading.html#cb763-6" aria-hidden="true" tabindex="-1"></a>Thread running! 5</span>
+<span id="cb763-7"><a href="multithreading.html#cb763-7" aria-hidden="true" tabindex="-1"></a>Thread running! 6</span>
+<span id="cb763-8"><a href="multithreading.html#cb763-8" aria-hidden="true" tabindex="-1"></a>Thread running! 7</span>
+<span id="cb763-9"><a href="multithreading.html#cb763-9" aria-hidden="true" tabindex="-1"></a>Thread running! 8</span>
+<span id="cb763-10"><a href="multithreading.html#cb763-10" aria-hidden="true" tabindex="-1"></a>Thread running! 9</span></code></pre></div>
+<p>Kalau butuh beberapa mutex, tidak masalah: punya saja beberapa variabel mutex.</p>
+<p>Dan selalu ingat Aturan Nomor Satu untuk Banyak Mutex: <em>Buka kunci mutex dalam urutan terbalik dari urutan saat mengunci!</em></p>
+<h3 data-number="39.7.1" id="berbagai-tipe-mutex"><span class="header-section-number">39.7.1</span> Berbagai Tipe Mutex</h3>
+<p></p>
+<p>Seperti yang diisyaratkan tadi, ada beberapa tipe mutex yang bisa dibuat dengan <code>mtx_init()</code>. (Sebagian tipe ini adalah hasil operasi bitwise-OR, seperti tercatat di tabel.)</p>
+<p></p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Tipe</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mtx_plain</code></td>
+<td>Mutex biasa</td>
+</tr>
+<tr>
+<td><code>mtx_timed</code></td>
+<td>Mutex yang mendukung timeout</td>
+</tr>
+<tr>
+<td><code>mtx_plain|mtx_recursive</code></td>
+<td>Mutex rekursif</td>
+</tr>
+<tr>
+<td><code>mtx_timed|mtx_recursive</code></td>
+<td>Mutex rekursif yang mendukung timeout</td>
+</tr>
+</tbody>
+</table>
+<p>“Rekursif” berarti pemegang lock boleh memanggil <code>mtx_lock()</code> berkali-kali pada lock yang sama. (Ia harus membukanya sebanyak itu juga sebelum orang lain bisa mengambil mutex.) Ini kadang memudahkan penulisan kode, terutama kalau kamu memanggil fungsi yang perlu mengunci mutex padahal kamu sudah memegang mutex itu.</p>
+<p>Dan timeout memberi thread kesempatan untuk <em>mencoba</em> mendapat lock selama beberapa waktu, tapi menyerah kalau tidak berhasil dalam jangka waktu itu.</p>
+<p></p>
+<p>Untuk mutex dengan timeout, pastikan membuatnya dengan <code>mtx_timed</code>:</p>
+<div class="sourceCode" id="cb764"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb764-1"><a href="multithreading.html#cb764-1" aria-hidden="true" tabindex="-1"></a>mtx_init<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> mtx_timed<span class="op">);</span></span></code></pre></div>
+<p></p>
+<p>Lalu saat menunggunya, kamu harus menentukan waktu dalam UTC kapan ia akan dibuka<a href="function-specifier-alignment-specifier-dan-operator.html#fn204" class="footnote-ref" id="fnref204" role="doc-noteref"><sup>204</sup></a>.</p>
+<p></p>
+<p>Fungsi <code>timespec_get()</code> dari <code>&lt;time.h&gt;</code> bisa membantu di sini. Ia memberimu waktu saat ini dalam UTC di <code>struct timespec</code>, yang persis kita butuhkan. Bahkan, ia tampaknya ada hanya untuk tujuan ini.</p>
+<p>Ia punya dua field: <code>tv_sec</code> berisi waktu saat ini dalam detik sejak epoch, dan <code>tv_nsec</code> berisi nanodetik (sepersemiliar detik) sebagai bagian “pecahan”.</p>
+<p>Jadi kamu bisa mengisinya dengan waktu saat ini, lalu menambahkannya untuk mendapat timeout tertentu.</p>
+<p></p>
+<p>Lalu panggil <code>mtx_timedlock()</code> alih-alih <code>mtx_lock()</code>. Kalau ia mengembalikan nilai <code>thrd_timedout</code>, berarti timeout.</p>
+<div class="sourceCode" id="cb765"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb765-1"><a href="multithreading.html#cb765-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> timespec timeout<span class="op">;</span></span>
+<span id="cb765-2"><a href="multithreading.html#cb765-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb765-3"><a href="multithreading.html#cb765-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>timeout<span class="op">,</span> TIME_UTC<span class="op">);</span>  <span class="co">// Ambil waktu saat ini</span></span>
+<span id="cb765-4"><a href="multithreading.html#cb765-4" aria-hidden="true" tabindex="-1"></a>timeout<span class="op">.</span>tv_sec <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>               <span class="co">// Timeout 1 detik setelah sekarang</span></span>
+<span id="cb765-5"><a href="multithreading.html#cb765-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb765-6"><a href="multithreading.html#cb765-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> result <span class="op">=</span> mtx_timedlock<span class="op">(&amp;</span>serial_mtx<span class="op">,</span> <span class="op">&amp;</span>timeout<span class="op">));</span></span>
+<span id="cb765-7"><a href="multithreading.html#cb765-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb765-8"><a href="multithreading.html#cb765-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>result <span class="op">==</span> thrd_timedout<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb765-9"><a href="multithreading.html#cb765-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Mutex lock timed out!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb765-10"><a href="multithreading.html#cb765-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Selain itu, timed lock sama saja dengan lock biasa.</p>
+<p> </p>
+<h2 data-number="39.8" id="condition-variable"><span class="header-section-number">39.8</span> Condition Variable</h2>
+<p></p>
+<p>Condition Variable adalah kepingan terakhir yang kita butuhkan untuk membuat aplikasi multithread yang berkinerja baik dan menyusun struktur multithread yang lebih kompleks.</p>
+<p>Condition variable menyediakan cara agar thread tidur sampai suatu kejadian di thread lain terjadi.</p>
+<p>Dengan kata lain, mungkin ada sejumlah thread yang sudah tidak sabar berangkat, tapi mereka harus menunggu sampai suatu kejadian benar sebelum melanjutkan. Pada dasarnya mereka disuruh “tunggu dulu!” sampai diberi tahu.</p>
+<p>Dan ini bekerja beriringan dengan mutex karena yang kita tunggu biasanya bergantung pada nilai suatu data, dan data itu biasanya perlu dilindungi mutex.</p>
+<p>Penting dicatat bahwa condition variable itu sendiri bukan penyimpan data tertentu dari sudut pandang kita. Ia hanyalah variabel yang dipakai C untuk melacak status menunggu/tidak menunggu dari sebuah thread atau kelompok thread.</p>
+<p>Mari kita tulis program rekaan yang membaca kelompok berisi 5 angka dari thread utama satu per satu. Lalu, ketika 5 angka sudah dimasukkan, child thread bangun, menjumlahkan kelima angka itu, dan mencetak hasilnya.</p>
+<p>Angka-angka itu akan disimpan di array global yang dibagi, begitu juga indeks ke array untuk angka yang akan dimasukkan.</p>
+<p>Karena ini nilai yang dibagi, setidaknya kita harus menyembunyikannya di balik mutex untuk thread utama maupun child thread. (Thread utama akan menulis data ke sana dan child thread akan membaca data darinya.)</p>
+<p>Tapi itu belum cukup. Child thread perlu diblokir (“tidur”) sampai 5 angka terbaca ke array. Lalu parent thread perlu membangunkan child thread agar bisa bekerja.</p>
+<p>Dan saat bangun, ia perlu memegang mutex itu. Dan memang akan! Ketika thread menunggu pada condition variable, ia juga memperoleh mutex saat bangun.</p>
+<p>Semua ini terjadi seputar variabel tambahan bertipe <code>cnd_t</code> yang adalah <em>condition variable</em>. Kita membuat variabel ini dengan fungsi <code>cnd_init()</code> dan menghancurkannya saat selesai dengan fungsi <code>cnd_destroy()</code>.</p>
+<p>Tapi bagaimana semuanya bekerja? Mari kita lihat garis besar apa yang akan dilakukan child thread:</p>
+<p> </p>
+<ol type="1">
+<li>Kunci mutex dengan <code>mtx_lock()</code></li>
+<li>Kalau kita belum memasukkan semua angka, tunggu pada condition variable dengan <code>cnd_wait()</code></li>
+<li>Kerjakan pekerjaan yang harus dikerjakan</li>
+<li>Buka kunci mutex dengan <code>mtx_unlock()</code></li>
+</ol>
+<p>Sementara itu thread utama akan melakukan ini:</p>
+<ol type="1">
+<li>Kunci mutex dengan <code>mtx_lock()</code></li>
+<li>Simpan angka yang baru dibaca ke array</li>
+<li>Kalau array penuh, beri sinyal agar child bangun dengan <code>cnd_signal()</code></li>
+<li>Buka kunci mutex dengan <code>mtx_unlock()</code></li>
+</ol>
+<p> </p>
+<p>Kalau kamu tidak terlalu cepat membacanya sekilas (tidak apa-apa—aku tidak tersinggung), mungkin kamu memperhatikan sesuatu yang aneh: bagaimana thread utama bisa memegang kunci mutex dan memberi sinyal ke child, kalau child harus memegang kunci mutex untuk menunggu sinyal? Keduanya tidak bisa memegang kunci!</p>
+<p>Dan memang tidak! Ada sihir di balik layar pada condition variable: saat kamu <code>cnd_wait()</code>, ia melepas mutex yang kamu tentukan dan thread tidur. Dan ketika seseorang memberi sinyal agar thread itu bangun, ia memperoleh kembali kunci itu seolah-olah tidak terjadi apa-apa.</p>
+<p>Di sisi <code>cnd_signal()</code> sedikit berbeda. Ia tidak melakukan apa-apa terhadap mutex. Thread yang memberi sinyal masih harus melepas mutex secara manual sebelum thread yang menunggu bisa bangun.</p>
+<p></p>
+<p>Satu hal lagi soal <code>cnd_wait()</code>. Kamu kemungkinan akan memanggil <code>cnd_wait()</code> kalau suatu kondisi<a href="function-specifier-alignment-specifier-dan-operator.html#fn205" class="footnote-ref" id="fnref205" role="doc-noteref"><sup>205</sup></a> belum terpenuhi (mis. dalam kasus ini, kalau belum semua angka dimasukkan). Intinya: kondisi ini harus berada dalam loop <code>while</code>, bukan pernyataan <code>if</code>. Kenapa?</p>
+<p>Itu karena fenomena misterius bernama <em>spurious wakeup</em>. Kadang, pada beberapa implementasi, sebuah thread bisa terbangun dari tidur <code>cnd_wait()</code> tanpa <em>alasan</em> yang jelas. <em>[Musik X-Files]</em><a href="function-specifier-alignment-specifier-dan-operator.html#fn206" class="footnote-ref" id="fnref206" role="doc-noteref"><sup>206</sup></a>. Karena itu kita harus memeriksa bahwa kondisi yang kita butuhkan masih benar-benar terpenuhi saat bangun. Dan kalau tidak, kembali tidur!</p>
+<p></p>
+<p>Jadi mari kita kerjakan! Mulai dari thread utama:</p>
+<ul>
+<li><p>Thread utama akan menyiapkan mutex dan condition variable, dan meluncurkan child thread.</p></li>
+<li><p>Lalu ia akan, dalam loop tak terbatas, mengambil angka sebagai input dari konsol.</p></li>
+<li><p>Ia juga akan memperoleh mutex untuk menyimpan angka yang dimasukkan ke array global.</p></li>
+<li><p>Ketika array berisi 5 angka, thread utama akan memberi sinyal ke child thread bahwa saatnya bangun dan bekerja.</p></li>
+<li><p>Lalu thread utama akan membuka kunci mutex dan kembali membaca angka berikutnya dari konsol.</p></li>
+</ul>
+<p>Sementara itu, child thread sibuk dengan kenakalannya sendiri:</p>
+<ul>
+<li><p>Child thread mengambil mutex</p></li>
+<li><p>Selama kondisi belum terpenuhi (yaitu selama array bersama belum berisi 5 angka), child thread tidur dengan menunggu pada condition variable. Saat menunggu, ia secara implisit membuka kunci mutex.</p></li>
+<li><p>Begitu thread utama memberi sinyal agar child thread bangun, ia bangun untuk bekerja dan mendapatkan kembali kunci mutex.</p></li>
+<li><p>Child thread menjumlahkan angka-angka itu dan mereset variabel yang menjadi indeks ke array.</p></li>
+<li><p>Lalu ia melepas mutex dan berjalan lagi dalam loop tak terbatas.</p></li>
+</ul>
+<p>Dan inilah kodenya! Pelajari sebentar supaya kamu bisa melihat di mana semua bagian di atas ditangani:</p>
+<p> </p>
+<div class="sourceCode" id="cb766"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb766-1"><a href="multithreading.html#cb766-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb766-2"><a href="multithreading.html#cb766-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb766-3"><a href="multithreading.html#cb766-3" aria-label="3"></a></span>
+<span id="cb766-4"><a href="multithreading.html#cb766-4" aria-label="4"></a><span class="pp">#define VALUE_COUNT_MAX </span><span class="dv">5</span></span>
+<span id="cb766-5"><a href="multithreading.html#cb766-5" aria-label="5"></a></span>
+<span id="cb766-6"><a href="multithreading.html#cb766-6" aria-label="6"></a><span class="dt">int</span> value<span class="op">[</span>VALUE_COUNT_MAX<span class="op">];</span>  <span class="co">// Global yang dibagi</span></span>
+<span id="cb766-7"><a href="multithreading.html#cb766-7" aria-label="7"></a><span class="dt">int</span> value_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>   <span class="co">// Global yang dibagi juga</span></span>
+<span id="cb766-8"><a href="multithreading.html#cb766-8" aria-label="8"></a></span>
+<span id="cb766-9"><a href="multithreading.html#cb766-9" aria-label="9"></a>mtx_t value_mtx<span class="op">;</span>   <span class="co">// Mutex untuk value</span></span>
+<span id="cb766-10"><a href="multithreading.html#cb766-10" aria-label="10"></a>cnd_t value_cnd<span class="op">;</span>   <span class="co">// Condition variable untuk value</span></span>
+<span id="cb766-11"><a href="multithreading.html#cb766-11" aria-label="11"></a></span>
+<span id="cb766-12"><a href="multithreading.html#cb766-12" aria-label="12"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb766-13"><a href="multithreading.html#cb766-13" aria-label="13"></a><span class="op">{</span></span>
+<span id="cb766-14"><a href="multithreading.html#cb766-14" aria-label="14"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb766-15"><a href="multithreading.html#cb766-15" aria-label="15"></a></span>
+<span id="cb766-16"><a href="multithreading.html#cb766-16" aria-label="16"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
+<span id="cb766-17"><a href="multithreading.html#cb766-17" aria-label="17"></a>        mtx_lock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>      <span class="co">// &lt;-- AMBIL MUTEX</span></span>
+<span id="cb766-18"><a href="multithreading.html#cb766-18" aria-label="18"></a></span>
+<span id="cb766-19"><a href="multithreading.html#cb766-19" aria-label="19"></a>        <span class="cf">while</span> <span class="op">(</span>value_count <span class="op">&lt;</span> VALUE_COUNT_MAX<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb766-20"><a href="multithreading.html#cb766-20" aria-label="20"></a>            printf<span class="op">(</span><span class="st">&quot;Thread: is waiting</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb766-21"><a href="multithreading.html#cb766-21" aria-label="21"></a>            cnd_wait<span class="op">(&amp;</span>value_cnd<span class="op">,</span> <span class="op">&amp;</span>value_mtx<span class="op">);</span>  <span class="co">// &lt;-- TUNGGU KONDISI</span></span>
+<span id="cb766-22"><a href="multithreading.html#cb766-22" aria-label="22"></a>        <span class="op">}</span></span>
+<span id="cb766-23"><a href="multithreading.html#cb766-23" aria-label="23"></a></span>
+<span id="cb766-24"><a href="multithreading.html#cb766-24" aria-label="24"></a>        printf<span class="op">(</span><span class="st">&quot;Thread: is awake!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb766-25"><a href="multithreading.html#cb766-25" aria-label="25"></a></span>
+<span id="cb766-26"><a href="multithreading.html#cb766-26" aria-label="26"></a>        <span class="dt">int</span> t <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb766-27"><a href="multithreading.html#cb766-27" aria-label="27"></a></span>
+<span id="cb766-28"><a href="multithreading.html#cb766-28" aria-label="28"></a>        <span class="co">// Jumlahkan semuanya</span></span>
+<span id="cb766-29"><a href="multithreading.html#cb766-29" aria-label="29"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> VALUE_COUNT_MAX<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb766-30"><a href="multithreading.html#cb766-30" aria-label="30"></a>            t <span class="op">+=</span> value<span class="op">[</span>i<span class="op">];</span></span>
+<span id="cb766-31"><a href="multithreading.html#cb766-31" aria-label="31"></a></span>
+<span id="cb766-32"><a href="multithreading.html#cb766-32" aria-label="32"></a>        printf<span class="op">(</span><span class="st">&quot;Thread: total is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span></span>
+<span id="cb766-33"><a href="multithreading.html#cb766-33" aria-label="33"></a></span>
+<span id="cb766-34"><a href="multithreading.html#cb766-34" aria-label="34"></a>        <span class="co">// Reset indeks input untuk thread utama</span></span>
+<span id="cb766-35"><a href="multithreading.html#cb766-35" aria-label="35"></a>        value_count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb766-36"><a href="multithreading.html#cb766-36" aria-label="36"></a></span>
+<span id="cb766-37"><a href="multithreading.html#cb766-37" aria-label="37"></a>        mtx_unlock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>   <span class="co">// &lt;-- BUKA KUNCI MUTEX</span></span>
+<span id="cb766-38"><a href="multithreading.html#cb766-38" aria-label="38"></a>    <span class="op">}</span></span>
+<span id="cb766-39"><a href="multithreading.html#cb766-39" aria-label="39"></a></span>
+<span id="cb766-40"><a href="multithreading.html#cb766-40" aria-label="40"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb766-41"><a href="multithreading.html#cb766-41" aria-label="41"></a><span class="op">}</span></span>
+<span id="cb766-42"><a href="multithreading.html#cb766-42" aria-label="42"></a></span>
+<span id="cb766-43"><a href="multithreading.html#cb766-43" aria-label="43"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb766-44"><a href="multithreading.html#cb766-44" aria-label="44"></a><span class="op">{</span></span>
+<span id="cb766-45"><a href="multithreading.html#cb766-45" aria-label="45"></a>    thrd_t t<span class="op">;</span></span>
+<span id="cb766-46"><a href="multithreading.html#cb766-46" aria-label="46"></a></span>
+<span id="cb766-47"><a href="multithreading.html#cb766-47" aria-label="47"></a>    <span class="co">// Luncurkan thread baru</span></span>
+<span id="cb766-48"><a href="multithreading.html#cb766-48" aria-label="48"></a></span>
+<span id="cb766-49"><a href="multithreading.html#cb766-49" aria-label="49"></a>    thrd_create<span class="op">(&amp;</span>t<span class="op">,</span> run<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb766-50"><a href="multithreading.html#cb766-50" aria-label="50"></a>    thrd_detach<span class="op">(</span>t<span class="op">);</span></span>
+<span id="cb766-51"><a href="multithreading.html#cb766-51" aria-label="51"></a></span>
+<span id="cb766-52"><a href="multithreading.html#cb766-52" aria-label="52"></a>    <span class="co">// Siapkan mutex dan condition variable</span></span>
+<span id="cb766-53"><a href="multithreading.html#cb766-53" aria-label="53"></a></span>
+<span id="cb766-54"><a href="multithreading.html#cb766-54" aria-label="54"></a>    mtx_init<span class="op">(&amp;</span>value_mtx<span class="op">,</span> mtx_plain<span class="op">);</span></span>
+<span id="cb766-55"><a href="multithreading.html#cb766-55" aria-label="55"></a>    cnd_init<span class="op">(&amp;</span>value_cnd<span class="op">);</span></span>
+<span id="cb766-56"><a href="multithreading.html#cb766-56" aria-label="56"></a></span>
+<span id="cb766-57"><a href="multithreading.html#cb766-57" aria-label="57"></a>    <span class="cf">for</span> <span class="op">(;;)</span> <span class="op">{</span></span>
+<span id="cb766-58"><a href="multithreading.html#cb766-58" aria-label="58"></a>        <span class="dt">int</span> n<span class="op">;</span></span>
+<span id="cb766-59"><a href="multithreading.html#cb766-59" aria-label="59"></a></span>
+<span id="cb766-60"><a href="multithreading.html#cb766-60" aria-label="60"></a>        scanf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">&amp;</span>n<span class="op">);</span></span>
+<span id="cb766-61"><a href="multithreading.html#cb766-61" aria-label="61"></a></span>
+<span id="cb766-62"><a href="multithreading.html#cb766-62" aria-label="62"></a>        mtx_lock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>    <span class="co">// &lt;-- KUNCI MUTEX</span></span>
+<span id="cb766-63"><a href="multithreading.html#cb766-63" aria-label="63"></a></span>
+<span id="cb766-64"><a href="multithreading.html#cb766-64" aria-label="64"></a>        value<span class="op">[</span>value_count<span class="op">++]</span> <span class="op">=</span> n<span class="op">;</span></span>
+<span id="cb766-65"><a href="multithreading.html#cb766-65" aria-label="65"></a></span>
+<span id="cb766-66"><a href="multithreading.html#cb766-66" aria-label="66"></a>        <span class="cf">if</span> <span class="op">(</span>value_count <span class="op">==</span> VALUE_COUNT_MAX<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb766-67"><a href="multithreading.html#cb766-67" aria-label="67"></a>            printf<span class="op">(</span><span class="st">&quot;Main: signaling thread</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb766-68"><a href="multithreading.html#cb766-68" aria-label="68"></a>            cnd_signal<span class="op">(&amp;</span>value_cnd<span class="op">);</span>  <span class="co">// &lt;-- BERI SINYAL KONDISI</span></span>
+<span id="cb766-69"><a href="multithreading.html#cb766-69" aria-label="69"></a>        <span class="op">}</span></span>
+<span id="cb766-70"><a href="multithreading.html#cb766-70" aria-label="70"></a></span>
+<span id="cb766-71"><a href="multithreading.html#cb766-71" aria-label="71"></a>        mtx_unlock<span class="op">(&amp;</span>value_mtx<span class="op">);</span>  <span class="co">// &lt;-- BUKA KUNCI MUTEX</span></span>
+<span id="cb766-72"><a href="multithreading.html#cb766-72" aria-label="72"></a>    <span class="op">}</span></span>
+<span id="cb766-73"><a href="multithreading.html#cb766-73" aria-label="73"></a></span>
+<span id="cb766-74"><a href="multithreading.html#cb766-74" aria-label="74"></a>    <span class="co">// Bersih-bersih (loop di atas ini tak terbatas, tapi kita ingin</span></span>
+<span id="cb766-75"><a href="multithreading.html#cb766-75" aria-label="75"></a>    <span class="co">// setidaknya berpura-pura rapi):</span></span>
+<span id="cb766-76"><a href="multithreading.html#cb766-76" aria-label="76"></a></span>
+<span id="cb766-77"><a href="multithreading.html#cb766-77" aria-label="77"></a>    mtx_destroy<span class="op">(&amp;</span>value_mtx<span class="op">);</span></span>
+<span id="cb766-78"><a href="multithreading.html#cb766-78" aria-label="78"></a>    cnd_destroy<span class="op">(&amp;</span>value_cnd<span class="op">);</span></span>
+<span id="cb766-79"><a href="multithreading.html#cb766-79" aria-label="79"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Dan berikut contoh output (angka-angka tunggal di baris adalah inputku):</p>
+<div class="sourceCode" id="cb767"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb767-1"><a href="multithreading.html#cb767-1" aria-hidden="true" tabindex="-1"></a>Thread: is waiting</span>
+<span id="cb767-2"><a href="multithreading.html#cb767-2" aria-hidden="true" tabindex="-1"></a>1</span>
+<span id="cb767-3"><a href="multithreading.html#cb767-3" aria-hidden="true" tabindex="-1"></a>1</span>
+<span id="cb767-4"><a href="multithreading.html#cb767-4" aria-hidden="true" tabindex="-1"></a>1</span>
+<span id="cb767-5"><a href="multithreading.html#cb767-5" aria-hidden="true" tabindex="-1"></a>1</span>
+<span id="cb767-6"><a href="multithreading.html#cb767-6" aria-hidden="true" tabindex="-1"></a>1</span>
+<span id="cb767-7"><a href="multithreading.html#cb767-7" aria-hidden="true" tabindex="-1"></a>Main: signaling thread</span>
+<span id="cb767-8"><a href="multithreading.html#cb767-8" aria-hidden="true" tabindex="-1"></a>Thread: is awake!</span>
+<span id="cb767-9"><a href="multithreading.html#cb767-9" aria-hidden="true" tabindex="-1"></a>Thread: total is 5</span>
+<span id="cb767-10"><a href="multithreading.html#cb767-10" aria-hidden="true" tabindex="-1"></a>Thread: is waiting</span>
+<span id="cb767-11"><a href="multithreading.html#cb767-11" aria-hidden="true" tabindex="-1"></a>2</span>
+<span id="cb767-12"><a href="multithreading.html#cb767-12" aria-hidden="true" tabindex="-1"></a>8</span>
+<span id="cb767-13"><a href="multithreading.html#cb767-13" aria-hidden="true" tabindex="-1"></a>5</span>
+<span id="cb767-14"><a href="multithreading.html#cb767-14" aria-hidden="true" tabindex="-1"></a>9</span>
+<span id="cb767-15"><a href="multithreading.html#cb767-15" aria-hidden="true" tabindex="-1"></a>0</span>
+<span id="cb767-16"><a href="multithreading.html#cb767-16" aria-hidden="true" tabindex="-1"></a>Main: signaling thread</span>
+<span id="cb767-17"><a href="multithreading.html#cb767-17" aria-hidden="true" tabindex="-1"></a>Thread: is awake!</span>
+<span id="cb767-18"><a href="multithreading.html#cb767-18" aria-hidden="true" tabindex="-1"></a>Thread: total is 24</span>
+<span id="cb767-19"><a href="multithreading.html#cb767-19" aria-hidden="true" tabindex="-1"></a>Thread: is waiting</span></code></pre></div>
+<p>Ini pemakaian condition variable yang umum pada situasi producer-consumer seperti ini. Kalau kita tidak punya cara untuk menidurkan child thread selagi ia menunggu suatu kondisi terpenuhi, ia akan terpaksa melakukan polling, yang sangat memboroskan CPU.</p>
+<h3 data-number="39.8.1" id="condition-wait-dengan-timeout"><span class="header-section-number">39.8.1</span> Condition Wait dengan Timeout</h3>
+<p></p>
+<p>Ada varian <code>cnd_wait()</code> yang memungkinkanmu menentukan timeout agar bisa berhenti menunggu.</p>
+<p>Karena child thread harus mengunci ulang mutex, ini belum tentu berarti kamu langsung hidup kembali tepat saat timeout terjadi; kamu masih harus menunggu thread lain melepas mutex.</p>
+<p>Tapi artinya kamu tidak akan menunggu sampai <code>cnd_signal()</code> terjadi.</p>
+<p>Agar ini berfungsi, panggil <code>cnd_timedwait()</code> alih-alih <code>cnd_wait()</code>. Kalau ia mengembalikan nilai <code>thrd_timedout</code>, berarti timeout.</p>
+<p>Timestamp-nya adalah waktu absolut dalam UTC, bukan waktu-dari-sekarang. Untungnya fungsi <code>timespec_get()</code> di <code>&lt;time.h&gt;</code> tampaknya dibuat khusus untuk kasus ini.</p>
+<p> </p>
+<div class="sourceCode" id="cb768"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb768-1"><a href="multithreading.html#cb768-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> timespec timeout<span class="op">;</span></span>
+<span id="cb768-2"><a href="multithreading.html#cb768-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb768-3"><a href="multithreading.html#cb768-3" aria-hidden="true" tabindex="-1"></a>timespec_get<span class="op">(&amp;</span>timeout<span class="op">,</span> TIME_UTC<span class="op">);</span>  <span class="co">// Ambil waktu saat ini</span></span>
+<span id="cb768-4"><a href="multithreading.html#cb768-4" aria-hidden="true" tabindex="-1"></a>timeout<span class="op">.</span>tv_sec <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>               <span class="co">// Timeout 1 detik setelah sekarang</span></span>
+<span id="cb768-5"><a href="multithreading.html#cb768-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb768-6"><a href="multithreading.html#cb768-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> result <span class="op">=</span> cnd_timedwait<span class="op">(&amp;</span>condition<span class="op">,</span> <span class="op">&amp;</span>mutex<span class="op">,</span> <span class="op">&amp;</span>timeout<span class="op">));</span></span>
+<span id="cb768-7"><a href="multithreading.html#cb768-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb768-8"><a href="multithreading.html#cb768-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>result <span class="op">==</span> thrd_timedout<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb768-9"><a href="multithreading.html#cb768-9" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Condition variable timed out!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb768-10"><a href="multithreading.html#cb768-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<h3 data-number="39.8.2" id="broadcast-membangunkan-semua-thread-yang-menunggu"><span class="header-section-number">39.8.2</span> Broadcast: Membangunkan Semua Thread yang Menunggu</h3>
+<p></p>
+<p> <code>cnd_signal()</code> hanya membangunkan satu thread untuk melanjutkan pekerjaan. Tergantung bagaimana logikamu disusun, mungkin masuk akal membangunkan lebih dari satu thread untuk melanjutkan begitu kondisi terpenuhi.</p>
+<p>Tentu saja hanya satu dari mereka yang bisa mengambil mutex, tapi kalau kamu punya situasi ketika:</p>
+<ul>
+<li><p>Thread yang baru bangun bertanggung jawab membangunkan thread berikutnya, dan—</p></li>
+<li><p>Ada kemungkinan kondisi loop spurious-wakeup mencegahnya melakukan itu, maka—</p></li>
+</ul>
+<p>kamu perlu men-broadcast pembangunan itu agar yakin setidaknya satu thread keluar dari loop itu untuk meluncurkan thread berikutnya.</p>
+<p>Bagaimana caranya, tanyamu?</p>
+<p></p>
+<p>Cukup pakai <code>cnd_broadcast()</code> alih-alih <code>cnd_signal()</code>. Pemakaiannya persis sama, hanya saja <code>cnd_broadcast()</code> membangunkan <strong>semua</strong> thread yang tidur menunggu condition variable itu.</p>
+<p> </p>
+<h2 data-number="39.9" id="menjalankan-fungsi-satu-kali"><span class="header-section-number">39.9</span> Menjalankan Fungsi Satu Kali</h2>
+<p></p>
+<p>Katakanlah kamu punya fungsi yang <em>bisa</em> dijalankan banyak thread, tapi kamu tidak tahu kapan, dan tidak sepadan repot menulis semua logikanya.</p>
+<p>Ada jalan keluarnya: pakai <code>call_once()</code>. Banyak sekali thread bisa mencoba menjalankan fungsi itu, tapi hanya yang pertama yang dihitung<a href="function-specifier-alignment-specifier-dan-operator.html#fn207" class="footnote-ref" id="fnref207" role="doc-noteref"><sup>207</sup></a></p>
+<p>Untuk memakainya, kamu butuh variabel flag khusus yang dideklarasikan untuk melacak apakah fungsi itu sudah dijalankan atau belum. Dan kamu butuh fungsi yang akan dijalankan, yang tidak menerima parameter dan tidak mengembalikan nilai.</p>
+<p> </p>
+<div class="sourceCode" id="cb769"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb769-1"><a href="multithreading.html#cb769-1" aria-hidden="true" tabindex="-1"></a>once_flag of <span class="op">=</span> ONCE_FLAG_INIT<span class="op">;</span>  <span class="co">// Inisialisasi seperti ini</span></span>
+<span id="cb769-2"><a href="multithreading.html#cb769-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb769-3"><a href="multithreading.html#cb769-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> run_once_function<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb769-4"><a href="multithreading.html#cb769-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb769-5"><a href="multithreading.html#cb769-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;ll only run once!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb769-6"><a href="multithreading.html#cb769-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb769-7"><a href="multithreading.html#cb769-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb769-8"><a href="multithreading.html#cb769-8" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> run<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb769-9"><a href="multithreading.html#cb769-9" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb769-10"><a href="multithreading.html#cb769-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb769-11"><a href="multithreading.html#cb769-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb769-12"><a href="multithreading.html#cb769-12" aria-hidden="true" tabindex="-1"></a>    call_once<span class="op">(&amp;</span>of<span class="op">,</span> run_once_function<span class="op">);</span></span>
+<span id="cb769-13"><a href="multithreading.html#cb769-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb769-14"><a href="multithreading.html#cb769-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">// ...</span></span></code></pre></div>
+<p> </p>
+<p>Pada contoh ini, berapa pun banyaknya thread yang sampai ke fungsi <code>run()</code>, <code>run_once_function()</code> hanya akan dipanggil satu kali.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="fungsionalitas-tanggal-dan-waktu.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="chapter-atomics.html" rel="next">Next</a></span></div></body>
+</html>

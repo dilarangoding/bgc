@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="hello-world.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="functions.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="3" id="variabel-dan-pernyataan"><span class="header-section-number">3</span> Variabel dan Pernyataan</h1>
+<blockquote>
+<p><em>“It takes all kinds to make a world, does it not, Padre?”</em><br />
+<em>“So it does, my son, so it does.”</em></p>
+<p>—Pirate Captain Thomas Bartholomew Red to the Padre, Pirates</p>
+</blockquote>
+<p>Program C memang berisi banyak hal.</p>
+<p>Yap.</p>
+<p>Dan karena berbagai alasan, kita semua akan terbantu kalau mengelompokkan jenis-jenis hal yang ada dalam sebuah program, supaya jelas apa yang sedang dibicarakan.</p>
+<h2 data-number="3.1" id="variabel"><span class="header-section-number">3.1</span> Variabel</h2>
+<p>Orang bilang, “variabel menyimpan nilai”. Tapi cara lain memandangnya: variabel adalah nama yang mudah dibaca manusia untuk merujuk ke sebuah data di memori.</p>
+<p>Kita berhenti sebentar di sini untuk mengintip ke lubang kelinci bernama pointer. Jangan khawatir dulu.</p>
+<p>Bayangkan memori sebagai array raksasa berisi byte<a href="function-specifier-alignment-specifier-dan-operator.html#fn33" class="footnote-ref" id="fnref33" role="doc-noteref"><sup>33</sup></a>. Data disimpan di dalam “array” ini<a href="function-specifier-alignment-specifier-dan-operator.html#fn34" class="footnote-ref" id="fnref34" role="doc-noteref"><sup>34</sup></a>. Kalau sebuah angka lebih besar dari satu byte, angka itu disimpan dalam beberapa byte. Karena memori mirip array, setiap byte memori bisa dirujuk lewat indeksnya. Indeks ke dalam memori ini juga disebut <em>alamat</em>, atau <em>lokasi</em>, atau <em>pointer</em>.</p>
+<p>Ketika kamu punya variabel di C, nilainya berada di memori <em>di suatu tempat</em>, pada suatu alamat. Tentu saja. Memangnya di mana lagi? Tapi merujuk ke sebuah nilai lewat alamat numeriknya itu merepotkan, jadi kita memberinya nama, dan itulah yang disebut variabel.</p>
+<p>Ada dua alasan kenapa hal ini dibahas:</p>
+<ol type="1">
+<li>Ini memudahkan pemahaman variabel pointer nanti—variabel yang menyimpan alamat variabel lain!</li>
+<li>Dan, ini juga memudahkan pemahaman pointer nanti.</li>
+</ol>
+<p>Jadi, variabel adalah nama untuk data yang disimpan di memori pada suatu alamat.</p>
+<h3 data-number="3.1.1" id="nama-variabel"><span class="header-section-number">3.1.1</span> Nama Variabel</h3>
+<p>Nama variabel boleh memakai karakter apa pun dalam rentang 0-9, A-Z, a-z, dan underscore, dengan aturan berikut:</p>
+<ul>
+<li>Nama variabel tidak boleh diawali digit 0-9.</li>
+<li>Nama variabel tidak boleh diawali dua underscore.</li>
+<li>Nama variabel tidak boleh diawali underscore yang diikuti huruf kapital A-Z.</li>
+</ul>
+<p>Untuk Unicode, coba saja. Spesifikasi di §D.2 punya sejumlah aturan tentang rentang codepoint Unicode mana yang boleh dipakai di bagian mana dari identifier, tapi itu terlalu panjang untuk ditulis di sini dan kemungkinan besar tidak perlu kamu pikirkan.</p>
+<h3 data-number="3.1.2" id="tipe-variabel"><span class="header-section-number">3.1.2</span> Tipe Variabel</h3>
+<p>Tergantung bahasa apa yang ada di gudang senjatamu, kamu mungkin sudah akrab, mungkin juga belum, dengan konsep tipe. Tapi C cukup ketat soal ini, jadi kita perlu mengulasnya sedikit.</p>
+<p>Berikut beberapa contoh tipe, yang paling dasar saja:</p>
+<p></p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 41%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: right;">Contoh</th>
+<th style="text-align: left;">Tipe C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Integer</td>
+<td style="text-align: right;"><code>3490</code></td>
+<td style="text-align: left;"><code>int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">Floating point</td>
+<td style="text-align: right;"><code>3.14159</code></td>
+<td style="text-align: left;"><code>float</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn35" class="footnote-ref" id="fnref35" role="doc-noteref"><sup>35</sup></a></td>
+</tr>
+<tr>
+<td style="text-align: left;">Karakter (tunggal)</td>
+<td style="text-align: right;"><code>'c'</code></td>
+<td style="text-align: left;"><code>char</code></td>
+</tr>
+<tr>
+<td style="text-align: left;">String</td>
+<td style="text-align: right;"><code>"Hello, world!"</code></td>
+<td style="text-align: left;"><code>char *</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn36" class="footnote-ref" id="fnref36" role="doc-noteref"><sup>36</sup></a></td>
+</tr>
+</tbody>
+</table>
+<p>C berusaha mengonversi secara otomatis antara kebanyakan tipe numerik kalau diminta. Selain itu, semua konversi dilakukan manual, terutama antara string dan numerik.</p>
+<p>Hampir semua tipe di C adalah varian dari tipe-tipe ini.</p>
+<p>Sebelum memakai variabel, kamu harus <em>mendeklarasikannya</em> dan memberi tahu C tipe apa yang akan dipegangnya. Setelah dideklarasikan, tipe variabel tidak bisa diubah lagi saat runtime. Apa yang kamu tetapkan, itulah yang berlaku sampai variabel keluar dari scope dan diserap kembali oleh alam semesta.</p>
+<p>Mari kita ambil kode “Hello, world” tadi dan tambahkan beberapa variabel:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb10-1"><a href="variabel-dan-pernyataan.html#cb10-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb10-2"><a href="variabel-dan-pernyataan.html#cb10-2" aria-label="2"></a></span>
+<span id="cb10-3"><a href="variabel-dan-pernyataan.html#cb10-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb10-4"><a href="variabel-dan-pernyataan.html#cb10-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb10-5"><a href="variabel-dan-pernyataan.html#cb10-5" aria-label="5"></a>    <span class="dt">int</span> i<span class="op">;</span>    <span class="co">// Menyimpan integer bertanda, mis. -3, -2, 0, 1, 10</span></span>
+<span id="cb10-6"><a href="variabel-dan-pernyataan.html#cb10-6" aria-label="6"></a>    <span class="dt">float</span> f<span class="op">;</span>  <span class="co">// Menyimpan bilangan floating point bertanda, mis. -3.1416</span></span>
+<span id="cb10-7"><a href="variabel-dan-pernyataan.html#cb10-7" aria-label="7"></a></span>
+<span id="cb10-8"><a href="variabel-dan-pernyataan.html#cb10-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;Hello, World!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Ah, keakraban yang menenangkan</span></span>
+<span id="cb10-9"><a href="variabel-dan-pernyataan.html#cb10-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Nah! Kita sudah mendeklarasikan beberapa variabel. Keduanya belum kita pakai dan belum diinisialisasi. Yang satu menyimpan integer, yang lain menyimpan floating point number (pada dasarnya bilangan real, kalau kamu punya latar belakang matematika).</p>
+<p>Variabel yang belum diinisialisasi bernilai tak tentu<a href="function-specifier-alignment-specifier-dan-operator.html#fn37" class="footnote-ref" id="fnref37" role="doc-noteref"><sup>37</sup></a>. Variabel harus diinisialisasi, atau kamu harus menganggap isinya angka sampah.</p>
+<blockquote>
+<p>Di sinilah C bisa “menjebak” kamu. Seringnya, dari pengalaman, nilai yang tak tentu itu nol… tapi bisa berubah dari satu run ke run berikutnya! Jangan pernah menganggap nilainya nol, meskipun kamu melihatnya nol. <em>Selalu</em> inisialisasi variabel secara eksplisit sebelum dipakai<a href="function-specifier-alignment-specifier-dan-operator.html#fn38" class="footnote-ref" id="fnref38" role="doc-noteref"><sup>38</sup></a>.</p>
+</blockquote>
+<p>Apa nih? Kamu mau menyimpan angka di variabel itu? Gila kamu!</p>
+<p>Ayo kita lakukan: </p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb11-1"><a href="variabel-dan-pernyataan.html#cb11-1" aria-label="1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb11-2"><a href="variabel-dan-pernyataan.html#cb11-2" aria-label="2"></a><span class="op">{</span></span>
+<span id="cb11-3"><a href="variabel-dan-pernyataan.html#cb11-3" aria-label="3"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb11-4"><a href="variabel-dan-pernyataan.html#cb11-4" aria-label="4"></a></span>
+<span id="cb11-5"><a href="variabel-dan-pernyataan.html#cb11-5" aria-label="5"></a>    i <span class="op">=</span> <span class="dv">2</span><span class="op">;</span> <span class="co">// Menugaskan nilai 2 ke variabel i</span></span>
+<span id="cb11-6"><a href="variabel-dan-pernyataan.html#cb11-6" aria-label="6"></a></span>
+<span id="cb11-7"><a href="variabel-dan-pernyataan.html#cb11-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;Hello, World!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb11-8"><a href="variabel-dan-pernyataan.html#cb11-8" aria-label="8"></a><span class="op">}</span></span></code></pre></div>
+<p>Mantap. Kita sudah menyimpan sebuah nilai. Sekarang kita cetak.</p>
+<p>Caranya, kita oper <em>dua</em> argumen keren ke fungsi <code>printf()</code>. Argumen pertama adalah string yang menjelaskan apa yang akan dicetak dan bagaimana mencetaknya (disebut <em>format string</em>), dan argumen kedua adalah nilai yang dicetak, yaitu apa pun isi variabel <code>i</code>.</p>
+<p><code>printf()</code> mencari urutan-urutan khusus dalam format string yang diawali tanda persen (<code>%</code>), yang memberi tahu apa yang harus dicetak. Misalnya, kalau menemukan <code>%d</code>, ia mengambil parameter berikutnya dan mencetaknya sebagai integer. Kalau menemukan <code>%f</code>, nilainya dicetak sebagai float. Kalau menemukan <code>%s</code>, ia mencetak string.</p>
+<p>Dengan begitu, kita bisa mencetak nilai berbagai tipe seperti ini:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb12-1"><a href="variabel-dan-pernyataan.html#cb12-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb12-2"><a href="variabel-dan-pernyataan.html#cb12-2" aria-label="2"></a></span>
+<span id="cb12-3"><a href="variabel-dan-pernyataan.html#cb12-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb12-4"><a href="variabel-dan-pernyataan.html#cb12-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb12-5"><a href="variabel-dan-pernyataan.html#cb12-5" aria-label="5"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb12-6"><a href="variabel-dan-pernyataan.html#cb12-6" aria-label="6"></a>    <span class="dt">float</span> f <span class="op">=</span> <span class="fl">3.14</span><span class="op">;</span></span>
+<span id="cb12-7"><a href="variabel-dan-pernyataan.html#cb12-7" aria-label="7"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span>  <span class="co">// char * (&quot;char pointer&quot;) adalah sebuah string</span></span>
+<span id="cb12-8"><a href="variabel-dan-pernyataan.html#cb12-8" aria-label="8"></a></span>
+<span id="cb12-9"><a href="variabel-dan-pernyataan.html#cb12-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">  i = </span><span class="sc">%d</span><span class="st"> and f = </span><span class="sc">%f</span><span class="st">!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">,</span> i<span class="op">,</span> f<span class="op">);</span></span>
+<span id="cb12-10"><a href="variabel-dan-pernyataan.html#cb12-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p>Outputnya akan seperti ini:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb13-1"><a href="variabel-dan-pernyataan.html#cb13-1" aria-hidden="true" tabindex="-1"></a>Hello, world!  i = 2 and f = 3.14!</span></code></pre></div>
+<p>Dengan begitu, <code>printf()</code> mungkin mirip dengan format string atau parameterized string di bahasa lain yang sudah kamu kenal. </p>
+<p><strong><em>CATATAN:</em></strong> Di bagian-bagian berikut, kita anggap kamu sudah mendeklarasikan variabelnya di awal. Kalau sebuah contoh memakai integer <code>i</code> dan <code>j</code>, bayangkan saja ada baris ini di suatu tempat di atasnya:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb14-1"><a href="variabel-dan-pernyataan.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i<span class="op">,</span> j<span class="op">;</span></span></code></pre></div>
+<h3 data-number="3.1.3" id="tipe-boolean"><span class="header-section-number">3.1.3</span> Tipe Boolean</h3>
+<p>Apakah C punya tipe Boolean, ya atau tidak?</p>
+<p><code>1</code>!</p>
+<p>Secara historis, C tidak punya tipe Boolean, dan sebagian orang berpendapat sampai sekarang pun belum.</p>
+<p>Di C, <code>0</code> berarti “false”, dan nilai bukan nol berarti “true”.</p>
+<p>Jadi <code>1</code> itu true. <code>-37</code> juga true. Dan <code>0</code> adalah false.</p>
+<p>Kamu bisa mendeklarasikan Boolean sebagai <code>int</code> biasa:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb15-1"><a href="variabel-dan-pernyataan.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb15-2"><a href="variabel-dan-pernyataan.html#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="variabel-dan-pernyataan.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb15-4"><a href="variabel-dan-pernyataan.html#cb15-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;x is true!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb15-5"><a href="variabel-dan-pernyataan.html#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Di C23, kita mendapat <code>bool</code>, <code>true</code>, dan <code>false</code> yang sesungguhnya. Sebelum itu, kalau versi C-mu cukup modern, kamu bisa <code>#include &lt;stdbool.h&gt;</code> untuk hasil yang sama.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb16-1"><a href="variabel-dan-pernyataan.html#cb16-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb16-2"><a href="variabel-dan-pernyataan.html#cb16-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span><span class="pp">  </span><span class="co">// tidak diperlukan di C23</span></span>
+<span id="cb16-3"><a href="variabel-dan-pernyataan.html#cb16-3" aria-label="3"></a></span>
+<span id="cb16-4"><a href="variabel-dan-pernyataan.html#cb16-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-5"><a href="variabel-dan-pernyataan.html#cb16-5" aria-label="5"></a>    <span class="dt">bool</span> x <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb16-6"><a href="variabel-dan-pernyataan.html#cb16-6" aria-label="6"></a></span>
+<span id="cb16-7"><a href="variabel-dan-pernyataan.html#cb16-7" aria-label="7"></a>    <span class="cf">if</span> <span class="op">(</span>x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb16-8"><a href="variabel-dan-pernyataan.html#cb16-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;x is true!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb16-9"><a href="variabel-dan-pernyataan.html#cb16-9" aria-label="9"></a>    <span class="op">}</span></span>
+<span id="cb16-10"><a href="variabel-dan-pernyataan.html#cb16-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p>Secara teknis, variabel <code>bool</code> seharusnya diisi <code>true</code>, <code>false</code>, atau hasil ekspresi yang bernilai true atau false. Tapi sebenarnya kamu bisa mengonversi berbagai hal ke <code>bool</code>. Ada aturan khusus, tapi yang bernilai nol cenderung menjadi <code>false</code>, dan yang bukan nol menjadi true.</p>
+<p>Hati-hati kalau keduanya dicampur, karena nilai numerik <code>true</code> kemungkinan besar adalah <code>1</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn39" class="footnote-ref" id="fnref39" role="doc-noteref"><sup>39</sup></a>. Kalau kamu mengandalkan nilai positif lain sebagai true, hasilnya bisa tidak cocok. Misalnya:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb17-1"><a href="variabel-dan-pernyataan.html#cb17-1" aria-label="1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">true</span> <span class="op">==</span> <span class="dv">12</span><span class="op">);</span>  <span class="co">// Mencetak &quot;0&quot;, false!</span></span></code></pre></div>
+<p></p>
+<h2 data-number="3.2" id="operators"><span class="header-section-number">3.2</span> Operator dan Ekspresi</h2>
+<p>Operator C seharusnya sudah akrab dari bahasa lain. Kita bahas sekilas beberapa di antaranya di sini.</p>
+<p>(Detailnya masih lebih banyak dari ini, tapi bagian ini sudah cukup untuk memulai.)</p>
+<h3 data-number="3.2.1" id="aritmetika"><span class="header-section-number">3.2.1</span> Aritmetika</h3>
+<p>Semoga ini sudah akrab: </p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb18-1"><a href="variabel-dan-pernyataan.html#cb18-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i <span class="op">+</span> <span class="dv">3</span><span class="op">;</span>  <span class="co">// Operator penjumlahan (+) dan penugasan (=), tambahkan 3 ke i</span></span>
+<span id="cb18-2"><a href="variabel-dan-pernyataan.html#cb18-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i <span class="op">-</span> <span class="dv">8</span><span class="op">;</span>  <span class="co">// Pengurangan, kurangi i dengan 8</span></span>
+<span id="cb18-3"><a href="variabel-dan-pernyataan.html#cb18-3" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i <span class="op">*</span> <span class="dv">9</span><span class="op">;</span>  <span class="co">// Perkalian</span></span>
+<span id="cb18-4"><a href="variabel-dan-pernyataan.html#cb18-4" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i <span class="op">/</span> <span class="dv">2</span><span class="op">;</span>  <span class="co">// Pembagian</span></span>
+<span id="cb18-5"><a href="variabel-dan-pernyataan.html#cb18-5" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> i <span class="op">%</span> <span class="dv">5</span><span class="op">;</span>  <span class="co">// Modulo (sisa pembagian)</span></span></code></pre></div>
+<p>Semua itu punya varian singkat. Setiap baris di atas bisa ditulis lebih ringkas sebagai: </p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb19-1"><a href="variabel-dan-pernyataan.html#cb19-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">+=</span> <span class="dv">3</span><span class="op">;</span>  <span class="co">// Sama dengan &quot;i = i + 3&quot;, tambahkan 3 ke i</span></span>
+<span id="cb19-2"><a href="variabel-dan-pernyataan.html#cb19-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">-=</span> <span class="dv">8</span><span class="op">;</span>  <span class="co">// Sama dengan &quot;i = i - 8&quot;</span></span>
+<span id="cb19-3"><a href="variabel-dan-pernyataan.html#cb19-3" aria-hidden="true" tabindex="-1"></a>i <span class="op">*=</span> <span class="dv">9</span><span class="op">;</span>  <span class="co">// Sama dengan &quot;i = i * 9&quot;</span></span>
+<span id="cb19-4"><a href="variabel-dan-pernyataan.html#cb19-4" aria-hidden="true" tabindex="-1"></a>i <span class="op">/=</span> <span class="dv">2</span><span class="op">;</span>  <span class="co">// Sama dengan &quot;i = i / 2&quot;</span></span>
+<span id="cb19-5"><a href="variabel-dan-pernyataan.html#cb19-5" aria-hidden="true" tabindex="-1"></a>i <span class="op">%=</span> <span class="dv">5</span><span class="op">;</span>  <span class="co">// Sama dengan &quot;i = i % 5&quot;</span></span></code></pre></div>
+<p>Tidak ada operator pangkat. Kamu harus memakai salah satu varian fungsi <code>pow()</code> dari <code>math.h</code>.</p>
+<p>Sekarang kita masuk ke hal-hal yang lebih aneh, yang mungkin tidak ada di bahasa lain!</p>
+<h3 data-number="3.2.2" id="operator-ternary"><span class="header-section-number">3.2.2</span> Operator Ternary</h3>
+<p>C juga punya <em>operator ternary</em>, yaitu ekspresi yang nilainya bergantung pada hasil sebuah kondisional yang tertanam di dalamnya.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb20-1"><a href="variabel-dan-pernyataan.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Jika x &gt; 10, tambahkan 17 ke y. Jika tidak, tambahkan 37 ke y.</span></span>
+<span id="cb20-2"><a href="variabel-dan-pernyataan.html#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="variabel-dan-pernyataan.html#cb20-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">+=</span> x <span class="op">&gt;</span> <span class="dv">10</span><span class="op">?</span> <span class="dv">17</span><span class="op">:</span> <span class="dv">37</span><span class="op">;</span></span></code></pre></div>
+<p>Berantakan sekali! Tapi kamu akan terbiasa seiring sering membacanya. Supaya lebih jelas, ekspresi di atas bisa ditulis ulang dengan pernyataan <code>if</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb21-1"><a href="variabel-dan-pernyataan.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Ekspresi ini:</span></span>
+<span id="cb21-2"><a href="variabel-dan-pernyataan.html#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="variabel-dan-pernyataan.html#cb21-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">+=</span> x <span class="op">&gt;</span> <span class="dv">10</span><span class="op">?</span> <span class="dv">17</span><span class="op">:</span> <span class="dv">37</span><span class="op">;</span></span>
+<span id="cb21-4"><a href="variabel-dan-pernyataan.html#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="variabel-dan-pernyataan.html#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">// setara dengan non-ekspresi ini:</span></span>
+<span id="cb21-6"><a href="variabel-dan-pernyataan.html#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="variabel-dan-pernyataan.html#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">&gt;</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb21-8"><a href="variabel-dan-pernyataan.html#cb21-8" aria-hidden="true" tabindex="-1"></a>    y <span class="op">+=</span> <span class="dv">17</span><span class="op">;</span></span>
+<span id="cb21-9"><a href="variabel-dan-pernyataan.html#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb21-10"><a href="variabel-dan-pernyataan.html#cb21-10" aria-hidden="true" tabindex="-1"></a>    y <span class="op">+=</span> <span class="dv">37</span><span class="op">;</span></span></code></pre></div>
+<p>Bandingkan keduanya sampai kamu bisa melihat masing-masing komponen operator ternary.</p>
+<p>Atau contoh lain, yang mencetak apakah angka di <code>x</code> ganjil atau genap:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb22-1"><a href="variabel-dan-pernyataan.html#cb22-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;The number </span><span class="sc">%d</span><span class="st"> is </span><span class="sc">%s</span><span class="st">.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">,</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span><span class="op">?</span> <span class="st">&quot;even&quot;</span><span class="op">:</span> <span class="st">&quot;odd&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Format specifier <code>%s</code> di <code>printf()</code> berarti “cetak string”. Kalau ekspresi <code>x % 2</code> bernilai <code>0</code>, nilai seluruh ekspresi ternary adalah string <code>"even"</code>. Kalau tidak, nilainya string <code>"odd"</code>. Keren sekali!</p>
+<p>Perlu diingat bahwa operator ternary bukan kendali alur seperti pernyataan <code>if</code>. Ia hanyalah ekspresi yang menghasilkan sebuah nilai. </p>
+<h3 data-number="3.2.3" id="pre-dan-post-increment-dan-decrement"><span class="header-section-number">3.2.3</span> Pre-dan-Post Increment-dan-Decrement</h3>
+<p> Sekarang kita bahas hal lain yang mungkin belum pernah kamu lihat.</p>
+<p>Inilah operator post-increment dan post-decrement yang legendaris:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb23-1"><a href="variabel-dan-pernyataan.html#cb23-1" aria-hidden="true" tabindex="-1"></a>i<span class="op">++;</span>        <span class="co">// Tambahkan satu ke i (post-increment)</span></span>
+<span id="cb23-2"><a href="variabel-dan-pernyataan.html#cb23-2" aria-hidden="true" tabindex="-1"></a>i<span class="op">--;</span>        <span class="co">// Kurangi i dengan satu (post-decrement)</span></span></code></pre></div>
+<p>Operator ini sangat umum dipakai sebagai versi singkat dari:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb24-1"><a href="variabel-dan-pernyataan.html#cb24-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">+=</span> <span class="dv">1</span><span class="op">;</span>        <span class="co">// Tambahkan satu ke i</span></span>
+<span id="cb24-2"><a href="variabel-dan-pernyataan.html#cb24-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">-=</span> <span class="dv">1</span><span class="op">;</span>        <span class="co">// Kurangi i dengan satu</span></span></code></pre></div>
+<p>tapi perbedaannya lebih halus dari itu, dasar penipu cerdas.</p>
+<p>Sekarang varian lainnya, pre-increment dan pre-decrement:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb25-1"><a href="variabel-dan-pernyataan.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="op">++</span>i<span class="op">;</span>        <span class="co">// Tambahkan satu ke i (pre-increment)</span></span>
+<span id="cb25-2"><a href="variabel-dan-pernyataan.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>i<span class="op">;</span>        <span class="co">// Kurangi i dengan satu (pre-decrement)</span></span></code></pre></div>
+<p>Pada pre-increment dan pre-decrement, nilai variabel di-increment atau di-decrement <em>sebelum</em> ekspresi dievaluasi. Setelah itu, ekspresi dievaluasi dengan nilai yang baru.</p>
+<p>Pada post-increment dan post-decrement, nilai ekspresi dihitung lebih dulu dengan nilai variabel apa adanya, dan <em>baru kemudian</em> variabelnya di-increment atau di-decrement.</p>
+<p>Kedua operator ini bisa disematkan dalam ekspresi, seperti ini:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb26-1"><a href="variabel-dan-pernyataan.html#cb26-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb26-2"><a href="variabel-dan-pernyataan.html#cb26-2" aria-hidden="true" tabindex="-1"></a>j <span class="op">=</span> <span class="dv">5</span> <span class="op">+</span> i<span class="op">++;</span>  <span class="co">// Hitung 5 + i, _baru kemudian_ increment i</span></span>
+<span id="cb26-3"><a href="variabel-dan-pernyataan.html#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="variabel-dan-pernyataan.html#cb26-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span>  <span class="co">// Mencetak 11, 15</span></span></code></pre></div>
+<p>Bandingkan dengan operator pre-increment:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb27-1"><a href="variabel-dan-pernyataan.html#cb27-1" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb27-2"><a href="variabel-dan-pernyataan.html#cb27-2" aria-hidden="true" tabindex="-1"></a>j <span class="op">=</span> <span class="dv">5</span> <span class="op">+</span> <span class="op">++</span>i<span class="op">;</span>  <span class="co">// Increment i, _baru kemudian_ hitung 5 + i</span></span>
+<span id="cb27-3"><a href="variabel-dan-pernyataan.html#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="variabel-dan-pernyataan.html#cb27-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span>  <span class="co">// Mencetak 11, 16</span></span></code></pre></div>
+<p>Teknik ini sering dipakai pada akses dan manipulasi array dan pointer. Dengannya kamu bisa memakai nilai sebuah variabel sekaligus meng-increment atau men-decrement nilai itu, sebelum atau sesudah dipakai.</p>
+<p>Tapi sejauh ini, tempat yang paling sering memakainya adalah loop <code>for</code>:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb28-1"><a href="variabel-dan-pernyataan.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb28-2"><a href="variabel-dan-pernyataan.html#cb28-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span></code></pre></div>
+<p>Soal itu kita bahas nanti. </p>
+<h3 data-number="3.2.4" id="operator-koma"><span class="header-section-number">3.2.4</span> Operator Koma</h3>
+<p> Ini cara yang jarang dipakai untuk memisahkan ekspresi yang akan dijalankan dari kiri ke kanan:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb29-1"><a href="variabel-dan-pernyataan.html#cb29-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">20</span><span class="op">;</span>  <span class="co">// Mula-mula tugaskan 10 ke x, lalu 20 ke y</span></span></code></pre></div>
+<p>Kelihatannya agak konyol, karena koma itu bisa saja diganti titik koma, kan?</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb30-1"><a href="variabel-dan-pernyataan.html#cb30-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> y <span class="op">=</span> <span class="dv">20</span><span class="op">;</span>  <span class="co">// Mula-mula tugaskan 10 ke x, lalu 20 ke y</span></span></code></pre></div>
+<p>Tapi keduanya sedikit berbeda. Yang terakhir berupa dua ekspresi terpisah, sedangkan yang pertama hanya satu ekspresi tunggal!</p>
+<p>Dengan operator koma, nilai ekspresi koma adalah nilai ekspresi yang paling kanan:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb31-1"><a href="variabel-dan-pernyataan.html#cb31-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="op">(</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb31-2"><a href="variabel-dan-pernyataan.html#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="variabel-dan-pernyataan.html#cb31-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;x is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// Mencetak 3, karena 3 adalah yang paling kanan di daftar koma</span></span></code></pre></div>
+<p>Tapi itu pun terasa dipaksakan. Tempat yang umum untuk operator koma adalah loop <code>for</code>, untuk melakukan beberapa hal sekaligus di setiap bagiannya:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb32-1"><a href="variabel-dan-pernyataan.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> j <span class="op">=</span> <span class="dv">10</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">100</span><span class="op">;</span> i<span class="op">++,</span> j<span class="op">++)</span></span>
+<span id="cb32-2"><a href="variabel-dan-pernyataan.html#cb32-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span></span></code></pre></div>
+<p>Kita akan kembali ke sana nanti. </p>
+<h3 data-number="3.2.5" id="operator-kondisional"><span class="header-section-number">3.2.5</span> Operator Kondisional</h3>
+<p> Untuk nilai Boolean, tersedia banyak operator standar: </p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb33-1"><a href="variabel-dan-pernyataan.html#cb33-1" aria-hidden="true" tabindex="-1"></a>a <span class="op">==</span> b<span class="op">;</span>  <span class="co">// True jika a sama dengan b</span></span>
+<span id="cb33-2"><a href="variabel-dan-pernyataan.html#cb33-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">!=</span> b<span class="op">;</span>  <span class="co">// True jika a tidak sama dengan b</span></span>
+<span id="cb33-3"><a href="variabel-dan-pernyataan.html#cb33-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">&lt;</span> b<span class="op">;</span>   <span class="co">// True jika a kurang dari b</span></span>
+<span id="cb33-4"><a href="variabel-dan-pernyataan.html#cb33-4" aria-hidden="true" tabindex="-1"></a>a <span class="op">&gt;</span> b<span class="op">;</span>   <span class="co">// True jika a lebih dari b</span></span>
+<span id="cb33-5"><a href="variabel-dan-pernyataan.html#cb33-5" aria-hidden="true" tabindex="-1"></a>a <span class="op">&lt;=</span> b<span class="op">;</span>  <span class="co">// True jika a kurang dari atau sama dengan b</span></span>
+<span id="cb33-6"><a href="variabel-dan-pernyataan.html#cb33-6" aria-hidden="true" tabindex="-1"></a>a <span class="op">&gt;=</span> b<span class="op">;</span>  <span class="co">// True jika a lebih dari atau sama dengan b</span></span></code></pre></div>
+<p>Jangan tertukar antara penugasan (<code>=</code>) dan perbandingan (<code>==</code>)! Pakai dua tanda sama dengan untuk membandingkan, satu untuk penugasan.</p>
+<p>Ekspresi perbandingan bisa dipakai dalam pernyataan <code>if</code>:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb34-1"><a href="variabel-dan-pernyataan.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>a <span class="op">&lt;=</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb34-2"><a href="variabel-dan-pernyataan.html#cb34-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Success!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p></p>
+<h3 data-number="3.2.6" id="operator-boolean"><span class="header-section-number">3.2.6</span> Operator Boolean</h3>
+<p> Ekspresi kondisional bisa dirangkai atau diubah dengan operator Boolean untuk <em>dan</em>, <em>atau</em>, dan <em>tidak</em>. </p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Operator</th>
+<th style="text-align: center;">Makna Boolean</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>&amp;&amp;</code></td>
+<td style="text-align: center;">and</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>||</code></td>
+<td style="text-align: center;">or</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>!</code></td>
+<td style="text-align: center;">not</td>
+</tr>
+</tbody>
+</table>
+<p>Contoh Boolean “and”:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb35-1"><a href="variabel-dan-pernyataan.html#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Lakukan sesuatu jika x kurang dari 10 dan y lebih dari 20:</span></span>
+<span id="cb35-2"><a href="variabel-dan-pernyataan.html#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="variabel-dan-pernyataan.html#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">&lt;</span> <span class="dv">10</span> <span class="op">&amp;&amp;</span> y <span class="op">&gt;</span> <span class="dv">20</span><span class="op">)</span></span>
+<span id="cb35-4"><a href="variabel-dan-pernyataan.html#cb35-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Doing something!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Contoh Boolean “not”:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb36-1"><a href="variabel-dan-pernyataan.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(!(</span>x <span class="op">&lt;</span> <span class="dv">12</span><span class="op">))</span></span>
+<span id="cb36-2"><a href="variabel-dan-pernyataan.html#cb36-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;x is not less than 12</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><code>!</code> punya prioritas (precedence) lebih tinggi daripada operator Boolean lainnya, jadi dalam kasus ini kita harus memakai tanda kurung.</p>
+<p>Tentu saja, itu sama saja dengan:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb37-1"><a href="variabel-dan-pernyataan.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">&gt;=</span> <span class="dv">12</span><span class="op">)</span></span>
+<span id="cb37-2"><a href="variabel-dan-pernyataan.html#cb37-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;x is not less than 12</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>tapi namanya juga contoh! </p>
+<h3 data-number="3.2.7" id="sizeof-operator"><span class="header-section-number">3.2.7</span> Operator <code>sizeof</code></h3>
+<p> Operator ini memberi tahu ukuran (dalam byte) yang dipakai sebuah variabel atau tipe data di memori.</p>
+<p>Lebih tepatnya, ia memberi tahu ukuran (dalam byte) yang dipakai oleh <em>tipe dari suatu ekspresi</em> (yang bisa saja hanya satu variabel) di memori.</p>
+<p>Ukurannya bisa berbeda di tiap sistem, kecuali untuk <code>char</code> dan variannya (yang selalu 1 byte).</p>
+<p>Mungkin sekarang ini belum terlihat berguna, tapi kita akan sering merujuknya, jadi layak dibahas.</p>
+<p>Karena <code>sizeof</code> menghitung jumlah byte yang dibutuhkan untuk menyimpan sebuah tipe, kamu mungkin mengira ia mengembalikan <code>int</code>. Atau… karena ukuran tidak mungkin negatif, mungkin <code>unsigned</code>?</p>
+<p> Ternyata C punya tipe khusus untuk menampung nilai kembalian <code>sizeof</code>, yaitu <code>size_t</code>, dibaca “<em>size tee</em>”<a href="function-specifier-alignment-specifier-dan-operator.html#fn40" class="footnote-ref" id="fnref40" role="doc-noteref"><sup>40</sup></a>. Yang kita tahu hanyalah bahwa ini tipe integer tak bertanda (unsigned) yang sanggup menyimpan ukuran dalam byte dari apa pun yang bisa diberikan ke <code>sizeof</code>.</p>
+<p><code>size_t</code> muncul di banyak tempat yang melibatkan jumlah sesuatu, baik sebagai argumen maupun nilai kembalian. Anggap saja ia nilai yang menyatakan “banyaknya”. </p>
+<p><code>sizeof</code> bisa diterapkan pada variabel atau ekspresi:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb38-1"><a href="variabel-dan-pernyataan.html#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">999</span><span class="op">;</span></span>
+<span id="cb38-2"><a href="variabel-dan-pernyataan.html#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="variabel-dan-pernyataan.html#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">// %zu adalah format specifier untuk tipe size_t</span></span>
+<span id="cb38-4"><a href="variabel-dan-pernyataan.html#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Jika compiler-mu menolak bagian &quot;z&quot;, buang saja</span></span>
+<span id="cb38-5"><a href="variabel-dan-pernyataan.html#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="variabel-dan-pernyataan.html#cb38-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span> a<span class="op">);</span>      <span class="co">// Mencetak 4 di sistem penulis</span></span>
+<span id="cb38-7"><a href="variabel-dan-pernyataan.html#cb38-7" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">7</span><span class="op">));</span> <span class="co">// Mencetak 4 di sistem penulis</span></span>
+<span id="cb38-8"><a href="variabel-dan-pernyataan.html#cb38-8" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span> <span class="fl">3.14</span><span class="op">);</span>   <span class="co">// Mencetak 8 di sistem penulis</span></span>
+<span id="cb38-9"><a href="variabel-dan-pernyataan.html#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="variabel-dan-pernyataan.html#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="co">// Jika perlu mencetak nilai size_t negatif, pakai %zd</span></span></code></pre></div>
+<p>Ingat: yang dihasilkan adalah ukuran dalam byte dari <em>tipe</em> ekspresi, bukan ukuran ekspresi itu sendiri. Itulah sebabnya ukuran <code>2+7</code> sama dengan ukuran <code>a</code>—keduanya bertipe <code>int</code>. Kita akan kembali ke angka <code>4</code> ini di blok kode berikutnya…</p>
+<p>…yang menunjukkan bahwa <code>sizeof</code> juga bisa diterapkan pada sebuah tipe (perhatikan bahwa tanda kurung wajib di sekitar nama tipe, tidak seperti pada ekspresi):</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb39-1"><a href="variabel-dan-pernyataan.html#cb39-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>   <span class="co">// Mencetak 4 di sistem penulis</span></span>
+<span id="cb39-2"><a href="variabel-dan-pernyataan.html#cb39-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">char</span><span class="op">));</span>  <span class="co">// Mencetak 1 di semua sistem</span></span></code></pre></div>
+<p>Perlu dicatat bahwa <code>sizeof</code> adalah operasi <em>compile-time</em><a href="function-specifier-alignment-specifier-dan-operator.html#fn41" class="footnote-ref" id="fnref41" role="doc-noteref"><sup>41</sup></a>. Hasilnya ditentukan sepenuhnya saat compile-time, bukan saat runtime.</p>
+<p>Kita akan memakainya nanti. </p>
+<h2 data-number="3.3" id="kendali-alur"><span class="header-section-number">3.3</span> Kendali Alur</h2>
+<p> Boolean memang bagus, tapi kita tidak akan ke mana-mana kalau tidak bisa mengendalikan alur program. Mari kita lihat beberapa konstruksi: <code>if</code>, <code>for</code>, <code>while</code>, dan <code>do-while</code>.</p>
+<p>Pertama, catatan umum tentang pernyataan dan blok pernyataan, dipersembahkan oleh developer C lokal yang ramah ini:</p>
+<p>Setelah pernyataan seperti <code>if</code> atau <code>while</code>, kamu bisa menaruh satu pernyataan tunggal untuk dieksekusi, atau sebuah blok pernyataan yang semuanya dieksekusi berurutan.</p>
+<p> Kita mulai dengan satu pernyataan:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb40-1"><a href="variabel-dan-pernyataan.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">10</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;x is 10</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Ini juga kadang ditulis di baris terpisah. (Whitespace hampir tidak berpengaruh di C—tidak seperti Python.)</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb41-1"><a href="variabel-dan-pernyataan.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb41-2"><a href="variabel-dan-pernyataan.html#cb41-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;x is 10</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Tapi bagaimana kalau kamu ingin beberapa hal terjadi sekaligus karena satu kondisi? Pakai kurung kurawal untuk menandai sebuah <em>blok</em> atau <em>pernyataan majemuk</em>.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb42-1"><a href="variabel-dan-pernyataan.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb42-2"><a href="variabel-dan-pernyataan.html#cb42-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;x is 10</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb42-3"><a href="variabel-dan-pernyataan.html#cb42-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;And also this happens when x is 10</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb42-4"><a href="variabel-dan-pernyataan.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Gaya yang sangat umum adalah <em>selalu</em> memakai kurung kurawal, meskipun sebenarnya tidak perlu:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb43-1"><a href="variabel-dan-pernyataan.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb43-2"><a href="variabel-dan-pernyataan.html#cb43-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;x is 10</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb43-3"><a href="variabel-dan-pernyataan.html#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Sebagian developer merasa kodenya lebih mudah dibaca, dan terhindar dari error seperti ini, ketika baris yang tampak berada di dalam blok <code>if</code> ternyata tidak.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb44-1"><a href="variabel-dan-pernyataan.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">// CONTOH ERROR BURUK</span></span>
+<span id="cb44-2"><a href="variabel-dan-pernyataan.html#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="variabel-dan-pernyataan.html#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb44-4"><a href="variabel-dan-pernyataan.html#cb44-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;This happens if x is 10</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb44-5"><a href="variabel-dan-pernyataan.html#cb44-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;This happens ALWAYS</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Kejutan!! Tanpa kondisi!</span></span></code></pre></div>
+<p><code>while</code>, <code>for</code>, dan konstruksi loop lainnya bekerja dengan cara yang sama seperti contoh di atas. Kalau ingin melakukan beberapa hal dalam loop atau setelah <code>if</code>, bungkus semuanya dalam kurung kurawal.</p>
+<p>Dengan kata lain, <code>if</code> menjalankan satu hal yang ada setelahnya. Satu hal itu bisa berupa satu pernyataan atau satu blok pernyataan. </p>
+<h3 data-number="3.3.1" id="ifstat"><span class="header-section-number">3.3.1</span> Pernyataan <code>if</code>-<code>else</code></h3>
+<p> Kita sudah memakai <code>if</code> di beberapa contoh, karena kemungkinan besar kamu sudah pernah melihatnya di bahasa lain, tapi ini satu contoh lagi:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb45-1"><a href="variabel-dan-pernyataan.html#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb45-2"><a href="variabel-dan-pernyataan.html#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="variabel-dan-pernyataan.html#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i <span class="op">&gt;</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb45-4"><a href="variabel-dan-pernyataan.html#cb45-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Yes, i is greater than 10.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb45-5"><a href="variabel-dan-pernyataan.html#cb45-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;And this will also print if i is greater than 10.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb45-6"><a href="variabel-dan-pernyataan.html#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb45-7"><a href="variabel-dan-pernyataan.html#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="variabel-dan-pernyataan.html#cb45-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i <span class="op">&lt;=</span> <span class="dv">10</span><span class="op">)</span> printf<span class="op">(</span><span class="st">&quot;i is less than or equal to 10.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Pada kode contoh, pesan dicetak kalau <code>i</code> lebih besar dari 10, kalau tidak eksekusi lanjut ke baris berikutnya. Perhatikan kurung kurawal setelah pernyataan <code>if</code>; kalau kondisinya true, yang dieksekusi adalah pernyataan tunggal tepat setelah <code>if</code>, atau sekumpulan kode dalam kurung kurawal setelah <code>if</code>. Perilaku <em>blok kode</em> seperti ini berlaku untuk semua pernyataan.</p>
+<p>Tentu saja, karena C menyenangkan dengan caranya sendiri, kamu juga bisa melakukan sesuatu saat kondisinya false lewat klausa <code>else</code> pada <code>if</code>:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb46-1"><a href="variabel-dan-pernyataan.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">99</span><span class="op">;</span></span>
+<span id="cb46-2"><a href="variabel-dan-pernyataan.html#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="variabel-dan-pernyataan.html#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb46-4"><a href="variabel-dan-pernyataan.html#cb46-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is 10!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb46-5"><a href="variabel-dan-pernyataan.html#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="variabel-dan-pernyataan.html#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb46-7"><a href="variabel-dan-pernyataan.html#cb46-7" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is decidedly not 10.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb46-8"><a href="variabel-dan-pernyataan.html#cb46-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Which irritates me a little, frankly.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb46-9"><a href="variabel-dan-pernyataan.html#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Kamu bahkan bisa merangkainya secara bertingkat untuk menguji berbagai kondisi, seperti ini:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb47-1"><a href="variabel-dan-pernyataan.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">99</span><span class="op">;</span></span>
+<span id="cb47-2"><a href="variabel-dan-pernyataan.html#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="variabel-dan-pernyataan.html#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">10</span><span class="op">)</span></span>
+<span id="cb47-4"><a href="variabel-dan-pernyataan.html#cb47-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is 10!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb47-5"><a href="variabel-dan-pernyataan.html#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="variabel-dan-pernyataan.html#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">20</span><span class="op">)</span></span>
+<span id="cb47-7"><a href="variabel-dan-pernyataan.html#cb47-7" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is 20!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb47-8"><a href="variabel-dan-pernyataan.html#cb47-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-9"><a href="variabel-dan-pernyataan.html#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">99</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb47-10"><a href="variabel-dan-pernyataan.html#cb47-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is 99! My favorite</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb47-11"><a href="variabel-dan-pernyataan.html#cb47-11" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;I can&#39;t tell you how happy I am.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb47-12"><a href="variabel-dan-pernyataan.html#cb47-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Really.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb47-13"><a href="variabel-dan-pernyataan.html#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb47-14"><a href="variabel-dan-pernyataan.html#cb47-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb47-15"><a href="variabel-dan-pernyataan.html#cb47-15" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb47-16"><a href="variabel-dan-pernyataan.html#cb47-16" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is some crazy number I&#39;ve never heard of.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Kalau kamu sampai menempuh jalan itu, coba lihat pernyataan <a href="variabel-dan-pernyataan.html#switch-statement"><code>switch</code></a> yang mungkin solusi lebih baik. Syaratnya, <code>switch</code> hanya bisa membandingkan kesamaan dengan angka konstan. Rangkaian <code>if</code>-<code>else</code> di atas bisa memeriksa ketidaksamaan, rentang, variabel, atau apa pun yang bisa dibuat dalam ekspresi kondisional. </p>
+<h3 data-number="3.3.2" id="whilestat"><span class="header-section-number">3.3.2</span> Pernyataan <code>while</code></h3>
+<p> <code>while</code> adalah konstruksi loop biasa yang lazim. Lakukan sesuatu selama ekspresi kondisinya bernilai true.</p>
+<p>Yuk, coba!</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb48-1"><a href="variabel-dan-pernyataan.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Cetak output berikut:</span></span>
+<span id="cb48-2"><a href="variabel-dan-pernyataan.html#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="co">//</span></span>
+<span id="cb48-3"><a href="variabel-dan-pernyataan.html#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="co">//   i is now 0!</span></span>
+<span id="cb48-4"><a href="variabel-dan-pernyataan.html#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="co">//   i is now 1!</span></span>
+<span id="cb48-5"><a href="variabel-dan-pernyataan.html#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co">//   [ sama saja untuk 2 sampai 7 ]</span></span>
+<span id="cb48-6"><a href="variabel-dan-pernyataan.html#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="co">//   i is now 8!</span></span>
+<span id="cb48-7"><a href="variabel-dan-pernyataan.html#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="co">//   i is now 9!</span></span>
+<span id="cb48-8"><a href="variabel-dan-pernyataan.html#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="variabel-dan-pernyataan.html#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb48-10"><a href="variabel-dan-pernyataan.html#cb48-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="variabel-dan-pernyataan.html#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb48-12"><a href="variabel-dan-pernyataan.html#cb48-12" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is now </span><span class="sc">%d</span><span class="st">!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb48-13"><a href="variabel-dan-pernyataan.html#cb48-13" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span></span>
+<span id="cb48-14"><a href="variabel-dan-pernyataan.html#cb48-14" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb48-15"><a href="variabel-dan-pernyataan.html#cb48-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-16"><a href="variabel-dan-pernyataan.html#cb48-16" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;All done!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Itulah loop dasar. C juga punya loop <code>for</code> yang akan membuat contoh tadi lebih rapi.</p>
+<p>Pemakaian <code>while</code> yang cukup sering adalah infinite loop, yaitu mengulang selama true:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb49-1"><a href="variabel-dan-pernyataan.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb49-2"><a href="variabel-dan-pernyataan.html#cb49-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;1 is always true, so this repeats forever.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb49-3"><a href="variabel-dan-pernyataan.html#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<h3 data-number="3.3.3" id="dowhilestat"><span class="header-section-number">3.3.3</span> Pernyataan <code>do</code>-<code>while</code></h3>
+<p> Setelah menguasai pernyataan <code>while</code>, mari kita lihat saudara dekatnya, <code>do</code>-<code>while</code>.</p>
+<p>Keduanya pada dasarnya sama, kecuali kalau kondisi loop bernilai false pada pass pertama: <code>do</code>-<code>while</code> tetap dieksekusi sekali, sedangkan <code>while</code> tidak dieksekusi sama sekali. Dengan kata lain, pengujian apakah blok akan dieksekusi terjadi di <em>akhir</em> blok pada <code>do</code>-<code>while</code>, dan di <em>awal</em> blok pada <code>while</code>.</p>
+<p>Kita lihat lewat contoh:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb50-1"><a href="variabel-dan-pernyataan.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Memakai pernyataan while:</span></span>
+<span id="cb50-2"><a href="variabel-dan-pernyataan.html#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="variabel-dan-pernyataan.html#cb50-3" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb50-4"><a href="variabel-dan-pernyataan.html#cb50-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="variabel-dan-pernyataan.html#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ini tidak dieksekusi karena i tidak kurang dari 10:</span></span>
+<span id="cb50-6"><a href="variabel-dan-pernyataan.html#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span><span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb50-7"><a href="variabel-dan-pernyataan.html#cb50-7" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;while: i is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb50-8"><a href="variabel-dan-pernyataan.html#cb50-8" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span></span>
+<span id="cb50-9"><a href="variabel-dan-pernyataan.html#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb50-10"><a href="variabel-dan-pernyataan.html#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-11"><a href="variabel-dan-pernyataan.html#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Memakai pernyataan do-while:</span></span>
+<span id="cb50-12"><a href="variabel-dan-pernyataan.html#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="variabel-dan-pernyataan.html#cb50-13" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb50-14"><a href="variabel-dan-pernyataan.html#cb50-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-15"><a href="variabel-dan-pernyataan.html#cb50-15" aria-hidden="true" tabindex="-1"></a><span class="co">// ini dieksekusi sekali, karena kondisi loop baru diperiksa setelah</span></span>
+<span id="cb50-16"><a href="variabel-dan-pernyataan.html#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co">// badan loop dijalankan:</span></span>
+<span id="cb50-17"><a href="variabel-dan-pernyataan.html#cb50-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-18"><a href="variabel-dan-pernyataan.html#cb50-18" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb50-19"><a href="variabel-dan-pernyataan.html#cb50-19" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;do-while: i is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb50-20"><a href="variabel-dan-pernyataan.html#cb50-20" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span></span>
+<span id="cb50-21"><a href="variabel-dan-pernyataan.html#cb50-21" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb50-22"><a href="variabel-dan-pernyataan.html#cb50-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-23"><a href="variabel-dan-pernyataan.html#cb50-23" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;All done!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Perhatikan bahwa pada kedua kasus, kondisi loop langsung bernilai false. Pada <code>while</code>, kondisinya gagal, sehingga blok kodenya tidak pernah dieksekusi. Tapi pada <code>do</code>-<code>while</code>, kondisi diperiksa <em>setelah</em> blok kode dieksekusi, jadi blok itu selalu berjalan setidaknya sekali. Di sini, blok mencetak pesan, meng-increment <code>i</code>, lalu kondisinya gagal, dan program lanjut ke output “All done!”.</p>
+<p>Intinya: kalau kamu ingin loop dieksekusi setidaknya sekali, apa pun kondisinya, pakai <code>do</code>-<code>while</code>.</p>
+<p>Semua contoh ini sebenarnya lebih cocok memakai loop <code>for</code>. Mari kita coba sesuatu yang kurang deterministik—ulangi sampai muncul bilangan acak tertentu!</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb51-1"><a href="variabel-dan-pernyataan.html#cb51-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span><span class="pp">   </span><span class="co">// Untuk printf</span></span>
+<span id="cb51-2"><a href="variabel-dan-pernyataan.html#cb51-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span><span class="pp">  </span><span class="co">// Untuk rand</span></span>
+<span id="cb51-3"><a href="variabel-dan-pernyataan.html#cb51-3" aria-label="3"></a></span>
+<span id="cb51-4"><a href="variabel-dan-pernyataan.html#cb51-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb51-5"><a href="variabel-dan-pernyataan.html#cb51-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb51-6"><a href="variabel-dan-pernyataan.html#cb51-6" aria-label="6"></a>    <span class="dt">int</span> r<span class="op">;</span></span>
+<span id="cb51-7"><a href="variabel-dan-pernyataan.html#cb51-7" aria-label="7"></a></span>
+<span id="cb51-8"><a href="variabel-dan-pernyataan.html#cb51-8" aria-label="8"></a>    <span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb51-9"><a href="variabel-dan-pernyataan.html#cb51-9" aria-label="9"></a>        r <span class="op">=</span> rand<span class="op">()</span> <span class="op">%</span> <span class="dv">100</span><span class="op">;</span> <span class="co">// Ambil bilangan acak antara 0 dan 99</span></span>
+<span id="cb51-10"><a href="variabel-dan-pernyataan.html#cb51-10" aria-label="10"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span></span>
+<span id="cb51-11"><a href="variabel-dan-pernyataan.html#cb51-11" aria-label="11"></a>    <span class="op">}</span> <span class="cf">while</span> <span class="op">(</span>r <span class="op">!=</span> <span class="dv">37</span><span class="op">);</span>    <span class="co">// Ulangi sampai 37 muncul</span></span>
+<span id="cb51-12"><a href="variabel-dan-pernyataan.html#cb51-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Catatan sampingan: pernahkah kamu menjalankannya lebih dari sekali? Kalau ya, apakah kamu melihat urutan angka yang sama muncul lagi. Dan lagi. Dan lagi? Itu karena <code>rand()</code> adalah pseudo-random number generator yang harus di-<em>seed</em> dengan angka berbeda supaya menghasilkan urutan yang berbeda. Lihat fungsi <a href="https://beej.us/guide/bgclr/html/split/stdlib.html#man-srand"><code>srand()</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn42" class="footnote-ref" id="fnref42" role="doc-noteref"><sup>42</sup></a> untuk detail lebih lanjut. </p>
+<h3 data-number="3.3.4" id="forstat"><span class="header-section-number">3.3.4</span> Pernyataan <code>for</code></h3>
+<p> Selamat datang di salah satu loop paling populer di dunia: loop <code>for</code>!</p>
+<p>Loop ini bagus kalau kamu sudah tahu jumlah iterasinya di awal.</p>
+<p>Hal yang sama bisa dilakukan hanya dengan loop <code>while</code>, tapi loop <code>for</code> membuat kode lebih rapi.</p>
+<p>Berikut dua potongan kode yang setara—perhatikan bahwa loop <code>for</code> hanyalah bentuk yang lebih ringkas:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb52-1"><a href="variabel-dan-pernyataan.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Cetak angka antara 0 dan 9, inklusif...</span></span>
+<span id="cb52-2"><a href="variabel-dan-pernyataan.html#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="variabel-dan-pernyataan.html#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Memakai pernyataan while:</span></span>
+<span id="cb52-4"><a href="variabel-dan-pernyataan.html#cb52-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="variabel-dan-pernyataan.html#cb52-5" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb52-6"><a href="variabel-dan-pernyataan.html#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="op">(</span>i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb52-7"><a href="variabel-dan-pernyataan.html#cb52-7" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb52-8"><a href="variabel-dan-pernyataan.html#cb52-8" aria-hidden="true" tabindex="-1"></a>    i<span class="op">++;</span></span>
+<span id="cb52-9"><a href="variabel-dan-pernyataan.html#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span>
+<span id="cb52-10"><a href="variabel-dan-pernyataan.html#cb52-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-11"><a href="variabel-dan-pernyataan.html#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="co">// Lakukan hal yang persis sama dengan for-loop:</span></span>
+<span id="cb52-12"><a href="variabel-dan-pernyataan.html#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-13"><a href="variabel-dan-pernyataan.html#cb52-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb52-14"><a href="variabel-dan-pernyataan.html#cb52-14" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;i is </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb52-15"><a href="variabel-dan-pernyataan.html#cb52-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Betul, kawan—keduanya melakukan hal yang persis sama. Tapi kamu bisa lihat sendiri bahwa pernyataan <code>for</code> sedikit lebih ringkas dan enak dipandang. (Pengguna JavaScript pasti paham betul asal-usul C-nya di titik ini.)</p>
+<p>Pernyataan <code>for</code> terbagi menjadi tiga bagian yang dipisahkan titik koma. Bagian pertama berisi inisialisasi, bagian kedua kondisi loop, dan bagian ketiga apa yang dijalankan di akhir blok kalau kondisi loop bernilai true. Ketiga bagian ini opsional.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb53-1"><a href="variabel-dan-pernyataan.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>initialize things<span class="op">;</span> loop <span class="cf">if</span> this is <span class="kw">true</span><span class="op">;</span> <span class="cf">do</span> this after each loop<span class="op">)</span></span></code></pre></div>
+<p>Perhatikan bahwa loop tidak akan dieksekusi sama sekali kalau kondisi loop sejak awal bernilai false.</p>
+<blockquote>
+<p><strong>Fakta menarik tentang loop <code>for</code>!</strong></p>
+<p>Kamu bisa memakai operator koma untuk melakukan beberapa hal di setiap klausa loop <code>for</code>!</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb54-1"><a href="variabel-dan-pernyataan.html#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> j <span class="op">=</span> <span class="dv">999</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++,</span> j<span class="op">--)</span> <span class="op">{</span></span>
+<span id="cb54-2"><a href="variabel-dan-pernyataan.html#cb54-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span></span>
+<span id="cb54-3"><a href="variabel-dan-pernyataan.html#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</blockquote>
+<!-- ` -->
+<p><code>for</code> yang kosong berjalan selamanya:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb55-1"><a href="variabel-dan-pernyataan.html#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span><span class="op">(;;)</span> <span class="op">{</span>  <span class="co">// &quot;selamanya&quot;</span></span>
+<span id="cb55-2"><a href="variabel-dan-pernyataan.html#cb55-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;I will print this again and again and again</span><span class="sc">\n</span><span class="st">&quot;</span> <span class="op">);</span></span>
+<span id="cb55-3"><a href="variabel-dan-pernyataan.html#cb55-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;for all eternity until the heat-death of the universe.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb55-4"><a href="variabel-dan-pernyataan.html#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="variabel-dan-pernyataan.html#cb55-5" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Or until you hit CTRL-C.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb55-6"><a href="variabel-dan-pernyataan.html#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<h3 data-number="3.3.5" id="switch-statement"><span class="header-section-number">3.3.5</span> Pernyataan <code>switch</code></h3>
+<p> Tergantung bahasa asalmu, kamu mungkin sudah atau belum mengenal <code>switch</code>, atau versi di C ini mungkin lebih terbatas daripada yang biasa kamu pakai. Pernyataan ini memungkinkan kita mengambil tindakan yang berbeda tergantung nilai sebuah ekspresi integer.</p>
+<p>Pada dasarnya, ekspresi dievaluasi menjadi nilai integer, lalu eksekusi melompat ke <code>case</code> yang cocok dengan nilai itu, dan berlanjut dari titik tersebut. Kalau pernyataan <code>break</code> ditemukan, eksekusi melompat keluar dari <code>switch</code>.</p>
+<p>Berikut contohnya: untuk jumlah kambing tertentu, kita cetak gambaran seberapa banyak jumlah itu.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb56-1"><a href="variabel-dan-pernyataan.html#cb56-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb56-2"><a href="variabel-dan-pernyataan.html#cb56-2" aria-label="2"></a></span>
+<span id="cb56-3"><a href="variabel-dan-pernyataan.html#cb56-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb56-4"><a href="variabel-dan-pernyataan.html#cb56-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb56-5"><a href="variabel-dan-pernyataan.html#cb56-5" aria-label="5"></a>    <span class="dt">int</span> goat_count <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb56-6"><a href="variabel-dan-pernyataan.html#cb56-6" aria-label="6"></a></span>
+<span id="cb56-7"><a href="variabel-dan-pernyataan.html#cb56-7" aria-label="7"></a>    <span class="cf">switch</span> <span class="op">(</span>goat_count<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb56-8"><a href="variabel-dan-pernyataan.html#cb56-8" aria-label="8"></a>        <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span></span>
+<span id="cb56-9"><a href="variabel-dan-pernyataan.html#cb56-9" aria-label="9"></a>            printf<span class="op">(</span><span class="st">&quot;You have no goats.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb56-10"><a href="variabel-dan-pernyataan.html#cb56-10" aria-label="10"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb56-11"><a href="variabel-dan-pernyataan.html#cb56-11" aria-label="11"></a></span>
+<span id="cb56-12"><a href="variabel-dan-pernyataan.html#cb56-12" aria-label="12"></a>        <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span></span>
+<span id="cb56-13"><a href="variabel-dan-pernyataan.html#cb56-13" aria-label="13"></a>            printf<span class="op">(</span><span class="st">&quot;You have a singular goat.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb56-14"><a href="variabel-dan-pernyataan.html#cb56-14" aria-label="14"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb56-15"><a href="variabel-dan-pernyataan.html#cb56-15" aria-label="15"></a></span>
+<span id="cb56-16"><a href="variabel-dan-pernyataan.html#cb56-16" aria-label="16"></a>        <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span></span>
+<span id="cb56-17"><a href="variabel-dan-pernyataan.html#cb56-17" aria-label="17"></a>            printf<span class="op">(</span><span class="st">&quot;You have a brace of goats.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb56-18"><a href="variabel-dan-pernyataan.html#cb56-18" aria-label="18"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb56-19"><a href="variabel-dan-pernyataan.html#cb56-19" aria-label="19"></a></span>
+<span id="cb56-20"><a href="variabel-dan-pernyataan.html#cb56-20" aria-label="20"></a>        <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb56-21"><a href="variabel-dan-pernyataan.html#cb56-21" aria-label="21"></a>            printf<span class="op">(</span><span class="st">&quot;You have a bona fide plethora of goats!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb56-22"><a href="variabel-dan-pernyataan.html#cb56-22" aria-label="22"></a>            <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb56-23"><a href="variabel-dan-pernyataan.html#cb56-23" aria-label="23"></a>    <span class="op">}</span></span>
+<span id="cb56-24"><a href="variabel-dan-pernyataan.html#cb56-24" aria-label="24"></a><span class="op">}</span></span></code></pre></div>
+<p>Pada contoh itu, <code>switch</code> melompat ke <code>case 2</code> dan mengeksekusi dari sana. Ketika (kalau) menemukan <code>break</code>, ia melompat keluar dari <code>switch</code>. </p>
+<p>Kamu juga mungkin melihat label <code>default</code> di bagian bawah. Inilah yang dijalankan kalau tidak ada case yang cocok.</p>
+<p>Setiap <code>case</code>, termasuk <code>default</code>, bersifat opsional. Urutannya bebas, tapi sangat umum <code>default</code>, kalau ada, ditaruh paling akhir.</p>
+<p>Jadi, secara keseluruhan ia bekerja seperti rangkaian <code>if</code>-<code>else</code>:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb57-1"><a href="variabel-dan-pernyataan.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>goat_count <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb57-2"><a href="variabel-dan-pernyataan.html#cb57-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;You have no goats.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb57-3"><a href="variabel-dan-pernyataan.html#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>goat_count <span class="op">==</span> <span class="dv">1</span><span class="op">)</span></span>
+<span id="cb57-4"><a href="variabel-dan-pernyataan.html#cb57-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;You have a singular goat.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb57-5"><a href="variabel-dan-pernyataan.html#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span> <span class="cf">if</span> <span class="op">(</span>goat_count <span class="op">==</span> <span class="dv">2</span><span class="op">)</span></span>
+<span id="cb57-6"><a href="variabel-dan-pernyataan.html#cb57-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;You have a brace of goats.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb57-7"><a href="variabel-dan-pernyataan.html#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
+<span id="cb57-8"><a href="variabel-dan-pernyataan.html#cb57-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;You have a bona fide plethora of goats!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Dengan beberapa perbedaan utama:</p>
+<ul>
+<li><code>switch</code> sering kali lebih cepat melompat ke kode yang benar (meski spesifikasi tidak menjamin hal itu).</li>
+<li><code>if</code>-<code>else</code> bisa memakai kondisional relasional seperti <code>&lt;</code> dan <code>&gt;=</code>, serta floating point dan tipe lainnya, sedangkan <code>switch</code> tidak bisa.</li>
+</ul>
+<p>Ada satu hal lagi tentang <code>switch</code> yang kadang kamu temui dan cukup menarik: <em>fall through</em>.</p>
+<p> Ingat bagaimana <code>break</code> membuat kita melompat keluar dari switch?</p>
+<p> Nah, apa yang terjadi kalau kita <em>tidak</em> <code>break</code>?</p>
+<p>Ternyata eksekusi terus masuk ke <code>case</code> berikutnya! Demo!</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb58-1"><a href="variabel-dan-pernyataan.html#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb58-2"><a href="variabel-dan-pernyataan.html#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span></span>
+<span id="cb58-3"><a href="variabel-dan-pernyataan.html#cb58-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb58-4"><a href="variabel-dan-pernyataan.html#cb58-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Fall through!</span></span>
+<span id="cb58-5"><a href="variabel-dan-pernyataan.html#cb58-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span></span>
+<span id="cb58-6"><a href="variabel-dan-pernyataan.html#cb58-6" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb58-7"><a href="variabel-dan-pernyataan.html#cb58-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb58-8"><a href="variabel-dan-pernyataan.html#cb58-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">3</span><span class="op">:</span></span>
+<span id="cb58-9"><a href="variabel-dan-pernyataan.html#cb58-9" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;3</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb58-10"><a href="variabel-dan-pernyataan.html#cb58-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb58-11"><a href="variabel-dan-pernyataan.html#cb58-11" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Kalau <code>x == 1</code>, <code>switch</code> ini mula-mula mengenai <code>case 1</code>, mencetak <code>1</code>, lalu langsung lanjut ke baris kode berikutnya… yang mencetak <code>2</code>!</p>
+<p>Setelah itu, akhirnya kita bertemu <code>break</code> dan melompat keluar dari <code>switch</code>.</p>
+<p>Kalau <code>x == 2</code>, kita hanya mengenai <code>case 2</code>, mencetak <code>2</code>, dan <code>break</code> seperti biasa.</p>
+<p>Ketiadaan <code>break</code> inilah yang disebut <em>fall through</em>.</p>
+<p>Kalau kamu memakai C sebelum C23, <em>SELALU</em> taruh komentar di kode pada tempat yang memang kamu maksudkan untuk fall through, seperti di atas. Dengan begitu programmer lain tidak bertanya-tanya apakah kamu sengaja melakukannya. GCC mengenali komentar ini dan menekan peringatan.</p>
+<p>Atau kamu bisa memakai atribut GCC non-standar, yang kurang disukai karena jelek dan non-standar, tapi dikenali oleh GCC maupun Clang:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb59-1"><a href="variabel-dan-pernyataan.html#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb59-2"><a href="variabel-dan-pernyataan.html#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span></span>
+<span id="cb59-3"><a href="variabel-dan-pernyataan.html#cb59-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb59-4"><a href="variabel-dan-pernyataan.html#cb59-4" aria-hidden="true" tabindex="-1"></a>        __attribute__<span class="op">((</span>fallthrough<span class="op">));</span></span>
+<span id="cb59-5"><a href="variabel-dan-pernyataan.html#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span></span>
+<span id="cb59-6"><a href="variabel-dan-pernyataan.html#cb59-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">...</span></span></code></pre></div>
+<p>Tapi sekarang, akhirnya, di C23 kita punya cara standar lewat atribut:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb60-1"><a href="variabel-dan-pernyataan.html#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>x<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb60-2"><a href="variabel-dan-pernyataan.html#cb60-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">1</span><span class="op">:</span></span>
+<span id="cb60-3"><a href="variabel-dan-pernyataan.html#cb60-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb60-4"><a href="variabel-dan-pernyataan.html#cb60-4" aria-hidden="true" tabindex="-1"></a>        <span class="op">[[</span><span class="at">fallthrough</span><span class="op">]];</span></span>
+<span id="cb60-5"><a href="variabel-dan-pernyataan.html#cb60-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="dv">2</span><span class="op">:</span></span>
+<span id="cb60-6"><a href="variabel-dan-pernyataan.html#cb60-6" aria-hidden="true" tabindex="-1"></a>        <span class="op">...</span></span></code></pre></div>
+<p>Tapi ingat, ini salah satu tempat paling umum munculnya bug dalam program C: lupa menaruh <code>break</code> di <code>case</code>. Kamu harus menaruhnya kalau tidak ingin langsung jatuh ke case berikutnya<a href="function-specifier-alignment-specifier-dan-operator.html#fn43" class="footnote-ref" id="fnref43" role="doc-noteref"><sup>43</sup></a>.</p>
+<p> </p>
+<p>Tadi sudah disebut bahwa <code>switch</code> bekerja dengan tipe integer—patuhi itu. Jangan pakai floating point atau tipe string di sana. Satu celahnya: tipe karakter boleh dipakai karena diam-diam mereka juga integer. Jadi ini sepenuhnya sah:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb61-1"><a href="variabel-dan-pernyataan.html#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> <span class="ch">&#39;b&#39;</span><span class="op">;</span></span>
+<span id="cb61-2"><a href="variabel-dan-pernyataan.html#cb61-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="variabel-dan-pernyataan.html#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>c<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb61-4"><a href="variabel-dan-pernyataan.html#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="ch">&#39;a&#39;</span><span class="op">:</span></span>
+<span id="cb61-5"><a href="variabel-dan-pernyataan.html#cb61-5" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;It&#39;s &#39;a&#39;!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb61-6"><a href="variabel-dan-pernyataan.html#cb61-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb61-7"><a href="variabel-dan-pernyataan.html#cb61-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-8"><a href="variabel-dan-pernyataan.html#cb61-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="ch">&#39;b&#39;</span><span class="op">:</span></span>
+<span id="cb61-9"><a href="variabel-dan-pernyataan.html#cb61-9" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;It&#39;s &#39;b&#39;!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb61-10"><a href="variabel-dan-pernyataan.html#cb61-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb61-11"><a href="variabel-dan-pernyataan.html#cb61-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-12"><a href="variabel-dan-pernyataan.html#cb61-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">case</span> <span class="ch">&#39;c&#39;</span><span class="op">:</span></span>
+<span id="cb61-13"><a href="variabel-dan-pernyataan.html#cb61-13" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;It&#39;s &#39;c&#39;!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb61-14"><a href="variabel-dan-pernyataan.html#cb61-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb61-15"><a href="variabel-dan-pernyataan.html#cb61-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Terakhir, kamu bisa memakai <code>enum</code> dalam <code>switch</code> karena <code>enum</code> juga tipe integer. Soal itu dibahas lebih lanjut di bab <code>enum</code>.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="hello-world.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="functions.html" rel="next">Next</a></span></div></body>
+</html>

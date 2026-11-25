@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="enumerated-type-enum.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="operasi-bitwise.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="23" id="pointer-iii-pointer-ke-pointer-dan-lainnya"><span class="header-section-number">23</span> Pointer III: Pointer ke Pointer dan Lainnya</h1>
+<p>Di sinilah kita membahas pemakaian pointer tingkat menengah dan lanjut. Kalau kamu belum menguasai pointer, ulas dulu bab-bab sebelumnya tentang <a href="pointers.html#pointers">pointer</a> dan <a href="pointers2.html#pointers2">aritmetika pointer</a> sebelum mulai dengan materi ini.</p>
+<h2 data-number="23.1" id="pointer-ke-pointer"><span class="header-section-number">23.1</span> Pointer ke Pointer</h2>
+<p></p>
+<p>Kalau kamu bisa punya pointer ke sebuah variabel, dan variabel bisa berupa pointer, bisakah kamu punya pointer ke variabel yang itu sendiri adalah pointer?</p>
+<p>Bisa! Itulah pointer ke pointer, yang disimpan dalam variabel bertipe pointer-pointer.</p>
+<p>Sebelum membedahnya, aku ingin mencoba membangun <em>gut feel</em> tentang cara kerja pointer ke pointer.</p>
+<p>Ingat bahwa pointer hanyalah sebuah angka. Angka yang mewakili indeks dalam memori komputer, biasanya indeks yang menyimpan nilai yang menarik minat kita karena suatu alasan.</p>
+<p>Pointer itu, yang berupa angka, harus disimpan di suatu tempat. Dan tempat itu adalah memori, sama seperti yang lainnya<a href="function-specifier-alignment-specifier-dan-operator.html#fn140" class="footnote-ref" id="fnref140" role="doc-noteref"><sup>140</sup></a>.</p>
+<p>Tapi karena disimpan di memori, ia pasti punya indeks tempat ia disimpan, kan? Pointer itu pasti punya indeks di memori tempat ia disimpan. Dan indeks itu adalah sebuah angka. Itulah alamat pointer tersebut. Itulah pointer ke pointer.</p>
+<p>Kita mulai dengan pointer biasa ke sebuah <code>int</code>, dari bab-bab sebelumnya:</p>
+<div class="sourceCode" id="cb505"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb505-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb505-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-2" aria-label="2"></a></span>
+<span id="cb505-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb505-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb505-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-5" aria-label="5"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Tipe: int</span></span>
+<span id="cb505-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-6" aria-label="6"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Tipe: pointer ke int</span></span>
+<span id="cb505-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-7" aria-label="7"></a></span>
+<span id="cb505-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>  <span class="co">// 3490</span></span>
+<span id="cb505-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb505-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Cukup lugas, kan? Ada dua tipe yang terlibat: <code>int</code> dan <code>int*</code>, dan kita mengatur <code>p</code> agar menunjuk ke <code>x</code>. Lalu kita bisa men-dereference <code>p</code> di baris 8 dan mencetak nilai <code>3490</code>.</p>
+<p>Tapi, seperti yang kita katakan, kita bisa punya pointer ke variabel apa pun… jadi apakah itu berarti kita bisa punya pointer ke <code>p</code>?</p>
+<p>Dengan kata lain, ekspresi ini bertipe apa?</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb506-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb506-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Tipe: int</span></span>
+<span id="cb506-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb506-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Tipe: pointer ke int</span></span>
+<span id="cb506-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb506-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb506-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb506-4" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span>p  <span class="co">// &lt;-- Apa tipe alamat p? Alias pointer ke p?</span></span></code></pre></div>
+<p>Kalau <code>x</code> adalah <code>int</code>, maka <code>&amp;x</code> adalah pointer ke <code>int</code> yang kita simpan di <code>p</code> yang bertipe <code>int*</code>. Ikut? (Ulangi paragraf ini sampai paham!)</p>
+<p>Dan karena itu <code>&amp;p</code> adalah pointer ke <code>int*</code>, alias “pointer ke pointer ke <code>int</code>”. Alias “<code>int</code>-pointer-pointer”.</p>
+<p>Paham? (Ulangi paragraf sebelumnya sampai paham!)</p>
+<p>Kita menulis tipe ini dengan dua asterisk: <code>int **</code>. Kita lihat pemakaiannya.</p>
+<div class="sourceCode" id="cb507"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb507-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb507-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-2" aria-label="2"></a></span>
+<span id="cb507-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb507-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb507-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-5" aria-label="5"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>  <span class="co">// Tipe: int</span></span>
+<span id="cb507-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-6" aria-label="6"></a>    <span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>   <span class="co">// Tipe: pointer ke int</span></span>
+<span id="cb507-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-7" aria-label="7"></a>    <span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>  <span class="co">// Tipe: pointer ke pointer ke int</span></span>
+<span id="cb507-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-8" aria-label="8"></a></span>
+<span id="cb507-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">,</span> <span class="op">**</span>q<span class="op">);</span>  <span class="co">// 3490 3490</span></span>
+<span id="cb507-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb507-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p>Mari kita karang beberapa alamat pura-pura untuk nilai-nilai di atas sebagai contoh dan lihat seperti apa ketiga variabel ini di memori. Nilai alamat di bawah ini hanya karanganku untuk keperluan contoh:</p>
+<table>
+<thead>
+<tr>
+<th>Variabel</th>
+<th>Disimpan di Alamat</th>
+<th>Nilai yang Tersimpan di Sana</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>28350</code></td>
+<td><code>3490</code>—nilai dari kode</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td><code>29122</code></td>
+<td><code>28350</code>—alamat <code>x</code>!</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td><code>30840</code></td>
+<td><code>29122</code>—alamat <code>p</code>!</td>
+</tr>
+</tbody>
+</table>
+<p>Sekarang mari kita coba sungguhan di komputerku<a href="function-specifier-alignment-specifier-dan-operator.html#fn141" class="footnote-ref" id="fnref141" role="doc-noteref"><sup>141</sup></a> dan mencetak nilai pointer dengan <code>%p</code>, lalu aku ulangi tabel yang sama dengan referensi sebenarnya (dicetak dalam hex).</p>
+<table>
+<thead>
+<tr>
+<th>Variabel</th>
+<th>Disimpan di Alamat</th>
+<th>Nilai yang Tersimpan di Sana</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>0x7ffd96a07b94</code></td>
+<td><code>3490</code>—nilai dari kode</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td><code>0x7ffd96a07b98</code></td>
+<td><code>0x7ffd96a07b94</code>—alamat <code>x</code>!</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td><code>0x7ffd96a07ba0</code></td>
+<td><code>0x7ffd96a07b98</code>—alamat <code>p</code>!</td>
+</tr>
+</tbody>
+</table>
+<p>Kamu bisa lihat alamat-alamat itu sama kecuali byte terakhir, jadi fokus saja ke sana.</p>
+<p>Di sistemku, <code>int</code> berukuran 4 byte, itulah kenapa kita melihat alamat naik 4 dari <code>x</code> ke <code>p</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn142" class="footnote-ref" id="fnref142" role="doc-noteref"><sup>142</sup></a> lalu naik 8 dari <code>p</code> ke <code>q</code>. Di sistemku, semua pointer berukuran 8 byte.</p>
+<p>Apakah penting kalau itu <code>int*</code> atau <code>int**</code>? Apakah salah satunya lebih banyak byte-nya? Tidak! Ingat bahwa semua pointer adalah alamat, yaitu indeks ke dalam memori. Dan di mesinku, sebuah indeks bisa direpresentasikan dengan 8 byte… tidak peduli apa yang disimpan di indeks itu.</p>
+<p>Sekarang lihat apa yang kita lakukan di baris 9 pada contoh sebelumnya: kita <em>men-dereference ganda</em> <code>q</code> untuk kembali ke <code>3490</code>.</p>
+<p>Ini bagian penting tentang pointer dan pointer ke pointer:</p>
+<ul>
+<li>Kamu bisa mendapat pointer ke apa pun dengan <code>&amp;</code> (termasuk ke pointer!)</li>
+<li>Kamu bisa mendapat yang ditunjuk sebuah pointer dengan <code>*</code> (termasuk pointer!)</li>
+</ul>
+<p>Jadi kamu bisa menganggap <code>&amp;</code> dipakai untuk membuat pointer, dan <code>*</code> adalah kebalikannya—ia berjalan ke arah yang berlawanan dari <code>&amp;</code>—untuk sampai ke yang ditunjuk.</p>
+<p>Dari sisi tipe, setiap kali kamu memakai <code>&amp;</code>, itu menambah satu tingkat pointer pada tipenya.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Jika kamu punya</th>
+<th style="text-align: center;">Lalu kamu jalankan</th>
+<th style="text-align: left;">Tipe hasilnya</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>int x</code></td>
+<td style="text-align: center;"><code>&amp;x</code></td>
+<td style="text-align: left;"><code>int *</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int *x</code></td>
+<td style="text-align: center;"><code>&amp;x</code></td>
+<td style="text-align: left;"><code>int **</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int **x</code></td>
+<td style="text-align: center;"><code>&amp;x</code></td>
+<td style="text-align: left;"><code>int ***</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int ***x</code></td>
+<td style="text-align: center;"><code>&amp;x</code></td>
+<td style="text-align: left;"><code>int ****</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dan setiap kali kamu memakai dereference (<code>*</code>), ia melakukan kebalikannya:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Jika kamu punya</th>
+<th style="text-align: center;">Lalu kamu jalankan</th>
+<th style="text-align: left;">Tipe hasilnya</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>int ****x</code></td>
+<td style="text-align: center;"><code>*x</code></td>
+<td style="text-align: left;"><code>int ***</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int ***x</code></td>
+<td style="text-align: center;"><code>*x</code></td>
+<td style="text-align: left;"><code>int **</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int **x</code></td>
+<td style="text-align: center;"><code>*x</code></td>
+<td style="text-align: left;"><code>int *</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int *x</code></td>
+<td style="text-align: center;"><code>*x</code></td>
+<td style="text-align: left;"><code>int</code></td>
+</tr>
+</tbody>
+</table>
+<p>Perhatikan bahwa kamu bisa memakai beberapa <code>*</code> berturut-turut untuk men-dereference dengan cepat, seperti yang kita lihat pada kode contoh dengan <code>**q</code> di atas. Masing-masing mengupas satu tingkat indirection.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Jika kamu punya</th>
+<th style="text-align: center;">Lalu kamu jalankan</th>
+<th style="text-align: left;">Tipe hasilnya</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>int ****x</code></td>
+<td style="text-align: center;"><code>***x</code></td>
+<td style="text-align: left;"><code>int *</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int ***x</code></td>
+<td style="text-align: center;"><code>**x</code></td>
+<td style="text-align: left;"><code>int *</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int **x</code></td>
+<td style="text-align: center;"><code>**x</code></td>
+<td style="text-align: left;"><code>int</code></td>
+</tr>
+</tbody>
+</table>
+<p>Secara umum, <code>&amp;*E == E</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn143" class="footnote-ref" id="fnref143" role="doc-noteref"><sup>143</sup></a>. Dereference “membatalkan” address-of.</p>
+<p>Tapi <code>&amp;</code> tidak bekerja dengan cara yang sama—kamu hanya bisa melakukannya satu per satu, dan harus menyimpan hasilnya di variabel perantara:</p>
+<div class="sourceCode" id="cb508"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb508-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb508-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span>     <span class="co">// Tipe: int</span></span>
+<span id="cb508-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb508-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>      <span class="co">// Tipe: int *, pointer ke int</span></span>
+<span id="cb508-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb508-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>     <span class="co">// Tipe: int **, pointer ke pointer ke int</span></span>
+<span id="cb508-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb508-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">***</span>r <span class="op">=</span> <span class="op">&amp;</span>q<span class="op">;</span>    <span class="co">// Tipe: int ***, pointer ke pointer ke pointer ke int</span></span>
+<span id="cb508-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb508-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">****</span>s <span class="op">=</span> <span class="op">&amp;</span>r<span class="op">;</span>   <span class="co">// Tipe: int ****, kamu paham maksudnya</span></span>
+<span id="cb508-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb508-6" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*****</span>t <span class="op">=</span> <span class="op">&amp;</span>s<span class="op">;</span>  <span class="co">// Tipe: int *****</span></span></code></pre></div>
+<p></p>
+<h3 data-number="23.1.1" id="pointer-pointer-dan-const"><span class="header-section-number">23.1.1</span> Pointer Pointer dan <code>const</code></h3>
+<p></p>
+<p>Kalau kamu ingat, mendeklarasikan pointer seperti ini:</p>
+<div class="sourceCode" id="cb509"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb509-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb509-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p<span class="op">;</span></span></code></pre></div>
+<p>berarti kamu tidak bisa mengubah <code>p</code>. Mencoba <code>p++</code> akan memberi error saat kompilasi.</p>
+<p>Tapi bagaimana ini bekerja dengan <code>int **</code> atau <code>int ***</code>? Di mana <code>const</code> ditaruh, dan apa artinya?</p>
+<p>Kita mulai dari bagian sederhana. <code>const</code> yang tepat di sebelah nama variabel merujuk ke variabel itu. Jadi kalau kamu ingin <code>int***</code> yang tidak bisa diubah, kamu bisa menulis:</p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb510-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb510-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">***</span><span class="dt">const</span> p<span class="op">;</span></span>
+<span id="cb510-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb510-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb510-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb510-3" aria-hidden="true" tabindex="-1"></a>p<span class="op">++;</span>  <span class="co">// Tidak diperbolehkan</span></span></code></pre></div>
+<p>Tapi di sinilah semuanya jadi agak aneh.</p>
+<p>Bagaimana kalau kita punya situasi ini:</p>
+<div class="sourceCode" id="cb511"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb511-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb511-1" aria-label="1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb511-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb511-2" aria-label="2"></a><span class="op">{</span></span>
+<span id="cb511-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb511-3" aria-label="3"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb511-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb511-4" aria-label="4"></a>    <span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb511-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb511-5" aria-label="5"></a>    <span class="dt">int</span> <span class="op">**</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span></span>
+<span id="cb511-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb511-6" aria-label="6"></a><span class="op">}</span></span></code></pre></div>
+<p>Waktu kubangun, aku mendapat peringatan ini:</p>
+<div class="sourceCode" id="cb512"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb512-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb512-1" aria-hidden="true" tabindex="-1"></a>warning: initialization discards ‘const’ qualifier from pointer target type</span>
+<span id="cb512-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb512-2" aria-hidden="true" tabindex="-1"></a>    7 |     int **q = &amp;p;</span>
+<span id="cb512-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb512-3" aria-hidden="true" tabindex="-1"></a>      |               ^</span></code></pre></div>
+<p>Apa yang terjadi? Compiler memberi tahu kita di sini bahwa ada variabel yang <code>const</code>, dan kita menugaskan nilainya ke variabel lain yang tidak <code>const</code> dengan cara yang sama. Sifat “<code>const</code>” dibuang, yang mungkin bukan yang kita inginkan.</p>
+<p>Tipe <code>p</code> adalah <code>int *const p</code>, jadi <code>&amp;p</code> bertipe <code>int *const *</code>. Dan kita mencoba menugaskannya ke <code>q</code>.</p>
+<p>Tapi <code>q</code> adalah <code>int **</code>! Tipe dengan sifat <code>const</code> yang berbeda pada <code>*</code> pertama! Jadi kita mendapat peringatan bahwa <code>const</code> pada <code>int *const *</code> milik <code>p</code> diabaikan dan dibuang.</p>
+<p>Kita bisa memperbaikinya dengan memastikan tipe <code>q</code> setidaknya sama <code>const</code>-nya dengan <code>p</code>.</p>
+<div class="sourceCode" id="cb513"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb513-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb513-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb513-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb513-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb513-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb513-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span>q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span></span></code></pre></div>
+<p>Dan sekarang kita senang.</p>
+<p>Kita bahkan bisa membuat <code>q</code> lebih <code>const</code> lagi. Seperti di atas, kita berkata, “<code>q</code> itu sendiri tidak <code>const</code>, tapi yang ditunjuknya <code>const</code>.” Tapi kita bisa membuat keduanya <code>const</code>:</p>
+<div class="sourceCode" id="cb514"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb514-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb514-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb514-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb514-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb514-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb514-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span><span class="dt">const</span> <span class="op">*</span><span class="dt">const</span> q <span class="op">=</span> <span class="op">&amp;</span>p<span class="op">;</span>  <span class="co">// Lebih const!</span></span></code></pre></div>
+<p>Dan itu juga berfungsi. Sekarang kita tidak bisa mengubah <code>q</code>, maupun pointer yang ditunjuk <code>q</code>.</p>
+<p></p>
+<h2 data-number="23.2" id="multibyte-values"><span class="header-section-number">23.2</span> Nilai Multibyte</h2>
+<p></p>
+<p>Kita sudah menyiratkan ini di berbagai tempat sebelumnya, tapi jelas tidak setiap nilai bisa disimpan dalam satu byte memori. Banyak hal memakai beberapa byte memori (dengan asumsi bukan <code>char</code>). Kamu bisa mengetahui jumlah byte dengan <code>sizeof</code>. Dan kamu bisa mengetahui alamat memori mana yang merupakan byte <em>pertama</em> dari object dengan operator <code>&amp;</code> standar, yang selalu mengembalikan alamat byte pertama.</p>
+<p>Dan ini fakta menarik lainnya! Kalau kamu menelusuri byte-byte dari object mana pun, kamu mendapat <em>object representation</em>-nya. Dua hal dengan object representation yang sama di memori adalah sama.</p>
+<p>Kalau kamu ingin menelusuri object representation, lakukan dengan pointer ke <code>unsigned char</code>.</p>
+<p>Mari kita buat versi kita sendiri dari <a href="https://beej.us/guide/bgclr/html/split/stringref.html#man-memcpy"><code>memcpy()</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn144" class="footnote-ref" id="fnref144" role="doc-noteref"><sup>144</sup></a> yang melakukan persis itu:</p>
+<div class="sourceCode" id="cb515"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb515-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>my_memcpy<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>dest<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>src<span class="op">,</span> <span class="dt">size_t</span> n<span class="op">)</span></span>
+<span id="cb515-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb515-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Buat variabel lokal untuk src dan dest, tapi bertipe unsigned char</span></span>
+<span id="cb515-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> src<span class="op">;</span></span>
+<span id="cb515-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>d <span class="op">=</span> dest<span class="op">;</span></span>
+<span id="cb515-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>n<span class="op">--</span> <span class="op">&gt;</span> <span class="dv">0</span><span class="op">)</span>   <span class="co">// Untuk jumlah byte yang diberikan</span></span>
+<span id="cb515-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-9" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>d<span class="op">++</span> <span class="op">=</span> <span class="op">*</span>s<span class="op">++;</span>  <span class="co">// Salin byte sumber ke byte tujuan</span></span>
+<span id="cb515-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-11"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Kebanyakan fungsi salin mengembalikan pointer ke dest demi</span></span>
+<span id="cb515-12"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// kemudahan caller</span></span>
+<span id="cb515-13"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb515-14"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> dest<span class="op">;</span></span>
+<span id="cb515-15"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb515-15" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>(Ada beberapa contoh bagus post-increment dan post-decrement di situ yang bisa kamu pelajari juga.)</p>
+<p>Penting dicatat bahwa versi di atas kemungkinan kurang efisien dibanding yang disertakan di sistemmu.</p>
+<p>Tapi kamu bisa mengoper pointer ke apa pun ke dalamnya, dan ia akan menyalin object itu. Bisa <code>int*</code>, <code>struct animal*</code>, atau apa saja.</p>
+<p>Mari kita coba contoh lain yang mencetak byte object representation dari sebuah <code>struct</code> supaya kita bisa melihat apakah ada padding di dalamnya dan nilainya apa<a href="function-specifier-alignment-specifier-dan-operator.html#fn145" class="footnote-ref" id="fnref145" role="doc-noteref"><sup>145</sup></a>.</p>
+<div class="sourceCode" id="cb516"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb516-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb516-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-2" aria-label="2"></a></span>
+<span id="cb516-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-3" aria-label="3"></a><span class="kw">struct</span> foo <span class="op">{</span></span>
+<span id="cb516-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-4" aria-label="4"></a>    <span class="dt">char</span> a<span class="op">;</span></span>
+<span id="cb516-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-5" aria-label="5"></a>    <span class="dt">int</span> b<span class="op">;</span></span>
+<span id="cb516-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-6" aria-label="6"></a><span class="op">};</span></span>
+<span id="cb516-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-7" aria-label="7"></a></span>
+<span id="cb516-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb516-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb516-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-10" aria-label="10"></a>    <span class="kw">struct</span> foo x <span class="op">=</span> <span class="op">{</span><span class="bn">0x12</span><span class="op">,</span> <span class="bn">0x12345678</span><span class="op">};</span></span>
+<span id="cb516-11"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-11" aria-label="11"></a>    <span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">(</span><span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*)&amp;</span>x<span class="op">;</span></span>
+<span id="cb516-12"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-12" aria-label="12"></a></span>
+<span id="cb516-13"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-13" aria-label="13"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">size_t</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="kw">sizeof</span> x<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb516-14"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-14" aria-label="14"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%02X\n</span><span class="st">&quot;</span><span class="op">,</span> p<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb516-15"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-15" aria-label="15"></a>    <span class="op">}</span></span>
+<span id="cb516-16"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb516-16" aria-label="16"></a><span class="op">}</span></span></code></pre></div>
+<p>Di situ ada <code>struct foo</code> yang disusun sedemikian rupa agar compiler terdorong menyisipkan padding byte (walaupun tidak wajib). Lalu kita ambil <code>unsigned char *</code> ke byte pertama variabel <code>struct foo</code> <code>x</code>.</p>
+<p>Dari sana, yang kita perlu tahu hanya <code>sizeof x</code> dan kita bisa menelusuri sebanyak itu byte, mencetak nilainya (dalam hex agar mudah).</p>
+<p>Menjalankannya memberi banyak angka sebagai output. Aku sudah memberinya anotasi di bawah untuk menunjukkan di mana nilai-nilai itu disimpan:</p>
+<div class="sourceCode" id="cb517"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb517-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-1" aria-hidden="true" tabindex="-1"></a>12  | x.a == 0x12</span>
+<span id="cb517-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb517-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-3" aria-hidden="true" tabindex="-1"></a>AB  |</span>
+<span id="cb517-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-4" aria-hidden="true" tabindex="-1"></a>BF  | padding bytes with &quot;random&quot; value</span>
+<span id="cb517-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-5" aria-hidden="true" tabindex="-1"></a>26  |</span>
+<span id="cb517-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb517-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-7" aria-hidden="true" tabindex="-1"></a>78  | x.b == 0x12345678</span>
+<span id="cb517-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-8" aria-hidden="true" tabindex="-1"></a>56  |</span>
+<span id="cb517-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-9" aria-hidden="true" tabindex="-1"></a>34  |</span>
+<span id="cb517-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb517-10" aria-hidden="true" tabindex="-1"></a>12  |</span></code></pre></div>
+<p>Di semua sistem, <code>sizeof(char)</code> adalah 1, dan kita lihat byte pertama di bagian atas output menyimpan nilai <code>0x12</code> yang kita simpan di sana.</p>
+<p>Lalu ada beberapa padding byte—di sistemku, nilainya berubah dari satu eksekusi ke eksekusi berikutnya.</p>
+<p>Terakhir, di sistemku, <code>sizeof(int)</code> adalah 4, dan kita bisa melihat 4 byte itu di bagian akhir. Perhatikan bahwa byte-nya sama dengan nilai hex <code>0x12345678</code>, tapi anehnya dalam urutan terbalik<a href="function-specifier-alignment-specifier-dan-operator.html#fn146" class="footnote-ref" id="fnref146" role="doc-noteref"><sup>146</sup></a>.</p>
+<p>Jadi itu sedikit intipan ke bawah kap tentang byte-byte dari entitas yang lebih kompleks di memori.</p>
+<p></p>
+<h2 data-number="23.3" id="pointer-null-dan-nol"><span class="header-section-number">23.3</span> Pointer <code>NULL</code> dan Nol</h2>
+<p></p>
+<p>Hal-hal berikut bisa dipakai secara bergantian:</p>
+<ul>
+<li><code>NULL</code></li>
+<li><code>0</code></li>
+<li><code>'\0'</code></li>
+<li><code>(void *)0</code></li>
+</ul>
+<p>Secara pribadi, aku selalu memakai <code>NULL</code> kalau maksudnya <code>NULL</code>, tapi kamu mungkin sesekali melihat varian lain. Walaupun <code>'\0'</code> (byte dengan semua bit bernilai nol) juga akan dibandingkan sebagai sama, membandingkannya dengan pointer itu <em>aneh</em>; kamu seharusnya membandingkan <code>NULL</code> dengan pointer. (Tentu saja, sering kali dalam pemrosesan string, kamu membandingkan <em>yang ditunjuk pointer</em> dengan <code>'\0'</code>, dan itu benar.)</p>
+<p><code>0</code> disebut <em>null pointer constant</em>, dan, ketika dibandingkan atau ditugaskan ke pointer lain, ia dikonversi menjadi null pointer dengan tipe yang sama.</p>
+<p></p>
+<h2 data-number="23.4" id="pointer-sebagai-integer"><span class="header-section-number">23.4</span> Pointer sebagai Integer</h2>
+<p></p>
+<p>Kamu bisa meng-cast pointer ke integer dan sebaliknya (karena pointer hanyalah indeks ke memori), tapi kemungkinan kamu hanya perlu melakukannya kalau mengerjakan hal-hal hardware level rendah. Hasil dari akal-akalan semacam itu ditentukan oleh implementasi, jadi tidak portabel. Dan <em>hal aneh</em> bisa terjadi.</p>
+<p>Meski begitu, C memberi satu jaminan: kamu bisa mengonversi pointer ke tipe <code>uintptr_t</code> dan kamu bisa mengonversinya kembali ke pointer tanpa kehilangan data.</p>
+<p><code>uintptr_t</code> didefinisikan di <code>&lt;stdint.h&gt;</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn147" class="footnote-ref" id="fnref147" role="doc-noteref"><sup>147</sup></a>.</p>
+<p>Selain itu, kalau kamu ingin yang signed, kamu bisa memakai <code>intptr_t</code> dengan efek yang sama.</p>
+<p></p>
+<h2 data-number="23.5" id="meng-cast-pointer-ke-pointer-lain"><span class="header-section-number">23.5</span> Meng-cast Pointer ke Pointer Lain</h2>
+<p></p>
+<p>Hanya ada satu konversi pointer yang aman:</p>
+<ol type="1">
+<li>Mengonversi ke <code>intptr_t</code> atau <code>uintptr_t</code>.</li>
+<li>Mengonversi ke dan dari <code>void*</code>.</li>
+</ol>
+<p>DUA! Dua konversi pointer yang aman.</p>
+<ol start="3" type="1">
+<li>Mengonversi ke dan dari <code>char*</code> (atau <code>signed char*</code>/<code>unsigned char*</code>).</li>
+</ol>
+<p>TIGA! Tiga konversi yang aman!</p>
+<ol start="4" type="1">
+<li>Mengonversi ke dan dari pointer ke sebuah <code>struct</code> dan pointer ke anggota pertamanya, dan sebaliknya.</li>
+</ol>
+<p>EMPAT! Empat konversi yang aman!</p>
+<p>Kalau kamu meng-cast ke pointer bertipe lain lalu mengakses object yang ditunjuknya, perilakunya undefined karena sesuatu yang disebut <em>strict aliasing</em>.</p>
+<p><em>Aliasing</em> biasa merujuk ke kemampuan untuk punya lebih dari satu cara mengakses object yang sama. Titik-titik akses itu adalah alias satu sama lain.</p>
+<p><em>Strict aliasing</em> menyatakan kamu hanya boleh mengakses sebuah object lewat pointer ke <em>tipe yang kompatibel</em> dengan object itu.</p>
+<p>Misalnya, ini jelas diperbolehkan:</p>
+<div class="sourceCode" id="cb518"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb518-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb518-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb518-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb518-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">;</span></span></code></pre></div>
+<p><code>p</code> adalah pointer ke <code>int</code>, dan ia menunjuk ke tipe yang kompatibel—yaitu <code>int</code>—jadi aman.</p>
+<p>Tapi yang berikut tidak bagus karena <code>int</code> dan <code>float</code> bukan tipe yang kompatibel:</p>
+<div class="sourceCode" id="cb519"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb519-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb519-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb519-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb519-2" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">(</span><span class="dt">float</span> <span class="op">*)&amp;</span>a<span class="op">;</span></span></code></pre></div>
+<p>Berikut program demo yang melakukan aliasing. Ia mengambil variabel <code>v</code> bertipe <code>int32_t</code> dan meng-alias-kannya ke pointer ke <code>struct words</code>. <code>struct</code> itu berisi dua <code>int16_t</code>. Tipe-tipe ini tidak kompatibel, jadi kita melanggar aturan strict aliasing. Compiler akan menganggap kedua pointer ini tidak pernah menunjuk ke object yang sama… tapi kita membuatnya menunjuk. Nakal sekali kita ini.</p>
+<p>Mari kita lihat apakah kita bisa merusak sesuatu.</p>
+<div class="sourceCode" id="cb520"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb520-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb520-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
+<span id="cb520-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-3" aria-label="3"></a></span>
+<span id="cb520-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-4" aria-label="4"></a><span class="kw">struct</span> words <span class="op">{</span></span>
+<span id="cb520-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-5" aria-label="5"></a>    <span class="dt">int16_t</span> v<span class="op">[</span><span class="dv">2</span><span class="op">];</span></span>
+<span id="cb520-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-6" aria-label="6"></a><span class="op">};</span></span>
+<span id="cb520-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-7" aria-label="7"></a></span>
+<span id="cb520-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-8" aria-label="8"></a><span class="dt">void</span> fun<span class="op">(</span><span class="dt">int32_t</span> <span class="op">*</span>pv<span class="op">,</span> <span class="kw">struct</span> words <span class="op">*</span>pw<span class="op">)</span></span>
+<span id="cb520-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb520-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-10" aria-label="10"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb520-11"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-11" aria-label="11"></a>        <span class="op">(*</span>pv<span class="op">)++;</span></span>
+<span id="cb520-12"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-12" aria-label="12"></a></span>
+<span id="cb520-13"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-13" aria-label="13"></a>        <span class="co">// Cetak nilai 32-bit dan nilai-nilai 16-bit:</span></span>
+<span id="cb520-14"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-14" aria-label="14"></a></span>
+<span id="cb520-15"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-15" aria-label="15"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x</span><span class="st">, </span><span class="sc">%x</span><span class="st">-</span><span class="sc">%x\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>pv<span class="op">,</span> pw<span class="op">-&gt;</span>v<span class="op">[</span><span class="dv">1</span><span class="op">],</span> pw<span class="op">-&gt;</span>v<span class="op">[</span><span class="dv">0</span><span class="op">]);</span></span>
+<span id="cb520-16"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-16" aria-label="16"></a>    <span class="op">}</span></span>
+<span id="cb520-17"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-17" aria-label="17"></a><span class="op">}</span></span>
+<span id="cb520-18"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-18" aria-label="18"></a></span>
+<span id="cb520-19"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-19" aria-label="19"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb520-20"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-20" aria-label="20"></a><span class="op">{</span></span>
+<span id="cb520-21"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-21" aria-label="21"></a>    <span class="dt">int32_t</span> v <span class="op">=</span> <span class="bn">0x12345678</span><span class="op">;</span></span>
+<span id="cb520-22"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-22" aria-label="22"></a></span>
+<span id="cb520-23"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-23" aria-label="23"></a>    <span class="kw">struct</span> words <span class="op">*</span>pw <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> words <span class="op">*)&amp;</span>v<span class="op">;</span>  <span class="co">// Melanggar strict aliasing</span></span>
+<span id="cb520-24"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-24" aria-label="24"></a></span>
+<span id="cb520-25"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-25" aria-label="25"></a>    fun<span class="op">(&amp;</span>v<span class="op">,</span> pw<span class="op">);</span></span>
+<span id="cb520-26"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb520-26" aria-label="26"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat bagaimana aku mengoper kedua pointer yang tidak kompatibel ke <code>fun()</code>? Satu bertipe <code>int32_t*</code> dan yang lain <code>struct words*</code>.</p>
+<p>Tapi keduanya menunjuk ke object yang sama: nilai 32-bit yang diinisialisasi dengan <code>0x12345678</code>.</p>
+<p>Jadi kalau kita lihat field-field di <code>struct words</code>, kita seharusnya melihat dua setengah bagian 16-bit dari angka itu. Benar?</p>
+<p>Dan di loop <code>fun()</code>, kita meng-increment pointer ke <code>int32_t</code>. Itu saja. Tapi karena <code>struct</code> menunjuk ke memori yang sama, ia juga seharusnya diperbarui ke nilai yang sama.</p>
+<p>Mari kita jalankan dan dapatkan ini, dengan nilai 32-bit di kiri dan dua bagian 16-bit di kanan. Seharusnya cocok<a href="function-specifier-alignment-specifier-dan-operator.html#fn148" class="footnote-ref" id="fnref148" role="doc-noteref"><sup>148</sup></a>:</p>
+<div class="sourceCode" id="cb521"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb521-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb521-1" aria-hidden="true" tabindex="-1"></a>12345679, 1234-5679</span>
+<span id="cb521-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb521-2" aria-hidden="true" tabindex="-1"></a>1234567a, 1234-567a</span>
+<span id="cb521-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb521-3" aria-hidden="true" tabindex="-1"></a>1234567b, 1234-567b</span>
+<span id="cb521-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb521-4" aria-hidden="true" tabindex="-1"></a>1234567c, 1234-567c</span>
+<span id="cb521-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb521-5" aria-hidden="true" tabindex="-1"></a>1234567d, 1234-567d</span></code></pre></div>
+<p>dan memang cocok… <em>SAMPAI BESOK!</em></p>
+<p>Mari kita coba mengompilasinya dengan GCC memakai <code>-O3</code> dan <code>-fstrict-aliasing</code>:</p>
+<div class="sourceCode" id="cb522"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb522-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb522-1" aria-hidden="true" tabindex="-1"></a>12345679, 1234-5678</span>
+<span id="cb522-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb522-2" aria-hidden="true" tabindex="-1"></a>1234567a, 1234-5679</span>
+<span id="cb522-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb522-3" aria-hidden="true" tabindex="-1"></a>1234567b, 1234-567a</span>
+<span id="cb522-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb522-4" aria-hidden="true" tabindex="-1"></a>1234567c, 1234-567b</span>
+<span id="cb522-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb522-5" aria-hidden="true" tabindex="-1"></a>1234567d, 1234-567c</span></code></pre></div>
+<p>Selisih satu! Tapi mereka menunjuk ke memori yang sama! Bagaimana bisa? Jawabannya: melakukan aliasing memori seperti itu adalah undefined behavior. <em>Apa pun mungkin terjadi</em>, hanya saja bukan dengan cara yang baik.</p>
+<p>Kalau kodemu melanggar aturan strict aliasing, apakah ia berfungsi atau tidak bergantung pada bagaimana seseorang memutuskan mengompilasinya. Dan itu menyebalkan karena di luar kendalimu. Kecuali kamu semacam dewa mahakuasa.</p>
+<p>Kemungkinan tidak, maaf.</p>
+<p>GCC bisa dipaksa untuk tidak memakai aturan strict aliasing dengan <code>-fno-strict-aliasing</code>. Mengompilasi program demo di atas dengan <code>-O3</code> dan flag ini membuat outputnya sesuai harapan.</p>
+<p>Terakhir, <em>type punning</em> adalah memakai pointer bertipe berbeda untuk melihat data yang sama. Sebelum ada strict aliasing, hal seperti ini cukup umum:</p>
+<div class="sourceCode" id="cb523"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb523-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb523-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">0x12345678</span><span class="op">;</span></span>
+<span id="cb523-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb523-2" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> b <span class="op">=</span> <span class="op">*((</span><span class="dt">short</span> <span class="op">*)&amp;</span>a<span class="op">);</span>   <span class="co">// Melanggar strict aliasing</span></span></code></pre></div>
+<p>Kalau kamu ingin melakukan type punning dengan (relatif) aman, lihat bagian tentang <a href="struct-ii-lebih-seru-dengan-struct.html#union-type-punning">Union dan Type Punning</a>.</p>
+<p></p>
+<h2 data-number="23.6" id="ptr_differences"><span class="header-section-number">23.6</span> Selisih Pointer</h2>
+<p></p>
+<p>Seperti yang kamu tahu dari bagian tentang aritmetika pointer, kamu bisa mengurangkan satu pointer dari pointer lain<a href="function-specifier-alignment-specifier-dan-operator.html#fn149" class="footnote-ref" id="fnref149" role="doc-noteref"><sup>149</sup></a> untuk mendapatkan selisihnya dalam jumlah elemen array.</p>
+<p>Nah, <em>tipe selisih itu</em> ditentukan oleh implementasi, jadi bisa berbeda dari satu sistem ke sistem lain.</p>
+<p></p>
+<p>Agar lebih portabel, kamu bisa menyimpan hasilnya dalam variabel bertipe <code>ptrdiff_t</code> yang didefinisikan di <code>&lt;stddef.h&gt;</code>.</p>
+<div class="sourceCode" id="cb524"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb524-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb524-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> cats<span class="op">[</span><span class="dv">100</span><span class="op">];</span></span>
+<span id="cb524-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb524-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb524-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb524-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>f <span class="op">=</span> cats <span class="op">+</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb524-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb524-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>g <span class="op">=</span> cats <span class="op">+</span> <span class="dv">60</span><span class="op">;</span></span>
+<span id="cb524-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb524-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb524-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb524-6" aria-hidden="true" tabindex="-1"></a><span class="dt">ptrdiff_t</span> d <span class="op">=</span> g <span class="op">-</span> f<span class="op">;</span>  <span class="co">// selisihnya 40</span></span></code></pre></div>
+<p> Dan kamu bisa mencetaknya dengan menambahkan awalan <code>t</code> pada format specifier integer:</p>
+<div class="sourceCode" id="cb525"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb525-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb525-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%td\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// Cetak desimal: 40</span></span>
+<span id="cb525-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb525-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%tX\n</span><span class="st">&quot;</span><span class="op">,</span> d<span class="op">);</span>  <span class="co">// Cetak hex:     28</span></span></code></pre></div>
+<p> </p>
+<h2 data-number="23.7" id="pointer-ke-fungsi"><span class="header-section-number">23.7</span> Pointer ke Fungsi</h2>
+<p></p>
+<p>Fungsi hanyalah kumpulan instruksi mesin di memori, jadi tidak ada alasan kita tidak bisa mengambil pointer ke instruksi pertama fungsi itu.</p>
+<p>Lalu memanggilnya.</p>
+<p>Ini bisa berguna untuk mengoper pointer ke sebuah fungsi ke fungsi lain sebagai argumen. Lalu fungsi kedua itu bisa memanggil apa pun yang dioper.</p>
+<p>Bagian yang rumit, meski begitu, adalah C perlu tahu tipe variabel yang berupa pointer ke fungsi itu.</p>
+<p>Dan ia benar-benar ingin tahu semua detailnya.</p>
+<p>Seperti “ini adalah pointer ke fungsi yang menerima dua argumen <code>int</code> dan mengembalikan <code>void</code>”.</p>
+<p>Bagaimana menuliskan semua itu agar bisa mendeklarasikan variabel?</p>
+<p>Ternyata bentuknya sangat mirip function prototype, hanya dengan beberapa tanda kurung tambahan:</p>
+<div class="sourceCode" id="cb526"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb526-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb526-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Deklarasikan p sebagai pointer ke fungsi.</span></span>
+<span id="cb526-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb526-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Fungsi ini mengembalikan float, dan menerima dua int sebagai argumen.</span></span>
+<span id="cb526-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb526-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb526-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb526-4" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="op">(*</span>p<span class="op">)(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">);</span></span></code></pre></div>
+<p>Perhatikan juga bahwa kamu tidak harus memberi nama pada parameter. Tapi boleh saja kalau mau; namanya hanya diabaikan.</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb527-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb527-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Deklarasikan p sebagai pointer ke fungsi.</span></span>
+<span id="cb527-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb527-2" aria-hidden="true" tabindex="-1"></a><span class="co">// Fungsi ini mengembalikan float, dan menerima dua int sebagai argumen.</span></span>
+<span id="cb527-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb527-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb527-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb527-4" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> <span class="op">(*</span>p<span class="op">)(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
+<p>Jadi sekarang setelah kita tahu cara mendeklarasikan variabel, bagaimana kita tahu apa yang ditugaskan ke dalamnya? Bagaimana mendapatkan alamat sebuah fungsi?</p>
+<p>Ternyata ada jalan pintas seperti saat mendapatkan pointer ke array: kamu cukup menyebut nama fungsi tanpa kurung. (Kamu boleh menaruh <code>&amp;</code> di depannya kalau mau, tapi itu tidak perlu dan tidak idiomatis.)</p>
+<p>Setelah punya pointer ke fungsi, kamu bisa memanggilnya hanya dengan menambahkan tanda kurung dan daftar argumen.</p>
+<p>Kita coba contoh sederhana yang secara efektif membuat alias untuk sebuah fungsi dengan mengarahkan pointer ke sana. Lalu kita memanggilnya.</p>
+<p>Kode ini mencetak <code>3490</code>:</p>
+<div class="sourceCode" id="cb528"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb528-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb528-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-2" aria-label="2"></a></span>
+<span id="cb528-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-3" aria-label="3"></a><span class="dt">void</span> print_int<span class="op">(</span><span class="dt">int</span> n<span class="op">)</span></span>
+<span id="cb528-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb528-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-5" aria-label="5"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> n<span class="op">);</span></span>
+<span id="cb528-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-6" aria-label="6"></a><span class="op">}</span></span>
+<span id="cb528-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-7" aria-label="7"></a></span>
+<span id="cb528-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb528-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb528-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-10" aria-label="10"></a>    <span class="co">// Tugaskan p agar menunjuk ke print_int:</span></span>
+<span id="cb528-11"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-11" aria-label="11"></a></span>
+<span id="cb528-12"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-12" aria-label="12"></a>    <span class="dt">void</span> <span class="op">(*</span>p<span class="op">)(</span><span class="dt">int</span><span class="op">)</span> <span class="op">=</span> print_int<span class="op">;</span></span>
+<span id="cb528-13"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-13" aria-label="13"></a></span>
+<span id="cb528-14"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-14" aria-label="14"></a>    p<span class="op">(</span><span class="dv">3490</span><span class="op">);</span>          <span class="co">// Panggil print_int lewat pointer</span></span>
+<span id="cb528-15"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb528-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p>Perhatikan bagaimana tipe <code>p</code> merepresentasikan tipe nilai kembalian dan parameter <code>print_int</code>. Harus begitu, kalau tidak C akan protes soal tipe pointer yang tidak kompatibel.</p>
+<p>Satu contoh lagi di sini menunjukkan bagaimana kita bisa mengoper pointer ke fungsi sebagai argumen ke fungsi lain.</p>
+<p>Kita akan menulis fungsi yang menerima beberapa argumen integer, ditambah pointer ke fungsi yang beroperasi pada kedua argumen itu. Lalu ia mencetak hasilnya.</p>
+<div class="sourceCode" id="cb529"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb529-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb529-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-2" aria-label="2"></a></span>
+<span id="cb529-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-3" aria-label="3"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
+<span id="cb529-4"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb529-5"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-5" aria-label="5"></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb529-6"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-6" aria-label="6"></a><span class="op">}</span></span>
+<span id="cb529-7"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-7" aria-label="7"></a></span>
+<span id="cb529-8"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-8" aria-label="8"></a><span class="dt">int</span> mult<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span></span>
+<span id="cb529-9"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb529-10"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-10" aria-label="10"></a>    <span class="cf">return</span> a <span class="op">*</span> b<span class="op">;</span></span>
+<span id="cb529-11"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-11" aria-label="11"></a><span class="op">}</span></span>
+<span id="cb529-12"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-12" aria-label="12"></a></span>
+<span id="cb529-13"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-13" aria-label="13"></a><span class="dt">void</span> print_math<span class="op">(</span><span class="dt">int</span> <span class="op">(*</span>op<span class="op">)(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">),</span> <span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span>
+<span id="cb529-14"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-14" aria-label="14"></a><span class="op">{</span></span>
+<span id="cb529-15"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-15" aria-label="15"></a>    <span class="dt">int</span> result <span class="op">=</span> op<span class="op">(</span>x<span class="op">,</span> y<span class="op">);</span></span>
+<span id="cb529-16"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-16" aria-label="16"></a></span>
+<span id="cb529-17"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> result<span class="op">);</span></span>
+<span id="cb529-18"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-18" aria-label="18"></a><span class="op">}</span></span>
+<span id="cb529-19"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-19" aria-label="19"></a></span>
+<span id="cb529-20"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-20" aria-label="20"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb529-21"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-21" aria-label="21"></a><span class="op">{</span></span>
+<span id="cb529-22"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-22" aria-label="22"></a>    print_math<span class="op">(</span>add<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">7</span><span class="op">);</span>   <span class="co">// 12</span></span>
+<span id="cb529-23"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-23" aria-label="23"></a>    print_math<span class="op">(</span>mult<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">7</span><span class="op">);</span>  <span class="co">// 35</span></span>
+<span id="cb529-24"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb529-24" aria-label="24"></a><span class="op">}</span></span></code></pre></div>
+<p>Luangkan waktu untuk mencernanya. Idenya, kita akan mengoper pointer ke sebuah fungsi ke <code>print_math()</code>, dan ia akan memanggil fungsi itu untuk melakukan perhitungan.</p>
+<p>Dengan begitu kita bisa mengubah perilaku <code>print_math()</code> dengan mengoper fungsi lain ke dalamnya. Kamu bisa lihat kita melakukannya di baris 22-23 saat mengoper pointer ke fungsi <code>add</code> dan <code>mult</code>.</p>
+<p>Nah, di baris 13, kita semua pasti setuju signature fungsi <code>print_math()</code> adalah pemandangan yang patut dikagumi. Dan, percaya atau tidak, yang ini sebenarnya cukup lugas dibanding beberapa hal yang bisa kamu susun<a href="function-specifier-alignment-specifier-dan-operator.html#fn150" class="footnote-ref" id="fnref150" role="doc-noteref"><sup>150</sup></a>.</p>
+<p>Tapi mari kita cerna. Ternyata hanya ada tiga parameter, tapi agak sulit dilihat:</p>
+<div class="sourceCode" id="cb530"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb530-1"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb530-1" aria-hidden="true" tabindex="-1"></a><span class="co">//                      op             x      y</span></span>
+<span id="cb530-2"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb530-2" aria-hidden="true" tabindex="-1"></a><span class="co">//              |-----------------|  |---|  |---|</span></span>
+<span id="cb530-3"><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#cb530-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_math<span class="op">(</span><span class="dt">int</span> <span class="op">(*</span>op<span class="op">)(</span><span class="dt">int</span><span class="op">,</span> <span class="dt">int</span><span class="op">),</span> <span class="dt">int</span> x<span class="op">,</span> <span class="dt">int</span> y<span class="op">)</span></span></code></pre></div>
+<p>Parameter pertama, <code>op</code>, berupa pointer ke fungsi yang menerima dua <code>int</code> sebagai argumen dan mengembalikan <code>int</code>. Ini cocok dengan signature <code>add()</code> maupun <code>mult()</code>.</p>
+<p>Yang kedua dan ketiga, <code>x</code> dan <code>y</code>, hanyalah parameter <code>int</code> biasa.</p>
+<p>Pelan-pelan dan sengaja, biarkan matamu menelusuri signature itu sambil mengenali bagian-bagian yang bekerja. Satu hal yang selalu menonjol bagiku adalah urutan <code>(*op)(</code>, tanda kurung dan asterisk itu. Itulah tanda bahwa ia pointer ke fungsi.</p>
+<p>Terakhir, lompat kembali ke bab <em>Pointer II</em> untuk melihat <a href="pointers2.html#qsort-example">contoh pointer-ke-fungsi memakai <code>qsort()</code> bawaan</a>.</p>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="enumerated-type-enum.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="operasi-bitwise.html" rel="next">Next</a></span></div></body>
+</html>

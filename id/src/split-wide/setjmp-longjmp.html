@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="array-bagian-ii.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="incomplete-type.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="34" id="setjmp-longjmp"><span class="header-section-number">34</span> Long Jump dengan <code>setjmp</code>, <code>longjmp</code></h1>
+<p></p>
+<p>Kita sudah melihat <code>goto</code>, yang melompat dalam function scope. Tapi <code>longjmp()</code> memungkinkanmu melompat kembali ke titik eksekusi yang lebih awal, kembali ke fungsi yang memanggil fungsi ini.</p>
+<p>Ada banyak batasan dan peringatan, tapi ini bisa menjadi fungsi yang berguna untuk keluar dari kedalaman call stack kembali ke keadaan yang lebih awal.</p>
+<p>Menurut pengalamanku, fungsionalitas ini sangat jarang dipakai.</p>
+<h2 data-number="34.1" id="memakai-setjmp-dan-longjmp"><span class="header-section-number">34.1</span> Memakai <code>setjmp</code> dan <code>longjmp</code></h2>
+<p> </p>
+<p>Tarian yang akan kita lakukan di sini pada dasarnya adalah menaruh penanda buku dalam eksekusi dengan <code>setjmp()</code>. Nanti, kita memanggil <code>longjmp()</code> dan ia akan melompat kembali ke titik eksekusi sebelumnya tempat kita menaruh penanda itu dengan <code>setjmp()</code>.</p>
+<p>Dan ini bisa dilakukan bahkan kalau kamu sudah memanggil subfungsi.</p>
+<p>Berikut demo singkat ketika kita memanggil fungsi beberapa tingkat ke dalam lalu keluar darurat.</p>
+<p>Kita akan memakai variabel file scope <code>env</code> untuk menyimpan <em>state</em> saat kita memanggil <code>setjmp()</code> sehingga bisa memulihkannya ketika memanggil <code>longjmp()</code> nanti. Inilah variabel tempat kita mengingat “posisi” kita.</p>
+<p>Variabel <code>env</code> bertipe <code>jmp_buf</code>, tipe opaque yang dideklarasikan di <code>&lt;setjmp.h&gt;</code>.</p>
+<div class="sourceCode" id="cb676"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb676-1"><a href="setjmp-longjmp.html#cb676-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb676-2"><a href="setjmp-longjmp.html#cb676-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;setjmp.h&gt;</span></span>
+<span id="cb676-3"><a href="setjmp-longjmp.html#cb676-3" aria-label="3"></a></span>
+<span id="cb676-4"><a href="setjmp-longjmp.html#cb676-4" aria-label="4"></a>jmp_buf env<span class="op">;</span></span>
+<span id="cb676-5"><a href="setjmp-longjmp.html#cb676-5" aria-label="5"></a></span>
+<span id="cb676-6"><a href="setjmp-longjmp.html#cb676-6" aria-label="6"></a><span class="dt">void</span> depth2<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb676-7"><a href="setjmp-longjmp.html#cb676-7" aria-label="7"></a><span class="op">{</span></span>
+<span id="cb676-8"><a href="setjmp-longjmp.html#cb676-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;Entering depth 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb676-9"><a href="setjmp-longjmp.html#cb676-9" aria-label="9"></a>    longjmp<span class="op">(</span>env<span class="op">,</span> <span class="dv">3490</span><span class="op">);</span>           <span class="co">// Keluar darurat</span></span>
+<span id="cb676-10"><a href="setjmp-longjmp.html#cb676-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;Leaving depth 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Ini tidak akan terjadi</span></span>
+<span id="cb676-11"><a href="setjmp-longjmp.html#cb676-11" aria-label="11"></a><span class="op">}</span></span>
+<span id="cb676-12"><a href="setjmp-longjmp.html#cb676-12" aria-label="12"></a></span>
+<span id="cb676-13"><a href="setjmp-longjmp.html#cb676-13" aria-label="13"></a><span class="dt">void</span> depth1<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb676-14"><a href="setjmp-longjmp.html#cb676-14" aria-label="14"></a><span class="op">{</span></span>
+<span id="cb676-15"><a href="setjmp-longjmp.html#cb676-15" aria-label="15"></a>    printf<span class="op">(</span><span class="st">&quot;Entering depth 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb676-16"><a href="setjmp-longjmp.html#cb676-16" aria-label="16"></a>    depth2<span class="op">();</span></span>
+<span id="cb676-17"><a href="setjmp-longjmp.html#cb676-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;Leaving depth 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Ini tidak akan terjadi</span></span>
+<span id="cb676-18"><a href="setjmp-longjmp.html#cb676-18" aria-label="18"></a><span class="op">}</span></span>
+<span id="cb676-19"><a href="setjmp-longjmp.html#cb676-19" aria-label="19"></a></span>
+<span id="cb676-20"><a href="setjmp-longjmp.html#cb676-20" aria-label="20"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb676-21"><a href="setjmp-longjmp.html#cb676-21" aria-label="21"></a><span class="op">{</span></span>
+<span id="cb676-22"><a href="setjmp-longjmp.html#cb676-22" aria-label="22"></a>    <span class="cf">switch</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{</span></span>
+<span id="cb676-23"><a href="setjmp-longjmp.html#cb676-23" aria-label="23"></a>      <span class="cf">case</span> <span class="dv">0</span><span class="op">:</span></span>
+<span id="cb676-24"><a href="setjmp-longjmp.html#cb676-24" aria-label="24"></a>          printf<span class="op">(</span><span class="st">&quot;Calling into functions, setjmp() returned 0</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb676-25"><a href="setjmp-longjmp.html#cb676-25" aria-label="25"></a>          depth1<span class="op">();</span></span>
+<span id="cb676-26"><a href="setjmp-longjmp.html#cb676-26" aria-label="26"></a>          printf<span class="op">(</span><span class="st">&quot;Returned from functions</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Ini tidak akan terjadi</span></span>
+<span id="cb676-27"><a href="setjmp-longjmp.html#cb676-27" aria-label="27"></a>          <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb676-28"><a href="setjmp-longjmp.html#cb676-28" aria-label="28"></a></span>
+<span id="cb676-29"><a href="setjmp-longjmp.html#cb676-29" aria-label="29"></a>      <span class="cf">case</span> <span class="dv">3490</span><span class="op">:</span></span>
+<span id="cb676-30"><a href="setjmp-longjmp.html#cb676-30" aria-label="30"></a>          printf<span class="op">(</span><span class="st">&quot;Bailed back to main, setjmp() returned 3490</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb676-31"><a href="setjmp-longjmp.html#cb676-31" aria-label="31"></a>          <span class="cf">break</span><span class="op">;</span></span>
+<span id="cb676-32"><a href="setjmp-longjmp.html#cb676-32" aria-label="32"></a>    <span class="op">}</span></span>
+<span id="cb676-33"><a href="setjmp-longjmp.html#cb676-33" aria-label="33"></a><span class="op">}</span></span></code></pre></div>
+<p>Saat dijalankan, ini mengeluarkan:</p>
+<div class="sourceCode" id="cb677"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb677-1"><a href="setjmp-longjmp.html#cb677-1" aria-hidden="true" tabindex="-1"></a>Calling into functions, setjmp() returned 0</span>
+<span id="cb677-2"><a href="setjmp-longjmp.html#cb677-2" aria-hidden="true" tabindex="-1"></a>Entering depth 1</span>
+<span id="cb677-3"><a href="setjmp-longjmp.html#cb677-3" aria-hidden="true" tabindex="-1"></a>Entering depth 2</span>
+<span id="cb677-4"><a href="setjmp-longjmp.html#cb677-4" aria-hidden="true" tabindex="-1"></a>Bailed back to main, setjmp() returned 3490</span></code></pre></div>
+<p>Kalau kamu mencoba mencocokkan output itu dengan kodenya, jelas ada hal yang benar-benar <em>aneh</em> sedang terjadi.</p>
+<p>Salah satu yang paling mencolok: <code>setjmp()</code> mengembalikan nilai <em>dua kali</em>. Apa-apaan ini? Sihir apa ini?!</p>
+<p>Begini ceritanya: kalau <code>setjmp()</code> mengembalikan <code>0</code>, artinya kamu berhasil menaruh “penanda buku” di titik itu.</p>
+<p>Kalau ia mengembalikan nilai bukan nol, artinya kamu baru saja kembali ke “penanda buku” yang ditaruh sebelumnya. (Dan nilai yang dikembalikan adalah nilai yang kamu oper ke <code>longjmp()</code>.)</p>
+<p>Dengan cara ini kamu bisa membedakan antara menaruh penanda dan kembali ke penanda itu nanti.</p>
+<p>Jadi ketika kode di atas memanggil <code>setjmp()</code> untuk pertama kali, <code>setjmp()</code> <em>menyimpan</em> state di variabel <code>env</code> dan mengembalikan <code>0</code>. Nanti saat kita memanggil <code>longjmp()</code> dengan <code>env</code> yang sama, ia memulihkan state itu dan <code>setjmp()</code> mengembalikan nilai yang dioper ke <code>longjmp()</code>.</p>
+<p> </p>
+<h2 data-number="34.2" id="jebakan"><span class="header-section-number">34.2</span> Jebakan</h2>
+<p>Di balik layar, ini cukup lugas. Biasanya <em>stack pointer</em> melacak lokasi di memori tempat variabel lokal disimpan, dan <em>program counter</em> melacak alamat instruksi yang sedang dieksekusi<a href="function-specifier-alignment-specifier-dan-operator.html#fn180" class="footnote-ref" id="fnref180" role="doc-noteref"><sup>180</sup></a>.</p>
+<p>Jadi kalau kita ingin melompat kembali ke fungsi yang lebih awal, pada dasarnya tinggal memulihkan stack pointer dan program counter ke nilai yang disimpan di variabel <code>jmp_buf</code>, dan memastikan nilai kembaliannya diatur dengan benar. Lalu eksekusi akan dilanjutkan di sana.</p>
+<p>Tapi berbagai faktor mengacaukan ini, menciptakan banyak jebakan undefined behavior.</p>
+<h3 data-number="34.2.1" id="nilai-variabel-lokal"><span class="header-section-number">34.2.1</span> Nilai Variabel Lokal</h3>
+<p></p>
+<p>Kalau kamu ingin nilai variabel lokal otomatis (bukan <code>static</code> dan bukan <code>extern</code>) tetap bertahan di fungsi yang memanggil <code>setjmp()</code> setelah <code>longjmp()</code> terjadi, kamu harus mendeklarasikan variabel itu sebagai <code>volatile</code>.</p>
+<p>Secara teknis, mereka hanya perlu <code>volatile</code> kalau nilainya berubah antara saat <code>setjmp()</code> dipanggil dan <code>longjmp()</code> dipanggil<a href="function-specifier-alignment-specifier-dan-operator.html#fn181" class="footnote-ref" id="fnref181" role="doc-noteref"><sup>181</sup></a>.</p>
+<p>Misalnya, kalau kita menjalankan kode ini:</p>
+<div class="sourceCode" id="cb678"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb678-1"><a href="setjmp-longjmp.html#cb678-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb678-2"><a href="setjmp-longjmp.html#cb678-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb678-3"><a href="setjmp-longjmp.html#cb678-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb678-4"><a href="setjmp-longjmp.html#cb678-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb678-5"><a href="setjmp-longjmp.html#cb678-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>dan nanti <code>longjmp()</code> kembali, nilai <code>x</code> akan tak tentu.</p>
+<p>Kalau ingin memperbaikinya, <code>x</code> harus <code>volatile</code>:</p>
+<div class="sourceCode" id="cb679"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb679-1"><a href="setjmp-longjmp.html#cb679-1" aria-hidden="true" tabindex="-1"></a><span class="dt">volatile</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb679-2"><a href="setjmp-longjmp.html#cb679-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb679-3"><a href="setjmp-longjmp.html#cb679-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb679-4"><a href="setjmp-longjmp.html#cb679-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb679-5"><a href="setjmp-longjmp.html#cb679-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p></p>
+<p>Sekarang nilainya akan benar, yaitu <code>30</code>, setelah <code>longjmp()</code> membawa kita kembali ke titik ini.</p>
+<h3 data-number="34.2.2" id="berapa-banyak-state-yang-disimpan"><span class="header-section-number">34.2.2</span> Berapa Banyak State yang Disimpan?</h3>
+<p> </p>
+<p>Saat kamu <code>longjmp()</code>, eksekusi dilanjutkan di titik <code>setjmp()</code> yang bersesuaian. Dan hanya itu.</p>
+<p></p>
+<p>Spesifikasi menunjukkan bahwa itu sama saja seolah-olah kamu melompat kembali ke fungsi pada titik itu dengan variabel lokal bernilai apa pun yang mereka miliki saat pemanggilan <code>longjmp()</code> dilakukan.</p>
+<p></p>
+<p>Hal-hal yang tidak dipulihkan, memparafrasekan spesifikasi, mencakup:</p>
+<ul>
+<li>Flag status floating point</li>
+<li>File yang terbuka</li>
+<li>Komponen lain apa pun dari abstract machine</li>
+</ul>
+<h3 data-number="34.2.3" id="kamu-tidak-boleh-menamai-apa-pun-setjmp"><span class="header-section-number">34.2.3</span> Kamu Tidak Boleh Menamai Apa Pun <code>setjmp</code></h3>
+<p>Kamu tidak boleh punya identifier <code>extern</code> bernama <code>setjmp</code>. Atau, kalau <code>setjmp</code> adalah makro, kamu tidak boleh meng-undefine-nya.</p>
+<p>Keduanya undefined behavior.</p>
+<h3 data-number="34.2.4" id="setjmp-tidak-boleh-berada-dalam-ekspresi-yang-lebih-besar"><span class="header-section-number">34.2.4</span> <code>setjmp()</code> Tidak Boleh Berada dalam Ekspresi yang Lebih Besar</h3>
+<p></p>
+<p>Artinya, kamu tidak bisa melakukan sesuatu seperti ini:</p>
+<div class="sourceCode" id="cb680"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb680-1"><a href="setjmp-longjmp.html#cb680-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>x <span class="op">==</span> <span class="dv">12</span> <span class="op">&amp;&amp;</span> setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+<p>Itu terlalu kompleks untuk diizinkan spesifikasi karena rekayasa yang harus terjadi saat membongkar stack dan sebagainya. Kita tidak bisa <code>longjmp()</code> kembali ke ekspresi kompleks yang baru dieksekusi sebagian.</p>
+<p>Jadi ada batas kompleksitas pada ekspresi itu.</p>
+<ul>
+<li><p>Ia boleh menjadi seluruh ekspresi pengendali dari kondisional.</p>
+<div class="sourceCode" id="cb681"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb681-1"><a href="setjmp-longjmp.html#cb681-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{...}</span></span></code></pre></div>
+<div class="sourceCode" id="cb682"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb682-1"><a href="setjmp-longjmp.html#cb682-1" aria-hidden="true" tabindex="-1"></a><span class="cf">switch</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{...}</span></span></code></pre></div></li>
+<li><p>Ia boleh menjadi bagian dari ekspresi relasional atau kesamaan, selama operand lainnya adalah konstanta integer. Dan keseluruhannya adalah ekspresi pengendali dari kondisional.</p>
+<div class="sourceCode" id="cb683"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb683-1"><a href="setjmp-longjmp.html#cb683-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>setjmp<span class="op">(</span>env<span class="op">)</span> <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{...}</span></span></code></pre></div></li>
+<li><p>Operand dari operasi logical NOT (<code>!</code>), yang menjadi seluruh ekspresi pengendali.</p>
+<div class="sourceCode" id="cb684"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb684-1"><a href="setjmp-longjmp.html#cb684-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(!</span>setjmp<span class="op">(</span>env<span class="op">))</span> <span class="op">{...}</span></span></code></pre></div></li>
+<li><p>Ekspresi mandiri, mungkin di-cast ke <code>void</code>.</p>
+<div class="sourceCode" id="cb685"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb685-1"><a href="setjmp-longjmp.html#cb685-1" aria-hidden="true" tabindex="-1"></a>setjmp<span class="op">(</span>env<span class="op">);</span></span></code></pre></div>
+<div class="sourceCode" id="cb686"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb686-1"><a href="setjmp-longjmp.html#cb686-1" aria-hidden="true" tabindex="-1"></a><span class="op">(</span><span class="dt">void</span><span class="op">)</span>setjmp<span class="op">(</span>env<span class="op">);</span></span></code></pre></div></li>
+</ul>
+<p></p>
+<h3 data-number="34.2.5" id="kapan-longjmp-tidak-boleh-dilakukan"><span class="header-section-number">34.2.5</span> Kapan <code>longjmp()</code> Tidak Boleh Dilakukan?</h3>
+<p></p>
+<p>Ini undefined behavior kalau:</p>
+<ul>
+<li>Kamu belum memanggil <code>setjmp()</code> sebelumnya</li>
+<li>Kamu memanggil <code>setjmp()</code> dari thread lain</li>
+<li>Kamu memanggil <code>setjmp()</code> di scope sebuah variable length array (VLA), dan eksekusi sudah meninggalkan scope VLA itu sebelum <code>longjmp()</code> dipanggil.</li>
+<li>Fungsi yang berisi <code>setjmp()</code> sudah keluar sebelum <code>longjmp()</code> dipanggil.</li>
+</ul>
+<p>Untuk yang terakhir, “keluar” mencakup return normal dari fungsi itu, serta kasus ketika <code>longjmp()</code> lain sudah melompat kembali ke titik yang “lebih awal” di call stack daripada fungsi yang dimaksud.</p>
+<h3 data-number="34.2.6" id="kamu-tidak-boleh-mengoper-0-ke-longjmp"><span class="header-section-number">34.2.6</span> Kamu Tidak Boleh Mengoper <code>0</code> ke <code>longjmp()</code></h3>
+<p>Kalau kamu mencoba mengoper nilai <code>0</code> ke <code>longjmp()</code>, nilai itu akan diam-diam diubah menjadi <code>1</code>.</p>
+<p>Karena <code>setjmp()</code> pada akhirnya mengembalikan nilai ini, dan <code>setjmp()</code> yang mengembalikan <code>0</code> punya makna khusus, mengembalikan <code>0</code> dilarang.</p>
+<h3 data-number="34.2.7" id="longjmp-dan-variable-length-array"><span class="header-section-number">34.2.7</span> <code>longjmp()</code> dan Variable Length Array</h3>
+<p>Kalau kamu berada di scope sebuah VLA dan <code>longjmp()</code> keluar dari sana, memori yang dialokasikan untuk VLA itu bisa bocor<a href="function-specifier-alignment-specifier-dan-operator.html#fn182" class="footnote-ref" id="fnref182" role="doc-noteref"><sup>182</sup></a>.</p>
+<p>Hal yang sama terjadi kalau kamu <code>longjmp()</code> melewati fungsi-fungsi sebelumnya yang masih punya VLA dalam scope.</p>
+<p>Ini salah satu hal yang benar-benar mengganggu aku soal VLA—kamu bisa menulis kode C yang sepenuhnya sah tapi menyia-nyiakan memori. Tapi ya, aku bukan pemegang spesifikasi.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="array-bagian-ii.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="incomplete-type.html" rel="next">Next</a></span></div></body>
+</html>

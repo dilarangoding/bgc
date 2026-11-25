@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="scope.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tipe-iii-konversi.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="14" id="tipe-ii-jauh-lebih-banyak-tipe"><span class="header-section-number">14</span> Tipe II: Jauh Lebih Banyak Tipe!</h1>
+<p>Kita sudah terbiasa dengan tipe <code>char</code>, <code>int</code>, dan <code>float</code>, tapi sekarang saatnya membawanya ke level berikutnya dan melihat apa lagi yang tersedia di departemen tipe!</p>
+<h2 data-number="14.1" id="integer-signed-dan-unsigned"><span class="header-section-number">14.1</span> Integer Signed dan Unsigned</h2>
+<p> Sejauh ini kita memakai <code>int</code> sebagai tipe <em>signed</em>, yaitu nilai yang bisa negatif maupun positif. Tapi C juga punya tipe integer <em>unsigned</em> khusus yang hanya bisa menyimpan angka positif.</p>
+<p>Tipe-tipe ini diawali dengan kata kunci <code>unsigned</code>.</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb219-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">;</span>           <span class="co">// signed</span></span>
+<span id="cb219-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb219-2" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> <span class="dt">int</span> a<span class="op">;</span>    <span class="co">// signed</span></span>
+<span id="cb219-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb219-3" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> a<span class="op">;</span>        <span class="co">// signed, &quot;singkatan&quot; dari &quot;int&quot; atau &quot;signed int&quot;, jarang dipakai</span></span>
+<span id="cb219-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb219-4" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">int</span> b<span class="op">;</span>  <span class="co">// unsigned</span></span>
+<span id="cb219-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb219-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> c<span class="op">;</span>      <span class="co">// unsigned, singkatan dari &quot;unsigned int&quot;</span></span></code></pre></div>
+<p>Kenapa? Kenapa kamu memutuskan hanya ingin menyimpan angka positif?</p>
+<p>Jawabannya: variabel unsigned bisa menampung angka yang lebih besar dibanding variabel signed.</p>
+<p>Tapi kenapa begitu?</p>
+<p>Bayangkan integer direpresentasikan oleh sejumlah <em>bit</em><a href="function-specifier-alignment-specifier-dan-operator.html#fn92" class="footnote-ref" id="fnref92" role="doc-noteref"><sup>92</sup></a>. Di komputerku, sebuah <code>int</code> direpresentasikan oleh 64 bit.</p>
+<p>Dan setiap permutasi bit yang bernilai <code>1</code> atau <code>0</code> mewakili sebuah angka. Kita yang memutuskan bagaimana membagi angka-angka ini.</p>
+<p>Pada angka signed, kita memakai (kurang lebih) separuh permutasi untuk angka negatif, dan separuh lainnya untuk angka positif.</p>
+<p>Pada unsigned, kita memakai <em>semua</em> permutasi untuk angka positif.</p>
+<p>Di komputerku, dengan <code>int</code> 64-bit yang memakai <a href="https://en.wikipedia.org/wiki/Two%27s_complement">two’s complement</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn93" class="footnote-ref" id="fnref93" role="doc-noteref"><sup>93</sup></a> untuk merepresentasikan angka unsigned, rentang integernya adalah sebagai berikut:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: right;">Minimum</th>
+<th style="text-align: right;">Maksimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: right;"><code>-9,223,372,036,854,775,808</code></td>
+<td style="text-align: right;"><code>9,223,372,036,854,775,807</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned int</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td style="text-align: right;"><code>18,446,744,073,709,551,615</code></td>
+</tr>
+</tbody>
+</table>
+<p>Perhatikan bahwa <code>unsigned int</code> positif terbesar kira-kira dua kali lebih besar dari <code>int</code> positif terbesar. Jadi ada sedikit keleluasaan di sana. </p>
+<h2 data-number="14.2" id="tipe-karakter"><span class="header-section-number">14.2</span> Tipe Karakter</h2>
+<p> Ingat <code>char</code>? Tipe yang bisa kita pakai untuk menyimpan satu karakter?</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb220-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span></span>
+<span id="cb220-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb220-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb220-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb220-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>  <span class="co">// &quot;B&quot;</span></span></code></pre></div>
+<p>Ada kejutan untukmu: sebenarnya ia adalah integer.</p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb221-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span></span>
+<span id="cb221-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb221-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb221-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb221-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Ubah ini dari %c menjadi %d:</span></span>
+<span id="cb221-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb221-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>  <span class="co">// 66 (!!)</span></span></code></pre></div>
+<p>Jauh di dalamnya, <code>char</code> hanyalah <code>int</code> kecil, yaitu integer yang hanya memakai satu byte ruang, jadi rentangnya terbatas pada…</p>
+<p>Di sini spesifikasi C jadi sedikit aneh. Ia menjamin bahwa <code>char</code> adalah satu byte, yaitu <code>sizeof(char) == 1</code>. Tapi kemudian di C11 §3.6¶3 ia berusaha keras menyatakan:</p>
+<blockquote>
+<p>A byte is composed of a contiguous sequence of bits, <em>the number of which is implementation-defined.</em></p>
+</blockquote>
+<p>Tunggu—apa? Mungkin sebagian dari kamu terbiasa dengan anggapan bahwa byte itu 8 bit, kan? Maksudnya, memang begitu, kan? Dan jawabannya: “Hampir pasti.”<a href="function-specifier-alignment-specifier-dan-operator.html#fn94" class="footnote-ref" id="fnref94" role="doc-noteref"><sup>94</sup></a> Tapi C bahasa yang tua, dan mesin-mesin zaman dulu punya pendapat yang, katakanlah, lebih <em>santai</em> soal berapa bit dalam satu byte. Dan selama bertahun-tahun, C mempertahankan fleksibilitas ini.</p>
+<p>Tapi dengan asumsi byte di C-mu berukuran 8 bit, seperti hampir semua mesin di dunia yang akan pernah kamu temui, rentang <code>char</code> adalah…</p>
+<p> —Nah, sebelum aku bisa menyebutkannya, ternyata <code>char</code> bisa signed atau unsigned tergantung compiler-mu. Kecuali kalau kamu menyebutkannya secara eksplisit.</p>
+<p>Dalam banyak kasus, cukup memakai <code>char</code> karena kamu tidak peduli soal tanda data. Tapi kalau kamu butuh <code>char</code> signed atau unsigned, kamu <em>harus</em> eksplisit:</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb222-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> a<span class="op">;</span>           <span class="co">// Bisa signed atau unsigned</span></span>
+<span id="cb222-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb222-2" aria-hidden="true" tabindex="-1"></a><span class="dt">signed</span> <span class="dt">char</span> b<span class="op">;</span>    <span class="co">// Pasti signed</span></span>
+<span id="cb222-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb222-3" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">char</span> c<span class="op">;</span>  <span class="co">// Pasti unsigned</span></span></code></pre></div>
+<p>Oke, sekarang akhirnya kita bisa menentukan rentang angkanya, dengan asumsi <code>char</code> berukuran 8 bit dan sistemmu memakai representasi two’s complement yang hampir universal untuk signed dan unsigned<a href="function-specifier-alignment-specifier-dan-operator.html#fn95" class="footnote-ref" id="fnref95" role="doc-noteref"><sup>95</sup></a>.</p>
+<p>Jadi, dengan asumsi-asumsi itu, akhirnya kita bisa menghitung rentangnya:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe <code>char</code></th>
+<th style="text-align: right;">Minimum</th>
+<th style="text-align: right;">Maksimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>signed char</code></td>
+<td style="text-align: right;"><code>-128</code></td>
+<td style="text-align: right;"><code>127</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned char</code></td>
+<td style="text-align: right;"><code>0</code></td>
+<td style="text-align: right;"><code>255</code></td>
+</tr>
+</tbody>
+</table>
+<p>Dan rentang untuk <code>char</code> ditentukan oleh implementasi. </p>
+<p>Biar kuluruskan dulu. <code>char</code> sebenarnya angka, berarti bisa dihitung secara matematis?</p>
+<p>Bisa! Cuma ingat untuk menjaga nilainya dalam rentang <code>char</code>!</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb223-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb223-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-2" aria-label="2"></a></span>
+<span id="cb223-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb223-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb223-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-5" aria-label="5"></a>    <span class="dt">char</span> a <span class="op">=</span> <span class="dv">10</span><span class="op">,</span> b <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb223-6"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-6" aria-label="6"></a></span>
+<span id="cb223-7"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a <span class="op">+</span> b<span class="op">);</span>  <span class="co">// 30!</span></span>
+<span id="cb223-8"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb223-8" aria-label="8"></a><span class="op">}</span></span></code></pre></div>
+<p> Bagaimana dengan konstanta karakter dalam tanda kutip tunggal, seperti <code>'B'</code>? Bagaimana ia punya nilai numerik?</p>
+<p>Spesifikasi juga bersikap mengambang di sini, karena C tidak dirancang untuk berjalan di satu jenis sistem dasar saja.</p>
+<p>Tapi anggap saja untuk sementara character set-mu berbasis <a href="https://en.wikipedia.org/wiki/ASCII">ASCII</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn96" class="footnote-ref" id="fnref96" role="doc-noteref"><sup>96</sup></a> setidaknya untuk 128 karakter pertama. Kalau begitu, konstanta karakter akan dikonversi menjadi <code>char</code> yang nilainya sama dengan nilai ASCII karakter tersebut.</p>
+<p>Ribet juga, ya. Langsung saja contoh:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb224-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb224-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-2" aria-label="2"></a></span>
+<span id="cb224-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb224-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb224-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-5" aria-label="5"></a>    <span class="dt">char</span> a <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb224-6"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-6" aria-label="6"></a>    <span class="dt">char</span> b <span class="op">=</span> <span class="ch">&#39;B&#39;</span><span class="op">;</span>  <span class="co">// Nilai ASCII 66</span></span>
+<span id="cb224-7"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-7" aria-label="7"></a></span>
+<span id="cb224-8"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a <span class="op">+</span> b<span class="op">);</span>  <span class="co">// 76!</span></span>
+<span id="cb224-9"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb224-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Ini bergantung pada lingkungan eksekusimu dan <a href="https://en.wikipedia.org/wiki/List_of_information_system_character_sets">character set yang dipakai</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn97" class="footnote-ref" id="fnref97" role="doc-noteref"><sup>97</sup></a>. Salah satu character set paling populer saat ini adalah <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn98" class="footnote-ref" id="fnref98" role="doc-noteref"><sup>98</sup></a> (yang merupakan superset ASCII), jadi untuk 0-9, A-Z, a-z dan tanda baca dasar, hampir pasti kamu mendapat nilai ASCII-nya. </p>
+<h2 data-number="14.3" id="tipe-integer-lainnya-short-long-long-long"><span class="header-section-number">14.3</span> Tipe Integer Lainnya: <code>short</code>, <code>long</code>, <code>long long</code></h2>
+<p>Sejauh ini kita hanya memakai dua tipe integer secara umum:</p>
+<ul>
+<li><code>char</code></li>
+<li><code>int</code></li>
+</ul>
+<p>dan baru-baru ini kita belajar varian unsigned dari tipe integer. Kita juga tahu bahwa <code>char</code> diam-diam adalah <code>int</code> kecil yang menyamar. Jadi kita tahu <code>int</code> bisa punya berbagai ukuran bit.</p>
+<p>Tapi ada beberapa tipe integer lagi yang perlu kita lihat, beserta rentang minimum yang bisa mereka tampung. (Implementasimu kemungkinan punya rentang lebih lebar daripada yang disyaratkan spesifikasi, tapi rentang di sini adalah yang <strong>pasti</strong> tersedia secara portabel.)</p>
+<p>Header file <code>&lt;limits.h&gt;</code> mendefinisikan makro yang menyimpan rentang berbagai tipe; andalkan itu untuk kepastian, dan <em>jangan pernah meng-hardcode atau mengasumsikan nilai-nilai ini</em>.</p>
+<p> Tipe tambahan ini adalah <code>short int</code>, <code>long int</code>, dan <code>long long int</code>. Biasanya, saat memakai tipe-tipe ini, developer C menghilangkan bagian <code>int</code> (misalnya <code>long long</code>), dan compiler tetap senang.</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb225-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Dua baris ini setara:</span></span>
+<span id="cb225-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">long</span> <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb225-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-3" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">long</span> x<span class="op">;</span></span>
+<span id="cb225-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb225-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Begitu juga dua baris ini:</span></span>
+<span id="cb225-6"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-6" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb225-7"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb225-7" aria-hidden="true" tabindex="-1"></a><span class="dt">short</span> x<span class="op">;</span></span></code></pre></div>
+<p>Mari kita lihat tipe data integer dan ukurannya secara menaik, dikelompokkan menurut tanda. Sekali lagi, batas minimum dan maksimum ini adalah yang dijamin secara portabel oleh spesifikasi; sistemmu kemungkinan punya rentang lebih lebar.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: right;">Byte Minimum</th>
+<th style="text-align: right;">Nilai Minimum</th>
+<th style="text-align: right;">Nilai Maksimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>char</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-128 atau 0</td>
+<td style="text-align: right;">127 atau 255<a href="function-specifier-alignment-specifier-dan-operator.html#fn99" class="footnote-ref" id="fnref99" role="doc-noteref"><sup>99</sup></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>signed char</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-128</td>
+<td style="text-align: right;">127</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>short</code></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-32768</td>
+<td style="text-align: right;">32767</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-32768</td>
+<td style="text-align: right;">32767</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">-2147483648</td>
+<td style="text-align: right;">2147483647</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long long</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-9223372036854775808</td>
+<td style="text-align: right;">9223372036854775807</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned char</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">255</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned short</code></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">65535</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned int</code></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">65535</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4294967295</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long long</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">18446744073709551615</td>
+</tr>
+</tbody>
+</table>
+<p>Tidak ada tipe <code>long long long</code>. Kamu tidak bisa terus menambah <code>long</code> seperti itu. Jangan konyol.</p>
+<blockquote>
+<p>Penggemar two’s complement mungkin menyadari ada yang janggal pada angka-angka itu. Kenapa, misalnya, <code>signed char</code> berhenti di -127 dan bukan -128? Ingat: itu hanya minimum yang disyaratkan spesifikasi. Beberapa representasi angka (seperti <a href="https://en.wikipedia.org/wiki/Signed_number_representations#Signed_magnitude_representation">sign and magnitude</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn100" class="footnote-ref" id="fnref100" role="doc-noteref"><sup>100</sup></a>) mentok di ±127.</p>
+</blockquote>
+<p>Mari kita jalankan tabel yang sama pada sistem 64-bit two’s complement milikku dan lihat hasilnya:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: right;">Byte di Sistemku</th>
+<th style="text-align: right;">Nilai Minimum</th>
+<th style="text-align: right;">Nilai Maksimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>char</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-128</td>
+<td style="text-align: right;">127<a href="function-specifier-alignment-specifier-dan-operator.html#fn101" class="footnote-ref" id="fnref101" role="doc-noteref"><sup>101</sup></a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>signed char</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-128</td>
+<td style="text-align: right;">127</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>short</code></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">-32768</td>
+<td style="text-align: right;">32767</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">-2147483648</td>
+<td style="text-align: right;">2147483647</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-9223372036854775808</td>
+<td style="text-align: right;">9223372036854775807</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long long</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-9223372036854775808</td>
+<td style="text-align: right;">9223372036854775807</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned char</code></td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">255</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned short</code></td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">65535</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned int</code></td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4294967295</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">18446744073709551615</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long long</code></td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">18446744073709551615</td>
+</tr>
+</tbody>
+</table>
+<p>Ini sedikit lebih masuk akal, tapi kita bisa melihat bahwa sistemku punya batas yang lebih besar daripada minimum di spesifikasi.</p>
+<p><span id="limits-macros">Lalu apa saja makro di <code>&lt;limits.h&gt;</code>?</span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: left;">Makro Min</th>
+<th style="text-align: left;">Makro Maks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>char</code></td>
+<td style="text-align: left;"><code>CHAR_MIN</code></td>
+<td style="text-align: left;"><code>CHAR_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>signed char</code></td>
+<td style="text-align: left;"><code>SCHAR_MIN</code></td>
+<td style="text-align: left;"><code>SCHAR_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>short</code></td>
+<td style="text-align: left;"><code>SHRT_MIN</code></td>
+<td style="text-align: left;"><code>SHRT_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;"><code>INT_MIN</code></td>
+<td style="text-align: left;"><code>INT_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long</code></td>
+<td style="text-align: left;"><code>LONG_MIN</code></td>
+<td style="text-align: left;"><code>LONG_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long long</code></td>
+<td style="text-align: left;"><code>LLONG_MIN</code></td>
+<td style="text-align: left;"><code>LLONG_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned char</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;"><code>UCHAR_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned short</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;"><code>USHRT_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned int</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;"><code>UINT_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;"><code>ULONG_MAX</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long long</code></td>
+<td style="text-align: left;"><code>0</code></td>
+<td style="text-align: left;"><code>ULLONG_MAX</code></td>
+</tr>
+</tbody>
+</table>
+<p>Perhatikan ada cara tersembunyi di sana untuk menentukan apakah sebuah sistem memakai <code>char</code> signed atau unsigned. Kalau <code>CHAR_MAX == UCHAR_MAX</code>, berarti ia unsigned.</p>
+<p>Perhatikan juga bahwa tidak ada makro minimum untuk varian <code>unsigned</code>—nilainya cuma <code>0</code>. </p>
+<h2 data-number="14.4" id="float-lainnya-double-dan-long-double"><span class="header-section-number">14.4</span> Float Lainnya: <code>double</code> dan <code>long double</code></h2>
+<p>Mari kita lihat apa kata spesifikasi tentang bilangan floating point di §5.2.4.2.2¶1-2:</p>
+<blockquote>
+<p>The following parameters are used to define the model for each floating-point type:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(s\)</span></td>
+<td style="text-align: left;">sign (<span class="math inline">\(\pm1\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(b\)</span></td>
+<td style="text-align: left;">base or radix of exponent representation (an integer <span class="math inline">\(&gt; 1\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(e\)</span></td>
+<td style="text-align: left;">exponent (an integer between a minimum <span class="math inline">\(e_{min}\)</span> and a maximum <span class="math inline">\(e_{max}\)</span>)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(p\)</span></td>
+<td style="text-align: left;">precision (the number of base-<span class="math inline">\(b\)</span> digits in the significand)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(f_k\)</span></td>
+<td style="text-align: left;">nonnegative integers less than <span class="math inline">\(b\)</span> (the significand digits)</td>
+</tr>
+</tbody>
+</table>
+<p>A <em>floating-point number</em> (<span class="math inline">\(x\)</span>) is defined by the following model:</p>
+<blockquote>
+<p><span class="math inline">\(x=sb^e\sum\limits_{k=1}^p f_kb^{-k},\)</span>    <span class="math inline">\(e_{min}\le e\le e_{max}\)</span></p>
+</blockquote>
+</blockquote>
+<p>Kuharap itu langsung bikin semuanya jelas.</p>
+<p>Baiklah. Mundur selangkah dan lihat apa yang praktis.</p>
+<p>Catatan: kita merujuk ke sejumlah makro di bagian ini. Makro-makro itu ada di header <code>&lt;float.h&gt;</code>.</p>
+<p>Bilangan floating point di-encode dalam urutan bit tertentu (<a href="https://en.wikipedia.org/wiki/IEEE_754">format IEEE-754</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn102" class="footnote-ref" id="fnref102" role="doc-noteref"><sup>102</sup></a> sangat populer) di dalam byte.</p>
+<p>Lebih dalam lagi, bilangan itu pada dasarnya direpresentasikan sebagai <em>significand</em> (bagian angkanya—digit-digit signifikannya sendiri, kadang juga disebut <em>mantissa</em>) dan <em>exponent</em>, yaitu pangkat yang dipakai untuk menaikkan digit-digit itu. Ingat bahwa eksponen negatif bisa membuat angka menjadi lebih kecil.</p>
+<p>Bayangkan kita memakai <span class="math inline">\(10\)</span> sebagai bilangan yang dipangkatkan. Kita bisa merepresentasikan angka-angka berikut dengan significand <span class="math inline">\(12345\)</span> dan eksponen <span class="math inline">\(-3\)</span>, <span class="math inline">\(4\)</span>, dan <span class="math inline">\(0\)</span> untuk meng-encode nilai floating point berikut:</p>
+<p><span class="math inline">\(12345\times10^{-3}=12.345\)</span></p>
+<p><span class="math inline">\(12345\times10^4=123450000\)</span></p>
+<p><span class="math inline">\(12345\times10^0=12345\)</span></p>
+<p>Untuk semua angka itu, significand-nya tetap sama. Satu-satunya perbedaan adalah eksponennya.</p>
+<p>Di mesinmu, basis untuk eksponen kemungkinan adalah <span class="math inline">\(2\)</span>, bukan <span class="math inline">\(10\)</span>, karena komputer suka biner. Kamu bisa mengeceknya dengan mencetak makro <code>FLT_RADIX</code>.</p>
+<p>Jadi kita punya sebuah angka yang direpresentasikan oleh sejumlah byte, yang di-encode dengan cara tertentu. Karena pola bit terbatas, jumlah bilangan floating point yang bisa direpresentasikan juga terbatas.</p>
+<p>Lebih khusus lagi, hanya sejumlah tertentu digit desimal signifikan yang bisa direpresentasikan secara akurat.</p>
+<p>Bagaimana cara mendapat lebih banyak? Pakai tipe data yang lebih besar!</p>
+<p>Dan kita punya beberapa. Kita sudah kenal <code>float</code>, tapi untuk presisi lebih besar ada <code>double</code>. Dan untuk presisi yang lebih besar lagi, ada <code>long double</code> (tidak berhubungan dengan <code>long int</code> kecuali namanya).</p>
+<p>Spesifikasi tidak menentukan berapa byte penyimpanan yang dipakai setiap tipe, tapi di sistemku, kita bisa melihat kenaikan ukuran relatifnya:</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: right;"><code>sizeof</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>double</code></td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long double</code></td>
+<td style="text-align: right;">16</td>
+</tr>
+</tbody>
+</table>
+<p>Jadi setiap tipe (di sistemku) memakai bit tambahan itu untuk presisi yang lebih tinggi.</p>
+<p>Tapi <em>seberapa besar</em> presisinya? Berapa banyak angka desimal yang bisa direpresentasikan oleh nilai-nilai ini?</p>
+<p>Nah, C menyediakan sejumlah makro di <code>&lt;float.h&gt;</code> untuk membantu kita mengetahuinya.</p>
+<p>Ini jadi agak aneh kalau kamu memakai sistem basis-2 (biner) untuk menyimpan angka (yang dipakai hampir semua orang di planet ini, mungkin termasuk kamu), tapi sabar saja sementara kita mengurainya. </p>
+<h3 data-number="14.4.1" id="berapa-banyak-digit-desimal"><span class="header-section-number">14.4.1</span> Berapa Banyak Digit Desimal?</h3>
+<p> Pertanyaan sejuta dolarnya adalah, “Berapa banyak digit desimal signifikan yang bisa disimpan dalam tipe floating point tertentu sehingga ketika dicetak, kita mendapat angka desimal yang sama?”</p>
+<p>Jumlah digit desimal yang bisa disimpan dalam tipe floating point dan pasti kembali sama saat dicetak diberikan oleh makro-makro ini:</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: right;">Digit Desimal yang Bisa Disimpan</th>
+<th style="text-align: right;">Minimum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: right;"><code>FLT_DIG</code></td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>double</code></td>
+<td style="text-align: right;"><code>DBL_DIG</code></td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long double</code></td>
+<td style="text-align: right;"><code>LDBL_DIG</code></td>
+<td style="text-align: right;">10</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>Di sistemku, <code>FLT_DIG</code> adalah 6, jadi aku bisa yakin kalau sebuah <code>float</code> 6 digit dicetak, hasilnya sama. (Bisa saja lebih dari 6 digit—sebagian angka tetap kembali dengan benar dengan lebih banyak digit. Tapi 6 pasti kembali.)</p>
+<p>Misalnya, kalau kita mencetak <code>float</code> dengan pola digit yang bertambah seperti ini, kelihatannya kita sampai 8 digit sebelum ada yang salah, tapi setelah itu kembali ke 7 digit yang benar.</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb226-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb226-1" aria-hidden="true" tabindex="-1"></a>0.12345</span>
+<span id="cb226-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb226-2" aria-hidden="true" tabindex="-1"></a>0.123456</span>
+<span id="cb226-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb226-3" aria-hidden="true" tabindex="-1"></a>0.1234567</span>
+<span id="cb226-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb226-4" aria-hidden="true" tabindex="-1"></a>0.12345678</span>
+<span id="cb226-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb226-5" aria-hidden="true" tabindex="-1"></a>0.123456791  &lt;-- Things start going wrong</span>
+<span id="cb226-6"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb226-6" aria-hidden="true" tabindex="-1"></a>0.1234567910</span></code></pre></div>
+<p>Kita coba demo lain. Pada kode ini ada dua <code>float</code> yang masing-masing menyimpan angka dengan <code>FLT_DIG</code> digit desimal signifikan<a href="function-specifier-alignment-specifier-dan-operator.html#fn103" class="footnote-ref" id="fnref103" role="doc-noteref"><sup>103</sup></a>. Lalu keduanya dijumlahkan, yang seharusnya menghasilkan 12 digit desimal signifikan. Tapi itu lebih dari yang bisa disimpan dalam <code>float</code> dan dipulihkan dengan benar sebagai string—jadi ketika dicetak, terlihat ada yang mulai salah setelah digit signifikan ke-7.</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb227-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb227-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;float.h&gt;</span></span>
+<span id="cb227-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-3" aria-label="3"></a></span>
+<span id="cb227-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb227-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb227-6"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-6" aria-label="6"></a>    <span class="co">// Kedua angka ini punya 6 digit signifikan, jadi bisa</span></span>
+<span id="cb227-7"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-7" aria-label="7"></a>    <span class="co">// disimpan secara akurat dalam float:</span></span>
+<span id="cb227-8"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-8" aria-label="8"></a></span>
+<span id="cb227-9"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-9" aria-label="9"></a>    <span class="dt">float</span> f <span class="op">=</span> <span class="fl">3.14159</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb227-10"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-10" aria-label="10"></a>    <span class="dt">float</span> g <span class="op">=</span> <span class="fl">0.00000265358</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb227-11"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-11" aria-label="11"></a></span>
+<span id="cb227-12"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-12" aria-label="12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.5f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>   <span class="co">// 3.14159       -- benar!</span></span>
+<span id="cb227-13"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.11f\n</span><span class="st">&quot;</span><span class="op">,</span> g<span class="op">);</span>  <span class="co">// 0.00000265358 -- benar!</span></span>
+<span id="cb227-14"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-14" aria-label="14"></a></span>
+<span id="cb227-15"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-15" aria-label="15"></a>    <span class="co">// Sekarang jumlahkan</span></span>
+<span id="cb227-16"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-16" aria-label="16"></a>    f <span class="op">+=</span> g<span class="op">;</span>                <span class="co">// 3.14159265358 adalah nilai f yang _seharusnya_</span></span>
+<span id="cb227-17"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-17" aria-label="17"></a></span>
+<span id="cb227-18"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-18" aria-label="18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%.11f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span>  <span class="co">// 3.14159274101 -- salah!</span></span>
+<span id="cb227-19"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb227-19" aria-label="19"></a><span class="op">}</span></span></code></pre></div>
+<p>(Kode di atas punya <code>f</code> setelah konstanta numeriknya—ini menandakan bahwa konstanta itu bertipe <code>float</code>, bukan <code>double</code> yang menjadi bawaannya. Soal ini dibahas nanti.)</p>
+<p>Ingat bahwa <code>FLT_DIG</code> adalah jumlah digit aman yang bisa disimpan dalam <code>float</code> dan diambil kembali dengan benar.</p>
+<p>Kadang kamu bisa mendapat satu atau dua digit lebih. Tapi kadang kamu hanya mendapat <code>FLT_DIG</code> digit. Yang pasti: kalau kamu menyimpan angka dengan jumlah digit sampai dengan <code>FLT_DIG</code> dalam <code>float</code>, dijamin kembali dengan benar.</p>
+<p>Jadi begitulah ceritanya. <code>FLT_DIG</code>. Tamat.</p>
+<p></p>
+<p>…Atau belum?</p>
+<h3 data-number="14.4.2" id="mengonversi-ke-desimal-dan-kembali"><span class="header-section-number">14.4.2</span> Mengonversi ke Desimal dan Kembali</h3>
+<p>Tapi menyimpan bilangan basis 10 dalam bilangan floating point lalu mengambilnya kembali baru setengah cerita.</p>
+<p>Ternyata bilangan floating point bisa meng-encode angka yang butuh lebih banyak angka desimal untuk dicetak sepenuhnya. Hanya saja angka desimal besarmu mungkin tidak cocok dengan salah satu angka itu.</p>
+<p>Artinya, kalau kamu melihat bilangan floating point dari satu ke yang berikutnya, ada celah di antaranya. Kalau kamu mencoba meng-encode angka desimal di celah itu, yang dipakai adalah bilangan floating point terdekat. Itulah kenapa kamu hanya bisa meng-encode <code>FLT_DIG</code> pada <code>float</code>.</p>
+<p>Tapi bagaimana dengan bilangan floating point yang <em>tidak</em> ada di celah? Berapa tempat desimal yang dibutuhkan untuk mencetaknya secara akurat?</p>
+<p>Cara lain menyatakan pertanyaan ini: untuk bilangan floating point tertentu, berapa digit desimal yang harus dipertahankan kalau kita ingin mengonversi angka desimal itu kembali menjadi bilangan floating point yang identik? Artinya, berapa digit yang harus dicetak di basis 10 untuk memulihkan <strong>semua</strong> digit basis 2 pada angka aslinya?</p>
+<p>Kadang hanya perlu beberapa. Tapi supaya yakin, kamu perlu mengonversi ke desimal dengan jumlah tempat desimal aman tertentu. Angka itu di-encode dalam makro-makro berikut:</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr>
+<th>Makro</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FLT_DECIMAL_DIG</code></td>
+<td>Jumlah digit desimal yang di-encode dalam <code>float</code>.</td>
+</tr>
+<tr>
+<td><code>DBL_DECIMAL_DIG</code></td>
+<td>Jumlah digit desimal yang di-encode dalam <code>double</code>.</td>
+</tr>
+<tr>
+<td><code>LDBL_DECIMAL_DIG</code></td>
+<td>Jumlah digit desimal yang di-encode dalam <code>long double</code>.</td>
+</tr>
+<tr>
+<td><code>DECIMAL_DIG</code></td>
+<td>Sama dengan encoding terlebar, <code>LDBL_DECIMAL_DIG</code>.</td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>Mari kita lihat contoh ketika <code>DBL_DIG</code> adalah 15 (jadi hanya segitu yang bisa ada di konstanta), tapi <code>DBL_DECIMAL_DIG</code> adalah 17 (jadi kita harus mengonversi ke 17 angka desimal untuk mempertahankan semua bit dari <code>double</code> aslinya).</p>
+<p>Kita tugaskan angka 15 digit signifikan <code>0.123456789012345</code> ke <code>x</code>, dan angka 1 digit signifikan <code>0.0000000000000006</code> ke <code>y</code>.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb228-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb228-1" aria-hidden="true" tabindex="-1"></a>x is exact: 0.12345678901234500    Printed to 17 decimal places</span>
+<span id="cb228-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb228-2" aria-hidden="true" tabindex="-1"></a>y is exact: 0.00000000000000060</span></code></pre></div>
+<p>Tapi mari kita jumlahkan. Hasilnya seharusnya <code>0.1234567890123456</code>, tapi itu lebih dari <code>DBL_DIG</code>, jadi mungkin terjadi hal-hal aneh… kita lihat:</p>
+<div class="sourceCode" id="cb229"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb229-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb229-1" aria-hidden="true" tabindex="-1"></a>x + y not quite right: 0.12345678901234559    Should end in 4560!</span></code></pre></div>
+<p>Itulah yang kita dapat karena mencetak lebih dari <code>DBL_DIG</code>, kan? Tapi lihat ini… angka di atas itu bisa direpresentasikan persis seperti adanya!</p>
+<p>Kalau kita tugaskan <code>0.12345678901234559</code> (17 digit) ke <code>z</code> dan mencetaknya, hasilnya:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb230-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb230-1" aria-hidden="true" tabindex="-1"></a>z is exact: 0.12345678901234559   17 digits correct! More than DBL_DIG!</span></code></pre></div>
+<p>Kalau <code>z</code> dipotong menjadi 15 digit, angkanya tidak akan sama. Itulah kenapa untuk mempertahankan semua bit sebuah <code>double</code>, kita butuh <code>DBL_DECIMAL_DIG</code> dan bukan sekadar <code>DBL_DIG</code> yang lebih kecil.</p>
+<p></p>
+<p>Jadi, jelas bahwa saat bermain dengan angka desimal secara umum, tidak aman mencetak lebih dari <code>FLT_DIG</code>, <code>DBL_DIG</code>, atau <code>LDBL_DIG</code> digit agar tetap masuk akal terhadap angka basis 10 aslinya dan perhitungan matematika berikutnya.</p>
+<p>Tapi saat mengonversi dari <code>float</code> ke representasi desimal dan <em>kembali</em> ke <code>float</code>, pasti pakai <code>FLT_DECIMAL_DIG</code> agar semua bit terpertahankan persis. </p>
+<p></p>
+<h2 data-number="14.5" id="tipe-konstanta-numerik"><span class="header-section-number">14.5</span> Tipe Konstanta Numerik</h2>
+<p>Saat kamu menulis konstanta angka, seperti <code>1234</code>, ia punya tipe. Tapi tipe apa? Mari kita lihat bagaimana C menentukan tipe konstanta itu, dan cara memaksanya memilih tipe tertentu.</p>
+<h3 data-number="14.5.1" id="heksadesimal-dan-oktal"><span class="header-section-number">14.5.1</span> Heksadesimal dan Oktal</h3>
+<p>Selain desimal biasa seperti buatan nenek, C juga mendukung konstanta dengan basis berbeda.</p>
+<p></p>
+<p>Kalau angka diawali <code>0x</code>, ia dibaca sebagai angka hex:</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb231-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">0x1A2B</span><span class="op">;</span>   <span class="co">// Heksadesimal</span></span>
+<span id="cb231-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb231-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b <span class="op">=</span> <span class="bn">0x1a2b</span><span class="op">;</span>   <span class="co">// Huruf besar/kecil tidak berpengaruh untuk digit hex</span></span>
+<span id="cb231-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb231-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb231-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb231-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Cetak angka hex, &quot;1a2b&quot;</span></span></code></pre></div>
+<p></p>
+<p> Kalau angka diawali <code>0</code>, ia dibaca sebagai angka oktal:</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb232-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a <span class="op">=</span> <span class="bn">012</span><span class="op">;</span></span>
+<span id="cb232-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb232-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb232-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb232-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%o\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">);</span>  <span class="co">// Cetak angka oktal, &quot;12&quot;</span></span></code></pre></div>
+<p>Ini terutama jadi masalah bagi programmer pemula yang mencoba mengisi angka desimal dengan <code>0</code> di kiri agar rapi dan sejajar, dan tanpa sadar mengubah basis angkanya:</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb233-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">11111</span><span class="op">;</span>  <span class="co">// Desimal 11111</span></span>
+<span id="cb233-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y <span class="op">=</span> <span class="bn">00111</span><span class="op">;</span>  <span class="co">// Desimal 73 (Oktal 111)</span></span>
+<span id="cb233-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb233-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> z <span class="op">=</span> <span class="bn">01111</span><span class="op">;</span>  <span class="co">// Desimal 585 (Oktal 1111)</span></span></code></pre></div>
+<p></p>
+<h4 data-number="14.5.1.1" id="catatan-tentang-biner"><span class="header-section-number">14.5.1.1</span> Catatan tentang Biner</h4>
+<p></p>
+<p>Ekstensi tidak resmi<a href="function-specifier-alignment-specifier-dan-operator.html#fn104" class="footnote-ref" id="fnref104" role="doc-noteref"><sup>104</sup></a> di banyak compiler C memungkinkan kita menulis bilangan biner dengan awalan <code>0b</code>:</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb234-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="bn">0b101010</span><span class="op">;</span>    <span class="co">// Biner 101010</span></span>
+<span id="cb234-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb234-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb234-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>   <span class="co">// Mencetak 42 desimal</span></span></code></pre></div>
+<p>Tidak ada format specifier <code>printf()</code> untuk mencetak bilangan biner. Kamu harus melakukannya satu karakter demi satu karakter dengan operator bitwise.</p>
+<p></p>
+<h3 data-number="14.5.2" id="konstanta-integer"><span class="header-section-number">14.5.2</span> Konstanta Integer</h3>
+<p></p>
+<p>Kamu bisa memaksa konstanta integer menjadi tipe tertentu dengan menambahkan sufiks yang menunjukkan tipenya.</p>
+<p>Kita akan melakukan beberapa penugasan sebagai demo, tapi paling sering developer tidak menulis sufiks kecuali perlu presisi. Compiler cukup pandai memastikan tipe-tipenya kompatibel.</p>
+<p> </p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb235-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span>           x <span class="op">=</span> <span class="dv">1234</span><span class="op">;</span></span>
+<span id="cb235-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">int</span>      x <span class="op">=</span> <span class="dv">1234</span><span class="bu">L</span><span class="op">;</span></span>
+<span id="cb235-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-3" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">1234</span><span class="bu">LL</span></span>
+<span id="cb235-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb235-5"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-5" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">int</span>           x <span class="op">=</span> <span class="dv">1234</span><span class="bu">U</span><span class="op">;</span></span>
+<span id="cb235-6"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-6" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span>      x <span class="op">=</span> <span class="dv">1234</span><span class="bu">UL</span><span class="op">;</span></span>
+<span id="cb235-7"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb235-7" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> <span class="dv">1234</span><span class="bu">ULL</span><span class="op">;</span></span></code></pre></div>
+<p>Sufiks boleh huruf besar maupun kecil. Dan <code>U</code> serta <code>L</code> atau <code>LL</code> boleh muncul dalam urutan mana pun.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: left;">Sufiks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>int</code></td>
+<td style="text-align: left;">Tidak ada</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long int</code></td>
+<td style="text-align: left;"><code>L</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long long int</code></td>
+<td style="text-align: left;"><code>LL</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned int</code></td>
+<td style="text-align: left;"><code>U</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long int</code></td>
+<td style="text-align: left;"><code>UL</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>unsigned long long int</code></td>
+<td style="text-align: left;"><code>ULL</code></td>
+</tr>
+</tbody>
+</table>
+<p>Tadi di tabel kusebut bahwa “tanpa sufiks” berarti <code>int</code>… tapi sebenarnya lebih rumit dari itu.</p>
+<p>Jadi apa yang terjadi kalau ada angka tanpa sufiks seperti:</p>
+<div class="sourceCode" id="cb236"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb236-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb236-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">1234</span><span class="op">;</span></span></code></pre></div>
+<p>Bertipe apa angka itu?</p>
+<p>Umumnya C memilih tipe terkecil, mulai dari <code>int</code>, yang bisa menampung nilainya.</p>
+<p>Tapi lebih spesifik lagi, itu juga bergantung pada basis angkanya (desimal, hex, atau oktal).</p>
+<p>Spesifikasi punya tabel bagus yang menunjukkan tipe mana yang dipakai untuk nilai tanpa sufiks. Bahkan, tabel itu akan kusalin utuh di sini.</p>
+<p>C11 §6.4.4.1¶5 berbunyi, “The type of an integer constant is the first of the first of the corresponding list in which its value can be represented.”</p>
+<p>Lalu dilanjutkan dengan tabel ini:</p>
+<table style="width:94%;">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 34%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">Sufiks</th>
+<th style="text-align: left;">Konstanta Desimal</th>
+<th style="text-align: left;">Konstanta Oktal atau<br />
+Heksadesimal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">tidak ada</td>
+<td style="text-align: left;"><code>int</code><br />
+<code>long int</code></td>
+<td style="text-align: left;"><code>int</code><br />
+<code>unsigned int</code><br />
+<code>long int</code><br />
+<code>unsigned long int</code><br />
+<code>long long int</code><br />
+<code>unsigned long long int</code><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>u</code> atau <code>U</code></td>
+<td style="text-align: left;"><code>unsigned int</code><br />
+<code>unsigned long int</code><br />
+<code>unsigned long long int</code></td>
+<td style="text-align: left;"><code>unsigned int</code><br />
+<code>unsigned long int</code><br />
+<code>unsigned long long int</code><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>l</code> atau <code>L</code></td>
+<td style="text-align: left;"><code>long int</code><br />
+<code>long long int</code></td>
+<td style="text-align: left;"><code>long int</code><br />
+<code>unsigned long int</code><br />
+<code>long long int</code><br />
+<code>unsigned long long int</code><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>u</code>/<code>U</code> dan<br />
+<code>l</code>/<code>L</code></td>
+<td style="text-align: left;"><code>unsigned long int</code><br />
+<code>unsigned long long int</code></td>
+<td style="text-align: left;"><code>unsigned long int</code><br />
+<code>unsigned long long int</code><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>ll</code> atau <code>LL</code></td>
+<td style="text-align: left;"><code>long long int</code></td>
+<td style="text-align: left;"><code>long long int</code><br />
+<code>unsigned long long int</code><br />
+</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>u</code>/<code>U</code> dan<br />
+<code>ll</code>/<code>LL</code></td>
+<td style="text-align: left;"><code>unsigned long long int</code></td>
+<td style="text-align: left;"><code>unsigned long long int</code></td>
+</tr>
+</tbody>
+</table>
+<p> </p>
+<p>Artinya, misalnya kalau kamu menulis angka seperti <code>123456789U</code>, mula-mula C akan melihat apakah ia bisa menjadi <code>unsigned int</code>. Kalau tidak muat, dicoba <code>unsigned long int</code>. Lalu <code>unsigned long long int</code>. Ia memakai tipe terkecil yang bisa menampung angka itu.</p>
+<p></p>
+<p></p>
+<h3 data-number="14.5.3" id="konstanta-floating-point"><span class="header-section-number">14.5.3</span> Konstanta Floating Point</h3>
+<p></p>
+<p>Kamu mungkin mengira konstanta floating point seperti <code>1.23</code> bertipe bawaan <code>float</code>, kan?</p>
+<p>Kejutan! Ternyata bilangan floating point tanpa sufiks bertipe <code>double</code>! Selamat ulang tahun yang terlambat!</p>
+<p> </p>
+<p>Kamu bisa memaksanya menjadi <code>float</code> dengan menambahkan <code>f</code> (atau <code>F</code>—tidak membedakan huruf besar/kecil). Kamu bisa memaksanya menjadi <code>long double</code> dengan menambahkan <code>l</code> (atau <code>L</code>).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Tipe</th>
+<th style="text-align: left;">Sufiks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>float</code></td>
+<td style="text-align: left;"><code>F</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>double</code></td>
+<td style="text-align: left;">Tidak ada</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>long double</code></td>
+<td style="text-align: left;"><code>L</code></td>
+</tr>
+</tbody>
+</table>
+<p>Misalnya:</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb237-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> x       <span class="op">=</span> <span class="fl">3.14</span><span class="bu">f</span><span class="op">;</span></span>
+<span id="cb237-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb237-2" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> x      <span class="op">=</span> <span class="fl">3.14</span><span class="op">;</span></span>
+<span id="cb237-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb237-3" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">double</span> x <span class="op">=</span> <span class="fl">3.14</span><span class="bu">L</span><span class="op">;</span></span></code></pre></div>
+<p> </p>
+<p>Tapi selama ini kita melakukan ini saja, kan?</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb238-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb238-1" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> x <span class="op">=</span> <span class="fl">3.14</span><span class="op">;</span></span></code></pre></div>
+<p>Bukankah sisi kiri <code>float</code> dan sisi kanan <code>double</code>? Betul! Tapi C cukup pandai soal konversi numerik otomatis, jadi lebih umum menulis konstanta floating point tanpa sufiks daripada dengan sufiks. Nanti dibahas lagi.</p>
+<p></p>
+<h4 data-number="14.5.3.1" id="notasi-ilmiah"><span class="header-section-number">14.5.3.1</span> Notasi Ilmiah</h4>
+<p></p>
+<p>Ingat tadi saat kita membahas bahwa bilangan floating point bisa direpresentasikan dengan significand, basis, dan eksponen?</p>
+<p>Nah, ada cara umum menulis bilangan seperti itu, ditampilkan di sini diikuti padanannya yang lebih mudah dikenali, yaitu hasil perhitungan sebenarnya:</p>
+<p><span class="math inline">\(1.2345\times10^3 = 1234.5\)</span></p>
+<p>Menulis angka dalam bentuk <span class="math inline">\(s\times b^e\)</span> disebut <a href="https://en.wikipedia.org/wiki/Scientific_notation"><em>notasi ilmiah</em></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn105" class="footnote-ref" id="fnref105" role="doc-noteref"><sup>105</sup></a>. Di C, ini ditulis dengan “notasi E”, jadi dua bentuk ini setara:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Notasi Ilmiah</th>
+<th style="text-align: left;">Notasi E</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(1.2345\times10^{-3}=0.0012345\)</span></td>
+<td style="text-align: left;"><code>1.2345e-3</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><span class="math inline">\(1.2345\times10^8=123450000\)</span></td>
+<td style="text-align: left;"><code>1.2345e+8</code></td>
+</tr>
+</tbody>
+</table>
+<p>Kamu bisa mencetak angka dalam notasi ini dengan <code>%e</code>:</p>
+<div class="sourceCode" id="cb239"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb239-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb239-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%e\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="fl">123456.0</span><span class="op">);</span>  <span class="co">// Mencetak 1.234560e+05</span></span></code></pre></div>
+<p>Beberapa fakta kecil yang menyenangkan tentang notasi ilmiah:</p>
+<ul>
+<li><p>Angka tidak harus ditulis dengan satu digit di depan titik desimal. Berapa pun jumlah angka boleh ditaruh di depan.</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb240-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> x <span class="op">=</span> <span class="fl">123.456e+3</span><span class="op">;</span>  <span class="co">// 123456</span></span></code></pre></div>
+<p>Tapi saat dicetak, eksponennya akan diubah sehingga hanya ada satu digit di depan titik desimal.</p></li>
+<li><p>Tanda plus pada eksponen boleh dihilangkan karena itu bawaannya, tapi dari yang pernah kulihat, ini jarang dipakai.</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb241-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2345e10</span> <span class="op">==</span> <span class="fl">1.2345e+10</span></span></code></pre></div></li>
+<li><p>Kamu bisa menambahkan sufiks <code>F</code> atau <code>L</code> pada konstanta notasi E:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb242-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb242-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2345e10</span><span class="bu">F</span></span>
+<span id="cb242-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb242-2" aria-hidden="true" tabindex="-1"></a><span class="fl">1.2345e10</span><span class="bu">L</span></span></code></pre></div></li>
+</ul>
+<p></p>
+<h4 data-number="14.5.3.2" id="konstanta-floating-point-heksadesimal"><span class="header-section-number">14.5.3.2</span> Konstanta Floating Point Heksadesimal</h4>
+<p></p>
+<p>Tapi tunggu, masih ada lagi yang mengambang!</p>
+<p>Ternyata ada juga konstanta floating point heksadesimal!</p>
+<p>Cara kerjanya mirip bilangan floating point desimal, tapi diawali <code>0x</code> seperti angka integer.</p>
+<p>Syaratnya, kamu <em>harus</em> menyebutkan eksponen, dan eksponen ini menghasilkan pangkat 2. Yaitu: <span class="math inline">\(2^x\)</span>.</p>
+<p>Lalu kamu memakai <code>p</code> alih-alih <code>e</code> saat menulis angkanya:</p>
+<p>Jadi <code>0xa.1p3</code> adalah <span class="math inline">\(10.0625\times2^3 == 80.5\)</span>.</p>
+<p>Saat memakai konstanta hex floating point, Kita bisa mencetak notasi ilmiah hex dengan <code>%a</code>:</p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb243-1"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb243-1" aria-hidden="true" tabindex="-1"></a><span class="dt">double</span> x <span class="op">=</span> <span class="fl">0xa.1p3</span><span class="op">;</span></span>
+<span id="cb243-2"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb243-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb243-3"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb243-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%a\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 0x1.42p+6</span></span>
+<span id="cb243-4"><a href="tipe-ii-jauh-lebih-banyak-tipe.html#cb243-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 80.500000</span></span></code></pre></div>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="scope.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tipe-iii-konversi.html" rel="next">Next</a></span></div></body>
+</html>

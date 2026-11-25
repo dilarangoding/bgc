@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="proyek-multifile.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="c-preprocessor.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="18" id="lingkungan-di-luar-program"><span class="header-section-number">18</span> Lingkungan di Luar Program</h1>
+<p>Ketika kamu menjalankan sebuah program, sebenarnya kamu sedang berbicara dengan shell, berkata, “Hei, tolong jalankan ini.” Dan shell menjawab, “Siap,” lalu memberi tahu sistem operasi, “Hei, bisa tolong buatkan proses baru dan jalankan ini?” Dan kalau semuanya lancar, OS menurut dan programmu berjalan.</p>
+<p>Tapi ada dunia luas di luar programmu, di dalam shell, yang bisa berinteraksi dengan C. Beberapa di antaranya kita lihat di bab ini.</p>
+<h2 data-number="18.1" id="argumen-command-line"><span class="header-section-number">18.1</span> Argumen Command Line</h2>
+<p></p>
+<p>Banyak utilitas command line menerima <em>argumen command line</em>. Misalnya, kalau kita ingin melihat semua file berakhiran <code>.txt</code>, kita bisa mengetik sesuatu seperti ini di sistem mirip Unix:</p>
+<div class="sourceCode" id="cb306"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb306-1"><a href="lingkungan-di-luar-program.html#cb306-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>.txt</span></code></pre></div>
+<p>(atau <code>dir</code> alih-alih <code>ls</code> di sistem Windows).</p>
+<p>Dalam kasus ini, perintahnya adalah <code>ls</code>, sedangkan argumennya adalah semua file yang berakhiran <code>.txt</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn119" class="footnote-ref" id="fnref119" role="doc-noteref"><sup>119</sup></a>.</p>
+<p>Jadi bagaimana kita bisa melihat apa yang dioper ke program dari command line?</p>
+<p>Katakanlah kita punya program bernama <code>add</code> yang menjumlahkan semua angka yang dioper di command line dan mencetak hasilnya:</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb307-1"><a href="lingkungan-di-luar-program.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./add</span> 10 30 5</span>
+<span id="cb307-2"><a href="lingkungan-di-luar-program.html#cb307-2" aria-hidden="true" tabindex="-1"></a><span class="ex">45</span></span></code></pre></div>
+<p>Dijamin ini bisa membayar tagihan!</p>
+<p>Tapi serius, ini alat yang bagus untuk melihat cara mengambil argumen dari command line dan memecahnya.</p>
+<p>Pertama, mari kita lihat dulu cara mendapatkannya. Untuk itu, kita butuh <code>main()</code> yang baru!</p>
+<p>Berikut program yang mencetak semua argumen command line. Misalnya, kalau executable-nya kita beri nama <code>foo</code>, kita bisa menjalankannya seperti ini:</p>
+<div class="sourceCode" id="cb308"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb308-1"><a href="lingkungan-di-luar-program.html#cb308-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./foo</span> i like turtles</span></code></pre></div>
+<p>dan kita akan melihat output ini:</p>
+<div class="sourceCode" id="cb309"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb309-1"><a href="lingkungan-di-luar-program.html#cb309-1" aria-hidden="true" tabindex="-1"></a>arg 0: ./foo</span>
+<span id="cb309-2"><a href="lingkungan-di-luar-program.html#cb309-2" aria-hidden="true" tabindex="-1"></a>arg 1: i</span>
+<span id="cb309-3"><a href="lingkungan-di-luar-program.html#cb309-3" aria-hidden="true" tabindex="-1"></a>arg 2: like</span>
+<span id="cb309-4"><a href="lingkungan-di-luar-program.html#cb309-4" aria-hidden="true" tabindex="-1"></a>arg 3: turtles</span></code></pre></div>
+<p>Agak aneh, karena argumen ke-nol adalah nama executable itu sendiri. Tapi itu hanya soal membiasakan diri. Argumen sebenarnya menyusul langsung setelahnya.</p>
+<p>Sumber:</p>
+<p> </p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb310-1"><a href="lingkungan-di-luar-program.html#cb310-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb310-2"><a href="lingkungan-di-luar-program.html#cb310-2" aria-label="2"></a></span>
+<span id="cb310-3"><a href="lingkungan-di-luar-program.html#cb310-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>argv<span class="op">[])</span></span>
+<span id="cb310-4"><a href="lingkungan-di-luar-program.html#cb310-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb310-5"><a href="lingkungan-di-luar-program.html#cb310-5" aria-label="5"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> argc<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb310-6"><a href="lingkungan-di-luar-program.html#cb310-6" aria-label="6"></a>        printf<span class="op">(</span><span class="st">&quot;arg </span><span class="sc">%d</span><span class="st">: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> argv<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb310-7"><a href="lingkungan-di-luar-program.html#cb310-7" aria-label="7"></a>    <span class="op">}</span></span>
+<span id="cb310-8"><a href="lingkungan-di-luar-program.html#cb310-8" aria-label="8"></a><span class="op">}</span></span></code></pre></div>
+<p>Wah! Ada apa dengan signature fungsi <code>main()</code> itu? Apa itu <code>argc</code> dan <code>argv</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn120" class="footnote-ref" id="fnref120" role="doc-noteref"><sup>120</sup></a> (dibaca <em>arg-cee</em> dan <em>arg-vee</em>)?</p>
+<p>Mulai dari yang mudah: <code>argc</code>. Ia singkatan dari <em>argument count</em> (jumlah argumen), termasuk nama program itu sendiri. Kalau kamu menganggap semua argumen sebagai array berisi string, yang memang begitulah adanya, maka <code>argc</code> bisa dianggap sebagai panjang array itu, yang memang begitulah adanya.</p>
+<p>Jadi di loop itu kita menelusuri semua <code>argv</code> dan mencetaknya satu per satu, jadi untuk input tertentu:</p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb311-1"><a href="lingkungan-di-luar-program.html#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./foo</span> i like turtles</span></code></pre></div>
+<p>kita mendapat output yang sesuai:</p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb312-1"><a href="lingkungan-di-luar-program.html#cb312-1" aria-hidden="true" tabindex="-1"></a>arg 0: ./foo</span>
+<span id="cb312-2"><a href="lingkungan-di-luar-program.html#cb312-2" aria-hidden="true" tabindex="-1"></a>arg 1: i</span>
+<span id="cb312-3"><a href="lingkungan-di-luar-program.html#cb312-3" aria-hidden="true" tabindex="-1"></a>arg 2: like</span>
+<span id="cb312-4"><a href="lingkungan-di-luar-program.html#cb312-4" aria-hidden="true" tabindex="-1"></a>arg 3: turtles</span></code></pre></div>
+<p>Dengan itu, kita siap membuat program penjumlah.</p>
+<p>Rencana kita:</p>
+<ul>
+<li>Lihat semua argumen command line (setelah <code>argv[0]</code>, nama program)</li>
+<li>Konversi menjadi integer</li>
+<li>Tambahkan ke total yang berjalan</li>
+<li>Cetak hasilnya</li>
+</ul>
+<p>Mari kita kerjakan!</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb313-1"><a href="lingkungan-di-luar-program.html#cb313-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb313-2"><a href="lingkungan-di-luar-program.html#cb313-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb313-3"><a href="lingkungan-di-luar-program.html#cb313-3" aria-label="3"></a></span>
+<span id="cb313-4"><a href="lingkungan-di-luar-program.html#cb313-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span></span>
+<span id="cb313-5"><a href="lingkungan-di-luar-program.html#cb313-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb313-6"><a href="lingkungan-di-luar-program.html#cb313-6" aria-label="6"></a>    <span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb313-7"><a href="lingkungan-di-luar-program.html#cb313-7" aria-label="7"></a></span>
+<span id="cb313-8"><a href="lingkungan-di-luar-program.html#cb313-8" aria-label="8"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">1</span><span class="op">;</span> i <span class="op">&lt;</span> argc<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span>  <span class="co">// Mulai dari 1, argumen pertama</span></span>
+<span id="cb313-9"><a href="lingkungan-di-luar-program.html#cb313-9" aria-label="9"></a>        <span class="dt">int</span> value <span class="op">=</span> atoi<span class="op">(</span>argv<span class="op">[</span>i<span class="op">]);</span>    <span class="co">// strtol() penanganan error-nya lebih baik</span></span>
+<span id="cb313-10"><a href="lingkungan-di-luar-program.html#cb313-10" aria-label="10"></a></span>
+<span id="cb313-11"><a href="lingkungan-di-luar-program.html#cb313-11" aria-label="11"></a>        total <span class="op">+=</span> value<span class="op">;</span></span>
+<span id="cb313-12"><a href="lingkungan-di-luar-program.html#cb313-12" aria-label="12"></a>    <span class="op">}</span></span>
+<span id="cb313-13"><a href="lingkungan-di-luar-program.html#cb313-13" aria-label="13"></a></span>
+<span id="cb313-14"><a href="lingkungan-di-luar-program.html#cb313-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> total<span class="op">);</span></span>
+<span id="cb313-15"><a href="lingkungan-di-luar-program.html#cb313-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Contoh eksekusi:</p>
+<div class="sourceCode" id="cb314"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb314-1"><a href="lingkungan-di-luar-program.html#cb314-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./add</span>
+<span id="cb314-2"><a href="lingkungan-di-luar-program.html#cb314-2" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span></span>
+<span id="cb314-3"><a href="lingkungan-di-luar-program.html#cb314-3" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./add 1</span>
+<span id="cb314-4"><a href="lingkungan-di-luar-program.html#cb314-4" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span></span>
+<span id="cb314-5"><a href="lingkungan-di-luar-program.html#cb314-5" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./add 1 2</span>
+<span id="cb314-6"><a href="lingkungan-di-luar-program.html#cb314-6" aria-hidden="true" tabindex="-1"></a><span class="ex">3</span></span>
+<span id="cb314-7"><a href="lingkungan-di-luar-program.html#cb314-7" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./add 1 2 3</span>
+<span id="cb314-8"><a href="lingkungan-di-luar-program.html#cb314-8" aria-hidden="true" tabindex="-1"></a><span class="ex">6</span></span>
+<span id="cb314-9"><a href="lingkungan-di-luar-program.html#cb314-9" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./add 1 2 3 4</span>
+<span id="cb314-10"><a href="lingkungan-di-luar-program.html#cb314-10" aria-hidden="true" tabindex="-1"></a><span class="ex">10</span></span></code></pre></div>
+<p>Tentu saja, program ini mungkin muntah kalau yang dioper bukan integer, tapi membuatnya tahan terhadap hal itu kita serahkan sebagai latihan untuk pembaca.</p>
+<h3 data-number="18.1.1" id="argv-terakhir-adalah-null"><span class="header-section-number">18.1.1</span> <code>argv</code> Terakhir adalah <code>NULL</code></h3>
+<p>Satu trivia menyenangkan tentang <code>argv</code>: setelah string terakhir ada pointer ke <code>NULL</code>.</p>
+<p>Artinya:</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb315-1"><a href="lingkungan-di-luar-program.html#cb315-1" aria-hidden="true" tabindex="-1"></a>argv<span class="op">[</span>argc<span class="op">]</span> <span class="op">==</span> NULL</span></code></pre></div>
+<p>selalu bernilai true!</p>
+<p>Ini mungkin tampak tidak berguna, tapi ternyata berguna di beberapa tempat; salah satunya kita lihat sekarang.</p>
+<h3 data-number="18.1.2" id="alternatifnya-char-argv"><span class="header-section-number">18.1.2</span> Alternatifnya: <code>char **argv</code></h3>
+<p>Ingat bahwa saat memanggil fungsi, C tidak membedakan notasi array dan notasi pointer pada signature fungsi.</p>
+<p>Artinya, keduanya sama:</p>
+<div class="sourceCode" id="cb316"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb316-1"><a href="lingkungan-di-luar-program.html#cb316-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">char</span> a<span class="op">[])</span></span>
+<span id="cb316-2"><a href="lingkungan-di-luar-program.html#cb316-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>a<span class="op">)</span></span></code></pre></div>
+<p>Nah, selama ini kita nyaman menganggap <code>argv</code> sebagai array berisi string, yaitu array berisi <code>char*</code>, jadi ini masuk akal:</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb317-1"><a href="lingkungan-di-luar-program.html#cb317-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">*</span>argv<span class="op">[])</span></span></code></pre></div>
+<p>tapi karena kesetaraan itu, kamu juga bisa menulis:</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb318-1"><a href="lingkungan-di-luar-program.html#cb318-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span></span></code></pre></div>
+<p>Ya, itu memang pointer ke pointer! Kalau lebih mudah, anggap saja sebagai pointer ke string. Tapi sebenarnya ia adalah pointer ke nilai yang menunjuk ke <code>char</code>.</p>
+<p>Ingat juga bahwa dua hal ini setara:</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb319-1"><a href="lingkungan-di-luar-program.html#cb319-1" aria-hidden="true" tabindex="-1"></a>argv<span class="op">[</span>i<span class="op">]</span></span>
+<span id="cb319-2"><a href="lingkungan-di-luar-program.html#cb319-2" aria-hidden="true" tabindex="-1"></a><span class="op">*(</span>argv <span class="op">+</span> i<span class="op">)</span></span></code></pre></div>
+<p>yang berarti kamu bisa melakukan aritmetika pointer pada <code>argv</code>.</p>
+<p>Jadi cara alternatif untuk memproses argumen command line adalah dengan menelusuri array <code>argv</code> sambil menaikkan pointer sampai bertemu <code>NULL</code> di ujung.</p>
+<p>Mari kita ubah penjumlah kita agar bekerja seperti itu:</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb320-1"><a href="lingkungan-di-luar-program.html#cb320-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb320-2"><a href="lingkungan-di-luar-program.html#cb320-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb320-3"><a href="lingkungan-di-luar-program.html#cb320-3" aria-label="3"></a></span>
+<span id="cb320-4"><a href="lingkungan-di-luar-program.html#cb320-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span></span>
+<span id="cb320-5"><a href="lingkungan-di-luar-program.html#cb320-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb320-6"><a href="lingkungan-di-luar-program.html#cb320-6" aria-label="6"></a>    <span class="dt">int</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb320-7"><a href="lingkungan-di-luar-program.html#cb320-7" aria-label="7"></a>    </span>
+<span id="cb320-8"><a href="lingkungan-di-luar-program.html#cb320-8" aria-label="8"></a>    <span class="co">// Trik manis supaya compiler berhenti memperingatkan soal variabel</span></span>
+<span id="cb320-9"><a href="lingkungan-di-luar-program.html#cb320-9" aria-label="9"></a>    <span class="co">// argc yang tidak terpakai:</span></span>
+<span id="cb320-10"><a href="lingkungan-di-luar-program.html#cb320-10" aria-label="10"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argc<span class="op">;</span></span>
+<span id="cb320-11"><a href="lingkungan-di-luar-program.html#cb320-11" aria-label="11"></a></span>
+<span id="cb320-12"><a href="lingkungan-di-luar-program.html#cb320-12" aria-label="12"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">char</span> <span class="op">**</span>p <span class="op">=</span> argv <span class="op">+</span> <span class="dv">1</span><span class="op">;</span> <span class="op">*</span>p <span class="op">!=</span> NULL<span class="op">;</span> p<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb320-13"><a href="lingkungan-di-luar-program.html#cb320-13" aria-label="13"></a>        <span class="dt">int</span> value <span class="op">=</span> atoi<span class="op">(*</span>p<span class="op">);</span>  <span class="co">// Pakai strtol() untuk penanganan error yang lebih baik</span></span>
+<span id="cb320-14"><a href="lingkungan-di-luar-program.html#cb320-14" aria-label="14"></a></span>
+<span id="cb320-15"><a href="lingkungan-di-luar-program.html#cb320-15" aria-label="15"></a>        total <span class="op">+=</span> value<span class="op">;</span></span>
+<span id="cb320-16"><a href="lingkungan-di-luar-program.html#cb320-16" aria-label="16"></a>    <span class="op">}</span></span>
+<span id="cb320-17"><a href="lingkungan-di-luar-program.html#cb320-17" aria-label="17"></a></span>
+<span id="cb320-18"><a href="lingkungan-di-luar-program.html#cb320-18" aria-label="18"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> total<span class="op">);</span></span>
+<span id="cb320-19"><a href="lingkungan-di-luar-program.html#cb320-19" aria-label="19"></a><span class="op">}</span></span></code></pre></div>
+<p>Aku sendiri memakai notasi array untuk mengakses <code>argv</code>, tapi gaya ini juga sering kulihat beredar.</p>
+<h3 data-number="18.1.3" id="fakta-menarik"><span class="header-section-number">18.1.3</span> Fakta Menarik</h3>
+<p></p>
+<p>Beberapa hal lagi tentang <code>argc</code> dan <code>argv</code>.</p>
+<ul>
+<li><p>Beberapa lingkungan mungkin tidak mengisi <code>argv[0]</code> dengan nama program. Kalau tidak tersedia, <code>argv[0]</code> akan berupa string kosong. Aku belum pernah melihat ini terjadi.</p></li>
+<li><p>Spesifikasi cukup longgar soal apa yang boleh dilakukan implementasi terhadap <code>argv</code> dan dari mana nilai-nilai itu berasal. Tapi setiap sistem yang pernah kupakai bekerja dengan cara yang sama, seperti yang kita bahas di bagian ini.</p></li>
+<li><p>Kamu bisa mengubah <code>argc</code>, <code>argv</code>, atau string mana pun yang ditunjuk <code>argv</code>. (Hanya saja jangan membuat string-string itu lebih panjang dari sebelumnya!)</p></li>
+<li><p>Di beberapa sistem mirip Unix, mengubah string <code>argv[0]</code> membuat output <code>ps</code> ikut berubah<a href="function-specifier-alignment-specifier-dan-operator.html#fn121" class="footnote-ref" id="fnref121" role="doc-noteref"><sup>121</sup></a>.</p>
+<p>Biasanya, kalau kamu punya program bernama <code>foo</code> yang dijalankan dengan <code>./foo</code>, kamu mungkin melihat ini pada output <code>ps</code>:</p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb321-1"><a href="lingkungan-di-luar-program.html#cb321-1" aria-hidden="true" tabindex="-1"></a> 4078 tty1     S      0:00 ./foo</span></code></pre></div>
+<p>Tapi kalau kamu mengubah <code>argv[0]</code> seperti ini, dengan hati-hati agar string baru <code>"Hi!  "</code> panjangnya sama dengan yang lama <code>"./foo"</code>:</p>
+<div class="sourceCode" id="cb322"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb322-1"><a href="lingkungan-di-luar-program.html#cb322-1" aria-hidden="true" tabindex="-1"></a>strcpy<span class="op">(</span>argv<span class="op">[</span><span class="dv">0</span><span class="op">],</span> <span class="st">&quot;Hi!  &quot;</span><span class="op">);</span></span></code></pre></div>
+<p>lalu menjalankan <code>ps</code> selagi program <code>./foo</code> masih berjalan, kita akan melihat ini sebagai gantinya:</p>
+<div class="sourceCode" id="cb323"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb323-1"><a href="lingkungan-di-luar-program.html#cb323-1" aria-hidden="true" tabindex="-1"></a> 4079 tty1     S      0:00 Hi!  </span></code></pre></div>
+<p>Perilaku ini tidak ada di spesifikasi dan sangat bergantung pada sistem.</p></li>
+</ul>
+<p> </p>
+<h2 data-number="18.2" id="exit-status"><span class="header-section-number">18.2</span> Exit Status</h2>
+<p></p>
+<p>Pernahkah kamu perhatikan bahwa signature fungsi <code>main()</code> mengembalikan tipe <code>int</code>? Untuk apa itu? Ini berkaitan dengan yang disebut <em>exit status</em>, yaitu integer yang bisa dikembalikan ke program yang menjalankan programmu untuk memberi tahu bagaimana hasilnya.</p>
+<p>Ada beberapa cara program keluar di C, termasuk <code>return</code> dari <code>main()</code>, atau memanggil salah satu varian <code>exit()</code>.</p>
+<p>Semua cara itu menerima sebuah <code>int</code> sebagai argumen.</p>
+<p> Catatan sampingan: sudah lihat belum bahwa di hampir semua contohku, meskipun <code>main()</code> seharusnya mengembalikan <code>int</code>, aku tidak menulis <code>return</code> apa pun? Di fungsi lain, ini ilegal, tapi di C ada kasus khusus: kalau eksekusi mencapai akhir <code>main()</code> tanpa menemukan <code>return</code>, ia otomatis melakukan <code>return 0</code>. </p>
+<p>Tapi apa arti <code>0</code> itu? Angka apa lagi yang bisa kita taruh di sana? Dan bagaimana angka-angka itu dipakai?</p>
+<p>Spesifikasi jelas sekaligus samar soal ini, seperti biasa. Jelas karena ia merinci apa yang bisa dilakukan, tapi samar karena tidak membatasinya secara khusus.</p>
+<p>Tidak ada pilihan lain selain <em>maju terus</em> dan mencari tahu!</p>
+<p>Mari kita ber-<a href="https://en.wikipedia.org/wiki/Inception">Inception</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn122" class="footnote-ref" id="fnref122" role="doc-noteref"><sup>122</sup></a> sebentar: ternyata ketika kamu menjalankan programmu, <em>kamu menjalankannya dari program lain</em>.</p>
+<p>Biasanya program lain ini semacam <a href="https://en.wikipedia.org/wiki/Shell_(computing)">shell</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn123" class="footnote-ref" id="fnref123" role="doc-noteref"><sup>123</sup></a> yang tidak banyak melakukan apa-apa sendiri kecuali menjalankan program lain.</p>
+<p>Tapi ini proses multitahap, terutama terlihat pada shell command-line:</p>
+<ol type="1">
+<li>Shell menjalankan programmu</li>
+<li>Shell biasanya tidur (untuk shell command-line)</li>
+<li>Programmu berjalan</li>
+<li>Programmu berhenti</li>
+<li>Shell bangun dan menunggu perintah berikutnya</li>
+</ol>
+<p>Nah, ada sedikit komunikasi yang terjadi antara langkah 4 dan 5: program bisa mengembalikan sebuah <em>status value</em> yang bisa ditanyakan oleh shell. Biasanya, nilai ini dipakai untuk menandakan sukses atau gagalnya programmu, dan, kalau gagal, jenis kegagalannya.</p>
+<p>Nilai inilah yang selama ini kita <code>return</code> dari <code>main()</code>. Itulah statusnya.</p>
+<p>Spesifikasi C mengizinkan dua nilai status berbeda, yang nama makronya didefinisikan di <code>&lt;stdlib.h&gt;</code>:</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EXIT_SUCCESS</code> atau <code>0</code></td>
+<td>Program berakhir dengan sukses.</td>
+</tr>
+<tr>
+<td><code>EXIT_FAILURE</code></td>
+<td>Program berakhir dengan error.</td>
+</tr>
+</tbody>
+</table>
+<p>Mari kita tulis program singkat yang mengalikan dua angka dari command line. Kamu wajib menyebutkan tepat dua nilai. Kalau tidak, kita cetak pesan error, dan keluar dengan status error.</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb324-1"><a href="lingkungan-di-luar-program.html#cb324-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb324-2"><a href="lingkungan-di-luar-program.html#cb324-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb324-3"><a href="lingkungan-di-luar-program.html#cb324-3" aria-label="3"></a></span>
+<span id="cb324-4"><a href="lingkungan-di-luar-program.html#cb324-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">)</span></span>
+<span id="cb324-5"><a href="lingkungan-di-luar-program.html#cb324-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb324-6"><a href="lingkungan-di-luar-program.html#cb324-6" aria-label="6"></a>    <span class="cf">if</span> <span class="op">(</span>argc <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb324-7"><a href="lingkungan-di-luar-program.html#cb324-7" aria-label="7"></a>        printf<span class="op">(</span><span class="st">&quot;usage: mult x y</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb324-8"><a href="lingkungan-di-luar-program.html#cb324-8" aria-label="8"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span>   <span class="co">// Beri tahu shell bahwa ini tidak berhasil</span></span>
+<span id="cb324-9"><a href="lingkungan-di-luar-program.html#cb324-9" aria-label="9"></a>    <span class="op">}</span></span>
+<span id="cb324-10"><a href="lingkungan-di-luar-program.html#cb324-10" aria-label="10"></a></span>
+<span id="cb324-11"><a href="lingkungan-di-luar-program.html#cb324-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">1</span><span class="op">])</span> <span class="op">*</span> atoi<span class="op">(</span>argv<span class="op">[</span><span class="dv">2</span><span class="op">]));</span></span>
+<span id="cb324-12"><a href="lingkungan-di-luar-program.html#cb324-12" aria-label="12"></a></span>
+<span id="cb324-13"><a href="lingkungan-di-luar-program.html#cb324-13" aria-label="13"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// sama dengan EXIT_SUCCESS, semuanya baik-baik saja.</span></span>
+<span id="cb324-14"><a href="lingkungan-di-luar-program.html#cb324-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Kalau kita coba menjalankannya, kita mendapat efek yang diharapkan sampai kita menyebutkan jumlah argumen command-line yang tepat:</p>
+<div class="sourceCode" id="cb325"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb325-1"><a href="lingkungan-di-luar-program.html#cb325-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./mult</span>
+<span id="cb325-2"><a href="lingkungan-di-luar-program.html#cb325-2" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> mult x y</span>
+<span id="cb325-3"><a href="lingkungan-di-luar-program.html#cb325-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb325-4"><a href="lingkungan-di-luar-program.html#cb325-4" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./mult 3 4 5</span>
+<span id="cb325-5"><a href="lingkungan-di-luar-program.html#cb325-5" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> mult x y</span>
+<span id="cb325-6"><a href="lingkungan-di-luar-program.html#cb325-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb325-7"><a href="lingkungan-di-luar-program.html#cb325-7" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./mult 3 4</span>
+<span id="cb325-8"><a href="lingkungan-di-luar-program.html#cb325-8" aria-hidden="true" tabindex="-1"></a><span class="ex">12</span></span></code></pre></div>
+<p></p>
+<p>Tapi itu belum benar-benar menunjukkan exit status yang kita kembalikan, kan? Kita bisa menyuruh shell mencetaknya. Dengan asumsi kamu memakai Bash atau shell POSIX lainnya, kamu bisa memakai <code>echo $?</code> untuk melihatnya<a href="function-specifier-alignment-specifier-dan-operator.html#fn124" class="footnote-ref" id="fnref124" role="doc-noteref"><sup>124</sup></a>.</p>
+<p>Kita coba:</p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb326-1"><a href="lingkungan-di-luar-program.html#cb326-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./mult</span>
+<span id="cb326-2"><a href="lingkungan-di-luar-program.html#cb326-2" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> mult x y</span>
+<span id="cb326-3"><a href="lingkungan-di-luar-program.html#cb326-3" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> echo <span class="va">$?</span></span>
+<span id="cb326-4"><a href="lingkungan-di-luar-program.html#cb326-4" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span></span>
+<span id="cb326-5"><a href="lingkungan-di-luar-program.html#cb326-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb326-6"><a href="lingkungan-di-luar-program.html#cb326-6" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./mult 3 4 5</span>
+<span id="cb326-7"><a href="lingkungan-di-luar-program.html#cb326-7" aria-hidden="true" tabindex="-1"></a><span class="ex">usage:</span> mult x y</span>
+<span id="cb326-8"><a href="lingkungan-di-luar-program.html#cb326-8" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> echo <span class="va">$?</span></span>
+<span id="cb326-9"><a href="lingkungan-di-luar-program.html#cb326-9" aria-hidden="true" tabindex="-1"></a><span class="ex">1</span></span>
+<span id="cb326-10"><a href="lingkungan-di-luar-program.html#cb326-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb326-11"><a href="lingkungan-di-luar-program.html#cb326-11" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./mult 3 4</span>
+<span id="cb326-12"><a href="lingkungan-di-luar-program.html#cb326-12" aria-hidden="true" tabindex="-1"></a><span class="ex">12</span></span>
+<span id="cb326-13"><a href="lingkungan-di-luar-program.html#cb326-13" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> echo <span class="va">$?</span></span>
+<span id="cb326-14"><a href="lingkungan-di-luar-program.html#cb326-14" aria-hidden="true" tabindex="-1"></a><span class="ex">0</span></span></code></pre></div>
+<p></p>
+<p>Menarik! Kita lihat bahwa di sistemku, <code>EXIT_FAILURE</code> adalah <code>1</code>. Spesifikasi tidak menyebutkannya, jadi bisa angka apa saja. Tapi coba saja; kemungkinan di sistemmu juga <code>1</code>.</p>
+<h3 data-number="18.2.1" id="nilai-exit-status-lainnya"><span class="header-section-number">18.2.1</span> Nilai Exit Status Lainnya</h3>
+<p>Status <code>0</code> jelas berarti sukses, tapi bagaimana dengan semua integer lain, bahkan yang negatif?</p>
+<p>Di sini kita keluar dari spesifikasi C dan masuk ke wilayah Unix. Secara umum, <code>0</code> berarti sukses, sedangkan angka positif bukan nol berarti gagal. Jadi hanya ada satu jenis sukses, dan banyak jenis gagal. Bash menyatakan exit code harus antara 0 dan 255, meski sejumlah kode dicadangkan.</p>
+<p>Singkatnya, kalau kamu ingin menandakan exit status error yang berbeda di lingkungan Unix, kamu bisa mulai dari <code>1</code> dan naik terus.</p>
+<p>Di Linux, kalau kamu mencoba kode di luar rentang 0-255, kodenya akan di-AND secara bitwise dengan <code>0xff</code>, yang secara efektif menjepitnya ke rentang itu.</p>
+<p>Kamu bisa membuat script shell yang memakai kode status ini untuk memutuskan apa yang dilakukan berikutnya.</p>
+<p></p>
+<h2 data-number="18.3" id="env-var"><span class="header-section-number">18.3</span> Environment Variable</h2>
+<p></p>
+<p>Sebelum masuk ke bagian ini, aku harus memperingatkan bahwa C tidak menentukan apa itu environment variable. Jadi aku akan menjelaskan sistem environment variable yang berfungsi di semua platform besar yang kuketahui.</p>
+<p>Pada dasarnya, environment adalah program yang akan menjalankan programmu, misalnya shell bash. Dan ia mungkin punya beberapa variabel bash yang didefinisikan. Kalau kamu belum tahu, shell bisa membuat variabelnya sendiri. Setiap shell berbeda, tapi di bash kamu bisa mengetik <code>set</code> dan ia akan menampilkan semuanya.</p>
+<p>Berikut potongan dari 61 variabel yang didefinisikan di bash shell-ku:</p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb327-1"><a href="lingkungan-di-luar-program.html#cb327-1" aria-hidden="true" tabindex="-1"></a>HISTFILE=/home/beej/.bash_history</span>
+<span id="cb327-2"><a href="lingkungan-di-luar-program.html#cb327-2" aria-hidden="true" tabindex="-1"></a>HISTFILESIZE=500</span>
+<span id="cb327-3"><a href="lingkungan-di-luar-program.html#cb327-3" aria-hidden="true" tabindex="-1"></a>HISTSIZE=500</span>
+<span id="cb327-4"><a href="lingkungan-di-luar-program.html#cb327-4" aria-hidden="true" tabindex="-1"></a>HOME=/home/beej</span>
+<span id="cb327-5"><a href="lingkungan-di-luar-program.html#cb327-5" aria-hidden="true" tabindex="-1"></a>HOSTNAME=FBILAPTOP</span>
+<span id="cb327-6"><a href="lingkungan-di-luar-program.html#cb327-6" aria-hidden="true" tabindex="-1"></a>HOSTTYPE=x86_64</span>
+<span id="cb327-7"><a href="lingkungan-di-luar-program.html#cb327-7" aria-hidden="true" tabindex="-1"></a>IFS=$&#39; \t\n&#39;</span></code></pre></div>
+<p>Perhatikan bentuknya berupa pasangan key/value. Misalnya, salah satu key-nya adalah <code>HOSTTYPE</code> dan value-nya <code>x86_64</code>. Dari sudut pandang C, semua value adalah string, bahkan kalau berupa angka<a href="function-specifier-alignment-specifier-dan-operator.html#fn125" class="footnote-ref" id="fnref125" role="doc-noteref"><sup>125</sup></a>.</p>
+<p>Jadi, <em>anyway</em>! Singkat cerita, nilai-nilai ini bisa diambil dari dalam programmu.</p>
+<p></p>
+<p>Mari kita tulis program yang memakai fungsi standar <code>getenv()</code> untuk mencari nilai yang kamu set di shell.</p>
+<p><code>getenv()</code> mengembalikan pointer ke string value, atau <code>NULL</code> kalau environment variable-nya tidak ada.</p>
+<div class="sourceCode" id="cb328"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb328-1"><a href="lingkungan-di-luar-program.html#cb328-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb328-2"><a href="lingkungan-di-luar-program.html#cb328-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb328-3"><a href="lingkungan-di-luar-program.html#cb328-3" aria-label="3"></a></span>
+<span id="cb328-4"><a href="lingkungan-di-luar-program.html#cb328-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb328-5"><a href="lingkungan-di-luar-program.html#cb328-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb328-6"><a href="lingkungan-di-luar-program.html#cb328-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>val <span class="op">=</span> getenv<span class="op">(</span><span class="st">&quot;FROTZ&quot;</span><span class="op">);</span>  <span class="co">// Coba ambil nilainya</span></span>
+<span id="cb328-7"><a href="lingkungan-di-luar-program.html#cb328-7" aria-label="7"></a></span>
+<span id="cb328-8"><a href="lingkungan-di-luar-program.html#cb328-8" aria-label="8"></a>    <span class="co">// Pastikan nilainya ada</span></span>
+<span id="cb328-9"><a href="lingkungan-di-luar-program.html#cb328-9" aria-label="9"></a>    <span class="cf">if</span> <span class="op">(</span>val <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb328-10"><a href="lingkungan-di-luar-program.html#cb328-10" aria-label="10"></a>        printf<span class="op">(</span><span class="st">&quot;Cannot find the FROTZ environment variable</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb328-11"><a href="lingkungan-di-luar-program.html#cb328-11" aria-label="11"></a>        <span class="cf">return</span> EXIT_FAILURE<span class="op">;</span></span>
+<span id="cb328-12"><a href="lingkungan-di-luar-program.html#cb328-12" aria-label="12"></a>    <span class="op">}</span></span>
+<span id="cb328-13"><a href="lingkungan-di-luar-program.html#cb328-13" aria-label="13"></a></span>
+<span id="cb328-14"><a href="lingkungan-di-luar-program.html#cb328-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;Value: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> val<span class="op">);</span></span>
+<span id="cb328-15"><a href="lingkungan-di-luar-program.html#cb328-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Kalau kujalankan langsung, hasilnya begini:</p>
+<div class="sourceCode" id="cb329"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb329-1"><a href="lingkungan-di-luar-program.html#cb329-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./foo</span>
+<span id="cb329-2"><a href="lingkungan-di-luar-program.html#cb329-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Cannot</span> find the FROTZ environment variable</span></code></pre></div>
+<p>yang masuk akal, karena belum kuset.</p>
+<p>Di bash, aku bisa mengisinya dengan<a href="function-specifier-alignment-specifier-dan-operator.html#fn126" class="footnote-ref" id="fnref126" role="doc-noteref"><sup>126</sup></a>:</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb330-1"><a href="lingkungan-di-luar-program.html#cb330-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> export FROTZ=<span class="st">&quot;C is awesome!&quot;</span></span></code></pre></div>
+<p>Lalu kalau kujalankan, hasilnya:</p>
+<div class="sourceCode" id="cb331"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb331-1"><a href="lingkungan-di-luar-program.html#cb331-1" aria-hidden="true" tabindex="-1"></a><span class="fu">$</span> ./foo</span>
+<span id="cb331-2"><a href="lingkungan-di-luar-program.html#cb331-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Value:</span> C is awesome!</span></code></pre></div>
+<p>Dengan cara ini, kamu bisa menyiapkan data di environment variable, lalu mengambilnya di kode C-mu dan menyesuaikan perilaku program.</p>
+<h3 data-number="18.3.1" id="mengatur-environment-variable"><span class="header-section-number">18.3.1</span> Mengatur Environment Variable</h3>
+<p>Ini bukan standar, tapi banyak sistem menyediakan cara untuk mengatur environment variable.</p>
+<p>Kalau di sistem mirip Unix, lihat dokumentasi <code>putenv()</code>, <code>setenv()</code>, dan <code>unsetenv()</code>. Di Windows, lihat <code>_putenv()</code>.</p>
+<h3 data-number="18.3.2" id="environment-variable-alternatif-di-sistem-mirip-unix"><span class="header-section-number">18.3.2</span> Environment Variable Alternatif di Sistem Mirip Unix</h3>
+<p>Kalau kamu di sistem mirip Unix, kemungkinan kamu punya beberapa cara lain untuk mengakses environment variable. Perhatikan bahwa walaupun spesifikasi menunjukkannya sebagai ekstensi umum, ini bukan benar-benar bagian dari standar C. Meski demikian, ini bagian dari standar POSIX.</p>
+<p></p>
+<p>Salah satunya adalah variabel bernama <code>environ</code> yang harus dideklarasikan seperti ini:</p>
+<div class="sourceCode" id="cb332"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb332-1"><a href="lingkungan-di-luar-program.html#cb332-1" aria-hidden="true" tabindex="-1"></a><span class="kw">extern</span> <span class="dt">char</span> <span class="op">**</span>environ<span class="op">;</span></span></code></pre></div>
+<p>Ia adalah array berisi string yang diakhiri pointer <code>NULL</code>.</p>
+<p>Kamu harus mendeklarasikannya sendiri sebelum memakainya, atau mungkin kamu menemukannya di header file non-standar <code>&lt;unistd.h&gt;</code>.</p>
+<p>Setiap string berbentuk <code>"key=value"</code> sehingga kamu harus memecah dan mem-parse-nya sendiri kalau ingin mengambil key dan value-nya.</p>
+<p>Berikut contoh menelusuri dan mencetak environment variable dengan beberapa cara berbeda:</p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb333-1"><a href="lingkungan-di-luar-program.html#cb333-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb333-2"><a href="lingkungan-di-luar-program.html#cb333-2" aria-label="2"></a></span>
+<span id="cb333-3"><a href="lingkungan-di-luar-program.html#cb333-3" aria-label="3"></a><span class="kw">extern</span> <span class="dt">char</span> <span class="op">**</span>environ<span class="op">;</span>  <span class="co">// HARUS extern DAN bernama &quot;environ&quot;</span></span>
+<span id="cb333-4"><a href="lingkungan-di-luar-program.html#cb333-4" aria-label="4"></a></span>
+<span id="cb333-5"><a href="lingkungan-di-luar-program.html#cb333-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb333-6"><a href="lingkungan-di-luar-program.html#cb333-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb333-7"><a href="lingkungan-di-luar-program.html#cb333-7" aria-label="7"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">char</span> <span class="op">**</span>p <span class="op">=</span> environ<span class="op">;</span> <span class="op">*</span>p <span class="op">!=</span> NULL<span class="op">;</span> p<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb333-8"><a href="lingkungan-di-luar-program.html#cb333-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span></span>
+<span id="cb333-9"><a href="lingkungan-di-luar-program.html#cb333-9" aria-label="9"></a>    <span class="op">}</span></span>
+<span id="cb333-10"><a href="lingkungan-di-luar-program.html#cb333-10" aria-label="10"></a></span>
+<span id="cb333-11"><a href="lingkungan-di-luar-program.html#cb333-11" aria-label="11"></a>    <span class="co">// Atau bisa juga begini:</span></span>
+<span id="cb333-12"><a href="lingkungan-di-luar-program.html#cb333-12" aria-label="12"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> environ<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> NULL<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb333-13"><a href="lingkungan-di-luar-program.html#cb333-13" aria-label="13"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> environ<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb333-14"><a href="lingkungan-di-luar-program.html#cb333-14" aria-label="14"></a>    <span class="op">}</span></span>
+<span id="cb333-15"><a href="lingkungan-di-luar-program.html#cb333-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p>Yang menghasilkan banyak output seperti ini:</p>
+<div class="sourceCode" id="cb334"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb334-1"><a href="lingkungan-di-luar-program.html#cb334-1" aria-hidden="true" tabindex="-1"></a>SHELL=/bin/bash</span>
+<span id="cb334-2"><a href="lingkungan-di-luar-program.html#cb334-2" aria-hidden="true" tabindex="-1"></a>COLORTERM=truecolor</span>
+<span id="cb334-3"><a href="lingkungan-di-luar-program.html#cb334-3" aria-hidden="true" tabindex="-1"></a>TERM_PROGRAM_VERSION=1.53.2</span>
+<span id="cb334-4"><a href="lingkungan-di-luar-program.html#cb334-4" aria-hidden="true" tabindex="-1"></a>LOGNAME=beej</span>
+<span id="cb334-5"><a href="lingkungan-di-luar-program.html#cb334-5" aria-hidden="true" tabindex="-1"></a>HOME=/home/beej</span>
+<span id="cb334-6"><a href="lingkungan-di-luar-program.html#cb334-6" aria-hidden="true" tabindex="-1"></a>... etc ...</span></code></pre></div>
+<p>Pakai <code>getenv()</code> kalau memungkinkan karena lebih portabel. Tapi kalau harus menelusuri environment variable, memakai <code>environ</code> mungkin pilihan yang tepat.</p>
+<p> </p>
+<p>Cara non-standar lain untuk mendapat environment variable adalah sebagai parameter <code>main()</code>. Cara kerjanya hampir sama, tapi kamu tidak perlu menambahkan variabel <code>extern</code> <code>environ</code>. <a href="https://pubs.opengroup.org/onlinepubs/9699919799/functions/exec.html">Bahkan spesifikasi POSIX pun tidak mendukung ini</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn127" class="footnote-ref" id="fnref127" role="doc-noteref"><sup>127</sup></a> sejauh yang kutahu, tapi ini umum di dunia Unix.</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb335-1"><a href="lingkungan-di-luar-program.html#cb335-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb335-2"><a href="lingkungan-di-luar-program.html#cb335-2" aria-label="2"></a></span>
+<span id="cb335-3"><a href="lingkungan-di-luar-program.html#cb335-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>argv<span class="op">,</span> <span class="dt">char</span> <span class="op">**</span>env<span class="op">)</span>  <span class="co">// &lt;-- env!</span></span>
+<span id="cb335-4"><a href="lingkungan-di-luar-program.html#cb335-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb335-5"><a href="lingkungan-di-luar-program.html#cb335-5" aria-label="5"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argc<span class="op">;</span> <span class="op">(</span><span class="dt">void</span><span class="op">)</span>argv<span class="op">;</span>  <span class="co">// Tekan peringatan variabel tak terpakai</span></span>
+<span id="cb335-6"><a href="lingkungan-di-luar-program.html#cb335-6" aria-label="6"></a></span>
+<span id="cb335-7"><a href="lingkungan-di-luar-program.html#cb335-7" aria-label="7"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">char</span> <span class="op">**</span>p <span class="op">=</span> env<span class="op">;</span> <span class="op">*</span>p <span class="op">!=</span> NULL<span class="op">;</span> p<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb335-8"><a href="lingkungan-di-luar-program.html#cb335-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span></span>
+<span id="cb335-9"><a href="lingkungan-di-luar-program.html#cb335-9" aria-label="9"></a>    <span class="op">}</span></span>
+<span id="cb335-10"><a href="lingkungan-di-luar-program.html#cb335-10" aria-label="10"></a></span>
+<span id="cb335-11"><a href="lingkungan-di-luar-program.html#cb335-11" aria-label="11"></a>    <span class="co">// Atau bisa juga begini:</span></span>
+<span id="cb335-12"><a href="lingkungan-di-luar-program.html#cb335-12" aria-label="12"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> env<span class="op">[</span>i<span class="op">]</span> <span class="op">!=</span> NULL<span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb335-13"><a href="lingkungan-di-luar-program.html#cb335-13" aria-label="13"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> env<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb335-14"><a href="lingkungan-di-luar-program.html#cb335-14" aria-label="14"></a>    <span class="op">}</span></span>
+<span id="cb335-15"><a href="lingkungan-di-luar-program.html#cb335-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p>Persis seperti memakai <code>environ</code> tapi <em>lebih tidak portabel lagi</em>. Bagus punya target.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="proyek-multifile.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="c-preprocessor.html" rel="next">Next</a></span></div></body>
+</html>

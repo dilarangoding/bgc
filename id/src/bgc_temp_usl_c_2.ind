@@ -1,0 +1,1008 @@
+\begin{theindex}
+
+  \item \texttt{!} boolean NOT, \hyperpage{18}
+  \item \texttt{!=} operator ketidaksamaan, \hyperpage{17}
+  \item \texttt{'} single quote, \hyperpage{101}
+  \item \texttt{*} for VLA function prototypes, \hyperpage{254}
+  \item \texttt{*} indirection operator, \hyperpage{36--37}
+  \item \texttt{*} operator perkalian, \hyperpage{15}
+  \item \texttt{*=} operator penugasan, \hyperpage{15}
+  \item \texttt{+} operator penjumlahan, \hyperpage{15}
+  \item \texttt{++} operator increment, \hyperpage{16--17}
+  \item \texttt{+=} operator penugasan, \hyperpage{15}
+  \item \texttt{,} operator koma, \hyperpage{17}
+  \item \texttt{-} operator pengurangan, \hyperpage{15}
+  \item \texttt{--} operator decrement, \hyperpage{16--17}
+  \item \texttt{-=} operator penugasan, \hyperpage{15}
+  \item \texttt{->} arrow operator, \hyperpage{60}
+  \item \texttt{...} variadic arguments, \hyperpage{214}
+  \item \texttt{/} operator pembagian, \hyperpage{15}
+  \item \texttt{/=} operator penugasan, \hyperpage{15}
+  \item \texttt{<} operator kurang dari, \hyperpage{17}
+  \item \texttt{<<} shift left, \hyperpage{212}
+  \item \texttt{<<=} assignment, \hyperpage{212}
+  \item \texttt{<=} operator kurang dari atau sama dengan, 
+		\hyperpage{17}
+  \item \texttt{=} operator penugasan, \hyperpage{13}
+  \item \texttt{==} operator kesamaan, \hyperpage{17}
+  \item \texttt{>} operator lebih dari, \hyperpage{17}
+  \item \texttt{>=} operator lebih dari atau sama dengan, 
+		\hyperpage{17}
+  \item \texttt{>>} shift right, \hyperpage{212}
+  \item \texttt{>>=} assignment, \hyperpage{212}
+  \item \texttt{?:} operator ternary, \hyperpage{15--16}
+  \item \texttt{\#} null directive, \hyperpage{168--169}
+  \item \texttt{\#} stringification, \hyperpage{158}
+  \item \texttt{\#\#} concatenation, \hyperpage{159}
+  \item \texttt{\#define} directive, \hyperpage{6}, 
+		\hyperpage{148--149}, \hyperpage{155--158}
+    \subitem versus \texttt{const}, \hyperpage{148--149}
+  \item \texttt{\#elif} directive, \hyperpage{151}
+  \item \texttt{\#elifdef} directive, \hyperpage{150--151}
+  \item \texttt{\#elifndef} directive, \hyperpage{150--151}
+  \item \texttt{\#else} directive, \hyperpage{150}
+  \item \texttt{\#embed} directive, \hyperpage{162--166}
+  \item \texttt{\#endif} directive, \hyperpage{149--150}
+  \item \texttt{\#error} directive, \hyperpage{162}
+  \item \texttt{\#if 0} directive, \hyperpage{151--152}
+  \item \texttt{\#if defined} directive, \hyperpage{152}
+  \item \texttt{\#if} directive, \hyperpage{151--152}
+  \item \texttt{\#ifdef} directive, \hyperpage{149--150}
+  \item \texttt{\#ifndef} directive, \hyperpage{150}
+  \item \texttt{\#include} directive, \hyperpage{6}, 
+		\hyperpage{147--148}
+    \subitem local files, \hyperpage{147--148}
+  \item \texttt{\#line} directive, \hyperpage{168}
+  \item \texttt{\#pragma} directive, \hyperpage{166--168}
+    \subitem nonstandard pragmas, \hyperpage{167}
+  \item \texttt{\#undef} directive, \hyperpage{153}
+  \item \texttt{\#warning} directive, \hyperpage{162}
+  \item \texttt{\%} operator modulus, \hyperpage{15}
+  \item \texttt{\%=} operator penugasan, \hyperpage{15}
+  \item \texttt{\&} bitwise AND, \hyperpage{211}
+  \item \texttt{\&} operator address-of, \hyperpage{35}
+  \item \texttt{\&=} assignment, \hyperpage{211}
+  \item \texttt{\&\&} boolean AND, \hyperpage{18}
+  \item \texttt{\^{}} bitwise XOR, \hyperpage{211}
+  \item \texttt{\^{}=} assignment, \hyperpage{211}
+  \item \texttt{\_Alignas} alignment specifier, \hyperpage{353--354}
+  \item \texttt{\_Alignof} operator, \hyperpage{354}
+  \item \texttt{\_Atomic} type qualifier, \hyperpage{341--342}
+  \item \texttt{\_Atomic} type specifier, \hyperpage{342}
+  \item \texttt{\_Complex} type, \hyperpage{291}
+  \item \texttt{\_Complex\_I} macro, \hyperpage{292}
+  \item \texttt{\_Exit()} function, \hyperpage{243--244}
+  \item \texttt{\_Generic} keyword, \hyperpage{273--275}
+  \item \texttt{\_Imaginary} type, \hyperpage{292}
+  \item \texttt{\_Imaginary\_I} macro, \hyperpage{292}
+  \item \texttt{\_Noreturn} function specifier, \hyperpage{352--353}
+  \item \texttt{\_Pragma} operator, \hyperpage{168}
+    \subitem in a macro, \hyperpage{168}
+  \item \texttt{\_Thread\_local} storage class, \hyperpage{130}, 
+		\hyperpage{319--320}
+  \item \texttt{\_\_DATE\_\_} macro, \hyperpage{153--154}
+  \item \texttt{\_\_FILE\_\_} macro, \hyperpage{153--154}
+  \item \texttt{\_\_LINE\_\_} macro, \hyperpage{153--154}, 
+		\hyperpage{168}
+  \item \texttt{\_\_STDC\_ANALYZABLE\_\_} macro, \hyperpage{154}
+  \item \texttt{\_\_STDC\_HOSTED\_\_} macro, \hyperpage{153}
+  \item \texttt{\_\_STDC\_IEC\_559\_COMPLEX\_\_} macro, \hyperpage{154}, 
+		\hyperpage{291--292}
+  \item \texttt{\_\_STDC\_IEC\_559\_\_} macro, \hyperpage{154}
+  \item \texttt{\_\_STDC\_ISO\_10646\_\_} macro, \hyperpage{154}, 
+		\hyperpage{231}
+  \item \texttt{\_\_STDC\_LIB\_EXT1\_\_} macro, \hyperpage{154}
+  \item \texttt{\_\_STDC\_MB\_MIGHT\_NEQ\_WC\_\_} macro, 
+		\hyperpage{154}
+  \item \texttt{\_\_STDC\_NO\_ATOMICS\_\_} macro, \hyperpage{154}, 
+		\hyperpage{333}
+  \item \texttt{\_\_STDC\_NO\_COMPLEX\_\_} macro, \hyperpage{154}, 
+		\hyperpage{291}
+  \item \texttt{\_\_STDC\_NO\_THREADS\_\_} macro, \hyperpage{154}, 
+		\hyperpage{311}
+  \item \texttt{\_\_STDC\_NO\_VLA\_\_} macro, \hyperpage{154}, 
+		\hyperpage{251}
+  \item \texttt{\_\_STDC\_UTF\_16\_\_} macro, \hyperpage{154}, 
+		\hyperpage{239}
+  \item \texttt{\_\_STDC\_UTF\_32\_\_ macro}, \hyperpage{239}
+  \item \texttt{\_\_STDC\_UTF\_32\_\_} macro, \hyperpage{154}
+  \item \texttt{\_\_STDC\_VERSION\_\_} macro, \hyperpage{153--154}
+  \item \texttt{\_\_STDC\_\_} macro, \hyperpage{153}
+  \item \texttt{\_\_TIME\_\_} macro, \hyperpage{153--154}
+  \item \texttt{\_\_func\_\_} identifier, \hyperpage{153--154}
+  \item \texttt{\_\_has\_embed()} identifier, \hyperpage{165--166}
+  \item \texttt{\_mkgmtime()} Windows function, \hyperpage{306}
+  \item \texttt{\_putenv()} function, \hyperpage{144}
+  \item \texttt{\textbar{}} bitwise OR, \hyperpage{211}
+  \item \texttt{\textbar{}=} assignment, \hyperpage{211}
+  \item \texttt{\textbar{}\textbar{}} boolean OR, \hyperpage{18}
+  \item \texttt{{\backslash}} backslash escape, \hyperpage{189--193}
+  \item \texttt{{\backslash}'} single quote, \hyperpage{189--190}
+  \item \texttt{{\backslash}123} octal value, \hyperpage{192}
+  \item \texttt{{\backslash}?} question mark, \hyperpage{190--192}
+  \item \texttt{{\backslash}U} Unicode escape, \hyperpage{192--193}, 
+		\hyperpage{228--229}
+  \item \texttt{{\backslash}a} alert, \hyperpage{190}
+  \item \texttt{{\backslash}b} backspace, \hyperpage{190--191}
+  \item \texttt{{\backslash}f} formfeed, \hyperpage{190}
+  \item \texttt{{\backslash}n} newline, \hyperpage{7}, \hyperpage{190}
+  \item \texttt{{\backslash}r} carriage return, \hyperpage{190--191}
+  \item \texttt{{\backslash}t} tab, \hyperpage{190}
+  \item \texttt{{\backslash}u} Unicode escape, \hyperpage{192--193}, 
+		\hyperpage{228--229}
+  \item \texttt{{\backslash}v} vertical tab, \hyperpage{190}
+  \item \texttt{{\backslash}x12} hexadecimal value, \hyperpage{192}
+  \item \texttt{{\backslash}{\backslash}} backslash, \hyperpage{190}
+  \item \texttt{~} bitwise NOT, \hyperpage{211}
+  \item \texttt{0} octal, \hyperpage{107--108}
+  \item \texttt{0b} binary, \hyperpage{108}
+  \item \texttt{0x} hexadecimal, \hyperpage{107}
+
+  \indexspace
+
+  \item \texttt{abort()} function, \hyperpage{244}
+  \item Addition operator, 
+		\hyperxindexformat{\see {\texttt{+} addition operator}}{1}
+  \item \texttt{alignas} alignment specifier, \hyperpage{353--354}
+  \item \texttt{aligned\_alloc()} function, \hyperpage{92--93}
+  \item Alignment, \hyperpage{353--355}
+  \item \texttt{alignof} operator, \hyperpage{354}
+  \item \texttt{argc} parameter, \hyperpage{138--141}
+  \item argumen Fungsi, \hyperpage{27}
+  \item \texttt{argv} parameter, \hyperpage{138--141}
+  \item Array initializers, \hyperpage{43--44}
+  \item Arrays, \hyperpage{41--49}
+    \subitem as pointers, \hyperpage{46--47}
+    \subitem getting the length, \hyperpage{42--43}
+    \subitem indexing, \hyperpage{41--42}
+    \subitem modifying within functions, \hyperpage{48}
+    \subitem multidimensional, \hyperpage{45--46}
+    \subitem multidimensional initializers, \hyperpage{278--280}
+    \subitem out of bounds, \hyperpage{44--45}
+    \subitem passing to functions, \hyperpage{47--49}
+    \subitem \texttt{static} in parameter lists, \hyperpage{277--278}
+    \subitem type qualifiers in parameter lists, \hyperpage{277}
+    \subitem zero length, \hyperpage{175--176}
+  \item \texttt{asctime()} function, \hyperpage{305}
+  \item \texttt{atexit()} function, \hyperpage{242}
+  \item Atomic variables, \hyperpage{333--349}
+    \subitem acquire, \hyperpage{337--339}, \hyperpage{347}
+    \subitem acquire/release, \hyperpage{347}
+    \subitem assignments and operators, \hyperpage{339--340}
+    \subitem atomic flags, \hyperpage{344}
+    \subitem compiling with, \hyperpage{333}
+    \subitem consume, \hyperpage{347}
+    \subitem fences, \hyperpage{348}
+    \subitem lock-free, \hyperpage{342--343}
+    \subitem memory order, \hyperpage{346--348}
+    \subitem pointers, \hyperpage{345--346}
+    \subitem relaxed, \hyperpage{348}
+    \subitem release, \hyperpage{337--339}, \hyperpage{347}
+    \subitem sequential consistency, \hyperpage{339}, \hyperpage{347}
+    \subitem \texttt{struct} and \texttt{union}, \hyperpage{344--345}
+    \subitem synchronization, \hyperpage{335}
+    \subitem synchronized library functions, \hyperpage{340--341}
+    \subitem with signal handlers, \hyperpage{343}
+  \item \texttt{atomic\_bool} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_BOOL\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_char} type, \hyperpage{341}
+  \item \texttt{atomic\_char16\_t} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_CHAR16\_T\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_char32\_t} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_CHAR32\_T\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{ATOMIC\_CHAR\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_fetch\_add()} function, \hyperpage{346}
+  \item \texttt{atomic\_fetch\_add\_explicit()} function, 
+		\hyperpage{346}
+  \item \texttt{atomic\_flag} type, \hyperpage{344}
+  \item \texttt{atomic\_flag\_clear()} function, \hyperpage{344}
+  \item \texttt{ATOMIC\_FLAG\_INIT} macro, \hyperpage{344}
+  \item \texttt{atomic\_flag\_test\_and\_set()} function, 
+		\hyperpage{344}
+  \item \texttt{atomic\_int} type, \hyperpage{334--335}, 
+		\hyperpage{341}
+  \item \texttt{atomic\_int\_fast16\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_fast32\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_fast64\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_fast8\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_least16\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_least32\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_least64\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_int\_least8\_t} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_INT\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_intmax\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_intptr\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_is\_lock\_free()} function, \hyperpage{343}
+  \item \texttt{atomic\_llong} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_LLONG\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_long} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_LONG\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{ATOMIC\_POINTER\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_ptrdiff\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_schar} type, \hyperpage{341}
+  \item \texttt{atomic\_short} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_SHORT\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{atomic\_signal\_fence()} function, \hyperpage{348}
+  \item \texttt{atomic\_size\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_thread\_fence()} function, \hyperpage{348}
+  \item \texttt{atomic\_uchar} type, \hyperpage{341}
+  \item \texttt{atomic\_uint} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_fast16\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_fast32\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_fast64\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_fast8\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_least16\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_least32\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_least64\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uint\_least8\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uintmax\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_uintptr\_t} type, \hyperpage{341}
+  \item \texttt{atomic\_ullong} type, \hyperpage{341}
+  \item \texttt{atomic\_ulong} type, \hyperpage{341}
+  \item \texttt{atomic\_ushort} type, \hyperpage{341}
+  \item \texttt{atomic\_wchar\_t} type, \hyperpage{341}
+  \item \texttt{ATOMIC\_WCHAR\_T\_LOCK\_FREE} macro, \hyperpage{343}
+  \item \texttt{auto} storage class, \hyperpage{127}
+  \item Automatic variables, \hyperpage{85}
+
+  \indexspace
+
+  \item Bell, 
+		\hyperxindexformat{\see {\texttt{{\backslash}a} operator}}{1}
+  \item Bitwise operations, \hyperpage{211--212}
+  \item Boolean AND, 
+		\hyperxindexformat{\see {\texttt{\&\&} operator}}{1}
+  \item Boolean NOT, \hyperxindexformat{\see {\texttt{!} operator}}{1}
+  \item Boolean OR, 
+		\hyperxindexformat{\see {\texttt{\textbar{}\textbar{}} operator}}{1}
+  \item \texttt{break} pernyataan, \hyperpage{24--26}
+
+  \indexspace
+
+  \item C Preprocessor, \hyperpage{6}
+  \item \texttt{c16rtomb()} function, \hyperpage{240}
+  \item \texttt{c32rtomb()} function, \hyperpage{240}
+  \item C3PO, \hyperpage{27}
+  \item \texttt{cabs()} function, \hyperpage{295}
+  \item \texttt{cacos()} function, \hyperpage{295}
+  \item \texttt{cacosh()} function, \hyperpage{295}
+  \item \texttt{call\_once()} function, \hyperpage{330--331}
+  \item \texttt{calloc()} function, \hyperpage{88}
+  \item \texttt{carg()} function, \hyperpage{296}
+  \item Carriage return, 
+		\hyperxindexformat{\see {\texttt{{\backslash}r} operator}}{1}
+  \item \texttt{case} pernyataan, \hyperpage{24--25}
+  \item \texttt{casin()} function, \hyperpage{295}
+  \item \texttt{casinh()} function, \hyperpage{295}
+  \item \texttt{catan()} function, \hyperpage{295}
+  \item \texttt{catanh()} function, \hyperpage{295}
+  \item \texttt{ccos()} function, \hyperpage{295}
+  \item \texttt{ccosh()} function, \hyperpage{295}
+  \item \texttt{cexp()} function, \hyperpage{295}
+  \item \texttt{char *} tipe, \hyperpage{12}
+  \item \texttt{char} tipe, \hyperpage{12}, \hyperpage{18}
+  \item \texttt{char} type, \hyperpage{100--101}
+  \item \texttt{char16\_t} type, \hyperpage{239}
+  \item \texttt{char32\_t} type, \hyperpage{239}
+  \item Character sets, \hyperpage{227--228}
+    \subitem basic, \hyperpage{227--229}
+    \subitem execution, \hyperpage{227--229}
+    \subitem source, \hyperpage{227}, \hyperpage{229}
+  \item \texttt{cimag()} function, \hyperpage{293--294}, 
+		\hyperpage{296}
+  \item \texttt{cimagf()} function, \hyperpage{294}
+  \item \texttt{cimagl()} function, \hyperpage{294}
+  \item \texttt{clang} compiler, \hyperpage{9}
+  \item \texttt{clog()} function, \hyperpage{295}
+  \item \texttt{CMPLX()} macro, \hyperpage{293}, \hyperpage{296}
+  \item \texttt{CMPLXF()} macro, \hyperpage{293}
+  \item \texttt{CMPLXL()} macro, \hyperpage{293}
+  \item \texttt{cnd\_broadcast()} function, \hyperpage{330}
+  \item \texttt{cnd\_destroy()} function, \hyperpage{326--329}
+  \item \texttt{cnd\_init()} function, \hyperpage{326--329}
+  \item \texttt{cnd\_signal()} function, \hyperpage{326--330}
+  \item \texttt{cnd\_t} type, \hyperpage{326--329}
+  \item \texttt{cnd\_timedwait()} function, \hyperpage{330}
+  \item \texttt{cnd\_wait()} function, \hyperpage{326--329}
+  \item Command line arguments, \hyperpage{137--141}
+  \item \texttt{complex double} type, \hyperpage{292}
+  \item \texttt{complex float} type, \hyperpage{292}
+  \item \texttt{complex long double} type, \hyperpage{292}
+  \item Complex numbers, \hyperpage{291--296}
+    \subitem arithmetic, \hyperpage{294--295}
+    \subitem declaring, \hyperpage{292}
+  \item \texttt{complex} type, \hyperpage{291--292}
+  \item \texttt{complex.h} header file, \hyperpage{291}
+  \item Compound literals, \hyperpage{269--272}
+    \subitem passing to functions, \hyperpage{270}
+    \subitem pointers to, \hyperpage{271--272}
+    \subitem scope, \hyperpage{272}
+    \subitem with \texttt{struct}, \hyperpage{270--271}
+  \item Condition variables, \hyperpage{326--330}
+    \subitem broadcasting, \hyperpage{330}
+    \subitem spurious wakeup, \hyperpage{327}
+    \subitem timeouts, \hyperpage{330}
+  \item Conditional compilation, \hyperpage{149--152}
+  \item \texttt{conj()} function, \hyperpage{296}
+  \item \texttt{const} type qualifier, \hyperpage{123--125}
+    \subitem and pointers, \hyperpage{123--124}
+    \subitem correctness, \hyperpage{124--125}
+  \item \texttt{cpow()} function, \hyperpage{295}
+  \item \texttt{cproj()} function, \hyperpage{296}
+  \item \texttt{creal()} function, \hyperpage{293--294}, 
+		\hyperpage{296}
+  \item \texttt{crealf()} function, \hyperpage{294}
+  \item \texttt{creall()} function, \hyperpage{294}
+  \item \texttt{csin()} function, \hyperpage{295}
+  \item \texttt{csinh()} function, \hyperpage{295}
+  \item \texttt{csqrt()} function, \hyperpage{295}
+  \item \texttt{ctan()} function, \hyperpage{295}
+  \item \texttt{ctanh()} function, \hyperpage{295}
+  \item \texttt{ctime()} function, \hyperpage{305}
+  \item \texttt{CX\_LIMITED\_RANGE} pragma, \hyperpage{167}
+
+  \indexspace
+
+  \item Data serialization, \hyperpage{69}
+  \item Date and time, \hyperpage{303--309}
+    \subitem differences, \hyperpage{308--309}
+  \item \texttt{DBL\_DECMIAL\_DIG} macro, \hyperpage{106--107}
+  \item \texttt{DBL\_DIG} macro, \hyperpage{105}, \hyperpage{107}
+  \item \texttt{DECMIAL\_DIG} macro, \hyperpage{106}
+  \item \texttt{default} label, \hyperpage{25}
+  \item Dereferencing, \hyperpage{36--37}
+  \item \texttt{difftime()} function, \hyperpage{308--309}
+  \item Division operator, 
+		\hyperxindexformat{\see {\texttt{/} division operator}}{1}
+  \item \texttt{do}-\texttt{while} pernyataan, \hyperpage{22--23}
+  \item \texttt{do}-\texttt{while} statement
+    \subitem in multiline macros, \hyperpage{159--160}
+  \item \texttt{double} type, \hyperpage{104--105}
+
+  \indexspace
+
+  \item Empty parameter lists, \hyperpage{30}
+  \item Endianess, \hyperpage{69}
+  \item \texttt{enum} enumerated types, \hyperpage{195--198}
+    \subitem numbering order, \hyperpage{195--196}
+    \subitem scope, \hyperpage{196}
+  \item \texttt{enum} kata kunci, \hyperpage{26}
+  \item \texttt{env} parameter, \hyperpage{145--146}
+  \item \texttt{environ} variable, \hyperpage{145}
+  \item Environment variables, \hyperpage{143--146}
+  \item \texttt{EOF} end of file, \hyperpage{63}
+  \item Escape sequences, \hyperpage{189--193}
+  \item Exit status, \hyperpage{141--143}
+    \subitem obtaining from shell, \hyperpage{142--143}
+  \item \texttt{EXIT\_FAILURE} macro, \hyperpage{142--143}
+  \item \texttt{EXIT\_SUCCESS} macro, \hyperpage{142}
+  \item Exiting, \hyperpage{241--244}
+    \subitem return from \texttt{main()}, \hyperpage{241--242}
+  \item \texttt{extern} storage class, \hyperpage{128--129}, 
+		\hyperpage{134}
+
+  \indexspace
+
+  \item \texttt{F} float constant, \hyperpage{110}
+  \item Fall through, \hyperpage{25--26}
+  \item \texttt{fclose()} function, \hyperpage{62--63}
+  \item \texttt{FENV\_ACCESS} pragma, \hyperpage{167}
+  \item \texttt{fgetc()} function, \hyperpage{62--63}
+  \item \texttt{fgets()} function, \hyperpage{63--65}
+  \item \texttt{fgetwc()} function, \hyperpage{233}
+  \item \texttt{fgetws()} function, \hyperpage{233}
+  \item File I/O, \hyperpage{61--69}
+    \subitem binary files, \hyperpage{66--68}
+    \subitem formatted input, \hyperpage{64--65}
+    \subitem line by line, \hyperpage{63--64}
+    \subitem text files, reading, \hyperpage{62--63}
+    \subitem text files, writing, \hyperpage{65--66}
+    \subitem with numeric values, \hyperpage{68--69}
+    \subitem with \texttt{struct}s, \hyperpage{68--69}
+  \item \texttt{FILE*} type, \hyperpage{61--63}
+  \item Fixed width integers, \hyperpage{297--301}
+  \item \texttt{float} tipe, \hyperpage{12}
+  \item Floating point constants, \hyperpage{109--110}
+  \item \texttt{FLT\_DECMIAL\_DIG} macro, \hyperpage{106--107}
+  \item \texttt{FLT\_DIG} macro, \hyperpage{105--107}
+  \item \texttt{fopen()} function, \hyperpage{62--63}
+  \item \texttt{for} pernyataan, \hyperpage{23--24}
+  \item \texttt{FP\_CONTRACT} pragma, \hyperpage{167}
+  \item \texttt{fprintf()} function, \hyperpage{65--66}
+  \item \texttt{fputc()} function, \hyperpage{65--66}
+  \item \texttt{fputs()} function, \hyperpage{65--66}
+  \item \texttt{fputwc()} function, \hyperpage{233}
+  \item \texttt{fputws()} function, \hyperpage{233}
+  \item \texttt{fread()} function, \hyperpage{66--68}
+  \item \texttt{free()} function, \hyperpage{86}
+  \item \texttt{fscanf()} function, \hyperpage{64--65}
+  \item Function prototype, \hyperpage{29--30}
+  \item Function specifiers, \hyperpage{351--353}
+  \item Fungsi, \hyperpage{27--31}
+  \item \texttt{fwide()} function, \hyperpage{233}
+  \item \texttt{fwprintf()} function, \hyperpage{233}
+  \item \texttt{fwrite()} function, \hyperpage{66--67}
+  \item \texttt{fwscanf()} function, \hyperpage{233}
+
+  \indexspace
+
+  \item \texttt{gcc} compiler, \hyperpage{7--10}, \hyperpage{134--135}
+    \subitem with threads, \hyperpage{311}
+  \item Generic selections, \hyperpage{273--275}
+  \item \texttt{getenv()} function, \hyperpage{144}
+  \item \texttt{getwchar()} function, \hyperpage{233}
+  \item \texttt{gmtime()} function, \hyperpage{305}
+  \item \texttt{goto} statement, \hyperpage{259--268}
+    \subitem as labeled \texttt{break}, \hyperpage{262}
+    \subitem as labeled \texttt{continue}, \hyperpage{260--261}
+    \subitem for bailing out, \hyperpage{261--262}
+    \subitem multilevel cleanup, \hyperpage{262--263}
+    \subitem restarting system calls, \hyperpage{265}
+    \subitem tail call optimzation, \hyperpage{263--265}
+    \subitem thread preemption, \hyperpage{265--266}
+    \subitem variable scope, \hyperpage{266--267}
+    \subitem with variable-length arrays, \hyperpage{267--268}
+  \item Greenwich Mean time, \hyperpage{303}
+
+  \indexspace
+
+  \item Hello, world, \hyperpage{6}, 8
+  \item Hex floating point constants, \hyperpage{111}
+  \item Hexadecimal, 
+		\hyperxindexformat{\see {\texttt{0x} hexadecimal}}{1}
+
+  \indexspace
+
+  \item \texttt{I} macro, \hyperpage{292}
+  \item I/O stream orientation, \hyperpage{233}
+  \item \texttt{if} pernyataan, \hyperpage{19--20}
+  \item \texttt{if}-\texttt{else} pernyataan, \hyperpage{20--21}
+  \item \texttt{if\_empty()} embed parameter, \hyperpage{164}
+  \item \texttt{imaginary} type, \hyperpage{292}
+  \item Implicit declaration, \hyperpage{30}
+  \item Incomplete types, \hyperpage{287}
+    \subitem self-referential \texttt{struct}s, \hyperpage{287--288}
+  \item \texttt{inline} function specifier, \hyperpage{351--352}
+  \item \texttt{int} tipe, \hyperpage{12}
+  \item \texttt{INT\_FASTn\_MAX} macros, \hyperpage{299}
+  \item \texttt{INT\_FASTn\_MIN} macros, \hyperpage{299}
+  \item \texttt{int\_fastN\_t} types, \hyperpage{297--298}
+  \item \texttt{INT\_LEASTn\_MAX} macros, \hyperpage{299}
+  \item \texttt{INT\_LEASTn\_MIN} macros, \hyperpage{299}
+  \item \texttt{int\_leastN\_t} types, \hyperpage{297--298}
+  \item Integer constants, \hyperpage{108--109}
+  \item Integer promotions, \hyperpage{211}
+  \item Integrated Development Environment, \hyperpage{9}
+  \item International Obfuscated C Code Contest, \hyperpage{1}
+  \item \texttt{INTMAX\_C()} macro, \hyperpage{298--299}
+  \item \texttt{INTMAX\_MAX} macro, \hyperpage{299}
+  \item \texttt{INTMAX\_MIN} macro, \hyperpage{299}
+  \item \texttt{intmax\_t} type, \hyperpage{298}
+  \item \texttt{INTn\_C()} macros, \hyperpage{298--299}
+  \item \texttt{INTn\_MAX} macros, \hyperpage{299}
+  \item \texttt{INTn\_MIN} macros, \hyperpage{299}
+  \item \texttt{intN\_t} types, \hyperpage{297--298}
+  \item \texttt{isalpha()} function
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{iswalnum()} function, \hyperpage{235}
+  \item \texttt{iswalpha()} function, \hyperpage{235}
+  \item \texttt{iswblank()} function, \hyperpage{235}
+  \item \texttt{iswcntrl()} function, \hyperpage{235}
+  \item \texttt{iswdigit()} function, \hyperpage{235}
+  \item \texttt{iswgraph()} function, \hyperpage{235}
+  \item \texttt{iswlower()} function, \hyperpage{235}
+  \item \texttt{iswprint()} function, \hyperpage{235}
+  \item \texttt{iswpunct()} function, \hyperpage{235}
+  \item \texttt{iswspace()} function, \hyperpage{235}
+  \item \texttt{iswupper()} function, \hyperpage{235}
+  \item \texttt{iswxdigit()} function, \hyperpage{235}
+
+  \indexspace
+
+  \item \texttt{jmp\_buf} type, \hyperpage{282}
+
+  \indexspace
+
+  \item Kendali Alur, \hyperpage{19--26}
+  \item Komentar, \hyperpage{6}
+  \item Kompilasi, \hyperpage{8--9}
+
+  \indexspace
+
+  \item \texttt{L} long constant, \hyperpage{108--109}
+  \item \texttt{L} long double constant, \hyperpage{110}
+  \item \texttt{L} wide character prefix, \hyperpage{231}
+  \item Labels, \hyperpage{259--260}
+  \item Language versions, \hyperpage{9--154}
+  \item \texttt{LDBL\_DECMIAL\_DIG} macro, \hyperpage{106}
+  \item \texttt{LDBL\_DIG} macro, \hyperpage{105}, \hyperpage{107}
+  \item \texttt{LL} long long constant, \hyperpage{108--109}
+  \item Local time, \hyperpage{303--304}
+  \item Locale, \hyperpage{219--223}
+    \subitem money, \hyperpage{220--222}
+  \item \texttt{locale.h} header file, \hyperpage{219}
+  \item \texttt{localeconv()} function, \hyperpage{220--221}
+    \subitem \texttt{mon\_grouping}, \hyperpage{221--222}
+    \subitem \texttt{sep\_by\_space}, \hyperpage{222}
+  \item \texttt{localtime()} function, \hyperpage{305}
+  \item \texttt{long double} type, \hyperpage{104--105}
+  \item Long jumps, \hyperpage{281--285}
+  \item \texttt{long long} type, \hyperpage{102--103}
+  \item \texttt{long} type, \hyperpage{102--103}
+  \item \texttt{longjmp()}, \hyperpage{283}
+  \item \texttt{longjmp()} function, \hyperpage{281--283}
+  \item \texttt{lonjmp()}, \hyperpage{284--285}
+
+  \indexspace
+
+  \item \texttt{main()} function
+    \subitem command line options, \hyperpage{138--139}
+    \subitem returning from, \hyperpage{141}
+  \item \texttt{main()} fungsi, \hyperpage{7}, \hyperpage{28}
+  \item \texttt{malloc()} function, \hyperpage{86}
+    \subitem and arrays, \hyperpage{87--88}
+    \subitem error checking, \hyperpage{86--87}
+    \subitem with UTF-8, \hyperpage{229}
+  \item Manual memory management, \hyperpage{85--93}
+  \item \texttt{MB\_LEN\_MAX} macro, \hyperpage{229, 230}
+  \item \texttt{mbrtoc16()} function, \hyperpage{240}
+  \item \texttt{mbrtoc32()} function, \hyperpage{240}
+  \item \texttt{mbstowcs()} function, \hyperpage{231--233}
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{mbtowc()} function, \hyperpage{231}
+  \item \texttt{memalignment()} function, \hyperpage{355}
+  \item \texttt{memcpy()} function, \hyperpage{80--82}
+  \item Memory address, \hyperpage{33}
+  \item Memory alignment, \hyperpage{92--93}
+  \item Memory order, \hyperpage{346--348}
+    \subitem acquire, \hyperpage{347}
+    \subitem acquire/release, \hyperpage{347}
+    \subitem consume, \hyperpage{347}
+    \subitem relaxed, \hyperpage{348}
+    \subitem release, 347
+    \subitem sequential consistency, \hyperpage{347}
+  \item \texttt{memory\_order\_acq\_rel} enumerated type, 
+		\hyperpage{346}
+  \item \texttt{memory\_order\_acquire} enumerated type, 
+		\hyperpage{346}
+  \item \texttt{memory\_order\_consume} enumerated type, 
+		\hyperpage{346}
+  \item \texttt{memory\_order\_relaxed} enumerated type, 
+		\hyperpage{346}
+  \item \texttt{memory\_order\_release} enumerated type, 
+		\hyperpage{346}
+  \item \texttt{memory\_order\_seq\_cst} enumerated type, 
+		\hyperpage{346}
+  \item \texttt{mktime()} function, \hyperpage{305--306}
+  \item Modulus operator, 
+		\hyperxindexformat{\see {\texttt{\%} modulus operator}}{1}
+  \item \texttt{mtx\_destroy()} function, \hyperpage{322--324}, 
+		\hyperpage{327--329}
+  \item \texttt{mtx\_init()} function, \hyperpage{322--324}, 
+		\hyperpage{327--329}
+  \item \texttt{mtx\_lock()} function, \hyperpage{322--324}, 
+		\hyperpage{326--329}
+  \item \texttt{mtx\_plain} macro, \hyperpage{325}
+  \item \texttt{mtx\_recursive} macro, \hyperpage{325}
+  \item \texttt{mtx\_t} type, \hyperpage{323}
+  \item \texttt{mtx\_timed} macro, \hyperpage{325}
+  \item \texttt{mtx\_timedlock()} function, \hyperpage{325--326}
+  \item \texttt{mtx\_unlock} function, \hyperpage{322}
+  \item \texttt{mtx\_unlock()} function, \hyperpage{323--324}, 
+		\hyperpage{326--329}
+  \item Multibyte characters, \hyperpage{230}
+    \subitem parse state, \hyperpage{236--238}
+  \item Multifile projects, \hyperpage{131--135}
+    \subitem \texttt{extern} storage class, \hyperpage{134}
+    \subitem function prototypes, \hyperpage{131--133}
+    \subitem includes, \hyperpage{131--134}
+    \subitem \texttt{static} storage class, \hyperpage{134}
+  \item Multiplication operator, 
+		\hyperxindexformat{\see {\texttt{*} multiplication operator}}{1}
+  \item Multithreading, \hyperpage{311--331}
+    \subitem and the standard library, \hyperpage{312}
+    \subitem one-time functions, \hyperpage{330--331}
+    \subitem race conditions, \hyperpage{315}, \hyperpage{322--323}
+  \item Mutexes, \hyperpage{322--326}
+    \subitem timeouts, \hyperpage{325--326}
+    \subitem types, \hyperpage{325--326}
+
+  \indexspace
+
+  \item New line, 
+		\hyperxindexformat{\see {\texttt{{\backslash}n} newline}}{1}
+  \item \texttt{noreturn} function specifier, \hyperpage{352--353}
+  \item \texttt{NULL} pointer, \hyperpage{38--39}
+    \subitem zero equivalence, \hyperpage{205}
+
+  \indexspace
+
+  \item Object files, \hyperpage{134--135}
+  \item Octothorpe, \hyperpage{6}
+  \item \texttt{offsetof()} macro, \hyperpage{177--178}
+  \item \texttt{once\_flag} type, \hyperpage{330--331}
+  \item \texttt{ONCE\_FLAG\_INIT} macro, \hyperpage{330--331}
+  \item Operator Aritmetika, \hyperpage{15}, 15
+  \item Operator Boolean, \hyperpage{18}
+  \item Operator Kondisional, \hyperpage{17}
+  \item operator perbandingan, \hyperpage{17}
+
+  \indexspace
+
+  \item parameter Fungsi, \hyperpage{27}
+  \item Pass by value, \hyperpage{28}, 29
+  \item Pointer types, \hyperpage{36}
+  \item Pointers, \hyperpage{33--40}
+    \subitem arithmetic, \hyperpage{75--84}
+    \subitem array equivalence, \hyperpage{78--79}
+    \subitem as arguments, \hyperpage{37}
+    \subitem as integers, \hyperpage{205}
+    \subitem casting, \hyperpage{205--207}
+    \subitem declarations, \hyperpage{39--40}
+    \subitem subtracting, \hyperpage{77--78}, \hyperpage{207--208}
+    \subitem to functions, \hyperpage{208--210}
+    \subitem to multibyte values, \hyperpage{203--204}
+    \subitem to pointers, \hyperpage{199--202}
+    \subitem to pointers, \texttt{const}, \hyperpage{202--203}
+    \subitem with \texttt{sizeof}, \hyperpage{40}
+  \item pow(), \hyperpage{15}
+  \item \texttt{prefix()} embed parameter, \hyperpage{164--165}
+  \item Preprocessor, \hyperpage{6}, \hyperpage{147--169}
+    \subitem macros, \hyperpage{148--149}
+    \subitem macros with arguments, \hyperpage{155--158}
+    \subitem macros with variable arguments, \hyperpage{157--158}
+    \subitem multiline macros, \hyperpage{159--160}
+    \subitem predefined macros, \hyperpage{153--155}
+  \item \texttt{PRIdFASTn} macros, \hyperpage{299--300}
+  \item \texttt{PRIdLEASTn} macros, \hyperpage{299--300}
+  \item \texttt{PRIdMAX} macro, \hyperpage{299--300}
+  \item \texttt{PRIdn} macros, \hyperpage{299--300}
+  \item \texttt{PRIiFASTn} macros, \hyperpage{299--300}
+  \item \texttt{PRIiLEASTn} macros, \hyperpage{299--300}
+  \item \texttt{PRIiMAX} macro, \hyperpage{299--300}
+  \item \texttt{PRIin} macros, \hyperpage{299--300}
+  \item printf(), \hyperpage{16}
+  \item \texttt{printf()} function, \hyperpage{299}
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{printf()} fungsi, \hyperpage{7}, \hyperpage{13}
+    \subitem with pointers, \hyperpage{35}
+  \item \texttt{PRIoFASTn} macros, \hyperpage{300}
+  \item \texttt{PRIoLEASTn} macros, \hyperpage{300}
+  \item \texttt{PRIoMAX} macros, \hyperpage{300}
+  \item \texttt{PRIon} macros, \hyperpage{300}
+  \item \texttt{PRIuFASTn} macros, \hyperpage{300}
+  \item \texttt{PRIuLEASTn} macros, \hyperpage{300}
+  \item \texttt{PRIuMAX} macros, \hyperpage{300}
+  \item \texttt{PRIun} macros, \hyperpage{300}
+  \item \texttt{PRIXFASTn} macros, \hyperpage{300}
+  \item \texttt{PRIxFASTn} macros, \hyperpage{300}
+  \item \texttt{PRIXLEASTn} macros, \hyperpage{300}
+  \item \texttt{PRIxLEASTn} macros, \hyperpage{300}
+  \item \texttt{PRIXMAX} macros, \hyperpage{300}
+  \item \texttt{PRIxMAX} macros, \hyperpage{300}
+  \item \texttt{PRIXn} macros, \hyperpage{300}
+  \item \texttt{PRIxn} macros, \hyperpage{300}
+  \item \texttt{ptrdiff\_t} type, \hyperpage{207--208}
+    \subitem printing, \hyperpage{208}
+  \item \texttt{putenv()} function, \hyperpage{144}
+  \item \texttt{putwchar()} function, \hyperpage{233}
+
+  \indexspace
+
+  \item \texttt{qsort()} function, \hyperpage{82--84}
+  \item \texttt{quick\_exit()} function, \hyperpage{242--243}
+
+  \indexspace
+
+  \item \texttt  {raise()} function, \hyperpage{343}
+  \item \texttt{realloc()} function, \hyperpage{88--90}
+    \subitem with \texttt{NULL} argument, \hyperpage{92}
+  \item \texttt{register} storage class, \hyperpage{129--130}
+  \item \texttt{restrict} type qualifier, \hyperpage{125--126}
+  \item \texttt{return} pernyataan, \hyperpage{27}
+
+  \indexspace
+
+  \item \texttt{scanf()} function, \hyperpage{299, 300}
+  \item Scientific notation, \hyperpage{110--111}
+  \item \texttt{SCNdFASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNdLEASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNdMAX} macros, \hyperpage{300--301}
+  \item \texttt{SCNdn} macros, \hyperpage{300--301}
+  \item \texttt{SCNiFASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNiLEASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNiMAX} macros, \hyperpage{300--301}
+  \item \texttt{SCNin} macros, \hyperpage{300--301}
+  \item \texttt{SCNoFASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNoLEASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNoMAX} macros, \hyperpage{300--301}
+  \item \texttt{SCNon} macros, \hyperpage{300--301}
+  \item \texttt{SCNuFASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNuLEASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNuMAX} macros, \hyperpage{300--301}
+  \item \texttt{SCNun} macros, \hyperpage{300--301}
+  \item \texttt{SCNxFASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNxLEASTn} macros, \hyperpage{300--301}
+  \item \texttt{SCNxMAX} macros, \hyperpage{300--301}
+  \item \texttt{SCNxn} macros, \hyperpage{300--301}
+  \item Scope, \hyperpage{95--98}
+    \subitem block, \hyperpage{95--96}
+    \subitem file, \hyperpage{96--97}
+    \subitem \texttt{for} loop, \hyperpage{97--98}
+    \subitem function, \hyperpage{98}
+  \item \texttt{setenv()}, \hyperpage{144}
+  \item \texttt{setjmp()}
+    \subitem in an expression, \hyperpage{284}
+  \item \texttt{setjmp()} function, \hyperpage{281--283}
+  \item \texttt{setlocale()} function, \hyperpage{219--220}, 
+		\hyperpage{238}
+    \subitem \texttt{LC\_ALL} macro, \hyperpage{223}
+    \subitem \texttt{LC\_COLLATE} macro, \hyperpage{223}
+    \subitem \texttt{LC\_CTYPE} macro, \hyperpage{223}
+    \subitem \texttt{LC\_MONETARY} macro, \hyperpage{223}
+    \subitem \texttt{LC\_NUMERIC} macro, \hyperpage{223}
+    \subitem \texttt{LC\_TIME} macro, \hyperpage{223}
+  \item \texttt{short} type, \hyperpage{102--103}
+  \item \texttt{sig\_atomic\_t} type, \hyperpage{248--249}
+  \item \texttt{SIG\_DFL} macro, \hyperpage{246}, \hyperpage{248--250}
+  \item \texttt{SIG\_ERR} macro, \hyperpage{247}
+  \item \texttt{SIG\_IGN} macro, \hyperpage{246}
+  \item \texttt{SIG\_INT} signal, \hyperpage{247}
+  \item \texttt{SIGABRT} signal, \hyperpage{244, 245}
+  \item \texttt{sigaction()} function, \hyperpage{245}, \hyperpage{248}
+  \item \texttt{SIGFPE} signal, \hyperpage{245}
+  \item \texttt{SIGILL} signal, \hyperpage{245}
+  \item \texttt{SIGINT} signal, \hyperpage{245--246}
+  \item Signal handlers
+    \subitem with lock-free atomics, \hyperpage{343}
+  \item Signal handling, \hyperpage{245--250}
+  \item Signal handling-
+    \subitem limitations, \hyperpage{248--249}
+  \item \texttt{signal()} function, \hyperpage{245--248}, 
+		\hyperpage{250}
+  \item \texttt{signed char} type, \hyperpage{100--101}
+  \item Significant digits, \hyperpage{105--107}
+  \item \texttt{SIGSEGV} signal, \hyperpage{245}
+  \item \texttt{SIGTERM} signal, \hyperpage{245}
+  \item \texttt{size\_t} tipe, \hyperpage{18}
+  \item \texttt{sizeof} operator, \hyperpage{18--19}
+    \subitem with arrays, \hyperpage{42--43}
+    \subitem with \texttt{malloc()}, \hyperpage{86--88}
+  \item \texttt{static} storage class, \hyperpage{127--128}, 
+		\hyperpage{134}
+    \subitem in block scope, \hyperpage{127--128}
+    \subitem in file scope, \hyperpage{128}
+  \item \texttt{stdarg.h} header file, \hyperpage{214}
+  \item \texttt{stdatomic.h} header, \hyperpage{334}
+  \item \texttt{stdbool.h} header file, \hyperpage{14}
+  \item \texttt{stderr} standard error, \hyperpage{61--62}
+  \item \texttt{stdin} standard input, \hyperpage{61--62}
+  \item \texttt{stdint.h} header file, \hyperpage{297}
+  \item stdio.h, \hyperpage{7}
+  \item \texttt{stdio.h} header file, \hyperpage{7}
+  \item \texttt{stdout} standard output, \hyperpage{61--62}
+  \item Storage-Class Specifiers, \hyperpage{127--130}
+  \item \texttt{strchr()} function
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{strftime()} function, \hyperpage{306--307}
+  \item String, \hyperxindexformat{\see {\texttt{char *}}}{1}
+  \item String literals, \hyperpage{51}
+  \item String variables, \hyperpage{51--52}
+    \subitem as arrays, \hyperpage{52}
+  \item Strings, \hyperpage{51--56}
+    \subitem copying, \hyperpage{55--56}
+    \subitem getting the length, \hyperpage{53--54}
+    \subitem initializers, \hyperpage{52--53}
+    \subitem termination, \hyperpage{54--55}
+  \item \texttt{strlen()} function
+    \subitem with UTF-8, \hyperpage{230}
+  \item \texttt{strstr()} function
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{strtod} function, \hyperpage{64}
+  \item \texttt{strtok()} function
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{strtol} function, \hyperpage{64}
+  \item \texttt{struct} keyword, \hyperpage{57--60}, 
+		\hyperpage{171--188}
+    \subitem anonymous, \hyperpage{173--174}
+    \subitem bit fields, \hyperpage{179--182}
+    \subitem comparing, \hyperpage{60}
+    \subitem compound literals, \hyperpage{270--271}
+    \subitem copying, \hyperpage{60}
+    \subitem declaring, \hyperpage{57--58}
+    \subitem flexible array members, \hyperpage{175--176}
+    \subitem initializers, \hyperpage{58}, \hyperpage{171--173}
+    \subitem padding bytes, \hyperpage{176--177}
+    \subitem passing and returning, \hyperpage{58--60}, \hyperpage{188}
+    \subitem self-referential, \hyperpage{174--175}
+  \item \texttt{struct timespec} type, \hyperpage{307--308}
+  \item \texttt{struct tm} type, \hyperpage{304}
+    \subitem conversion to \texttt{time\_t}, \hyperpage{305--306}
+  \item Subtraction operator, 
+		\hyperxindexformat{\see {\texttt{-} subtraction operator}}{1}
+  \item \texttt{suffix()} embed parameter, \hyperpage{164--165}
+  \item \texttt{switch} pernyataan, \hyperpage{24--26}
+  \item \texttt{swprintf()} function, \hyperpage{233}
+  \item \texttt{swscanf()} function, \hyperpage{233}
+
+  \indexspace
+
+  \item Tab (is better), 
+		\hyperxindexformat{\see {\texttt{{\backslash}t} operator}}{1}
+  \item Tail call optimzation
+    \subitem with \texttt{goto}, \hyperpage{263--265}
+  \item Ternary operator, 
+		\hyperxindexformat{\see {\texttt{?:} ternary operator}}{1}
+  \item The heap, \hyperpage{85}
+  \item The stack, \hyperpage{85}
+  \item \texttt{thrd\_create()} function, \hyperpage{313--315}
+  \item \texttt{thrd\_detach()} function, \hyperpage{317--318}
+  \item \texttt{thrd\_join()} function, \hyperpage{313--315}
+  \item \texttt{thrd\_start\_t} type, \hyperpage{313--314}
+  \item \texttt{thrd\_t} type, \hyperpage{312}
+  \item \texttt{thrd\_timedout} macro, \hyperpage{330}
+  \item \texttt{thrd\_timedout()} macro, \hyperpage{330}
+  \item Thread local data, \hyperpage{318--320}
+  \item Thread-specific storage, \hyperpage{320--322}
+  \item \texttt{thread\_local} storage class, \hyperpage{320}
+  \item \texttt{threads.h} header file, \hyperpage{320}
+  \item \texttt{time()} function, \hyperpage{304--305}
+  \item \texttt{time\_t} type, \hyperpage{304}
+    \subitem conversion to \texttt{struct tm}, \hyperpage{305}
+  \item \texttt{timegm()} Unix function, \hyperpage{306}
+  \item \texttt{timespec\_get()} function, \hyperpage{307--308}, 
+		\hyperpage{325--326}, \hyperpage{330}
+  \item tipe, \hyperpage{12}
+  \item tipe Boolean, \hyperpage{14}
+  \item \texttt{tolower()} function
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{toupper()} function
+    \subitem with UTF-8, \hyperpage{229}
+  \item \texttt{towlower()} function, \hyperpage{235}
+  \item \texttt{towupper()} function, \hyperpage{235}
+  \item Trigraphs, \hyperpage{191--192}
+  \item \texttt{tss\_create()} function, \hyperpage{320--322}
+  \item \texttt{tss\_delete()} function, \hyperpage{320--322}
+  \item \texttt{tss\_dtor\_t} type, \hyperpage{320}
+  \item \texttt{tss\_get()} function, \hyperpage{321--322}
+  \item \texttt{tss\_set()} function, \hyperpage{321--322}
+  \item \texttt{tss\_t} type, \hyperpage{320--322}
+  \item Type conversions, \hyperpage{113--121}
+    \subitem Boolean, \hyperpage{118}
+    \subitem casting, \hyperpage{120--121}
+    \subitem \texttt{char}, \hyperpage{117--118}
+    \subitem explicit, \hyperpage{119--121}
+    \subitem floating point, \hyperpage{118}
+    \subitem implicit, \hyperpage{118--119}
+    \subitem integer, \hyperpage{118}
+    \subitem numeric, \hyperpage{118--120}
+    \subitem strings, \hyperpage{113--117}
+  \item Type qualifiers, \hyperpage{123--127}
+    \subitem arrays in parameter lists, \hyperpage{277}
+  \item \texttt{typedef} keyword, \hyperpage{71--74}
+    \subitem scoping rules, \hyperpage{71--73}
+    \subitem with anonymous \texttt{struct}s, \hyperpage{72--73}
+    \subitem with arrays, \hyperpage{74}
+    \subitem with pointers, \hyperpage{73--74}
+    \subitem with \texttt{struct}s, \hyperpage{72--73}
+  \item Types
+    \subitem character, \hyperpage{100--101}
+    \subitem signed and unsigned, \hyperpage{99--100}
+
+  \indexspace
+
+  \item \texttt{U} Unicode prefix, \hyperpage{239}
+  \item \texttt{u} Unicode prefix, \hyperpage{239}
+  \item \texttt{U} unsigned constant, \hyperpage{108--109}
+  \item \texttt{u8} UTF-8 prefix, \hyperpage{238}
+  \item \texttt{UINT\_FASTn\_MAX} macros, \hyperpage{299}
+  \item \texttt{uint\_fastN\_t} types, \hyperpage{297--298}
+  \item \texttt{UINT\_LEASTn\_MAX} macros, \hyperpage{299}
+  \item \texttt{uint\_leastN\_t} types, \hyperpage{297--298}
+  \item \texttt{UINTMAX\_C()} macro, \hyperpage{298--299}
+  \item \texttt{UINTMAX\_MAX} macro, \hyperpage{299}
+  \item \texttt{uintmax\_t} type, \hyperpage{298}
+  \item \texttt{UINTn\_C()} macros, \hyperpage{298--299}
+  \item \texttt{UINTn\_MAX} macros, \hyperpage{299}
+  \item \texttt{uintN\_t} types, \hyperpage{297--298}
+  \item \texttt{UL} unsigned long constant, \hyperpage{108--109}
+  \item \texttt{ULL} unsigned long long constant, \hyperpage{108--109}
+  \item \texttt{ungetwc()} function, \hyperpage{233}
+  \item Unicode, \hyperpage{225--240}
+    \subitem code points, \hyperpage{226}
+    \subitem encoding, \hyperpage{226--227}
+    \subitem endianess, \hyperpage{227}
+    \subitem UTF-16, \hyperpage{226--227}, \hyperpage{239}
+    \subitem UTF-32, \hyperpage{226--227}, \hyperpage{239}
+    \subitem UTF-8, \hyperpage{226--227}, \hyperpage{229}, 
+		\hyperpage{238}
+  \item \texttt{union} keyword, \hyperpage{182--188}
+    \subitem and unnamed \texttt{struct}s, \hyperpage{187}
+    \subitem common initial sequences, \hyperpage{184--187}
+    \subitem passing and returning, \hyperpage{188}
+    \subitem pointers to, \hyperpage{183--184}
+    \subitem type punning, \hyperpage{183}
+  \item Universal Coordinated Time, \hyperpage{303--304}
+  \item \texttt{unsetenv()} function, \hyperpage{144}
+  \item \texttt{unsigned char} type, \hyperpage{100--101}
+  \item \texttt{unsigned} type, \hyperpage{99--100}
+
+  \indexspace
+
+  \item \texttt{va\_arg()} macro, \hyperpage{214--216}
+  \item \texttt{va\_copy()} macro, \hyperpage{216}
+  \item \texttt{va\_end()} macro, \hyperpage{214--216}
+  \item \texttt{va\_list} type, \hyperpage{214--217}
+    \subitem passing to functions, \hyperpage{216--217}
+  \item \texttt{va\_start()} macro, \hyperpage{214--216}
+    \subitem scoping issues, 217
+  \item variabel, \hyperpage{11--12}
+    \subitem belum diinisialisasi, \hyperpage{12}
+  \item Variable hiding, \hyperpage{96}
+  \item Variable-length array, \hyperpage{251--257}
+    \subitem and \texttt{sizeof()}, \hyperpage{252--253}
+    \subitem controversy, \hyperpage{257}
+    \subitem defining, \hyperpage{251--252}
+    \subitem in function prototypes, \hyperpage{254}
+    \subitem multidimensional, \hyperpage{253}
+    \subitem passing to functions, \hyperpage{253--255}
+    \subitem with \texttt{goto}, \hyperpage{257}
+    \subitem with \texttt{longjmp()}, \hyperpage{257}
+    \subitem with regular arrays, \hyperpage{255--256}
+    \subitem with \texttt{typedef}, \hyperpage{256--257}
+  \item Variadic functions, \hyperpage{213--217}
+  \item \texttt{vfwprintf()} function, \hyperpage{233}
+  \item \texttt{vfwscanf()} function, \hyperpage{233}
+  \item \texttt{void} tipe, \hyperpage{28}, \hyperpage{30, 31}
+    \subitem in function prototypes, \hyperpage{31}
+  \item \texttt{void*} void pointer, \hyperpage{79--84}
+    \subitem caveats, \hyperpage{81}
+  \item \texttt{volatile} type qualifier, \hyperpage{126--127}
+    \subitem with \texttt{setjmp()}, \hyperpage{283}
+  \item \texttt{vprintf()} function, \hyperpage{216--217}
+  \item \texttt{vswprintf()} function, \hyperpage{233}
+  \item \texttt{vswscanf()} function, \hyperpage{233}
+  \item \texttt{vwprintf()} function, \hyperpage{233}
+  \item \texttt{vwscanf()} function, \hyperpage{233}
+
+  \indexspace
+
+  \item \texttt{wchar\_t} type, \hyperpage{230--232}
+  \item \texttt{wcscat()} function, \hyperpage{234}
+  \item \texttt{wcschr()} function, \hyperpage{235}
+  \item \texttt{wcscmp()} function, \hyperpage{234}
+  \item \texttt{wcscoll()} function, \hyperpage{234}
+  \item \texttt{wcscpy()} function, \hyperpage{234}
+  \item \texttt{wcscspn()} function, \hyperpage{235}
+  \item \texttt{wcsftime()} function, \hyperpage{235}
+  \item \texttt{wcslen()} function, \hyperpage{233}, \hyperpage{235}
+  \item \texttt{wcsncat()} function, \hyperpage{234}
+  \item \texttt{wcsncmp()} function, \hyperpage{234}
+  \item \texttt{wcsncpy()} function, \hyperpage{234}
+  \item \texttt{wcspbrk()} function, \hyperpage{235}
+  \item \texttt{wcsrchr()} function, \hyperpage{235}
+  \item \texttt{wcsspn()} function, \hyperpage{235}
+  \item \texttt{wcsstr()} function, \hyperpage{235}
+  \item \texttt{wcstod()} function, \hyperpage{234}
+  \item \texttt{wcstof()} function, \hyperpage{234}
+  \item \texttt{wcstok()} function, \hyperpage{235}
+  \item \texttt{wcstol()} function, \hyperpage{234}
+  \item \texttt{wcstold()} function, \hyperpage{234}
+  \item \texttt{wcstoll()} function, \hyperpage{234}
+  \item \texttt{wcstombs()} function, \hyperpage{231}, \hyperpage{233}
+  \item \texttt{wcstoul()} function, \hyperpage{234}
+  \item \texttt{wcstoull()} function, \hyperpage{234}
+  \item \texttt{wcsxfrm()} function, \hyperpage{234}
+  \item \texttt{wctomb()} function, \hyperpage{231}
+  \item \texttt{while} pernyataan, \hyperpage{21--22}
+  \item Wide characters, \hyperpage{230--238}
+  \item \texttt{wint\_t} type, \hyperpage{233}
+  \item \texttt{wmemchr()} function, \hyperpage{235}
+  \item \texttt{wmemcmp()} function, \hyperpage{234}
+  \item \texttt{wmemcpy()} function, \hyperpage{234}
+  \item \texttt{wmemmove()} function, \hyperpage{234}
+  \item \texttt{wmemset()} function, \hyperpage{235}
+  \item \texttt{wprintf()} function, \hyperpage{233}
+  \item \texttt{wscanf()} function, \hyperpage{233}
+
+\end{theindex}

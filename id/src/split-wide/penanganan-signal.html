@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="keluar-dari-program.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="variable-length-array-vla.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="29" id="penanganan-signal"><span class="header-section-number">29</span> Penanganan Signal</h1>
+<p></p>
+<p>Sebelum mulai, aku hanya ingin menyarankan agar kamu pada umumnya mengabaikan seluruh bab ini dan memakai fungsi penanganan signal bawaan OS-mu yang (sangat mungkin) lebih unggul. Sistem mirip Unix punya keluarga fungsi <code>sigaction()</code>, dan Windows punya… entah apa yang dilakukannya<a href="function-specifier-alignment-specifier-dan-operator.html#fn171" class="footnote-ref" id="fnref171" role="doc-noteref"><sup>171</sup></a>.</p>
+<p>Setelah itu beres, apa itu signal?</p>
+<h2 data-number="29.1" id="apa-itu-signal"><span class="header-section-number">29.1</span> Apa Itu Signal?</h2>
+<p>Sebuah <em>signal</em> di-<em>raise</em> pada berbagai kejadian eksternal. Programmu bisa diatur agar diinterupsi untuk <em>menangani</em> signal itu, dan, kalau mau, melanjutkan dari tempat ia berhenti setelah signal selesai ditangani.</p>
+<p>Bayangkan seperti fungsi yang otomatis dipanggil ketika salah satu kejadian eksternal ini terjadi.</p>
+<p>Apa saja kejadian itu? Di sistemmu kemungkinan ada banyak sekali, tapi di spesifikasi C hanya ada beberapa:</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 88%" />
+</colgroup>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SIGABRT</code></td>
+<td>Terminasi abnormal—yang terjadi ketika <code>abort()</code> dipanggil.</td>
+</tr>
+<tr>
+<td><code>SIGFPE</code></td>
+<td>Exception floating point.</td>
+</tr>
+<tr>
+<td><code>SIGILL</code></td>
+<td>Instruksi ilegal.</td>
+</tr>
+<tr>
+<td><code>SIGINT</code></td>
+<td>Interupsi—biasanya akibat <code>CTRL-C</code> ditekan.</td>
+</tr>
+<tr>
+<td><code>SIGSEGV</code></td>
+<td>“Segmentation Violation”: akses memori yang tidak valid.</td>
+</tr>
+<tr>
+<td><code>SIGTERM</code></td>
+<td>Permintaan terminasi.</td>
+</tr>
+</tbody>
+</table>
+<p>Kamu bisa mengatur programmu untuk mengabaikan, menangani, atau membiarkan aksi bawaan untuk masing-masing signal itu dengan fungsi <code>signal()</code>.</p>
+<h2 data-number="29.2" id="menangani-signal-dengan-signal"><span class="header-section-number">29.2</span> Menangani Signal dengan <code>signal()</code></h2>
+<p></p>
+<p>Pemanggilan <code>signal()</code> menerima dua parameter: signal yang dimaksud, dan aksi yang diambil ketika signal itu di-raise.</p>
+<p>Aksinya bisa berupa salah satu dari tiga hal:</p>
+<ul>
+<li>Pointer ke fungsi handler.</li>
+<li><code>SIG_IGN</code> untuk mengabaikan signal.</li>
+<li><code>SIG_DFL</code> untuk mengembalikan handler bawaan signal itu.</li>
+</ul>
+<p>Mari kita tulis program yang tidak bisa di-<code>CTRL-C</code>. (Tenang saja—pada program berikut, kamu juga bisa menekan <code>RETURN</code> dan ia akan keluar.)</p>
+<p></p>
+<div class="sourceCode" id="cb584"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb584-1"><a href="penanganan-signal.html#cb584-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb584-2"><a href="penanganan-signal.html#cb584-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
+<span id="cb584-3"><a href="penanganan-signal.html#cb584-3" aria-label="3"></a></span>
+<span id="cb584-4"><a href="penanganan-signal.html#cb584-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb584-5"><a href="penanganan-signal.html#cb584-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb584-6"><a href="penanganan-signal.html#cb584-6" aria-label="6"></a>    <span class="dt">char</span> s<span class="op">[</span><span class="dv">1024</span><span class="op">];</span></span>
+<span id="cb584-7"><a href="penanganan-signal.html#cb584-7" aria-label="7"></a></span>
+<span id="cb584-8"><a href="penanganan-signal.html#cb584-8" aria-label="8"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> SIG_IGN<span class="op">);</span>    <span class="co">// Abaikan SIGINT, yang disebabkan oleh ^C</span></span>
+<span id="cb584-9"><a href="penanganan-signal.html#cb584-9" aria-label="9"></a></span>
+<span id="cb584-10"><a href="penanganan-signal.html#cb584-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;Try hitting ^C... (hit RETURN to exit)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb584-11"><a href="penanganan-signal.html#cb584-11" aria-label="11"></a></span>
+<span id="cb584-12"><a href="penanganan-signal.html#cb584-12" aria-label="12"></a>    <span class="co">// Tunggu satu baris input supaya program tidak langsung keluar</span></span>
+<span id="cb584-13"><a href="penanganan-signal.html#cb584-13" aria-label="13"></a>    fgets<span class="op">(</span>s<span class="op">,</span> <span class="kw">sizeof</span> s<span class="op">,</span> stdin<span class="op">);</span></span>
+<span id="cb584-14"><a href="penanganan-signal.html#cb584-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat baris 8—kita menyuruh program mengabaikan <code>SIGINT</code>, signal interupsi yang di-raise ketika <code>CTRL-C</code> ditekan. Sebanyak apa pun kamu menekannya, signal itu tetap diabaikan. Kalau baris 8 dijadikan komentar, kamu akan melihat bahwa kamu bisa <code>CTRL-C</code> sesuka hati dan langsung keluar dari program.</p>
+<p> </p>
+<h2 data-number="29.3" id="menulis-signal-handler"><span class="header-section-number">29.3</span> Menulis Signal Handler</h2>
+<p>Tadi kusebut bahwa kamu juga bisa menulis fungsi handler yang dipanggil ketika signal di-raise.</p>
+<p>Ini cukup lugas, tapi kemampuannya juga sangat terbatas menurut spesifikasi.</p>
+<p></p>
+<p>Sebelum mulai, mari kita lihat function prototype untuk pemanggilan <code>signal()</code>:</p>
+<div class="sourceCode" id="cb585"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb585-1"><a href="penanganan-signal.html#cb585-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">(*</span>signal<span class="op">(</span><span class="dt">int</span> sig<span class="op">,</span> <span class="dt">void</span> <span class="op">(*</span>func<span class="op">)(</span><span class="dt">int</span><span class="op">)))(</span><span class="dt">int</span><span class="op">);</span></span></code></pre></div>
+<p>Mudah dibaca, kan?</p>
+<p><em>SALAH!</em> <code>:)</code></p>
+<p>Mari kita bongkar sebentar untuk latihan.</p>
+<p><code>signal()</code> menerima dua argumen: integer <code>sig</code> yang mewakili signal, dan pointer <code>func</code> ke handler (handler mengembalikan <code>void</code> dan menerima <code>int</code> sebagai argumen), disorot di bawah:</p>
+<div class="sourceCode" id="cb586"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb586-1"><a href="penanganan-signal.html#cb586-1" aria-hidden="true" tabindex="-1"></a>                sig          func</span>
+<span id="cb586-2"><a href="penanganan-signal.html#cb586-2" aria-hidden="true" tabindex="-1"></a>              <span class="op">|-----|</span>  <span class="op">|---------------|</span></span>
+<span id="cb586-3"><a href="penanganan-signal.html#cb586-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">(*</span>signal<span class="op">(</span><span class="dt">int</span> sig<span class="op">,</span> <span class="dt">void</span> <span class="op">(*</span>func<span class="op">)(</span><span class="dt">int</span><span class="op">)))(</span><span class="dt">int</span><span class="op">);</span></span></code></pre></div>
+<p></p>
+<p>Pada dasarnya, kita akan mengoper nomor signal yang ingin kita tangkap, dan mengoper pointer ke fungsi berbentuk:</p>
+<div class="sourceCode" id="cb587"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb587-1"><a href="penanganan-signal.html#cb587-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> f<span class="op">(</span><span class="dt">int</span> x<span class="op">);</span></span></code></pre></div>
+<p>yang akan melakukan penangkapan sebenarnya.</p>
+<p>Nah—bagaimana dengan sisa prototype itu? Isinya pada dasarnya semua tipe kembalian. Begini, <code>signal()</code> akan mengembalikan apa pun yang kamu oper sebagai <code>func</code> kalau berhasil… artinya ia mengembalikan pointer ke fungsi yang mengembalikan <code>void</code> dan menerima <code>int</code> sebagai argumen.</p>
+<div class="sourceCode" id="cb588"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb588-1"><a href="penanganan-signal.html#cb588-1" aria-hidden="true" tabindex="-1"></a>returned</span>
+<span id="cb588-2"><a href="penanganan-signal.html#cb588-2" aria-hidden="true" tabindex="-1"></a>function    indicates we<span class="ch">&#39;r</span><span class="er">e              and</span></span>
+<span id="cb588-3"><a href="penanganan-signal.html#cb588-3" aria-hidden="true" tabindex="-1"></a>returns     returning a                  that function</span>
+<span id="cb588-4"><a href="penanganan-signal.html#cb588-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span>        pointer to function          takes an <span class="dt">int</span></span>
+<span id="cb588-5"><a href="penanganan-signal.html#cb588-5" aria-hidden="true" tabindex="-1"></a><span class="op">|--|</span>        <span class="op">|</span>                                   <span class="op">|---|</span></span>
+<span id="cb588-6"><a href="penanganan-signal.html#cb588-6" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span>       <span class="op">(*</span>signal<span class="op">(</span><span class="dt">int</span> sig<span class="op">,</span> <span class="dt">void</span> <span class="op">(*</span>func<span class="op">)(</span><span class="dt">int</span><span class="op">)))(</span><span class="dt">int</span><span class="op">);</span></span></code></pre></div>
+<p>Ia juga bisa mengembalikan <code>SIG_ERR</code> kalau terjadi error.</p>
+<p>Mari kita buat contoh yang membuatmu harus menekan <code>CTRL-C</code> dua kali untuk keluar.</p>
+<p>Aku ingin menegaskan bahwa program ini melibatkan undefined behavior dalam beberapa hal. Tapi kemungkinan besar program ini berfungsi di sistemmu, dan sulit membuat demo non-trivial yang portabel.</p>
+<p> </p>
+<div class="sourceCode" id="cb589"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb589-1"><a href="penanganan-signal.html#cb589-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb589-2"><a href="penanganan-signal.html#cb589-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb589-3"><a href="penanganan-signal.html#cb589-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
+<span id="cb589-4"><a href="penanganan-signal.html#cb589-4" aria-label="4"></a></span>
+<span id="cb589-5"><a href="penanganan-signal.html#cb589-5" aria-label="5"></a><span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb589-6"><a href="penanganan-signal.html#cb589-6" aria-label="6"></a></span>
+<span id="cb589-7"><a href="penanganan-signal.html#cb589-7" aria-label="7"></a><span class="dt">void</span> sigint_handler<span class="op">(</span><span class="dt">int</span> signum<span class="op">)</span></span>
+<span id="cb589-8"><a href="penanganan-signal.html#cb589-8" aria-label="8"></a><span class="op">{</span></span>
+<span id="cb589-9"><a href="penanganan-signal.html#cb589-9" aria-label="9"></a>    <span class="co">// Compiler boleh menjalankan:</span></span>
+<span id="cb589-10"><a href="penanganan-signal.html#cb589-10" aria-label="10"></a>    <span class="co">//</span></span>
+<span id="cb589-11"><a href="penanganan-signal.html#cb589-11" aria-label="11"></a>    <span class="co">//   signal(signum, SIG_DFL)</span></span>
+<span id="cb589-12"><a href="penanganan-signal.html#cb589-12" aria-label="12"></a>    <span class="co">//</span></span>
+<span id="cb589-13"><a href="penanganan-signal.html#cb589-13" aria-label="13"></a>    <span class="co">// saat handler dipanggil. Jadi kita reset handler-nya di sini:</span></span>
+<span id="cb589-14"><a href="penanganan-signal.html#cb589-14" aria-label="14"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span>
+<span id="cb589-15"><a href="penanganan-signal.html#cb589-15" aria-label="15"></a></span>
+<span id="cb589-16"><a href="penanganan-signal.html#cb589-16" aria-label="16"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>   <span class="co">// Hilangkan peringatan variabel tak terpakai</span></span>
+<span id="cb589-17"><a href="penanganan-signal.html#cb589-17" aria-label="17"></a></span>
+<span id="cb589-18"><a href="penanganan-signal.html#cb589-18" aria-label="18"></a>    count<span class="op">++;</span>                       <span class="co">// Undefined behavior</span></span>
+<span id="cb589-19"><a href="penanganan-signal.html#cb589-19" aria-label="19"></a>    printf<span class="op">(</span><span class="st">&quot;Count: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> count<span class="op">);</span>  <span class="co">// Undefined behavior</span></span>
+<span id="cb589-20"><a href="penanganan-signal.html#cb589-20" aria-label="20"></a></span>
+<span id="cb589-21"><a href="penanganan-signal.html#cb589-21" aria-label="21"></a>    <span class="cf">if</span> <span class="op">(</span>count <span class="op">==</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb589-22"><a href="penanganan-signal.html#cb589-22" aria-label="22"></a>        printf<span class="op">(</span><span class="st">&quot;Exiting!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>      <span class="co">// Undefined behavior</span></span>
+<span id="cb589-23"><a href="penanganan-signal.html#cb589-23" aria-label="23"></a>        exit<span class="op">(</span><span class="dv">0</span><span class="op">);</span></span>
+<span id="cb589-24"><a href="penanganan-signal.html#cb589-24" aria-label="24"></a>    <span class="op">}</span></span>
+<span id="cb589-25"><a href="penanganan-signal.html#cb589-25" aria-label="25"></a><span class="op">}</span></span>
+<span id="cb589-26"><a href="penanganan-signal.html#cb589-26" aria-label="26"></a></span>
+<span id="cb589-27"><a href="penanganan-signal.html#cb589-27" aria-label="27"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb589-28"><a href="penanganan-signal.html#cb589-28" aria-label="28"></a><span class="op">{</span></span>
+<span id="cb589-29"><a href="penanganan-signal.html#cb589-29" aria-label="29"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span>
+<span id="cb589-30"><a href="penanganan-signal.html#cb589-30" aria-label="30"></a></span>
+<span id="cb589-31"><a href="penanganan-signal.html#cb589-31" aria-label="31"></a>    printf<span class="op">(</span><span class="st">&quot;Try hitting ^C...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb589-32"><a href="penanganan-signal.html#cb589-32" aria-label="32"></a></span>
+<span id="cb589-33"><a href="penanganan-signal.html#cb589-33" aria-label="33"></a>    <span class="cf">for</span><span class="op">(;;);</span>  <span class="co">// Tunggu di sini selamanya</span></span>
+<span id="cb589-34"><a href="penanganan-signal.html#cb589-34" aria-label="34"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Salah satu hal yang akan kamu lihat: di baris 14 kita mereset signal handler. Ini karena C punya opsi untuk mereset signal handler ke perilaku <code>SIG_DFL</code>-nya sebelum menjalankan handler kustommu. Dengan kata lain, handler itu bisa jadi sekali pakai. Jadi hal pertama yang kita lakukan adalah mereset-nya agar signal berikutnya juga tertangani.</p>
+<p>Dalam kasus ini kita mengabaikan nilai kembalian <code>signal()</code>. Kalau sebelumnya kita sudah mengatur handler lain, ia akan mengembalikan pointer ke handler itu, yang bisa kita ambil seperti ini:</p>
+<div class="sourceCode" id="cb590"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb590-1"><a href="penanganan-signal.html#cb590-1" aria-hidden="true" tabindex="-1"></a><span class="co">// old_handler bertipe &quot;pointer ke fungsi yang menerima satu parameter</span></span>
+<span id="cb590-2"><a href="penanganan-signal.html#cb590-2" aria-hidden="true" tabindex="-1"></a><span class="co">// int dan mengembalikan void&quot;:</span></span>
+<span id="cb590-3"><a href="penanganan-signal.html#cb590-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-4"><a href="penanganan-signal.html#cb590-4" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">(*</span>old_handler<span class="op">)(</span><span class="dt">int</span><span class="op">);</span></span>
+<span id="cb590-5"><a href="penanganan-signal.html#cb590-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb590-6"><a href="penanganan-signal.html#cb590-6" aria-hidden="true" tabindex="-1"></a>old_handler <span class="op">=</span> signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span></code></pre></div>
+<p></p>
+<p>Meski begitu, aku tidak yakin ada kasus pemakaian umum untuk ini. Tapi kalau kamu butuh handler lama karena suatu alasan, kamu bisa mendapatkannya dengan cara itu.</p>
+<p>Catatan singkat soal baris 16—itu hanya untuk memberi tahu compiler agar tidak memperingatkan bahwa variabel ini tidak dipakai. Seperti berkata, “Aku tahu aku tidak memakainya; tidak perlu memperingatkanku.”</p>
+<p>Dan terakhir, kamu akan melihat bahwa aku menandai undefined behavior di beberapa tempat. Soal itu dibahas di bagian berikutnya.</p>
+<h2 data-number="29.4" id="apa-yang-sebenarnya-bisa-kita-lakukan"><span class="header-section-number">29.4</span> Apa yang Sebenarnya Bisa Kita Lakukan?</h2>
+<p>Ternyata kita cukup terbatas dalam hal apa yang bisa dan tidak bisa dilakukan di signal handler. Ini salah satu alasan aku bilang kamu tidak perlu repot dengan ini dan sebaiknya memakai penanganan signal OS sendiri (misalnya <code>sigaction()</code> untuk sistem mirip Unix).</p>
+<p>Wikipedia bahkan menyebut satu-satunya hal yang benar-benar portabel adalah memanggil <code>signal()</code> dengan <code>SIG_IGN</code> atau <code>SIG_DFL</code>, itu saja.</p>
+<p>Berikut yang <strong>tidak bisa</strong> kita lakukan secara portabel:</p>
+<p></p>
+<ul>
+<li>Memanggil fungsi standard library apa pun.
+<ul>
+<li>Seperti <code>printf()</code>, misalnya.</li>
+<li>Kurasa mungkin aman memanggil fungsi restartable/reentrant, tapi spesifikasi tidak memberikan kebebasan itu.</li>
+</ul></li>
+<li>Mengambil atau mengisi nilai dari variabel lokal <code>static</code>, file scope, atau thread-local.
+<ul>
+<li>Kecuali kalau itu atomic object yang lock-free atau…</li>
+<li>Kamu menugaskan ke variabel bertipe <code>volatile sig_atomic_t</code>.</li>
+</ul></li>
+</ul>
+<p></p>
+<p>Bagian terakhir itu–<code>sig_atomic_t</code>–adalah tiketmu untuk mengeluarkan data dari signal handler. (Kecuali kamu ingin memakai atomic object lock-free, yang di luar cakupan bagian ini<a href="function-specifier-alignment-specifier-dan-operator.html#fn172" class="footnote-ref" id="fnref172" role="doc-noteref"><sup>172</sup></a>.) Ia adalah tipe integer yang mungkin signed, mungkin tidak. Dan ia dibatasi oleh apa yang bisa dimasukkan ke dalamnya.</p>
+<p>Kamu bisa melihat nilai minimum dan maksimum yang diizinkan pada makro <code>SIG_ATOMIC_MIN</code> dan <code>SIG_ATOMIC_MAX</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn173" class="footnote-ref" id="fnref173" role="doc-noteref"><sup>173</sup></a>.</p>
+<p>Membingungkannya, spesifikasi juga menyatakan kamu tidak boleh merujuk “to any object with static or thread storage duration that is not a lock-free atomic object other than by assigning a value to an object declared as <code>volatile sig_atomic_t</code> […]”</p>
+<p>Menurut pemahamanku, kamu tidak boleh membaca atau menulis apa pun yang bukan atomic object lock-free. Kamu juga boleh menugaskan ke object <code>volatile sig_atomic_t</code>.</p>
+<p>Tapi bolehkah membacanya? Jujur, aku tidak melihat kenapa tidak, hanya saja spesifikasi sangat tegas menyebut menugaskan ke. Tapi kalau kamu harus membacanya dan membuat keputusan berdasarkan nilainya, kamu mungkin membuka peluang terjadinya semacam race condition.</p>
+<p></p>
+<p>Dengan itu dalam pikiran, kita bisa menulis ulang kode “tekan <code>CTRL-C</code> dua kali untuk keluar” agar sedikit lebih portabel, walaupun outputnya jadi lebih singkat.</p>
+<p>Mari kita ubah handler <code>SIGINT</code> kita agar tidak melakukan apa-apa selain menaikkan nilai bertipe <code>volatile sig_atomic_t</code>. Jadi ia akan menghitung berapa kali <code>CTRL-C</code> ditekan.</p>
+<p>Lalu di loop utama, kita periksa apakah penghitung itu melebihi <code>2</code>, dan keluar kalau ya.</p>
+<div class="sourceCode" id="cb591"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb591-1"><a href="penanganan-signal.html#cb591-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb591-2"><a href="penanganan-signal.html#cb591-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
+<span id="cb591-3"><a href="penanganan-signal.html#cb591-3" aria-label="3"></a></span>
+<span id="cb591-4"><a href="penanganan-signal.html#cb591-4" aria-label="4"></a><span class="dt">volatile</span> <span class="dt">sig_atomic_t</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb591-5"><a href="penanganan-signal.html#cb591-5" aria-label="5"></a></span>
+<span id="cb591-6"><a href="penanganan-signal.html#cb591-6" aria-label="6"></a><span class="dt">void</span> sigint_handler<span class="op">(</span><span class="dt">int</span> signum<span class="op">)</span></span>
+<span id="cb591-7"><a href="penanganan-signal.html#cb591-7" aria-label="7"></a><span class="op">{</span></span>
+<span id="cb591-8"><a href="penanganan-signal.html#cb591-8" aria-label="8"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>                    <span class="co">// Peringatan variabel tak terpakai</span></span>
+<span id="cb591-9"><a href="penanganan-signal.html#cb591-9" aria-label="9"></a></span>
+<span id="cb591-10"><a href="penanganan-signal.html#cb591-10" aria-label="10"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span>  <span class="co">// Reset signal handler</span></span>
+<span id="cb591-11"><a href="penanganan-signal.html#cb591-11" aria-label="11"></a></span>
+<span id="cb591-12"><a href="penanganan-signal.html#cb591-12" aria-label="12"></a>    count<span class="op">++;</span>                         <span class="co">// Undefined behavior</span></span>
+<span id="cb591-13"><a href="penanganan-signal.html#cb591-13" aria-label="13"></a><span class="op">}</span></span>
+<span id="cb591-14"><a href="penanganan-signal.html#cb591-14" aria-label="14"></a></span>
+<span id="cb591-15"><a href="penanganan-signal.html#cb591-15" aria-label="15"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb591-16"><a href="penanganan-signal.html#cb591-16" aria-label="16"></a><span class="op">{</span></span>
+<span id="cb591-17"><a href="penanganan-signal.html#cb591-17" aria-label="17"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span>
+<span id="cb591-18"><a href="penanganan-signal.html#cb591-18" aria-label="18"></a></span>
+<span id="cb591-19"><a href="penanganan-signal.html#cb591-19" aria-label="19"></a>    printf<span class="op">(</span><span class="st">&quot;Hit ^C twice to exit.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb591-20"><a href="penanganan-signal.html#cb591-20" aria-label="20"></a></span>
+<span id="cb591-21"><a href="penanganan-signal.html#cb591-21" aria-label="21"></a>    <span class="cf">while</span><span class="op">(</span>count <span class="op">&lt;</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb591-22"><a href="penanganan-signal.html#cb591-22" aria-label="22"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Undefined behavior lagi? Menurutku iya, karena kita harus membaca nilainya untuk menaikkan dan menyimpannya. Thread lain bisa saja mengutak-atik <code>count</code> dan bikin kesal. Tapi pada kasus sederhana ini, tidak ada thread lain yang melakukannya, jadi pelanggaran ini bisa dimaafkan dan kita nikmati saja demonya.</p>
+<p>Kalau kita hanya ingin menunda keluar satu kali penekanan <code>CTRL-C</code>, itu bisa dilakukan tanpa terlalu repot. Tapi penundaan lebih banyak membutuhkan perangkaian fungsi yang konyol.</p>
+<p>Yang akan kita lakukan: tangani sekali, dan handler akan mereset signal ke perilaku bawaannya (yaitu keluar):</p>
+<p></p>
+<div class="sourceCode" id="cb592"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb592-1"><a href="penanganan-signal.html#cb592-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb592-2"><a href="penanganan-signal.html#cb592-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;signal.h&gt;</span></span>
+<span id="cb592-3"><a href="penanganan-signal.html#cb592-3" aria-label="3"></a></span>
+<span id="cb592-4"><a href="penanganan-signal.html#cb592-4" aria-label="4"></a><span class="dt">void</span> sigint_handler<span class="op">(</span><span class="dt">int</span> signum<span class="op">)</span></span>
+<span id="cb592-5"><a href="penanganan-signal.html#cb592-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb592-6"><a href="penanganan-signal.html#cb592-6" aria-label="6"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>signum<span class="op">;</span>                      <span class="co">// Peringatan variabel tak terpakai</span></span>
+<span id="cb592-7"><a href="penanganan-signal.html#cb592-7" aria-label="7"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> SIG_DFL<span class="op">);</span>           <span class="co">// Reset signal handler</span></span>
+<span id="cb592-8"><a href="penanganan-signal.html#cb592-8" aria-label="8"></a><span class="op">}</span></span>
+<span id="cb592-9"><a href="penanganan-signal.html#cb592-9" aria-label="9"></a></span>
+<span id="cb592-10"><a href="penanganan-signal.html#cb592-10" aria-label="10"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb592-11"><a href="penanganan-signal.html#cb592-11" aria-label="11"></a><span class="op">{</span></span>
+<span id="cb592-12"><a href="penanganan-signal.html#cb592-12" aria-label="12"></a>    signal<span class="op">(</span>SIGINT<span class="op">,</span> sigint_handler<span class="op">);</span></span>
+<span id="cb592-13"><a href="penanganan-signal.html#cb592-13" aria-label="13"></a></span>
+<span id="cb592-14"><a href="penanganan-signal.html#cb592-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;Hit ^C twice to exit.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb592-15"><a href="penanganan-signal.html#cb592-15" aria-label="15"></a></span>
+<span id="cb592-16"><a href="penanganan-signal.html#cb592-16" aria-label="16"></a>    <span class="cf">while</span><span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb592-17"><a href="penanganan-signal.html#cb592-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Nanti saat membahas variabel atomic lock-free, kita akan melihat cara memperbaiki versi <code>count</code> (dengan asumsi variabel atomic lock-free tersedia di sistemmu).</p>
+<p>Inilah alasan di awal tadi aku menyarankan melihat sistem signal bawaan OS-mu sebagai alternatif yang kemungkinan lebih unggul.</p>
+<h2 data-number="29.5" id="teman-tidak-membiarkan-temannya-signal"><span class="header-section-number">29.5</span> Teman Tidak Membiarkan Temannya <code>signal()</code></h2>
+<p>Sekali lagi, pakai penanganan signal bawaan OS-mu atau padanannya. Itu tidak ada di spesifikasi, kurang portabel, tapi kemungkinan jauh lebih mumpuni. Lagi pula OS-mu mungkin punya sejumlah signal yang tidak ada di spesifikasi C. Dan menulis kode portabel dengan <code>signal()</code> memang sulit.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="keluar-dari-program.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="variable-length-array-vla.html" rel="next">Next</a></span></div></body>
+</html>

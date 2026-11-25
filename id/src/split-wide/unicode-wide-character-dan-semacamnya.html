@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="locale-dan-internasionalisasi.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="keluar-dari-program.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="27" id="unicode-wide-character-dan-semacamnya"><span class="header-section-number">27</span> Unicode, Wide Character, dan Semacamnya</h1>
+<p></p>
+<p>Sebelum mulai, perlu diketahui bahwa ini area yang masih aktif berkembang di C, karena bahasa ini sedang berusaha melewati, ehm, <em>sakit pertumbuhan</em>. Sekarang C23 sudah terbit, pembaruan di sini kemungkinan akan ada.</p>
+<p>Kebanyakan orang pada dasarnya hanya tertarik pada pertanyaan yang tampak sederhana, “Bagaimana cara memakai character set ini-itu di C?” Kita akan sampai ke sana. Tapi seperti yang akan kita lihat, mungkin itu sudah berfungsi di sistemmu. Atau kamu mungkin harus menyerahkannya ke library pihak ketiga.</p>
+<p>Kita akan membahas banyak hal di bab ini—sebagian tidak bergantung platform, dan sebagian khusus C.</p>
+<p>Mari kita buat garis besarnya dulu:</p>
+<ul>
+<li>Latar belakang Unicode</li>
+<li>Latar belakang character encoding</li>
+<li>Source dan Execution Character Set</li>
+<li>Memakai Unicode dan UTF-8</li>
+<li>Memakai tipe karakter lain seperti <code>wchar_t</code>, <code>char16_t</code>, dan <code>char32_t</code></li>
+</ul>
+<p>Kita mulai menyelam!</p>
+<h2 data-number="27.1" id="apa-itu-unicode"><span class="header-section-number">27.1</span> Apa Itu Unicode?</h2>
+<p>Dulu, di AS dan sebagian besar dunia, populer memakai encoding 7-bit atau 8-bit untuk karakter di memori. Artinya kita hanya bisa punya total 128 atau 256 karakter (termasuk karakter yang tidak bisa dicetak). Itu cukup untuk dunia yang berpusat pada AS, tapi ternyata ada alfabet lain di luar sana—siapa sangka? Bahasa Mandarin punya lebih dari 50.000 karakter, dan itu tidak muat dalam satu byte.</p>
+<p>Maka orang-orang menciptakan berbagai cara alternatif untuk merepresentasikan character set kustom mereka sendiri. Dan itu tidak masalah, tapi berubah menjadi mimpi buruk kompatibilitas.</p>
+<p>Untuk lolos darinya, Unicode diciptakan. Satu character set untuk menguasai semuanya. Ia memanjang sampai tak terhingga (secara efektif) sehingga kita tidak akan pernah kehabisan ruang untuk karakter baru. Ia punya huruf Mandarin, Latin, Yunani, aksara paku, simbol catur, emoji… hampir semuanya, sungguh! Dan terus bertambah dari waktu ke waktu!</p>
+<h2 data-number="27.2" id="code-point"><span class="header-section-number">27.2</span> Code Point</h2>
+<p></p>
+<p>Aku ingin membahas dua konsep di sini. Membingungkan karena keduanya berupa angka… angka berbeda untuk hal yang sama. Tapi sabar dulu ya.</p>
+<p>Mari kita definisikan <em>code point</em> secara longgar sebagai nilai numerik yang mewakili sebuah karakter. (Code point juga bisa mewakili karakter kontrol yang tidak bisa dicetak, tapi anggap saja yang kumaksud adalah sesuatu seperti huruf “B” atau karakter “π”.)</p>
+<p>Setiap code point mewakili satu karakter unik. Dan setiap karakter punya code point numerik unik yang terkait dengannya.</p>
+<p>Misalnya, di Unicode, nilai numerik 66 mewakili “B”, dan 960 mewakili “π”. Pemetaan karakter lain yang bukan Unicode mungkin memakai nilai berbeda, tapi lupakan saja dan fokus pada Unicode, masa depan!</p>
+<p>Jadi itu satu hal: ada angka yang mewakili setiap karakter. Di Unicode, angka-angka ini berkisar dari 0 sampai lebih dari 1 juta.</p>
+<p></p>
+<p>Paham?</p>
+<p>Karena kita akan sedikit membalik meja.</p>
+<h2 data-number="27.3" id="encoding"><span class="header-section-number">27.3</span> Encoding</h2>
+<p></p>
+<p>Kalau kamu ingat, byte 8-bit bisa menampung nilai 0-255, inklusif. Itu bagus untuk “B” yang bernilai 66—muat dalam satu byte. Tapi “π” bernilai 960, dan itu tidak muat dalam satu byte! Kita butuh byte lain. Bagaimana menyimpan semua itu di memori? Atau bagaimana dengan angka yang lebih besar, seperti 195.024? Itu butuh beberapa byte untuk menampungnya.</p>
+<p>Pertanyaan Besarnya: bagaimana angka-angka ini direpresentasikan di memori? Inilah yang kita sebut <em>encoding</em> karakter.</p>
+<p>Jadi kita punya dua hal: yang satu adalah code point yang secara efektif memberi tahu nomor seri sebuah karakter. Dan satu lagi encoding yang memberi tahu bagaimana kita merepresentasikan angka itu di memori.</p>
+<p>Ada banyak encoding. Kamu bisa membuat sendiri sekarang juga, kalau mau<a href="function-specifier-alignment-specifier-dan-operator.html#fn158" class="footnote-ref" id="fnref158" role="doc-noteref"><sup>158</sup></a>. Tapi kita akan melihat beberapa encoding yang benar-benar umum dan dipakai bersama Unicode.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: center;">Encoding</th>
+<th style="text-align: left;">Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">UTF-8</td>
+<td style="text-align: left;">Encoding berorientasi byte yang memakai jumlah byte bervariasi per karakter. Inilah yang sebaiknya dipakai.</td>
+</tr>
+<tr>
+<td style="text-align: center;">UTF-16</td>
+<td style="text-align: left;">Encoding 16-bit per karakter<a href="function-specifier-alignment-specifier-dan-operator.html#fn159" class="footnote-ref" id="fnref159" role="doc-noteref"><sup>159</sup></a>.</td>
+</tr>
+<tr>
+<td style="text-align: center;">UTF-32</td>
+<td style="text-align: left;">Encoding 32-bit per karakter.</td>
+</tr>
+</tbody>
+</table>
+<p>Pada UTF-16 dan UTF-32, urutan byte penting, jadi kamu mungkin melihat UTF-16BE untuk big-endian dan UTF-16LE untuk little-endian. Sama untuk UTF-32. Secara teknis, kalau tidak disebutkan, kamu harus mengasumsikan big-endian. Tapi karena Windows memakai UTF-16 secara luas dan little-endian, kadang itulah yang diasumsikan<a href="function-specifier-alignment-specifier-dan-operator.html#fn160" class="footnote-ref" id="fnref160" role="doc-noteref"><sup>160</sup></a>.</p>
+<p>Mari kita lihat beberapa contoh. Aku akan menulis nilainya dalam hex karena itu tepat dua digit per byte 8-bit, dan memudahkan kita melihat bagaimana susunannya di memori.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Karakter</th>
+<th style="text-align: center;">Code Point</th>
+<th style="text-align: center;">UTF-16BE</th>
+<th style="text-align: center;">UTF-32BE</th>
+<th style="text-align: center;">UTF-16LE</th>
+<th style="text-align: center;">UTF-32LE</th>
+<th style="text-align: center;">UTF-8</th>
+<th style="text-align: center;"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>A</code></td>
+<td style="text-align: center;">41</td>
+<td style="text-align: center;">0041</td>
+<td style="text-align: center;">00000041</td>
+<td style="text-align: center;">4100</td>
+<td style="text-align: center;">41000000</td>
+<td style="text-align: center;">41</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>B</code></td>
+<td style="text-align: center;">42</td>
+<td style="text-align: center;">0042</td>
+<td style="text-align: center;">00000042</td>
+<td style="text-align: center;">4200</td>
+<td style="text-align: center;">42000000</td>
+<td style="text-align: center;">42</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>~</code></td>
+<td style="text-align: center;">7E</td>
+<td style="text-align: center;">007E</td>
+<td style="text-align: center;">0000007E</td>
+<td style="text-align: center;">7E00</td>
+<td style="text-align: center;">7E000000</td>
+<td style="text-align: center;">7E</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>π</code></td>
+<td style="text-align: center;">3C0</td>
+<td style="text-align: center;">03C0</td>
+<td style="text-align: center;">000003C0</td>
+<td style="text-align: center;">C003</td>
+<td style="text-align: center;">C0030000</td>
+<td style="text-align: center;">CF80</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>€</code></td>
+<td style="text-align: center;">20AC</td>
+<td style="text-align: center;">20AC</td>
+<td style="text-align: center;">000020AC</td>
+<td style="text-align: center;">AC20</td>
+<td style="text-align: center;">AC200000</td>
+<td style="text-align: center;">E282AC</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>Cari pola di dalamnya. Perhatikan bahwa UTF-16BE dan UTF-32BE hanyalah code point yang direpresentasikan langsung sebagai nilai 16- dan 32-bit<a href="function-specifier-alignment-specifier-dan-operator.html#fn161" class="footnote-ref" id="fnref161" role="doc-noteref"><sup>161</sup></a>.</p>
+<p> </p>
+<p>Little-endian sama saja, hanya saja urutan byte-nya little-endian.</p>
+<p></p>
+<p>Lalu ada UTF-8 di bagian akhir. Pertama, mungkin kamu memperhatikan bahwa code point satu byte direpresentasikan sebagai satu byte. Itu bagus. Kamu mungkin juga memperhatikan bahwa code point yang berbeda memakai jumlah byte yang berbeda. Inilah encoding dengan lebar bervariasi.</p>
+<p>Jadi begitu kita melewati nilai tertentu, UTF-8 mulai memakai byte tambahan untuk menyimpan nilainya. Dan byte-byte itu tampaknya tidak berkorelasi dengan nilai code point.</p>
+<p><a href="https://en.wikipedia.org/wiki/UTF-8">Detail encoding UTF-8</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn162" class="footnote-ref" id="fnref162" role="doc-noteref"><sup>162</sup></a> di luar cakupan panduan ini, tapi cukup diketahui bahwa ia memakai jumlah byte yang bervariasi per code point, dan nilai byte itu tidak cocok dengan code point <em>kecuali untuk 128 code point pertama</em>. Kalau kamu benar-benar ingin belajar lebih jauh, <a href="https://www.youtube.com/watch?v=MijmeoH9LT4">Computerphile punya video UTF-8 yang bagus bersama Tom Scott</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn163" class="footnote-ref" id="fnref163" role="doc-noteref"><sup>163</sup></a>.</p>
+<p>Soal terakhir itu hal yang keren tentang Unicode dan UTF-8 dari sudut pandang Amerika Utara: ia kompatibel mundur dengan encoding ASCII 7-bit! Jadi kalau kamu terbiasa dengan ASCII, UTF-8 sama saja! Setiap dokumen ber-encoding ASCII juga ber-encoding UTF-8! (Tapi tidak sebaliknya, tentu saja.)</p>
+<p>Kemungkinan poin terakhir itulah, lebih dari yang lain, yang mendorong UTF-8 menguasai dunia.</p>
+<p> </p>
+<h2 data-number="27.4" id="src-exec-charset"><span class="header-section-number">27.4</span> Source dan Execution Character Set</h2>
+<p></p>
+<p>Saat memprogram di C, ada (setidaknya) tiga character set yang berperan:</p>
+<ul>
+<li>Yang dipakai kodemu saat tersimpan di disk.</li>
+<li>Yang diterjemahkan compiler dari itu tepat saat kompilasi dimulai (<em>source character set</em>). Ini mungkin sama dengan yang di disk, mungkin juga tidak.</li>
+<li>Yang menjadi tujuan terjemahan source character set oleh compiler untuk eksekusi (<em>execution character set</em>). Ini mungkin sama dengan source character set, mungkin juga tidak.</li>
+</ul>
+<p>Compiler-mu kemungkinan punya opsi untuk memilih character set ini saat build.</p>
+<p></p>
+<p>Basic character set untuk source maupun execution berisi karakter-karakter berikut:</p>
+<div class="sourceCode" id="cb554"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb554-1"><a href="unicode-wide-character-dan-semacamnya.html#cb554-1" aria-hidden="true" tabindex="-1"></a>A B C D E F G H I J K L M</span>
+<span id="cb554-2"><a href="unicode-wide-character-dan-semacamnya.html#cb554-2" aria-hidden="true" tabindex="-1"></a>N O P Q R S T U V W X Y Z</span>
+<span id="cb554-3"><a href="unicode-wide-character-dan-semacamnya.html#cb554-3" aria-hidden="true" tabindex="-1"></a>a b c d e f g h i j k l m</span>
+<span id="cb554-4"><a href="unicode-wide-character-dan-semacamnya.html#cb554-4" aria-hidden="true" tabindex="-1"></a>n o p q r s t u v w x y z</span>
+<span id="cb554-5"><a href="unicode-wide-character-dan-semacamnya.html#cb554-5" aria-hidden="true" tabindex="-1"></a>0 1 2 3 4 5 6 7 8 9</span>
+<span id="cb554-6"><a href="unicode-wide-character-dan-semacamnya.html#cb554-6" aria-hidden="true" tabindex="-1"></a>! &quot; # % &amp; &#39; ( ) * + , - . / :</span>
+<span id="cb554-7"><a href="unicode-wide-character-dan-semacamnya.html#cb554-7" aria-hidden="true" tabindex="-1"></a>; &lt; = &gt; ? [ \ ] ^ _ { | } ~</span>
+<span id="cb554-8"><a href="unicode-wide-character-dan-semacamnya.html#cb554-8" aria-hidden="true" tabindex="-1"></a>space tab vertical-tab</span>
+<span id="cb554-9"><a href="unicode-wide-character-dan-semacamnya.html#cb554-9" aria-hidden="true" tabindex="-1"></a>form-feed end-of-line</span></code></pre></div>
+<p>Itulah karakter yang bisa kamu pakai di source dan tetap 100% portabel.</p>
+<p>Execution character set akan punya tambahan karakter untuk alert (bell/flash), backspace, carriage return, dan newline.</p>
+<p>Tapi kebanyakan orang tidak sampai seekstrem itu dan dengan bebas memakai extended character set di source dan executable, terutama sekarang ketika Unicode dan UTF-8 makin umum. Maksudnya, basic character set bahkan tidak mengizinkan <code>@</code>, <code>$</code>, atau <code>`</code>!</p>
+<p>Perlu dicatat, menulis karakter Unicode hanya dengan basic character set itu merepotkan (walaupun bisa dengan escape sequence).</p>
+<p> </p>
+<h2 data-number="27.5" id="unicode-in-c"><span class="header-section-number">27.5</span> Unicode di C</h2>
+<p>Sebelum membahas encoding di C, mari kita bahas Unicode dari sudut pandang code point dulu. Ada cara di C untuk menentukan karakter Unicode dan karakter-karakter ini akan diterjemahkan compiler ke execution character set<a href="function-specifier-alignment-specifier-dan-operator.html#fn164" class="footnote-ref" id="fnref164" role="doc-noteref"><sup>164</sup></a>.</p>
+<p>Jadi bagaimana caranya?</p>
+<p>Bagaimana dengan simbol euro, code point 0x20AC. (Ditulis dalam hex karena kedua cara merepresentasikannya di C membutuhkan hex.) Bagaimana kita bisa memasukkannya ke kode C kita?</p>
+<p> Pakai escape <code>\u</code> untuk memasukkannya ke string, mis. <code>"\u20AC"</code> (huruf besar/kecil pada hex tidak berpengaruh). Kamu harus menaruh <strong>tepat empat</strong> digit hex setelah <code>\u</code>, dengan nol di depan kalau perlu.</p>
+<p>Berikut contohnya:</p>
+<div class="sourceCode" id="cb555"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb555-1"><a href="unicode-wide-character-dan-semacamnya.html#cb555-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\u20AC</span><span class="st">1.23&quot;</span><span class="op">;</span></span>
+<span id="cb555-2"><a href="unicode-wide-character-dan-semacamnya.html#cb555-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb555-3"><a href="unicode-wide-character-dan-semacamnya.html#cb555-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// €1.23</span></span></code></pre></div>
+<p></p>
+<p>Jadi <code>\u</code> berfungsi untuk code point Unicode 16-bit, tapi bagaimana dengan yang lebih besar dari 16 bit? Untuk itu kita butuh huruf kapital: <code>\U</code>.</p>
+<p>Misalnya:</p>
+<div class="sourceCode" id="cb556"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb556-1"><a href="unicode-wide-character-dan-semacamnya.html#cb556-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\U0001D4D1</span><span class="st">&quot;</span><span class="op">;</span></span>
+<span id="cb556-2"><a href="unicode-wide-character-dan-semacamnya.html#cb556-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb556-3"><a href="unicode-wide-character-dan-semacamnya.html#cb556-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// Mencetak huruf matematika &quot;B&quot;</span></span></code></pre></div>
+<p>Sama seperti <code>\u</code>, hanya dengan 32 bit alih-alih 16. Keduanya setara:</p>
+<div class="sourceCode" id="cb557"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb557-1"><a href="unicode-wide-character-dan-semacamnya.html#cb557-1" aria-hidden="true" tabindex="-1"></a>\u03C0</span>
+<span id="cb557-2"><a href="unicode-wide-character-dan-semacamnya.html#cb557-2" aria-hidden="true" tabindex="-1"></a>\U000003C0</span></code></pre></div>
+<p> </p>
+<p>Sekali lagi, ini diterjemahkan ke execution character set saat kompilasi. Mereka merepresentasikan code point Unicode, bukan encoding tertentu. Selain itu, kalau sebuah code point Unicode tidak bisa direpresentasikan di execution character set, compiler boleh melakukan apa saja terhadapnya.</p>
+<p>Nah, mungkin kamu bertanya kenapa tidak langsung begini:</p>
+<div class="sourceCode" id="cb558"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb558-1"><a href="unicode-wide-character-dan-semacamnya.html#cb558-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;€1.23&quot;</span><span class="op">;</span></span>
+<span id="cb558-2"><a href="unicode-wide-character-dan-semacamnya.html#cb558-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb558-3"><a href="unicode-wide-character-dan-semacamnya.html#cb558-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// €1.23</span></span></code></pre></div>
+<p>Dan kemungkinan besar bisa, dengan compiler modern. Source character set akan diterjemahkan oleh compiler ke execution character set untukmu. Tapi compiler bebas muntah kalau menemukan karakter yang tidak termasuk dalam extended character set-nya, dan simbol € jelas tidak ada di basic character set.</p>
+<p> </p>
+<p>Peringatan dari spesifikasi: kamu tidak boleh memakai <code>\u</code> atau <code>\U</code> untuk meng-encode code point di bawah 0xA0 kecuali 0x24 (<code>$</code>), 0x40 (<code>@</code>), dan 0x60 (<code>`</code>)—ya, itulah tiga serangkai tanda baca umum yang tidak ada di basic character set. Tampaknya pembatasan ini dilonggarkan di versi spesifikasi yang akan datang.</p>
+<p> </p>
+<p>Terakhir, kamu juga bisa memakai ini di identifier dalam kodemu, dengan beberapa batasan. Tapi aku tidak ingin membahasnya di sini. Bab ini fokus pada penanganan string.</p>
+<p>Dan itu saja soal Unicode di C (kecuali encoding).</p>
+<h2 data-number="27.6" id="utf8-quick"><span class="header-section-number">27.6</span> Catatan Singkat tentang UTF-8 Sebelum Kita Terjun ke Semak-Semak</h2>
+<p></p>
+<p>Bisa jadi file source di disk, extended source character, dan extended execution character-mu semuanya berformat UTF-8. Dan library yang kamu pakai mengharapkan UTF-8. Inilah masa depan gemilang dengan UTF-8 di mana-mana.</p>
+<p>Kalau begitu, dan kamu tidak keberatan tidak portabel ke sistem yang tidak seperti itu, jalankan saja. Taruh karakter Unicode di source dan datamu sesukamu. Pakai string C biasa dan berbahagialah.</p>
+<p>Banyak hal akan langsung berfungsi (walaupun tidak portabel) karena string UTF-8 aman diakhiri NUL seperti string C lainnya. Tapi mungkin kehilangan portabilitas demi penanganan karakter yang lebih mudah adalah pertukaran yang sepadan bagimu.</p>
+<p>Meski begitu, ada beberapa peringatan:</p>
+<ul>
+<li><p>Fungsi seperti <code>strlen()</code> melaporkan jumlah byte dalam string, belum tentu jumlah karakternya. (Fungsi <code>mbstowcs()</code> mengembalikan jumlah karakter dalam string ketika kamu mengonversinya menjadi wide character. POSIX memperluas ini sehingga kamu bisa mengoper <code>NULL</code> sebagai argumen pertama kalau hanya ingin jumlah karakter.)</p></li>
+<li><p>Yang berikut tidak akan bekerja dengan benar pada karakter lebih dari satu byte: <code>strtok()</code>, <code>strchr()</code> (pakai <code>strstr()</code> sebagai gantinya), fungsi tipe <code>strspn()</code>, <code>toupper()</code>, <code>tolower()</code>, fungsi tipe <code>isalpha()</code>, dan mungkin lebih banyak lagi. Waspadai apa pun yang beroperasi pada byte.</p></li>
+<li><p>Varian <code>printf()</code> menyediakan cara untuk hanya mencetak sebagian byte dari sebuah string<a href="function-specifier-alignment-specifier-dan-operator.html#fn165" class="footnote-ref" id="fnref165" role="doc-noteref"><sup>165</sup></a>. Pastikan kamu mencetak jumlah byte yang benar agar berakhir di batas karakter.</p></li>
+<li><p>Kalau kamu ingin <code>malloc()</code> ruang untuk sebuah string, atau mendeklarasikan array <code>char</code> untuknya, ketahuilah bahwa ukuran maksimumnya bisa lebih besar dari yang kamu duga. Setiap karakter bisa memakai sampai <code>MB_LEN_MAX</code> byte (dari <code>&lt;limits.h&gt;</code>)—kecuali karakter di basic character set yang dijamin satu byte.</p></li>
+</ul>
+<p>Dan mungkin masih ada yang lain yang belum kutemukan. Kabari aku kalau ada jebakan lain di luar sana…</p>
+<p></p>
+<h2 data-number="27.7" id="berbagai-tipe-karakter"><span class="header-section-number">27.7</span> Berbagai Tipe Karakter</h2>
+<p>Aku ingin memperkenalkan lebih banyak tipe karakter. Kita sudah terbiasa dengan <code>char</code>, kan?</p>
+<p>Tapi itu terlalu mudah. Mari kita buat semuanya jauh lebih sulit! Hore!</p>
+<h3 data-number="27.7.1" id="karakter-multibyte"><span class="header-section-number">27.7.1</span> Karakter Multibyte</h3>
+<p></p>
+<p>Pertama-tama, aku ingin mengubah cara berpikirmu tentang apa itu string (array <code>char</code>). Ini adalah <em>string multibyte</em> yang terdiri dari <em>karakter multibyte</em>.</p>
+<p>Betul—string karakter biasa yang kamu kenal itu multibyte. Ketika seseorang bilang “string C”, maksudnya “string multibyte C”.</p>
+<p>Bahkan kalau sebuah karakter dalam string hanya satu byte, atau kalau sebuah string hanya terdiri dari karakter tunggal, ia tetap dikenal sebagai string multibyte.</p>
+<p>Misalnya:</p>
+<div class="sourceCode" id="cb559"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb559-1"><a href="unicode-wide-character-dan-semacamnya.html#cb559-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c<span class="op">[</span><span class="dv">128</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span>  <span class="co">// String multibyte</span></span></code></pre></div>
+<p>Maksudnya, sebuah karakter yang tidak ada di basic character set bisa tersusun dari beberapa byte. Sampai sebanyak <code>MB_LEN_MAX</code> (dari <code>&lt;limits.h&gt;</code>). Memang di layar hanya tampak seperti satu karakter, tapi ia bisa berupa beberapa byte.</p>
+<p>Nilai Unicode juga bisa dimasukkan ke sana, seperti yang kita lihat tadi:</p>
+<div class="sourceCode" id="cb560"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb560-1"><a href="unicode-wide-character-dan-semacamnya.html#cb560-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\u20AC</span><span class="st">1.23&quot;</span><span class="op">;</span></span>
+<span id="cb560-2"><a href="unicode-wide-character-dan-semacamnya.html#cb560-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb560-3"><a href="unicode-wide-character-dan-semacamnya.html#cb560-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// €1.23</span></span></code></pre></div>
+<p>Tapi di sini kita mulai masuk ke keanehan, karena lihat ini:</p>
+<p></p>
+<div class="sourceCode" id="cb561"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb561-1"><a href="unicode-wide-character-dan-semacamnya.html#cb561-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;</span><span class="sc">\u20AC</span><span class="st">1.23&quot;</span><span class="op">;</span>  <span class="co">// €1.23</span></span>
+<span id="cb561-2"><a href="unicode-wide-character-dan-semacamnya.html#cb561-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb561-3"><a href="unicode-wide-character-dan-semacamnya.html#cb561-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> strlen<span class="op">(</span>s<span class="op">));</span>  <span class="co">// 7!</span></span></code></pre></div>
+<p>Panjang string <code>"€1.23"</code> adalah <code>7</code>?! Ya! Setidaknya di sistemku, ya! Ingat bahwa <code>strlen()</code> mengembalikan jumlah byte dalam string, bukan jumlah karakter. (Saat membahas “wide character” nanti, kita akan melihat cara mendapat jumlah karakter dalam string.)</p>
+<p></p>
+<p>Perhatikan bahwa walaupun C mengizinkan konstanta <code>char</code> multibyte individual (berbeda dari <code>char*</code>), perilakunya bervariasi menurut implementasi dan compiler-mu mungkin memperingatkannya.</p>
+<p>GCC, misalnya, memperingatkan soal multi-character character constant pada dua baris berikut (dan, di sistemku, mencetak encoding UTF-8-nya):</p>
+<div class="sourceCode" id="cb562"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb562-1"><a href="unicode-wide-character-dan-semacamnya.html#cb562-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="ch">&#39;€&#39;</span><span class="op">);</span></span>
+<span id="cb562-2"><a href="unicode-wide-character-dan-semacamnya.html#cb562-2" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%x\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="ch">&#39;\</span><span class="er">u20ac</span><span class="ch">&#39;</span><span class="op">);</span></span></code></pre></div>
+<p></p>
+<h3 data-number="27.7.2" id="wide-characters"><span class="header-section-number">27.7.2</span> Wide Character</h3>
+<p></p>
+<p>Kalau bukan karakter multibyte, berarti kamu <em>wide character</em>.</p>
+<p>Wide character adalah satu nilai yang bisa mewakili secara unik karakter apa pun di locale saat ini. Analog dengan code point Unicode. Tapi bisa jadi bukan. Atau bisa jadi iya.</p>
+<p>Pada dasarnya, kalau string karakter multibyte adalah array byte, string wide character adalah array <em>karakter</em>. Jadi kamu bisa mulai berpikir per karakter, bukan per byte (yang terakhir jadi berantakan ketika karakter mulai memakai jumlah byte yang bervariasi).</p>
+<p></p>
+<p>Wide character bisa direpresentasikan oleh sejumlah tipe, tapi yang paling menonjol adalah <code>wchar_t</code>. Ia yang utama. Mirip <code>char</code>, hanya saja lebar.</p>
+<p>Mungkin kamu bertanya-tanya, kalau kita tidak bisa tahu apakah itu Unicode atau bukan, bagaimana itu memberi banyak fleksibilitas dalam menulis kode? <code>wchar_t</code> membuka sebagian pintu itu, karena ada sekumpulan fungsi lengkap yang bisa dipakai untuk menangani string <code>wchar_t</code> (seperti mengambil panjang, dan sebagainya) tanpa peduli encoding-nya.</p>
+<h2 data-number="27.8" id="memakai-wide-character-dan-wchar_t"><span class="header-section-number">27.8</span> Memakai Wide Character dan <code>wchar_t</code></h2>
+<p>Saatnya tipe baru: <code>wchar_t</code>. Ini tipe wide character utama. Ingat bahwa <code>char</code> hanya satu byte? Dan satu byte mungkin tidak cukup untuk merepresentasikan semua karakter? Nah, yang ini cukup.</p>
+<p>Untuk memakai <code>wchar_t</code>, include <code>&lt;wchar.h&gt;</code>.</p>
+<p>Berapa byte ukurannya? Tidak sepenuhnya jelas. Bisa 16 bit. Bisa 32 bit.</p>
+<p>Tapi tunggu, katamu—kalau hanya 16 bit, ia tidak cukup besar untuk menampung semua code point Unicode, kan? Benar—memang tidak. Spesifikasi tidak mewajibkannya. Ia hanya harus bisa merepresentasikan semua karakter di locale saat ini.</p>
+<p>Ini bisa menyebabkan masalah dengan Unicode pada platform yang <code>wchar_t</code>-nya 16-bit (ehem—Windows). Tapi itu di luar cakupan panduan ini.</p>
+<p></p>
+<p>Kamu bisa mendeklarasikan string atau karakter bertipe ini dengan awalan <code>L</code>, dan mencetaknya dengan format specifier <code>%ls</code> (“ell ess”). Atau mencetak satu <code>wchar_t</code> dengan <code>%lc</code>.</p>
+<div class="sourceCode" id="cb563"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb563-1"><a href="unicode-wide-character-dan-semacamnya.html#cb563-1" aria-hidden="true" tabindex="-1"></a><span class="dt">wchar_t</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">L&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb563-2"><a href="unicode-wide-character-dan-semacamnya.html#cb563-2" aria-hidden="true" tabindex="-1"></a><span class="dt">wchar_t</span> c <span class="op">=</span> <span class="ch">L&#39;B&#39;</span><span class="op">;</span></span>
+<span id="cb563-3"><a href="unicode-wide-character-dan-semacamnya.html#cb563-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb563-4"><a href="unicode-wide-character-dan-semacamnya.html#cb563-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%ls</span><span class="st"> </span><span class="sc">%lc\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">,</span> c<span class="op">);</span></span></code></pre></div>
+<p></p>
+<p>Nah—apakah karakter-karakter itu disimpan sebagai code point Unicode atau tidak? Tergantung implementasi. Tapi kamu bisa mengujinya dengan makro <code>__STDC_ISO_10646__</code>. Kalau makro ini terdefinisi, jawabannya, “Itu Unicode!”</p>
+<p>Lebih rinci, nilai di makro itu adalah integer berbentuk <code>yyyymm</code> yang memberi tahu standar Unicode mana yang bisa kamu andalkan—yang berlaku pada tanggal itu.</p>
+<p>Tapi bagaimana cara memakainya?</p>
+<h3 data-number="27.8.1" id="konversi-multibyte-ke-wchar_t"><span class="header-section-number">27.8.1</span> Konversi Multibyte ke <code>wchar_t</code></h3>
+<p>Jadi bagaimana kita berpindah dari string standar berorientasi byte ke string lebar berorientasi karakter dan sebaliknya?</p>
+<p>Kita bisa memakai beberapa fungsi konversi string untuk mewujudkannya.</p>
+<p>Pertama, beberapa konvensi penamaan yang akan kamu lihat pada fungsi-fungsi ini:</p>
+<ul>
+<li><code>mb</code>: multibyte</li>
+<li><code>wc</code>: wide character</li>
+<li><code>mbs</code>: string multibyte</li>
+<li><code>wcs</code>: string wide character</li>
+</ul>
+<p>Jadi kalau kita ingin mengonversi string multibyte menjadi string wide character, kita bisa memanggil <code>mbstowcs()</code>. Dan sebaliknya: <code>wcstombs()</code>.</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Fungsi Konversi</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mbtowc()</code></td>
+<td>Mengonversi karakter multibyte menjadi wide character.</td>
+</tr>
+<tr>
+<td><code>wctomb()</code></td>
+<td>Mengonversi wide character menjadi karakter multibyte.</td>
+</tr>
+<tr>
+<td><code>mbstowcs()</code></td>
+<td>Mengonversi string multibyte menjadi wide string.</td>
+</tr>
+<tr>
+<td><code>wcstombs()</code></td>
+<td>Mengonversi wide string menjadi string multibyte.</td>
+</tr>
+</tbody>
+</table>
+<p>Mari kita buat demo singkat yang mengonversi string multibyte menjadi string wide character, lalu membandingkan panjang kedua string itu dengan fungsi masing-masing.</p>
+<p></p>
+<div class="sourceCode" id="cb564"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb564-1"><a href="unicode-wide-character-dan-semacamnya.html#cb564-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb564-2"><a href="unicode-wide-character-dan-semacamnya.html#cb564-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb564-3"><a href="unicode-wide-character-dan-semacamnya.html#cb564-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;wchar.h&gt;</span></span>
+<span id="cb564-4"><a href="unicode-wide-character-dan-semacamnya.html#cb564-4" aria-label="4"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb564-5"><a href="unicode-wide-character-dan-semacamnya.html#cb564-5" aria-label="5"></a><span class="pp">#include </span><span class="im">&lt;locale.h&gt;</span></span>
+<span id="cb564-6"><a href="unicode-wide-character-dan-semacamnya.html#cb564-6" aria-label="6"></a></span>
+<span id="cb564-7"><a href="unicode-wide-character-dan-semacamnya.html#cb564-7" aria-label="7"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb564-8"><a href="unicode-wide-character-dan-semacamnya.html#cb564-8" aria-label="8"></a><span class="op">{</span></span>
+<span id="cb564-9"><a href="unicode-wide-character-dan-semacamnya.html#cb564-9" aria-label="9"></a>    <span class="co">// Keluar dari locale C ke locale yang kemungkinan punya simbol euro</span></span>
+<span id="cb564-10"><a href="unicode-wide-character-dan-semacamnya.html#cb564-10" aria-label="10"></a>    setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
+<span id="cb564-11"><a href="unicode-wide-character-dan-semacamnya.html#cb564-11" aria-label="11"></a></span>
+<span id="cb564-12"><a href="unicode-wide-character-dan-semacamnya.html#cb564-12" aria-label="12"></a>    <span class="co">// String multibyte asli dengan simbol euro (code point Unicode 20ac)</span></span>
+<span id="cb564-13"><a href="unicode-wide-character-dan-semacamnya.html#cb564-13" aria-label="13"></a>    <span class="dt">char</span> <span class="op">*</span>mb_string <span class="op">=</span> <span class="st">&quot;The cost is </span><span class="sc">\u20ac</span><span class="st">1.23&quot;</span><span class="op">;</span>  <span class="co">// €1.23</span></span>
+<span id="cb564-14"><a href="unicode-wide-character-dan-semacamnya.html#cb564-14" aria-label="14"></a>    <span class="dt">size_t</span> mb_len <span class="op">=</span> strlen<span class="op">(</span>mb_string<span class="op">);</span></span>
+<span id="cb564-15"><a href="unicode-wide-character-dan-semacamnya.html#cb564-15" aria-label="15"></a></span>
+<span id="cb564-16"><a href="unicode-wide-character-dan-semacamnya.html#cb564-16" aria-label="16"></a>    <span class="co">// Array wide character yang akan menampung string hasil konversi</span></span>
+<span id="cb564-17"><a href="unicode-wide-character-dan-semacamnya.html#cb564-17" aria-label="17"></a>    <span class="dt">wchar_t</span> wc_string<span class="op">[</span><span class="dv">128</span><span class="op">];</span>  <span class="co">// Menampung sampai 128 wide character</span></span>
+<span id="cb564-18"><a href="unicode-wide-character-dan-semacamnya.html#cb564-18" aria-label="18"></a></span>
+<span id="cb564-19"><a href="unicode-wide-character-dan-semacamnya.html#cb564-19" aria-label="19"></a>    <span class="co">// Konversi string MB ke WC; ini mengembalikan jumlah wide char</span></span>
+<span id="cb564-20"><a href="unicode-wide-character-dan-semacamnya.html#cb564-20" aria-label="20"></a>    <span class="dt">size_t</span> wc_len <span class="op">=</span> mbstowcs<span class="op">(</span>wc_string<span class="op">,</span> mb_string<span class="op">,</span> <span class="dv">128</span><span class="op">);</span></span>
+<span id="cb564-21"><a href="unicode-wide-character-dan-semacamnya.html#cb564-21" aria-label="21"></a></span>
+<span id="cb564-22"><a href="unicode-wide-character-dan-semacamnya.html#cb564-22" aria-label="22"></a>    <span class="co">// Cetak hasil--perhatikan %ls untuk string wide char</span></span>
+<span id="cb564-23"><a href="unicode-wide-character-dan-semacamnya.html#cb564-23" aria-label="23"></a>    printf<span class="op">(</span><span class="st">&quot;multibyte: </span><span class="sc">\&quot;%s\&quot;</span><span class="st"> (</span><span class="sc">%zu</span><span class="st"> bytes)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> mb_string<span class="op">,</span> mb_len<span class="op">);</span></span>
+<span id="cb564-24"><a href="unicode-wide-character-dan-semacamnya.html#cb564-24" aria-label="24"></a>    printf<span class="op">(</span><span class="st">&quot;wide char: </span><span class="sc">\&quot;%ls\&quot;</span><span class="st"> (</span><span class="sc">%zu</span><span class="st"> characters)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> wc_string<span class="op">,</span> wc_len<span class="op">);</span></span>
+<span id="cb564-25"><a href="unicode-wide-character-dan-semacamnya.html#cb564-25" aria-label="25"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Di sistemku, ini mengeluarkan:</p>
+<div class="sourceCode" id="cb565"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb565-1"><a href="unicode-wide-character-dan-semacamnya.html#cb565-1" aria-hidden="true" tabindex="-1"></a>multibyte: &quot;The cost is €1.23&quot; (19 bytes)</span>
+<span id="cb565-2"><a href="unicode-wide-character-dan-semacamnya.html#cb565-2" aria-hidden="true" tabindex="-1"></a>wide char: &quot;The cost is €1.23&quot; (17 characters)</span></code></pre></div>
+<p>(Jumlah byte di sistemmu mungkin berbeda tergantung locale.)</p>
+<p>Satu hal menarik: <code>mbstowcs()</code>, selain mengonversi string multibyte menjadi wide, mengembalikan panjang (dalam karakter) string wide character itu. Pada sistem yang patuh POSIX, kamu bisa memanfaatkan mode khusus ketika ia <em>hanya</em> mengembalikan panjang-dalam-karakter dari string multibyte tertentu: cukup oper <code>NULL</code> untuk tujuan, dan <code>0</code> untuk jumlah karakter maksimum yang dikonversi (nilai ini diabaikan).</p>
+<p>(Pada kode di bawah, aku memakai extended source character set milikku—kamu mungkin harus menggantinya dengan escape <code>\u</code>.)</p>
+<div class="sourceCode" id="cb566"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb566-1"><a href="unicode-wide-character-dan-semacamnya.html#cb566-1" aria-hidden="true" tabindex="-1"></a>setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
+<span id="cb566-2"><a href="unicode-wide-character-dan-semacamnya.html#cb566-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb566-3"><a href="unicode-wide-character-dan-semacamnya.html#cb566-3" aria-hidden="true" tabindex="-1"></a><span class="co">// String berikut punya 7 karakter</span></span>
+<span id="cb566-4"><a href="unicode-wide-character-dan-semacamnya.html#cb566-4" aria-hidden="true" tabindex="-1"></a><span class="dt">size_t</span> len_in_chars <span class="op">=</span> mbstowcs<span class="op">(</span>NULL<span class="op">,</span> <span class="st">&quot;§¶°±π€•&quot;</span><span class="op">,</span> <span class="dv">0</span><span class="op">);</span></span>
+<span id="cb566-5"><a href="unicode-wide-character-dan-semacamnya.html#cb566-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb566-6"><a href="unicode-wide-character-dan-semacamnya.html#cb566-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu</span><span class="st">&quot;</span><span class="op">,</span> len_in_chars<span class="op">);</span>  <span class="co">// 7</span></span></code></pre></div>
+<p></p>
+<p>Sekali lagi, itu ekstensi POSIX yang tidak portabel.</p>
+<p>Dan, tentu saja, kalau ingin mengonversi ke arah sebaliknya, pakai <code>wcstombs()</code>.</p>
+<h2 data-number="27.9" id="fungsionalitas-wide-character"><span class="header-section-number">27.9</span> Fungsionalitas Wide Character</h2>
+<p>Setelah masuk ke wilayah wide character, kita punya berbagai fungsionalitas yang bisa dipakai. Aku hanya akan meringkas sejumlah fungsi di sini, tapi pada dasarnya yang ada adalah versi wide character dari fungsi string multibyte yang sudah kita kenal. (Misalnya, kita kenal <code>strlen()</code> untuk string multibyte; ada <code>wcslen()</code> untuk string wide character.)</p>
+<h3 data-number="27.9.1" id="wint_t"><span class="header-section-number">27.9.1</span> <code>wint_t</code></h3>
+<p></p>
+<p>Banyak fungsi ini memakai <code>wint_t</code> untuk menyimpan karakter tunggal, baik yang dioper maupun yang dikembalikan.</p>
+<p>Secara sifat ia terkait dengan <code>wchar_t</code>. <code>wint_t</code> adalah integer yang bisa merepresentasikan semua nilai di extended character set, dan juga karakter end-of-file khusus, <code>WEOF</code>.</p>
+<p></p>
+<p>Ini dipakai oleh sejumlah fungsi wide character yang berorientasi satu karakter.</p>
+<h3 data-number="27.9.2" id="io-stream-orientation"><span class="header-section-number">27.9.2</span> Orientasi I/O Stream</h3>
+<p></p>
+<p>Ringkasnya: jangan mencampur fungsi berorientasi byte (seperti <code>fprintf()</code>) dengan fungsi berorientasi wide (seperti <code>fwprintf()</code>). Putuskan apakah sebuah stream akan berorientasi byte atau wide dan tetaplah memakai jenis fungsi I/O itu.</p>
+<p>Lebih rinci: stream bisa berorientasi byte atau wide. Saat sebuah stream pertama kali dibuat, ia belum punya orientasi, tapi pembacaan atau penulisan pertama akan menetapkan orientasinya.</p>
+<p>Kalau kamu pertama kali memakai operasi wide (seperti <code>fwprintf()</code>), stream itu berorientasi wide.</p>
+<p>Kalau kamu pertama kali memakai operasi byte (seperti <code>fprintf()</code>), stream itu berorientasi byte.</p>
+<p>Kamu bisa mengatur secara manual stream yang belum berorientasi ke satu arah atau yang lain dengan memanggil <code>fwide()</code>. Fungsi yang sama bisa dipakai untuk mengetahui orientasi sebuah stream.</p>
+<p>Kalau perlu mengubah orientasi di tengah jalan, bisa dilakukan dengan <code>freopen()</code>.</p>
+<p></p>
+<h3 data-number="27.9.3" id="fungsi-io"><span class="header-section-number">27.9.3</span> Fungsi I/O</h3>
+<p>Biasanya include <code>&lt;stdio.h&gt;</code> dan <code>&lt;wchar.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr>
+<th>Fungsi I/O</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wprintf()</code></td>
+<td>Output terformat ke konsol.</td>
+</tr>
+<tr>
+<td><code>wscanf()</code></td>
+<td>Input terformat dari konsol.</td>
+</tr>
+<tr>
+<td><code>getwchar()</code></td>
+<td>Input konsol berbasis karakter.</td>
+</tr>
+<tr>
+<td><code>putwchar()</code></td>
+<td>Output konsol berbasis karakter.</td>
+</tr>
+<tr>
+<td><code>fwprintf()</code></td>
+<td>Output terformat ke file.</td>
+</tr>
+<tr>
+<td><code>fwscanf()</code></td>
+<td>Input terformat dari file.</td>
+</tr>
+<tr>
+<td><code>fgetwc()</code></td>
+<td>Input file berbasis karakter.</td>
+</tr>
+<tr>
+<td><code>fputwc()</code></td>
+<td>Output file berbasis karakter.</td>
+</tr>
+<tr>
+<td><code>fgetws()</code></td>
+<td>Input file berbasis string.</td>
+</tr>
+<tr>
+<td><code>fputws()</code></td>
+<td>Output file berbasis string.</td>
+</tr>
+<tr>
+<td><code>swprintf()</code></td>
+<td>Output terformat ke string.</td>
+</tr>
+<tr>
+<td><code>swscanf()</code></td>
+<td>Input terformat dari string.</td>
+</tr>
+<tr>
+<td><code>vfwprintf()</code></td>
+<td>Output terformat variadic ke file.</td>
+</tr>
+<tr>
+<td><code>vfwscanf()</code></td>
+<td>Input terformat variadic dari file.</td>
+</tr>
+<tr>
+<td><code>vswprintf()</code></td>
+<td>Output terformat variadic ke string.</td>
+</tr>
+<tr>
+<td><code>vswscanf()</code></td>
+<td>Input terformat variadic dari string.</td>
+</tr>
+<tr>
+<td><code>vwprintf()</code></td>
+<td>Output terformat variadic ke konsol.</td>
+</tr>
+<tr>
+<td><code>vwscanf()</code></td>
+<td>Input terformat variadic dari konsol.</td>
+</tr>
+<tr>
+<td><code>ungetwc()</code></td>
+<td>Mengembalikan sebuah wide character ke stream.</td>
+</tr>
+<tr>
+<td><code>fwide()</code></td>
+<td>Mengambil atau mengatur orientasi multibyte/wide sebuah stream.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.9.4" id="fungsi-konversi-tipe"><span class="header-section-number">27.9.4</span> Fungsi Konversi Tipe</h3>
+<p>Biasanya include <code>&lt;wchar.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Fungsi Konversi</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wcstod()</code></td>
+<td>Mengonversi string menjadi <code>double</code>.</td>
+</tr>
+<tr>
+<td><code>wcstof()</code></td>
+<td>Mengonversi string menjadi <code>float</code>.</td>
+</tr>
+<tr>
+<td><code>wcstold()</code></td>
+<td>Mengonversi string menjadi <code>long double</code>.</td>
+</tr>
+<tr>
+<td><code>wcstol()</code></td>
+<td>Mengonversi string menjadi <code>long</code>.</td>
+</tr>
+<tr>
+<td><code>wcstoll()</code></td>
+<td>Mengonversi string menjadi <code>long long</code>.</td>
+</tr>
+<tr>
+<td><code>wcstoul()</code></td>
+<td>Mengonversi string menjadi <code>unsigned long</code>.</td>
+</tr>
+<tr>
+<td><code>wcstoull()</code></td>
+<td>Mengonversi string menjadi <code>unsigned long long</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.9.5" id="fungsi-penyalinan-string-dan-memori"><span class="header-section-number">27.9.5</span> Fungsi Penyalinan String dan Memori</h3>
+<p>Biasanya include <code>&lt;wchar.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Fungsi Penyalinan</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wcscpy()</code></td>
+<td>Menyalin string.</td>
+</tr>
+<tr>
+<td><code>wcsncpy()</code></td>
+<td>Menyalin string, dibatasi panjang.</td>
+</tr>
+<tr>
+<td><code>wmemcpy()</code></td>
+<td>Menyalin memori.</td>
+</tr>
+<tr>
+<td><code>wmemmove()</code></td>
+<td>Menyalin memori yang mungkin tumpang tindih.</td>
+</tr>
+<tr>
+<td><code>wcscat()</code></td>
+<td>Menyambung string.</td>
+</tr>
+<tr>
+<td><code>wcsncat()</code></td>
+<td>Menyambung string, dibatasi panjang.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.9.6" id="fungsi-perbandingan-string-dan-memori"><span class="header-section-number">27.9.6</span> Fungsi Perbandingan String dan Memori</h3>
+<p>Biasanya include <code>&lt;wchar.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr>
+<th>Fungsi Perbandingan</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wcscmp()</code></td>
+<td>Membandingkan string secara leksikografis.</td>
+</tr>
+<tr>
+<td><code>wcsncmp()</code></td>
+<td>Membandingkan string secara leksikografis, dibatasi panjang.</td>
+</tr>
+<tr>
+<td><code>wcscoll()</code></td>
+<td>Membandingkan string menurut urutan kamus berdasarkan locale.</td>
+</tr>
+<tr>
+<td><code>wmemcmp()</code></td>
+<td>Membandingkan memori secara leksikografis.</td>
+</tr>
+<tr>
+<td><code>wcsxfrm()</code></td>
+<td>Mengubah string menjadi versi yang membuat <code>wcscmp()</code> berperilaku seperti <code>wcscoll()</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn166" class="footnote-ref" id="fnref166" role="doc-noteref"><sup>166</sup></a>.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.9.7" id="fungsi-pencarian-string"><span class="header-section-number">27.9.7</span> Fungsi Pencarian String</h3>
+<p>Biasanya include <code>&lt;wchar.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Fungsi Pencarian</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wcschr()</code></td>
+<td>Mencari karakter dalam string.</td>
+</tr>
+<tr>
+<td><code>wcsrchr()</code></td>
+<td>Mencari karakter dalam string dari belakang.</td>
+</tr>
+<tr>
+<td><code>wmemchr()</code></td>
+<td>Mencari karakter di memori.</td>
+</tr>
+<tr>
+<td><code>wcsstr()</code></td>
+<td>Mencari substring dalam string.</td>
+</tr>
+<tr>
+<td><code>wcspbrk()</code></td>
+<td>Mencari salah satu dari sekumpulan karakter dalam string.</td>
+</tr>
+<tr>
+<td><code>wcsspn()</code></td>
+<td>Mencari panjang substring yang berisi salah satu dari sekumpulan karakter.</td>
+</tr>
+<tr>
+<td><code>wcscspn()</code></td>
+<td>Mencari panjang substring sebelum salah satu dari sekumpulan karakter.</td>
+</tr>
+<tr>
+<td><code>wcstok()</code></td>
+<td>Mencari token dalam string.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.9.8" id="fungsi-panjanglain-lain"><span class="header-section-number">27.9.8</span> Fungsi Panjang/Lain-lain</h3>
+<p>Biasanya include <code>&lt;wchar.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Fungsi Panjang/Lain-lain</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>wcslen()</code></td>
+<td>Mengembalikan panjang string.</td>
+</tr>
+<tr>
+<td><code>wmemset()</code></td>
+<td>Mengisi karakter di memori.</td>
+</tr>
+<tr>
+<td><code>wcsftime()</code></td>
+<td>Output tanggal dan waktu terformat.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.9.9" id="fungsi-klasifikasi-karakter"><span class="header-section-number">27.9.9</span> Fungsi Klasifikasi Karakter</h3>
+<p>Include <code>&lt;wctype.h&gt;</code> untuk ini.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr>
+<th>Fungsi Panjang/Lain-lain</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iswalnum()</code></td>
+<td>True jika karakter alfanumerik.</td>
+</tr>
+<tr>
+<td><code>iswalpha()</code></td>
+<td>True jika karakter berupa huruf.</td>
+</tr>
+<tr>
+<td><code>iswblank()</code></td>
+<td>True jika karakter kosong (mirip spasi, tapi bukan newline).</td>
+</tr>
+<tr>
+<td><code>iswcntrl()</code></td>
+<td>True jika karakter adalah karakter kontrol.</td>
+</tr>
+<tr>
+<td><code>iswdigit()</code></td>
+<td>True jika karakter berupa digit.</td>
+</tr>
+<tr>
+<td><code>iswgraph()</code></td>
+<td>True jika karakter bisa dicetak (kecuali spasi).</td>
+</tr>
+<tr>
+<td><code>iswlower()</code></td>
+<td>True jika karakter huruf kecil.</td>
+</tr>
+<tr>
+<td><code>iswprint()</code></td>
+<td>True jika karakter bisa dicetak (termasuk spasi).</td>
+</tr>
+<tr>
+<td><code>iswpunct()</code></td>
+<td>True jika karakter berupa tanda baca.</td>
+</tr>
+<tr>
+<td><code>iswspace()</code></td>
+<td>True jika karakter berupa whitespace.</td>
+</tr>
+<tr>
+<td><code>iswupper()</code></td>
+<td>True jika karakter huruf besar.</td>
+</tr>
+<tr>
+<td><code>iswxdigit()</code></td>
+<td>True jika karakter berupa digit hex.</td>
+</tr>
+<tr>
+<td><code>towlower()</code></td>
+<td>Mengonversi karakter menjadi huruf kecil.</td>
+</tr>
+<tr>
+<td><code>towupper()</code></td>
+<td>Mengonversi karakter menjadi huruf besar.</td>
+</tr>
+</tbody>
+</table>
+<h2 data-number="27.10" id="parse-state-fungsi-restartable"><span class="header-section-number">27.10</span> Parse State, Fungsi Restartable</h2>
+<p></p>
+<p>Kita akan masuk sedikit ke jeroan konversi multibyte, tapi ini hal yang bagus untuk dipahami secara konseptual.</p>
+<p>Bayangkan bagaimana programmu mengambil deretan karakter multibyte dan mengubahnya menjadi wide character, atau sebaliknya. Pada suatu titik, ia mungkin sedang di tengah mem-parse sebuah karakter, atau mungkin harus menunggu byte tambahan sebelum menentukan nilai akhirnya.</p>
+<p>Parse state ini disimpan dalam variabel opaque bertipe <code>mbstate_t</code> dan dipakai setiap kali konversi dilakukan. Begitulah cara fungsi konversi melacak posisinya di tengah pekerjaan.</p>
+<p>Dan kalau kamu berpindah ke deretan karakter lain di tengah stream, atau mencoba seek ke tempat lain di deretan inputmu, ia bisa bingung karenanya.</p>
+<p>Mungkin kamu ingin menegurku soal ini: tadi kita sudah melakukan beberapa konversi, dan aku tidak pernah menyebut <code>mbstate_t</code> di mana pun.</p>
+<p>Itu karena fungsi konversi seperti <code>mbstowcs()</code>, <code>wctomb()</code>, dan sebagainya masing-masing punya variabel <code>mbstate_t</code> sendiri yang mereka pakai. Tapi hanya ada satu per fungsi, jadi kalau kamu menulis kode multithread, fungsi-fungsi itu tidak aman dipakai.</p>
+<p>Untungnya, C mendefinisikan versi <em>restartable</em> dari fungsi-fungsi ini yang memungkinkan kamu mengoper <code>mbstate_t</code>-mu sendiri per thread kalau perlu. Kalau kamu bekerja dengan multithread, pakai ini!</p>
+<p>Catatan singkat tentang menginisialisasi variabel <code>mbstate_t</code>: cukup <code>memset()</code> ke nol. Tidak ada fungsi bawaan untuk memaksa inisialisasi.</p>
+<div class="sourceCode" id="cb567"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb567-1"><a href="unicode-wide-character-dan-semacamnya.html#cb567-1" aria-hidden="true" tabindex="-1"></a>mbstate_t mbs<span class="op">;</span></span>
+<span id="cb567-2"><a href="unicode-wide-character-dan-semacamnya.html#cb567-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb567-3"><a href="unicode-wide-character-dan-semacamnya.html#cb567-3" aria-hidden="true" tabindex="-1"></a><span class="co">// Atur state ke state awal</span></span>
+<span id="cb567-4"><a href="unicode-wide-character-dan-semacamnya.html#cb567-4" aria-hidden="true" tabindex="-1"></a>memset<span class="op">(&amp;</span>mbs<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="kw">sizeof</span> mbs<span class="op">);</span></span></code></pre></div>
+<p>Berikut daftar fungsi konversi restartable—perhatikan konvensi penamaan dengan menaruh “<code>r</code>” setelah tipe “asal”:</p>
+<ul>
+<li><code>mbrtowc()</code>—multibyte ke wide character</li>
+<li><code>wcrtomb()</code>—wide character ke multibyte</li>
+<li><code>mbsrtowcs()</code>—string multibyte ke string wide character</li>
+<li><code>wcsrtombs()</code>—string wide character ke string multibyte</li>
+</ul>
+<p>Fungsi-fungsi ini sangat mirip dengan padanannya yang non-restartable, hanya saja mereka mewajibkan kamu mengoper pointer ke variabel <code>mbstate_t</code> milikmu sendiri. Mereka juga mengubah pointer string sumber (untuk membantu kalau ditemukan byte yang tidak valid), jadi mungkin berguna menyimpan salinan aslinya.</p>
+<p>Berikut contoh dari awal bab yang disusun ulang agar mengoper <code>mbstate_t</code> kita sendiri.</p>
+<div class="sourceCode" id="cb568"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb568-1"><a href="unicode-wide-character-dan-semacamnya.html#cb568-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb568-2"><a href="unicode-wide-character-dan-semacamnya.html#cb568-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb568-3"><a href="unicode-wide-character-dan-semacamnya.html#cb568-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;stddef.h&gt;</span></span>
+<span id="cb568-4"><a href="unicode-wide-character-dan-semacamnya.html#cb568-4" aria-label="4"></a><span class="pp">#include </span><span class="im">&lt;wchar.h&gt;</span></span>
+<span id="cb568-5"><a href="unicode-wide-character-dan-semacamnya.html#cb568-5" aria-label="5"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb568-6"><a href="unicode-wide-character-dan-semacamnya.html#cb568-6" aria-label="6"></a><span class="pp">#include </span><span class="im">&lt;locale.h&gt;</span></span>
+<span id="cb568-7"><a href="unicode-wide-character-dan-semacamnya.html#cb568-7" aria-label="7"></a></span>
+<span id="cb568-8"><a href="unicode-wide-character-dan-semacamnya.html#cb568-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb568-9"><a href="unicode-wide-character-dan-semacamnya.html#cb568-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb568-10"><a href="unicode-wide-character-dan-semacamnya.html#cb568-10" aria-label="10"></a>    <span class="co">// Keluar dari locale C ke locale yang kemungkinan punya simbol euro</span></span>
+<span id="cb568-11"><a href="unicode-wide-character-dan-semacamnya.html#cb568-11" aria-label="11"></a>    setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span>
+<span id="cb568-12"><a href="unicode-wide-character-dan-semacamnya.html#cb568-12" aria-label="12"></a></span>
+<span id="cb568-13"><a href="unicode-wide-character-dan-semacamnya.html#cb568-13" aria-label="13"></a>    <span class="co">// String multibyte asli dengan simbol euro (code point Unicode 20ac)</span></span>
+<span id="cb568-14"><a href="unicode-wide-character-dan-semacamnya.html#cb568-14" aria-label="14"></a>    <span class="dt">char</span> <span class="op">*</span>mb_string <span class="op">=</span> <span class="st">&quot;The cost is </span><span class="sc">\u20ac</span><span class="st">1.23&quot;</span><span class="op">;</span>  <span class="co">// €1.23</span></span>
+<span id="cb568-15"><a href="unicode-wide-character-dan-semacamnya.html#cb568-15" aria-label="15"></a>    <span class="dt">size_t</span> mb_len <span class="op">=</span> strlen<span class="op">(</span>mb_string<span class="op">);</span></span>
+<span id="cb568-16"><a href="unicode-wide-character-dan-semacamnya.html#cb568-16" aria-label="16"></a></span>
+<span id="cb568-17"><a href="unicode-wide-character-dan-semacamnya.html#cb568-17" aria-label="17"></a>    <span class="co">// Array wide character yang akan menampung string hasil konversi</span></span>
+<span id="cb568-18"><a href="unicode-wide-character-dan-semacamnya.html#cb568-18" aria-label="18"></a>    <span class="dt">wchar_t</span> wc_string<span class="op">[</span><span class="dv">128</span><span class="op">];</span>  <span class="co">// Menampung sampai 128 wide character</span></span>
+<span id="cb568-19"><a href="unicode-wide-character-dan-semacamnya.html#cb568-19" aria-label="19"></a></span>
+<span id="cb568-20"><a href="unicode-wide-character-dan-semacamnya.html#cb568-20" aria-label="20"></a>    <span class="co">// Siapkan state konversi</span></span>
+<span id="cb568-21"><a href="unicode-wide-character-dan-semacamnya.html#cb568-21" aria-label="21"></a>    mbstate_t mbs<span class="op">;</span></span>
+<span id="cb568-22"><a href="unicode-wide-character-dan-semacamnya.html#cb568-22" aria-label="22"></a>    memset<span class="op">(&amp;</span>mbs<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="kw">sizeof</span> mbs<span class="op">);</span>  <span class="co">// State awal</span></span>
+<span id="cb568-23"><a href="unicode-wide-character-dan-semacamnya.html#cb568-23" aria-label="23"></a></span>
+<span id="cb568-24"><a href="unicode-wide-character-dan-semacamnya.html#cb568-24" aria-label="24"></a>    <span class="co">// mbsrtowcs() mengubah pointer input agar menunjuk ke karakter tidak</span></span>
+<span id="cb568-25"><a href="unicode-wide-character-dan-semacamnya.html#cb568-25" aria-label="25"></a>    <span class="co">// valid pertama, atau NULL jika berhasil. Kita buat salinan pointer</span></span>
+<span id="cb568-26"><a href="unicode-wide-character-dan-semacamnya.html#cb568-26" aria-label="26"></a>    <span class="co">// untuk diutak-atik mbsrtowcs() sehingga aslinya tidak berubah.</span></span>
+<span id="cb568-27"><a href="unicode-wide-character-dan-semacamnya.html#cb568-27" aria-label="27"></a>    <span class="co">//</span></span>
+<span id="cb568-28"><a href="unicode-wide-character-dan-semacamnya.html#cb568-28" aria-label="28"></a>    <span class="co">// Contoh ini kemungkinan berhasil, tapi kita periksa lebih ke bawah</span></span>
+<span id="cb568-29"><a href="unicode-wide-character-dan-semacamnya.html#cb568-29" aria-label="29"></a>    <span class="co">// untuk memastikan.</span></span>
+<span id="cb568-30"><a href="unicode-wide-character-dan-semacamnya.html#cb568-30" aria-label="30"></a>    <span class="dt">const</span> <span class="dt">char</span> <span class="op">*</span>invalid <span class="op">=</span> mb_string<span class="op">;</span></span>
+<span id="cb568-31"><a href="unicode-wide-character-dan-semacamnya.html#cb568-31" aria-label="31"></a></span>
+<span id="cb568-32"><a href="unicode-wide-character-dan-semacamnya.html#cb568-32" aria-label="32"></a>    <span class="co">// Konversi string MB ke WC; ini mengembalikan jumlah wide char</span></span>
+<span id="cb568-33"><a href="unicode-wide-character-dan-semacamnya.html#cb568-33" aria-label="33"></a>    <span class="dt">size_t</span> wc_len <span class="op">=</span> mbsrtowcs<span class="op">(</span>wc_string<span class="op">,</span> <span class="op">&amp;</span>invalid<span class="op">,</span> <span class="dv">128</span><span class="op">,</span> <span class="op">&amp;</span>mbs<span class="op">);</span></span>
+<span id="cb568-34"><a href="unicode-wide-character-dan-semacamnya.html#cb568-34" aria-label="34"></a></span>
+<span id="cb568-35"><a href="unicode-wide-character-dan-semacamnya.html#cb568-35" aria-label="35"></a>    <span class="cf">if</span> <span class="op">(</span>invalid <span class="op">==</span> NULL<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb568-36"><a href="unicode-wide-character-dan-semacamnya.html#cb568-36" aria-label="36"></a>        printf<span class="op">(</span><span class="st">&quot;No invalid characters found</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb568-37"><a href="unicode-wide-character-dan-semacamnya.html#cb568-37" aria-label="37"></a></span>
+<span id="cb568-38"><a href="unicode-wide-character-dan-semacamnya.html#cb568-38" aria-label="38"></a>        <span class="co">// Cetak hasil--perhatikan %ls untuk string wide char</span></span>
+<span id="cb568-39"><a href="unicode-wide-character-dan-semacamnya.html#cb568-39" aria-label="39"></a>        printf<span class="op">(</span><span class="st">&quot;multibyte: </span><span class="sc">\&quot;%s\&quot;</span><span class="st"> (</span><span class="sc">%zu</span><span class="st"> bytes)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> mb_string<span class="op">,</span> mb_len<span class="op">);</span></span>
+<span id="cb568-40"><a href="unicode-wide-character-dan-semacamnya.html#cb568-40" aria-label="40"></a>        printf<span class="op">(</span><span class="st">&quot;wide char: </span><span class="sc">\&quot;%ls\&quot;</span><span class="st"> (</span><span class="sc">%zu</span><span class="st"> characters)</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> wc_string<span class="op">,</span> wc_len<span class="op">);</span></span>
+<span id="cb568-41"><a href="unicode-wide-character-dan-semacamnya.html#cb568-41" aria-label="41"></a>    <span class="op">}</span> <span class="cf">else</span> <span class="op">{</span></span>
+<span id="cb568-42"><a href="unicode-wide-character-dan-semacamnya.html#cb568-42" aria-label="42"></a>        <span class="dt">ptrdiff_t</span> offset <span class="op">=</span> invalid <span class="op">-</span> mb_string<span class="op">;</span></span>
+<span id="cb568-43"><a href="unicode-wide-character-dan-semacamnya.html#cb568-43" aria-label="43"></a>        printf<span class="op">(</span><span class="st">&quot;Invalid character at offset </span><span class="sc">%td\n</span><span class="st">&quot;</span><span class="op">,</span> offset<span class="op">);</span></span>
+<span id="cb568-44"><a href="unicode-wide-character-dan-semacamnya.html#cb568-44" aria-label="44"></a>    <span class="op">}</span></span>
+<span id="cb568-45"><a href="unicode-wide-character-dan-semacamnya.html#cb568-45" aria-label="45"></a><span class="op">}</span></span></code></pre></div>
+<p>Untuk fungsi konversi yang mengelola state-nya sendiri, kamu bisa mereset state internalnya ke state awal dengan mengoper <code>NULL</code> untuk argumen <code>char*</code>-nya, misalnya:</p>
+<div class="sourceCode" id="cb569"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb569-1"><a href="unicode-wide-character-dan-semacamnya.html#cb569-1" aria-hidden="true" tabindex="-1"></a>mbstowcs<span class="op">(</span>NULL<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">0</span><span class="op">);</span>   <span class="co">// Reset parse state untuk mbstowcs()</span></span>
+<span id="cb569-2"><a href="unicode-wide-character-dan-semacamnya.html#cb569-2" aria-hidden="true" tabindex="-1"></a>mbstowcs<span class="op">(</span>dest<span class="op">,</span> src<span class="op">,</span> <span class="dv">100</span><span class="op">);</span>  <span class="co">// Parse beberapa hal</span></span></code></pre></div>
+<p>Untuk I/O, setiap wide stream mengelola <code>mbstate_t</code>-nya sendiri dan memakainya untuk konversi input dan output selama berjalan.</p>
+<p>Dan beberapa fungsi I/O berorientasi byte seperti <code>printf()</code> dan <code>scanf()</code> menyimpan state internalnya sendiri saat bekerja.</p>
+<p>Terakhir, fungsi konversi restartable ini sebenarnya punya state internal sendiri kalau kamu mengoper <code>NULL</code> sebagai parameter <code>mbstate_t</code>. Ini membuat mereka berperilaku lebih mirip padanannya yang non-restartable.</p>
+<p> </p>
+<h2 data-number="27.11" id="encoding-unicode-dan-c"><span class="header-section-number">27.11</span> Encoding Unicode dan C</h2>
+<p>Di bagian ini, kita akan melihat apa yang bisa (dan tidak bisa) dilakukan C pada tiga encoding Unicode tertentu: UTF-8, UTF-16, dan UTF-32.</p>
+<h3 data-number="27.11.1" id="utf-8"><span class="header-section-number">27.11.1</span> UTF-8</h3>
+<p></p>
+<p>Untuk menyegarkan ingatan sebelum bagian ini, baca <a href="unicode-wide-character-dan-semacamnya.html#utf8-quick">catatan singkat UTF-8, di atas</a>.</p>
+<p>Selain itu, apa kemampuan UTF-8 di C?</p>
+<p>Sayangnya, tidak banyak.</p>
+<p></p>
+<p>Kamu bisa memberi tahu C bahwa kamu secara spesifik menginginkan string literal ber-encoding UTF-8, dan ia akan melakukannya. Caranya dengan awalan <code>u8</code> pada string:</p>
+<div class="sourceCode" id="cb570"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb570-1"><a href="unicode-wide-character-dan-semacamnya.html#cb570-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">u8&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb570-2"><a href="unicode-wide-character-dan-semacamnya.html#cb570-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb570-3"><a href="unicode-wide-character-dan-semacamnya.html#cb570-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>   <span class="co">// Hello, world!--kalau kamu bisa mengeluarkan UTF-8</span></span></code></pre></div>
+<p>Nah, bisakah karakter Unicode dimasukkan ke sana?</p>
+<div class="sourceCode" id="cb571"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb571-1"><a href="unicode-wide-character-dan-semacamnya.html#cb571-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">u8&quot;€123&quot;</span><span class="op">;</span></span></code></pre></div>
+<p></p>
+<p>Tentu! Kalau extended source character set mendukungnya. (gcc mendukung.)</p>
+<p>Bagaimana kalau tidak? Kamu bisa menentukan code point Unicode dengan <code>\u</code> dan <code>\U</code> yang akrab di sekitar kita, <a href="unicode-wide-character-dan-semacamnya.html#unicode-in-c">seperti dicatat di atas</a>.</p>
+<p>Tapi hanya itu. Tidak ada cara portabel di standard library untuk mengambil input sembarang dan mengubahnya menjadi UTF-8 kecuali locale-mu UTF-8. Atau untuk mem-parse UTF-8 kecuali locale-mu UTF-8.</p>
+<p>Jadi kalau ingin melakukannya, berada di locale UTF-8 dan:</p>
+<p></p>
+<div class="sourceCode" id="cb572"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb572-1"><a href="unicode-wide-character-dan-semacamnya.html#cb572-1" aria-hidden="true" tabindex="-1"></a>setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>atau cari tahu nama locale UTF-8 di mesin lokalmu dan atur secara eksplisit seperti ini:</p>
+<div class="sourceCode" id="cb573"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb573-1"><a href="unicode-wide-character-dan-semacamnya.html#cb573-1" aria-hidden="true" tabindex="-1"></a>setlocale<span class="op">(</span>LC_ALL<span class="op">,</span> <span class="st">&quot;en_US.UTF-8&quot;</span><span class="op">);</span>  <span class="co">// Nama non-portabel</span></span></code></pre></div>
+<p></p>
+<p>Atau pakai <a href="unicode-wide-character-dan-semacamnya.html#utf-3rd-party">library pihak ketiga</a>.</p>
+<p></p>
+<h3 data-number="27.11.2" id="utf-16-utf-32-char16_t-dan-char32_t"><span class="header-section-number">27.11.2</span> UTF-16, UTF-32, <code>char16_t</code>, dan <code>char32_t</code></h3>
+<p> </p>
+<p><code>char16_t</code> dan <code>char32_t</code> adalah dua tipe karakter yang berpotensi lebar, masing-masing berukuran 16 bit dan 32 bit. Belum tentu lebar, karena kalau tidak bisa merepresentasikan setiap karakter di locale saat ini, mereka kehilangan sifat wide character-nya. Tapi spesifikasi menyebut mereka tipe “wide character” di mana-mana, jadi begitulah.</p>
+<p>Tipe-tipe ini ada untuk membuat segalanya sedikit lebih ramah Unicode, mudah-mudahan.</p>
+<p>Untuk memakainya, include <code>&lt;uchar.h&gt;</code>. (Itu “u”, bukan “w”.)</p>
+<p>Header file ini tidak ada di OS X—sayang sekali. Kalau kamu hanya ingin tipenya, kamu bisa:</p>
+<div class="sourceCode" id="cb574"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb574-1"><a href="unicode-wide-character-dan-semacamnya.html#cb574-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdint.h&gt;</span></span>
+<span id="cb574-2"><a href="unicode-wide-character-dan-semacamnya.html#cb574-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb574-3"><a href="unicode-wide-character-dan-semacamnya.html#cb574-3" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="dt">int_least16_t</span> <span class="dt">char16_t</span><span class="op">;</span></span>
+<span id="cb574-4"><a href="unicode-wide-character-dan-semacamnya.html#cb574-4" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="dt">int_least32_t</span> <span class="dt">char32_t</span><span class="op">;</span></span></code></pre></div>
+<p>Tapi kalau kamu juga ingin fungsinya, itu urusanmu sendiri.</p>
+<p> </p>
+<p>Dengan asumsi kamu masih bisa lanjut, kamu bisa mendeklarasikan string atau karakter bertipe ini dengan awalan <code>u</code> dan <code>U</code>:</p>
+<div class="sourceCode" id="cb575"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb575-1"><a href="unicode-wide-character-dan-semacamnya.html#cb575-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char16_t</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">u&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb575-2"><a href="unicode-wide-character-dan-semacamnya.html#cb575-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char16_t</span> c <span class="op">=</span> <span class="ch">u&#39;B&#39;</span><span class="op">;</span></span>
+<span id="cb575-3"><a href="unicode-wide-character-dan-semacamnya.html#cb575-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb575-4"><a href="unicode-wide-character-dan-semacamnya.html#cb575-4" aria-hidden="true" tabindex="-1"></a><span class="dt">char32_t</span> <span class="op">*</span>t <span class="op">=</span> <span class="st">U&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb575-5"><a href="unicode-wide-character-dan-semacamnya.html#cb575-5" aria-hidden="true" tabindex="-1"></a><span class="dt">char32_t</span> d <span class="op">=</span> <span class="ch">U&#39;B&#39;</span><span class="op">;</span></span></code></pre></div>
+<p> </p>
+<p>Nah—apakah nilai di dalamnya disimpan dalam UTF-16 atau UTF-32? Tergantung implementasi.</p>
+<p>Tapi kamu bisa mengujinya. Kalau makro <code>__STDC_UTF_16__</code> atau <code>__STDC_UTF_32__</code> terdefinisi (bernilai <code>1</code>), artinya tipe-tipe itu masing-masing menyimpan UTF-16 atau UTF-32.</p>
+<p>Kalau kamu penasaran, dan aku tahu kamu penasaran, nilainya, kalau UTF-16 atau UTF-32, disimpan dalam endianess native. Artinya, kamu seharusnya bisa langsung membandingkannya dengan nilai code point Unicode:</p>
+<div class="sourceCode" id="cb576"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb576-1"><a href="unicode-wide-character-dan-semacamnya.html#cb576-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char16_t</span> pi <span class="op">=</span> <span class="st">u&quot;</span><span class="sc">\u03C0</span><span class="st">&quot;</span><span class="op">;</span>  <span class="co">// simbol pi</span></span>
+<span id="cb576-2"><a href="unicode-wide-character-dan-semacamnya.html#cb576-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb576-3"><a href="unicode-wide-character-dan-semacamnya.html#cb576-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __STDC_UTF_16__</span></span>
+<span id="cb576-4"><a href="unicode-wide-character-dan-semacamnya.html#cb576-4" aria-hidden="true" tabindex="-1"></a>pi <span class="op">==</span> <span class="bn">0x3C0</span><span class="op">;</span>  <span class="co">// Selalu true</span></span>
+<span id="cb576-5"><a href="unicode-wide-character-dan-semacamnya.html#cb576-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
+<span id="cb576-6"><a href="unicode-wide-character-dan-semacamnya.html#cb576-6" aria-hidden="true" tabindex="-1"></a>pi <span class="op">==</span> <span class="bn">0x3C0</span><span class="op">;</span>  <span class="co">// Kemungkinan tidak true</span></span>
+<span id="cb576-7"><a href="unicode-wide-character-dan-semacamnya.html#cb576-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p> </p>
+<h3 data-number="27.11.3" id="konversi-multibyte"><span class="header-section-number">27.11.3</span> Konversi Multibyte</h3>
+<p>Kamu bisa mengonversi dari encoding multibyte-mu ke <code>char16_t</code> atau <code>char32_t</code> dengan sejumlah fungsi bantu.</p>
+<p>(Seperti kubilang tadi, hasilnya mungkin bukan UTF-16 atau UTF-32 kecuali makro yang sesuai bernilai <code>1</code>.)</p>
+<p>Semua fungsi ini restartable (yaitu kamu mengoper <code>mbstate_t</code>-mu sendiri), dan semuanya beroperasi karakter demi karakter<a href="function-specifier-alignment-specifier-dan-operator.html#fn167" class="footnote-ref" id="fnref167" role="doc-noteref"><sup>167</sup></a>.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Fungsi Konversi</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mbrtoc16()</code></td>
+<td>Mengonversi karakter multibyte menjadi karakter <code>char16_t</code>.</td>
+</tr>
+<tr>
+<td><code>mbrtoc32()</code></td>
+<td>Mengonversi karakter multibyte menjadi karakter <code>char32_t</code>.</td>
+</tr>
+<tr>
+<td><code>c16rtomb()</code></td>
+<td>Mengonversi karakter <code>char16_t</code> menjadi karakter multibyte.</td>
+</tr>
+<tr>
+<td><code>c32rtomb()</code></td>
+<td>Mengonversi karakter <code>char32_t</code> menjadi karakter multibyte.</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="27.11.4" id="utf-3rd-party"><span class="header-section-number">27.11.4</span> Library Pihak Ketiga</h3>
+<p>Untuk konversi berat antara berbagai encoding spesifik, ada beberapa library matang yang layak dicoba. Perhatikan bahwa aku belum pernah memakai keduanya.</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Iconv">iconv</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn168" class="footnote-ref" id="fnref168" role="doc-noteref"><sup>168</sup></a>—Internationalization Conversion, API standar POSIX yang umum dan tersedia di platform-platform besar.</li>
+<li><a href="http://site.icu-project.org/">ICU</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn169" class="footnote-ref" id="fnref169" role="doc-noteref"><sup>169</sup></a>—International Components for Unicode. Setidaknya satu blogger menganggapnya mudah dipakai.</li>
+</ul>
+<p>Kalau kamu punya library lain yang patut dicatat, kabari aku.</p>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="locale-dan-internasionalisasi.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="keluar-dari-program.html" rel="next">Next</a></span></div></body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="id">
+<head>
+    <title>Beej's Guide to C Programming</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Description" content="Beej's Guide to C Programming">
+    <meta name="Keywords" content="c programming clang">
+    <link rel="icon" type="image/gif" href="/guide/favicon.gif"/>
+    <link rel="stylesheet" type="text/css" href="index.css"/>
+</head>
+
+<body>
+
+<div class="center">
+	<div class="ib800">
+		<div class="center">
+			<div class="hr w100p"></div>
+			<div id="suggestive-sell">Suka dengan panduan ini? Ayo ikut mendukung!</div>
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+			<input type="hidden" name="cmd" value="_s-xclick">
+			<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Bayar dengan PayPal - cepat, gratis, dan aman!">
+			<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----">
+			</form>
+			<div class="hr w100p"></div>
+		</div>
+
+		<p>
+
+		<!--
+		<div class="center">
+			<div class="w100p ilb">
+				<div class="float-left mb2ex">
+					<a target="_blank" href="http://beej.us/guide/url/bgbuy">
+						<img border="0" src="bgccover.png" alt="book cover image"/>
+					</a>
+				</div>
+
+				<div style="margin-top: 4ex;">
+					<a target="_blank" href="http://beej.us/guide/url/bgbuy">
+						<b><span class="bigfont">Beli Panduan ini sebagai BUKU
+						Perfect-Bound sungguhan sekarang juga!</span></b>
+						<p>
+						<b><i>Astaga!</i></b>
+					</a>
+				</div>
+
+				<div class="clear-both"></div>
+
+			</div>
+		</div>
+		-->
+
+		<div class="left">
+			<h1 class="maintitle">Beej's Guide to C Programming</h1>
+
+            <p>Ini adalah <b>volume pertama</b> dari Beej's Guide to C,
+            yaitu tutorialnya. <a href="/guide/bgclr/">Klik di sini untuk
+            volume kedua, referensi library</a>. 
+
+            <p>Mohon diingat bahwa <b><i>dokumen ini masih berkualitas
+            beta</i></b>. Kalau kamu punya koreksi, aku dengan senang
+            hati mendengarnya, tapi ketahuilah bahwa bahkan <i>aku</i>
+            mungkin belum membaca bagian panduan itu. Ada kesalahan yang
+            kasatmata! Selain itu, aku mungkin tidak tahu apa yang
+            kubicarakan soal suatu hal! Jadi <a
+            href="mailto:beej@beej.us">kirimi aku email</a>!</p>
+
+			<p>
+			(<a href="http://beej.us/guide/">Klik di sini untuk panduan lainnya!</a>)
+
+			<h3 class="secttitle">Yang Tersedia untuk Pembaca:</h3>
+			<!--
+			<p><a href="errata.html">Errata</a> (kesalahan?  Apa?)</p>
+			-->
+
+            <p>Cari di panduan HTML lewat DuckDuckGo:
+
+            <p><form method="get" id="ddgSearch" action="https://duckduckgo.com/">
+                <input type="hidden" name="sites" value="https://beej.us/guide/bgc/"/>
+                <input type="hidden" name="k7" value="#ffffff"/>
+                <input type="hidden" name="k8" value="#222222"/>
+                <input type="hidden" name="k9" value="#00278e"/>
+                <input type="hidden" name="kx" value="#20692b"/>
+                <input type="hidden" name="kj" value="#fafafa"/>
+                <input type="hidden" name="kt" value="p"/>
+                <table style="margin:0 1em">
+                <tr>
+                <td style="width:100%">
+                <input style="width:calc(100% - 1em)" type="text" name="q" placeholder="Cari di Beej's Guide to C..." aria-label="Cari di Beej's Guide to C lewat DuckDuckGo"/>
+                </td>
+                <td>
+                <button type="submit">Cari&nbsp;DDG</button>
+                </td>
+                </table>
+            </form>
+
+            <p style="margin-bottom:0">Cari di panduan HTML lewat Google:
+
+            <script async src="https://cse.google.com/cse.js?cx=ae3393718e443f40f">
+            </script>
+            <div class="gcse-search"></div>
+
+			<b class="subsecttitle">HTML:</b>
+			<ul>
+			<li><a href="html/split/">HTML</a>
+			<li><a href="html/split-wide/">HTML, layar lebar</a>
+			<p>
+			<li><a href="html/">HTML, satu halaman</a>
+			<li><a href="html/index-wide.html">HTML, satu halaman, layar lebar</a>
+			<p>
+			<li><a href="html/bgc.zip">HTML ZIP</a>
+			<li><a href="html/bgc-wide.zip">HTML ZIP, layar lebar</a>
+			</ul>
+			<p>
+
+			<b class="subsecttitle">PDF:</b>
+			<ul>
+			<li><a href="pdf/bgc_usl_c_1.pdf">US Letter, satu sisi, dengan syntax highlighting</a></li>
+			<li><a href="pdf/bgc_usl_c_2.pdf">US Letter, dua sisi, dengan syntax highlighting</a></li>
+			<li><a href="pdf/bgc_a4_c_1.pdf">A4, satu sisi, dengan syntax highlighting</a></li>
+			<li><a href="pdf/bgc_a4_c_2.pdf">A4, dua sisi, dengan syntax highlighting</a></li>
+			<li><a href="pdf/bgc_usl_bw_1.pdf">US Letter, satu sisi, hitam putih</a></li>
+			<li><a href="pdf/bgc_usl_bw_2.pdf">US Letter, dua sisi, hitam putih</a></li>
+			<li><a href="pdf/bgc_a4_bw_1.pdf">A4, satu sisi, hitam putih</a></li>
+			<li><a href="pdf/bgc_a4_bw_2.pdf">A4, dua sisi, hitam putih</a></li>
+			</ul>
+
+			<b class="subsecttitle">Contoh:</b>
+			<p>
+			<ul>
+			<li><a href="source/">Unduhan contoh kode C lepas</a>	<i>(Jalankan <tt>make</tt> untuk membangunnya.)</i>
+			<li><a href="source/bgc_source.zip">File ZIP</a>
+			</ul>
+
+			<!--
+			<p>
+
+			<h3 class="secttitle">Mirror:</h3>
+			<i>Beri tahu aku kalau kamu me-mirror situs ini.</i>
+
+			<p>
+			<ul>
+			<li><a href="http://docs.hfbk.net/beej.us/">kfbk.net</a> (Jerman)
+			<li><a href="http://www.rainydayz.org/content/beejs-guides">rainydayz.org</a> (Britania Raya)
+			</ul>
+
+			<p>
+			-->
+
+			
+			<h3 class="secttitle">Terjemahan!</h3>
+			<i>Beri tahu aku kalau kamu membuat terjemahan yang perlu ditautkan.</i>
+
+			<p>
+
+			<ul>
+			<li><a href="https://stefanogassmann.github.io/BGCSpanish/">Spanyol (Rolling Release).</a>
+			</ul>
+
+			<p><b>Tautan terjemahan yang rusak</b>
+			<p><i>Beri tahu aku kalau kamu punya pembaruan.</i>
+
+			<ul>
+			</ul>
+
+			<p>
+			
+
+			<h3 class="secttitle">Yang Tersedia untuk Penerjemah dan Penulis:</h3>
+
+			<p>Clone semuanya dari <a
+			href="https://github.com/beejjorgensen/bgc">GitHub</a> dan ikuti
+			<tt>README</tt>.
+
+			<hr class="singleline">
+			Hubungi Beej: <tt class="email"><a href="mailto:beej@beej.us">beej@beej.us</a></tt>
+		</div>
+	</div>
+</div>
+
+</html>
+

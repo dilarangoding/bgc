@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="lingkungan-di-luar-program.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="struct-ii-lebih-seru-dengan-struct.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="19" id="c-preprocessor"><span class="header-section-number">19</span> C Preprocessor</h1>
+<p></p>
+<p>Sebelum programmu dikompilasi, ia sebenarnya melewati tahap yang disebut <em>preprocessing</em>. Hampir seperti ada bahasa <em>di atas</em> bahasa C yang berjalan lebih dulu. Dan ia menghasilkan kode C, yang kemudian dikompilasi.</p>
+<p>Kita sudah melihatnya sedikit lewat <code>#include</code>! Itulah C Preprocessor! Di tempat ia menemukan directive itu, ia menyertakan file yang disebut tepat di situ, seolah-olah kamu mengetiknya sendiri. Dan <em>baru kemudian</em> compiler membangun semuanya.</p>
+<p>Tapi ternyata kemampuannya jauh lebih besar daripada sekadar menyertakan sesuatu. Kamu bisa mendefinisikan <em>makro</em> yang disubstitusi… bahkan makro yang menerima argumen!</p>
+<h2 data-number="19.1" id="include"><span class="header-section-number">19.1</span> <code>#include</code></h2>
+<p></p>
+<p>Kita mulai dari yang sudah sering kita lihat. Ini tentu saja cara untuk menyertakan sumber lain ke dalam sumbermu. Sangat umum dipakai dengan header file.</p>
+<p>Walaupun spesifikasi mengizinkan berbagai perilaku untuk <code>#include</code>, kita akan mengambil pendekatan yang lebih pragmatis dan membahas cara kerjanya di setiap sistem yang pernah kulihat.</p>
+<p>Header file bisa dibagi dua kategori: sistem dan lokal. Yang bawaan, seperti <code>stdio.h</code>, <code>stdlib.h</code>, <code>math.h</code>, dan sebagainya, di-include dengan kurung siku:</p>
+<div class="sourceCode" id="cb336"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb336-1"><a href="c-preprocessor.html#cb336-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb336-2"><a href="c-preprocessor.html#cb336-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span></code></pre></div>
+<p>Kurung siku memberi tahu C, “Hei, jangan cari header file ini di direktori saat ini—cari di direktori include level sistem.”</p>
+<p></p>
+<p>Itu tentu saja menyiratkan bahwa harus ada cara untuk meng-include file lokal dari direktori saat ini. Dan memang ada: dengan tanda kutip ganda:</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb337-1"><a href="c-preprocessor.html#cb337-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;myheader.h&quot;</span></span></code></pre></div>
+<p>Atau kamu juga hampir pasti bisa mencari di direktori relatif memakai garis miring dan titik, seperti ini:</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb338-1"><a href="c-preprocessor.html#cb338-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;mydir/myheader.h&quot;</span></span>
+<span id="cb338-2"><a href="c-preprocessor.html#cb338-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;../someheader.py&quot;</span></span></code></pre></div>
+<p>Jangan pakai backslash (<code>\</code>) sebagai pemisah path di <code>#include</code>-mu! Itu undefined behavior! Pakai garis miring biasa (<code>/</code>) saja, bahkan di Windows.</p>
+<p>Ringkasnya, pakai kurung siku (<code>&lt;</code> dan <code>&gt;</code>) untuk include sistem, dan pakai tanda kutip ganda (<code>"</code>) untuk include pribadimu.</p>
+<p> </p>
+<h2 data-number="19.2" id="makro-sederhana"><span class="header-section-number">19.2</span> Makro Sederhana</h2>
+<p></p>
+<p><em>Makro</em> adalah identifier yang <em>diperluas</em> menjadi potongan kode lain sebelum compiler sempat melihatnya. Anggap seperti placeholder—ketika preprocessor melihat salah satu identifier itu, ia menggantinya dengan nilai lain yang sudah kamu definisikan.</p>
+<p></p>
+<p>Kita melakukannya dengan <code>#define</code> (sering dibaca “pound define”, atau mungkin “hash define”, tapi jarang, kalaupun ada, “octothorpe define”). Berikut contohnya:</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb339-1"><a href="c-preprocessor.html#cb339-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb339-2"><a href="c-preprocessor.html#cb339-2" aria-label="2"></a></span>
+<span id="cb339-3"><a href="c-preprocessor.html#cb339-3" aria-label="3"></a><span class="pp">#define HELLO </span><span class="st">&quot;Hello, world&quot;</span></span>
+<span id="cb339-4"><a href="c-preprocessor.html#cb339-4" aria-label="4"></a><span class="pp">#define PI </span><span class="fl">3.14159</span></span>
+<span id="cb339-5"><a href="c-preprocessor.html#cb339-5" aria-label="5"></a></span>
+<span id="cb339-6"><a href="c-preprocessor.html#cb339-6" aria-label="6"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb339-7"><a href="c-preprocessor.html#cb339-7" aria-label="7"></a><span class="op">{</span></span>
+<span id="cb339-8"><a href="c-preprocessor.html#cb339-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">, </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> HELLO<span class="op">,</span> PI<span class="op">);</span></span>
+<span id="cb339-9"><a href="c-preprocessor.html#cb339-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Di baris 3 dan 4 kita mendefinisikan beberapa makro. Di mana pun makro itu muncul di kode (baris 8), mereka akan disubstitusi dengan nilai yang didefinisikan.</p>
+<p>Dari sudut pandang C compiler, itu persis seperti kalau kita menulis ini:</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb340-1"><a href="c-preprocessor.html#cb340-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb340-2"><a href="c-preprocessor.html#cb340-2" aria-label="2"></a></span>
+<span id="cb340-3"><a href="c-preprocessor.html#cb340-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb340-4"><a href="c-preprocessor.html#cb340-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb340-5"><a href="c-preprocessor.html#cb340-5" aria-label="5"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st">, </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="st">&quot;Hello, world&quot;</span><span class="op">,</span> <span class="fl">3.14159</span><span class="op">);</span></span>
+<span id="cb340-6"><a href="c-preprocessor.html#cb340-6" aria-label="6"></a><span class="op">}</span></span></code></pre></div>
+<p>Lihat bagaimana <code>HELLO</code> diganti dengan <code>"Hello, world"</code> dan <code>PI</code> diganti dengan <code>3.14159</code>? Dari sudut pandang compiler, itu persis seperti nilai-nilai itu muncul langsung di kode.</p>
+<p>Perhatikan bahwa makro tidak punya tipe tertentu, <em>per se</em>. Yang terjadi hanyalah mereka diganti utuh dengan apa pun yang di-<code>#define</code>-kan. Kalau kode C hasilnya tidak valid, compiler akan muntah.</p>
+<p>Kamu juga bisa mendefinisikan makro tanpa nilai:</p>
+<div class="sourceCode" id="cb341"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb341-1"><a href="c-preprocessor.html#cb341-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define EXTRA_HAPPY</span></span></code></pre></div>
+<p>dalam kasus itu, makro-nya ada dan terdefinisi, tapi didefinisikan sebagai kosong. Jadi di mana pun ia muncul di teks, akan diganti dengan kosong. Kita akan melihat kegunaannya nanti.</p>
+<p>Secara konvensi, nama makro ditulis <code>HURUF_BESAR_SEMUA</code> walaupun secara teknis itu tidak wajib.</p>
+<p></p>
+<p>Secara keseluruhan, ini memberimu cara untuk mendefinisikan nilai konstan yang efektif bersifat global dan bisa dipakai di tempat <em>mana saja</em>. Bahkan di tempat yang tidak bisa memakai variabel <code>const</code>, misalnya pada <code>case</code> di <code>switch</code> dan panjang array tetap.</p>
+<p>Meski begitu, perdebatan masih ramai di internet soal apakah variabel <code>const</code> bertipe lebih baik daripada makro <code>#define</code> secara umum.</p>
+<p>Ia juga bisa dipakai untuk mengganti atau memodifikasi kata kunci, konsep yang sama sekali asing bagi <code>const</code>, walaupun praktik ini sebaiknya jarang dilakukan.</p>
+<p> </p>
+<h2 data-number="19.3" id="kompilasi-kondisional"><span class="header-section-number">19.3</span> Kompilasi Kondisional</h2>
+<p></p>
+<p>Preprocessor bisa diminta menentukan apakah blok kode tertentu ditampilkan ke compiler atau dibuang sepenuhnya sebelum kompilasi.</p>
+<p>Caranya dengan membungkus kode dalam blok kondisional, mirip pernyataan <code>if</code>-<code>else</code>.</p>
+<h3 data-number="19.3.1" id="jika-terdefinisi-ifdef-dan-endif"><span class="header-section-number">19.3.1</span> Jika Terdefinisi, <code>#ifdef</code> dan <code>#endif</code></h3>
+<p>Pertama, mari kita coba mengompilasi kode tertentu bergantung pada apakah sebuah makro terdefinisi atau tidak.</p>
+<p> </p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb342-1"><a href="c-preprocessor.html#cb342-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb342-2"><a href="c-preprocessor.html#cb342-2" aria-label="2"></a></span>
+<span id="cb342-3"><a href="c-preprocessor.html#cb342-3" aria-label="3"></a><span class="pp">#define EXTRA_HAPPY</span></span>
+<span id="cb342-4"><a href="c-preprocessor.html#cb342-4" aria-label="4"></a></span>
+<span id="cb342-5"><a href="c-preprocessor.html#cb342-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb342-6"><a href="c-preprocessor.html#cb342-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb342-7"><a href="c-preprocessor.html#cb342-7" aria-label="7"></a></span>
+<span id="cb342-8"><a href="c-preprocessor.html#cb342-8" aria-label="8"></a><span class="pp">#ifdef EXTRA_HAPPY</span></span>
+<span id="cb342-9"><a href="c-preprocessor.html#cb342-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m extra happy!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb342-10"><a href="c-preprocessor.html#cb342-10" aria-label="10"></a><span class="pp">#endif</span></span>
+<span id="cb342-11"><a href="c-preprocessor.html#cb342-11" aria-label="11"></a></span>
+<span id="cb342-12"><a href="c-preprocessor.html#cb342-12" aria-label="12"></a>    printf<span class="op">(</span><span class="st">&quot;OK!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb342-13"><a href="c-preprocessor.html#cb342-13" aria-label="13"></a><span class="op">}</span></span></code></pre></div>
+<p>Pada contoh itu, kita mendefinisikan <code>EXTRA_HAPPY</code> (sebagai kosong, tapi ia <em>terdefinisi</em>), lalu di baris 8 kita memeriksa apakah ia terdefinisi dengan directive <code>#ifdef</code>. Kalau terdefinisi, kode setelahnya disertakan sampai <code>#endif</code>.</p>
+<p> </p>
+<p>Jadi karena terdefinisi, kode itu disertakan untuk kompilasi dan outputnya:</p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb343-1"><a href="c-preprocessor.html#cb343-1" aria-hidden="true" tabindex="-1"></a>I&#39;m extra happy!</span>
+<span id="cb343-2"><a href="c-preprocessor.html#cb343-2" aria-hidden="true" tabindex="-1"></a>OK!</span></code></pre></div>
+<p>Kalau <code>#define</code>-nya kita jadikan komentar, seperti ini:</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb344-1"><a href="c-preprocessor.html#cb344-1" aria-hidden="true" tabindex="-1"></a><span class="co">//#define EXTRA_HAPPY</span></span></code></pre></div>
+<p>maka ia tidak terdefinisi, dan kode itu tidak disertakan dalam kompilasi. Dan outputnya hanya:</p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb345-1"><a href="c-preprocessor.html#cb345-1" aria-hidden="true" tabindex="-1"></a>OK!</span></code></pre></div>
+<p>Penting diingat bahwa keputusan ini terjadi saat compile time! Kodenya benar-benar dikompilasi atau dibuang tergantung kondisi. Ini berbeda dengan pernyataan <code>if</code> biasa yang dievaluasi saat program berjalan.</p>
+<h3 data-number="19.3.2" id="jika-tidak-terdefinisi-ifndef"><span class="header-section-number">19.3.2</span> Jika Tidak Terdefinisi, <code>#ifndef</code></h3>
+<p>Ada juga bentuk negatif dari “jika terdefinisi”: “jika tidak terdefinisi”, atau <code>#ifndef</code>. Kita bisa mengubah contoh sebelumnya supaya mengeluarkan hal berbeda tergantung apakah sesuatu terdefinisi:</p>
+<p> </p>
+<div class="sourceCode" id="cb346" data-startfrom="8"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 7;"><span id="cb346-8"><a href="c-preprocessor.html#cb346-8" aria-label="8"></a><span class="pp">#ifdef EXTRA_HAPPY</span></span>
+<span id="cb346-9"><a href="c-preprocessor.html#cb346-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m extra happy!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb346-10"><a href="c-preprocessor.html#cb346-10" aria-label="10"></a><span class="pp">#endif</span></span>
+<span id="cb346-11"><a href="c-preprocessor.html#cb346-11" aria-label="11"></a></span>
+<span id="cb346-12"><a href="c-preprocessor.html#cb346-12" aria-label="12"></a><span class="pp">#ifndef EXTRA_HAPPY</span></span>
+<span id="cb346-13"><a href="c-preprocessor.html#cb346-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m just regular</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb346-14"><a href="c-preprocessor.html#cb346-14" aria-label="14"></a><span class="pp">#endif</span></span></code></pre></div>
+<p>Kita akan lihat cara yang lebih rapi untuk itu di bagian berikutnya.</p>
+<p>Kalau dikaitkan kembali ke header file, kita sudah melihat bagaimana header file bisa dibuat hanya di-include satu kali dengan membungkusnya dalam directive preprocessor seperti ini:</p>
+<div class="sourceCode" id="cb347"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb347-1"><a href="c-preprocessor.html#cb347-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifndef MYHEADER_H  </span><span class="co">// Baris pertama myheader.h</span></span>
+<span id="cb347-2"><a href="c-preprocessor.html#cb347-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define MYHEADER_H</span></span>
+<span id="cb347-3"><a href="c-preprocessor.html#cb347-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb347-4"><a href="c-preprocessor.html#cb347-4" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">12</span><span class="op">;</span></span>
+<span id="cb347-5"><a href="c-preprocessor.html#cb347-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb347-6"><a href="c-preprocessor.html#cb347-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif  </span><span class="co">// Baris terakhir myheader.h</span></span></code></pre></div>
+<p> </p>
+<p>Ini menunjukkan bagaimana sebuah makro bertahan lintas file dan beberapa <code>#include</code>. Kalau belum terdefinisi, kita definisikan lalu kompilasi seluruh header file.</p>
+<p>Tapi saat di-include lagi, kita lihat bahwa <code>MYHEADER_H</code> <em>sudah</em> terdefinisi, jadi kita tidak mengirim header file itu ke compiler—ia secara efektif dibuang.</p>
+<h3 data-number="19.3.3" id="else"><span class="header-section-number">19.3.3</span> <code>#else</code></h3>
+<p></p>
+<p>Tapi itu belum semua yang bisa kita lakukan! Ada juga <code>#else</code> yang bisa kita campurkan.</p>
+<p> </p>
+<p>Mari kita modifikasi contoh sebelumnya:</p>
+<div class="sourceCode" id="cb348" data-startfrom="8"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 7;"><span id="cb348-8"><a href="c-preprocessor.html#cb348-8" aria-label="8"></a><span class="pp">#ifdef EXTRA_HAPPY</span></span>
+<span id="cb348-9"><a href="c-preprocessor.html#cb348-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m extra happy!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb348-10"><a href="c-preprocessor.html#cb348-10" aria-label="10"></a><span class="pp">#else</span></span>
+<span id="cb348-11"><a href="c-preprocessor.html#cb348-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m just regular</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb348-12"><a href="c-preprocessor.html#cb348-12" aria-label="12"></a><span class="pp">#endif</span></span></code></pre></div>
+<p> </p>
+<p>Sekarang kalau <code>EXTRA_HAPPY</code> tidak terdefinisi, ia akan masuk ke klausa <code>#else</code> dan mencetak:</p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb349-1"><a href="c-preprocessor.html#cb349-1" aria-hidden="true" tabindex="-1"></a>I&#39;m just regular</span></code></pre></div>
+<h3 data-number="19.3.4" id="else-if-elifdef-elifndef"><span class="header-section-number">19.3.4</span> Else-If: <code>#elifdef</code>, <code>#elifndef</code></h3>
+<p> </p>
+<p>Fitur ini baru di C23!</p>
+<p>Bagaimana kalau kamu ingin sesuatu yang lebih kompleks? Mungkin kamu butuh struktur rangkaian if-else supaya kodemu terbangun dengan benar?</p>
+<p>Untungnya directive-directive ini tersedia. Kita bisa memakai <code>#elifdef</code> untuk “else if defined”:</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb350-1"><a href="c-preprocessor.html#cb350-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef MODE_1</span></span>
+<span id="cb350-2"><a href="c-preprocessor.html#cb350-2" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;This is mode 1</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb350-3"><a href="c-preprocessor.html#cb350-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#elifdef MODE_2</span></span>
+<span id="cb350-4"><a href="c-preprocessor.html#cb350-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;This is mode 2</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb350-5"><a href="c-preprocessor.html#cb350-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#elifdef MODE_3</span></span>
+<span id="cb350-6"><a href="c-preprocessor.html#cb350-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;This is mode 3</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb350-7"><a href="c-preprocessor.html#cb350-7" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
+<span id="cb350-8"><a href="c-preprocessor.html#cb350-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;This is some other mode</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb350-9"><a href="c-preprocessor.html#cb350-9" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p></p>
+<p>Sebaliknya, kamu bisa memakai <code>#elifndef</code> untuk “else if not defined”.</p>
+<p></p>
+<h3 data-number="19.3.5" id="kondisional-umum-if-elif"><span class="header-section-number">19.3.5</span> Kondisional Umum: <code>#if</code>, <code>#elif</code></h3>
+<p> </p>
+<p>Ini bekerja sangat mirip directive <code>#ifdef</code> dan <code>#ifndef</code>, yaitu kamu juga bisa punya <code>#else</code> dan semuanya ditutup dengan <code>#endif</code>.</p>
+<p>Satu-satunya perbedaan: ekspresi konstan setelah <code>#if</code> harus bernilai true (bukan nol) agar kode di dalam <code>#if</code> dikompilasi. Jadi alih-alih apakah sesuatu terdefinisi atau tidak, kita ingin ekspresi yang bernilai true.</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb351-1"><a href="c-preprocessor.html#cb351-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb351-2"><a href="c-preprocessor.html#cb351-2" aria-label="2"></a></span>
+<span id="cb351-3"><a href="c-preprocessor.html#cb351-3" aria-label="3"></a><span class="pp">#define HAPPY_FACTOR </span><span class="dv">1</span></span>
+<span id="cb351-4"><a href="c-preprocessor.html#cb351-4" aria-label="4"></a></span>
+<span id="cb351-5"><a href="c-preprocessor.html#cb351-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb351-6"><a href="c-preprocessor.html#cb351-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb351-7"><a href="c-preprocessor.html#cb351-7" aria-label="7"></a></span>
+<span id="cb351-8"><a href="c-preprocessor.html#cb351-8" aria-label="8"></a><span class="pp">#if HAPPY_FACTOR == 0</span></span>
+<span id="cb351-9"><a href="c-preprocessor.html#cb351-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m not happy!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb351-10"><a href="c-preprocessor.html#cb351-10" aria-label="10"></a><span class="pp">#elif HAPPY_FACTOR == 1</span></span>
+<span id="cb351-11"><a href="c-preprocessor.html#cb351-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m just regular</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb351-12"><a href="c-preprocessor.html#cb351-12" aria-label="12"></a><span class="pp">#else</span></span>
+<span id="cb351-13"><a href="c-preprocessor.html#cb351-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m extra happy!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb351-14"><a href="c-preprocessor.html#cb351-14" aria-label="14"></a><span class="pp">#endif</span></span>
+<span id="cb351-15"><a href="c-preprocessor.html#cb351-15" aria-label="15"></a></span>
+<span id="cb351-16"><a href="c-preprocessor.html#cb351-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;OK!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb351-17"><a href="c-preprocessor.html#cb351-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Sekali lagi, untuk klausa <code>#if</code> yang tidak cocok, compiler bahkan tidak akan melihat baris-baris itu. Untuk kode di atas, setelah preprocessor selesai, yang dilihat compiler hanyalah:</p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb352-1"><a href="c-preprocessor.html#cb352-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb352-2"><a href="c-preprocessor.html#cb352-2" aria-label="2"></a></span>
+<span id="cb352-3"><a href="c-preprocessor.html#cb352-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb352-4"><a href="c-preprocessor.html#cb352-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb352-5"><a href="c-preprocessor.html#cb352-5" aria-label="5"></a></span>
+<span id="cb352-6"><a href="c-preprocessor.html#cb352-6" aria-label="6"></a>    printf<span class="op">(</span><span class="st">&quot;I&#39;m just regular</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb352-7"><a href="c-preprocessor.html#cb352-7" aria-label="7"></a></span>
+<span id="cb352-8"><a href="c-preprocessor.html#cb352-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;OK!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb352-9"><a href="c-preprocessor.html#cb352-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Salah satu pemakaian akal-akalan dari hal ini adalah mengomentari banyak baris dengan cepat<a href="function-specifier-alignment-specifier-dan-operator.html#fn128" class="footnote-ref" id="fnref128" role="doc-noteref"><sup>128</sup></a>.</p>
+<p></p>
+<p>Kalau kamu menaruh <code>#if 0</code> (“if false”) di awal blok yang ingin dikomentari dan <code>#endif</code> di akhir, kamu mendapat efek ini:</p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb353-1"><a href="c-preprocessor.html#cb353-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if 0</span></span>
+<span id="cb353-2"><a href="c-preprocessor.html#cb353-2" aria-hidden="true" tabindex="-1"></a><span class="co">    printf(</span><span class="st">&quot;All this code&quot;</span><span class="co">); /* is effectively */</span></span>
+<span id="cb353-3"><a href="c-preprocessor.html#cb353-3" aria-hidden="true" tabindex="-1"></a><span class="co">    printf(</span><span class="st">&quot;commented out&quot;</span><span class="co">); // by the #if 0</span></span>
+<span id="cb353-4"><a href="c-preprocessor.html#cb353-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p></p>
+<p>Bagaimana kalau kamu memakai compiler pra-C23 dan tidak ada dukungan directive <code>#elifdef</code> atau <code>#elifndef</code>? Bagaimana mendapat efek yang sama dengan <code>#if</code>? Artinya, bagaimana kalau kita menginginkan ini:</p>
+<div class="sourceCode" id="cb354"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb354-1"><a href="c-preprocessor.html#cb354-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef FOO</span></span>
+<span id="cb354-2"><a href="c-preprocessor.html#cb354-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb354-3"><a href="c-preprocessor.html#cb354-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#elifdef BAR  </span><span class="co">// KEMUNGKINAN ERROR: Tidak didukung sebelum C23</span></span>
+<span id="cb354-4"><a href="c-preprocessor.html#cb354-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb354-5"><a href="c-preprocessor.html#cb354-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p>Bagaimana caranya?</p>
+<p>Ternyata ada operator preprocessor bernama <code>defined</code> yang bisa dipakai dengan pernyataan <code>#if</code>.</p>
+<p>Ketiganya setara:</p>
+<p></p>
+<div class="sourceCode" id="cb355"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb355-1"><a href="c-preprocessor.html#cb355-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef FOO</span></span>
+<span id="cb355-2"><a href="c-preprocessor.html#cb355-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#if defined FOO</span></span>
+<span id="cb355-3"><a href="c-preprocessor.html#cb355-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#if defined(FOO)   </span><span class="co">// Tanda kurung opsional</span></span></code></pre></div>
+<p>Begitu juga ketiga ini:</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb356-1"><a href="c-preprocessor.html#cb356-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifndef FOO</span></span>
+<span id="cb356-2"><a href="c-preprocessor.html#cb356-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#if !defined FOO</span></span>
+<span id="cb356-3"><a href="c-preprocessor.html#cb356-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#if !defined(FOO)   </span><span class="co">// Tanda kurung opsional</span></span></code></pre></div>
+<p>Perhatikan bahwa kita bisa memakai operator logika NOT standar (<code>!</code>) untuk “tidak terdefinisi”.</p>
+<p>Jadi sekarang kita kembali ke dunia <code>#if</code> dan bisa memakai <code>#elif</code> sesuka hati!</p>
+<p>Kode yang rusak ini:</p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb357-1"><a href="c-preprocessor.html#cb357-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef FOO</span></span>
+<span id="cb357-2"><a href="c-preprocessor.html#cb357-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb357-3"><a href="c-preprocessor.html#cb357-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#elifdef BAR  </span><span class="co">// KEMUNGKINAN ERROR: Tidak didukung sebelum C23</span></span>
+<span id="cb357-4"><a href="c-preprocessor.html#cb357-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb357-5"><a href="c-preprocessor.html#cb357-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p>bisa diganti dengan:</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb358-1"><a href="c-preprocessor.html#cb358-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if defined FOO</span></span>
+<span id="cb358-2"><a href="c-preprocessor.html#cb358-2" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb358-3"><a href="c-preprocessor.html#cb358-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#elif defined BAR</span></span>
+<span id="cb358-4"><a href="c-preprocessor.html#cb358-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb358-5"><a href="c-preprocessor.html#cb358-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p> </p>
+<h3 data-number="19.3.6" id="menghapus-makro-undef"><span class="header-section-number">19.3.6</span> Menghapus Makro: <code>#undef</code></h3>
+<p></p>
+<p>Kalau kamu sudah mendefinisikan sesuatu tapi tidak membutuhkannya lagi, kamu bisa membatalkan definisinya dengan <code>#undef</code>.</p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb359-1"><a href="c-preprocessor.html#cb359-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb359-2"><a href="c-preprocessor.html#cb359-2" aria-label="2"></a></span>
+<span id="cb359-3"><a href="c-preprocessor.html#cb359-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb359-4"><a href="c-preprocessor.html#cb359-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb359-5"><a href="c-preprocessor.html#cb359-5" aria-label="5"></a><span class="pp">#define GOATS</span></span>
+<span id="cb359-6"><a href="c-preprocessor.html#cb359-6" aria-label="6"></a></span>
+<span id="cb359-7"><a href="c-preprocessor.html#cb359-7" aria-label="7"></a><span class="pp">#ifdef GOATS</span></span>
+<span id="cb359-8"><a href="c-preprocessor.html#cb359-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;Goats detected!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// tercetak</span></span>
+<span id="cb359-9"><a href="c-preprocessor.html#cb359-9" aria-label="9"></a><span class="pp">#endif</span></span>
+<span id="cb359-10"><a href="c-preprocessor.html#cb359-10" aria-label="10"></a></span>
+<span id="cb359-11"><a href="c-preprocessor.html#cb359-11" aria-label="11"></a><span class="pp">#undef GOATS  </span><span class="co">// Buat GOATS tidak terdefinisi lagi</span></span>
+<span id="cb359-12"><a href="c-preprocessor.html#cb359-12" aria-label="12"></a></span>
+<span id="cb359-13"><a href="c-preprocessor.html#cb359-13" aria-label="13"></a><span class="pp">#ifdef GOATS</span></span>
+<span id="cb359-14"><a href="c-preprocessor.html#cb359-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;Goats detected, again!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span> <span class="co">// tidak tercetak</span></span>
+<span id="cb359-15"><a href="c-preprocessor.html#cb359-15" aria-label="15"></a><span class="pp">#endif</span></span>
+<span id="cb359-16"><a href="c-preprocessor.html#cb359-16" aria-label="16"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<h2 data-number="19.4" id="makro-bawaan"><span class="header-section-number">19.4</span> Makro Bawaan</h2>
+<p></p>
+<p>Standar mendefinisikan banyak makro bawaan yang bisa diuji dan dipakai untuk kompilasi kondisional. Mari kita lihat di sini.</p>
+<h3 data-number="19.4.1" id="makro-wajib"><span class="header-section-number">19.4.1</span> Makro Wajib</h3>
+<p>Semua ini terdefinisi:</p>
+<p> </p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 82%" />
+</colgroup>
+<thead>
+<tr>
+<th>Makro</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__DATE__</code></td>
+<td>Tanggal kompilasi—yaitu saat file ini dikompilasi—dengan format <code>Mmm dd yyyy</code></td>
+</tr>
+<tr>
+<td><code>__TIME__</code></td>
+<td>Waktu kompilasi dengan format <code>hh:mm:ss</code></td>
+</tr>
+<tr>
+<td><code>__FILE__</code></td>
+<td>String berisi nama file ini</td>
+</tr>
+<tr>
+<td><code>__LINE__</code></td>
+<td>Nomor baris di file tempat makro ini muncul</td>
+</tr>
+<tr>
+<td><code>__func__</code></td>
+<td>Nama fungsi tempat ini muncul, sebagai string<a href="function-specifier-alignment-specifier-dan-operator.html#fn129" class="footnote-ref" id="fnref129" role="doc-noteref"><sup>129</sup></a></td>
+</tr>
+<tr>
+<td><code>__STDC__</code></td>
+<td>Bernilai <code>1</code> kalau ini C compiler standar</td>
+</tr>
+<tr>
+<td><code>__STDC_HOSTED__</code></td>
+<td>Bernilai <code>1</code> kalau compiler adalah <em>hosted implementation</em><a href="function-specifier-alignment-specifier-dan-operator.html#fn130" class="footnote-ref" id="fnref130" role="doc-noteref"><sup>130</sup></a>, selain itu <code>0</code></td>
+</tr>
+<tr>
+<td><code>__STDC_VERSION__</code></td>
+<td>Versi C ini, berupa konstanta <code>long int</code> dengan bentuk <code>yyyymmL</code>, mis. <code>201710L</code></td>
+</tr>
+</tbody>
+</table>
+<p>Mari kita gabungkan semuanya.</p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb360-1"><a href="c-preprocessor.html#cb360-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb360-2"><a href="c-preprocessor.html#cb360-2" aria-label="2"></a></span>
+<span id="cb360-3"><a href="c-preprocessor.html#cb360-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb360-4"><a href="c-preprocessor.html#cb360-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb360-5"><a href="c-preprocessor.html#cb360-5" aria-label="5"></a>    printf<span class="op">(</span><span class="st">&quot;This function: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> __func__<span class="op">);</span></span>
+<span id="cb360-6"><a href="c-preprocessor.html#cb360-6" aria-label="6"></a>    printf<span class="op">(</span><span class="st">&quot;This file: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> __FILE__<span class="op">);</span></span>
+<span id="cb360-7"><a href="c-preprocessor.html#cb360-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;This line: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> __LINE__<span class="op">);</span></span>
+<span id="cb360-8"><a href="c-preprocessor.html#cb360-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;Compiled on: </span><span class="sc">%s</span><span class="st"> </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> __DATE__<span class="op">,</span> __TIME__<span class="op">);</span></span>
+<span id="cb360-9"><a href="c-preprocessor.html#cb360-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;C Version: </span><span class="sc">%ld\n</span><span class="st">&quot;</span><span class="op">,</span> __STDC_VERSION__<span class="op">);</span></span>
+<span id="cb360-10"><a href="c-preprocessor.html#cb360-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<p>Output di sistemku:</p>
+<div class="sourceCode" id="cb361"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb361-1"><a href="c-preprocessor.html#cb361-1" aria-hidden="true" tabindex="-1"></a>This function: main</span>
+<span id="cb361-2"><a href="c-preprocessor.html#cb361-2" aria-hidden="true" tabindex="-1"></a>This file: foo.c</span>
+<span id="cb361-3"><a href="c-preprocessor.html#cb361-3" aria-hidden="true" tabindex="-1"></a>This line: 7</span>
+<span id="cb361-4"><a href="c-preprocessor.html#cb361-4" aria-hidden="true" tabindex="-1"></a>Compiled on: Nov 23 2020 17:16:27</span>
+<span id="cb361-5"><a href="c-preprocessor.html#cb361-5" aria-hidden="true" tabindex="-1"></a>C Version: 201710</span></code></pre></div>
+<p><code>__FILE__</code>, <code>__func__</code> dan <code>__LINE__</code> sangat berguna untuk melaporkan kondisi error dalam pesan kepada developer. Makro <code>assert()</code> di <code>&lt;assert.h&gt;</code> memakai ketiganya untuk menunjukkan di bagian kode mana assertion gagal.</p>
+<p> </p>
+<h4 data-number="19.4.1.1" id="stdc_version__"><span class="header-section-number">19.4.1.1</span> <code>__STDC_VERSION__</code></h4>
+<p></p>
+<p>Kalau kamu penasaran, berikut nomor versi untuk rilis-rilis utama Spesifikasi Bahasa C:</p>
+<table>
+<thead>
+<tr>
+<th>Rilis</th>
+<th>Versi ISO/IEC</th>
+<th><code>__STDC_VERSION__</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C89</td>
+<td>ISO/IEC 9899:1990</td>
+<td>tidak terdefinisi</td>
+</tr>
+<tr>
+<td><strong>C89</strong></td>
+<td>ISO/IEC 9899:1990/Amd.1:1995</td>
+<td><code>199409L</code></td>
+</tr>
+<tr>
+<td><strong>C99</strong></td>
+<td>ISO/IEC 9899:1999</td>
+<td><code>199901L</code></td>
+</tr>
+<tr>
+<td><strong>C11</strong></td>
+<td>ISO/IEC 9899:2011/Amd.1:2012</td>
+<td><code>201112L</code></td>
+</tr>
+</tbody>
+</table>
+<p>Perhatikan bahwa makro ini awalnya tidak ada di C89.</p>
+<p>Perhatikan juga bahwa rencananya nomor versi akan selalu naik, jadi kamu selalu bisa memeriksa, misalnya, “setidaknya C99” dengan:</p>
+<div class="sourceCode" id="cb362"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb362-1"><a href="c-preprocessor.html#cb362-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __STDC_VERSION__ &gt;= 1999901L</span></span></code></pre></div>
+<p> </p>
+<h3 data-number="19.4.2" id="makro-opsional"><span class="header-section-number">19.4.2</span> Makro Opsional</h3>
+<p>Implementasimu mungkin mendefinisikan ini juga. Atau mungkin tidak.</p>
+<p> </p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr>
+<th>Makro</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__STDC_ISO_10646__</code></td>
+<td>Jika terdefinisi, <code>wchar_t</code> menyimpan nilai Unicode, selain itu sesuatu yang lain</td>
+</tr>
+<tr>
+<td><code>__STDC_MB_MIGHT_NEQ_WC__</code></td>
+<td>Nilai <code>1</code> menandakan bahwa nilai pada karakter multibyte mungkin tidak sama dengan nilai pada wide character</td>
+</tr>
+<tr>
+<td><code>__STDC_UTF_16__</code></td>
+<td>Nilai <code>1</code> menandakan bahwa sistem memakai encoding UTF-16 pada tipe <code>char16_t</code></td>
+</tr>
+<tr>
+<td><code>__STDC_UTF_32__</code></td>
+<td>Nilai <code>1</code> menandakan bahwa sistem memakai encoding UTF-32 pada tipe <code>char32_t</code></td>
+</tr>
+<tr>
+<td><code>__STDC_ANALYZABLE__</code></td>
+<td>Nilai <code>1</code> menandakan bahwa kode itu analyzable<a href="function-specifier-alignment-specifier-dan-operator.html#fn131" class="footnote-ref" id="fnref131" role="doc-noteref"><sup>131</sup></a></td>
+</tr>
+<tr>
+<td><code>__STDC_IEC_559__</code></td>
+<td><code>1</code> jika floating point IEEE-754 (alias IEC 60559) didukung</td>
+</tr>
+<tr>
+<td><code>__STDC_IEC_559_COMPLEX__</code></td>
+<td><code>1</code> jika floating point kompleks IEC 60559 didukung</td>
+</tr>
+<tr>
+<td><code>__STDC_LIB_EXT1__</code></td>
+<td><code>1</code> jika implementasi ini mendukung berbagai fungsi standard library alternatif yang “aman” (nama mereka berakhiran <code>_s</code>)</td>
+</tr>
+<tr>
+<td><code>__STDC_NO_ATOMICS__</code></td>
+<td><code>1</code> jika implementasi ini <strong>tidak</strong> mendukung <code>_Atomic</code> atau <code>&lt;stdatomic.h&gt;</code></td>
+</tr>
+<tr>
+<td><code>__STDC_NO_COMPLEX__</code></td>
+<td><code>1</code> jika implementasi ini <strong>tidak</strong> mendukung tipe kompleks atau <code>&lt;complex.h&gt;</code></td>
+</tr>
+<tr>
+<td><code>__STDC_NO_THREADS__</code></td>
+<td><code>1</code> jika implementasi ini <strong>tidak</strong> mendukung <code>&lt;threads.h&gt;</code></td>
+</tr>
+<tr>
+<td><code>__STDC_NO_VLA__</code></td>
+<td><code>1</code> jika implementasi ini <strong>tidak</strong> mendukung variable-length array</td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<h2 data-number="19.5" id="makro-dengan-argumen"><span class="header-section-number">19.5</span> Makro dengan Argumen</h2>
+<p></p>
+<p>Makro lebih kuat daripada sekadar substitusi. Kamu bisa mengaturnya agar menerima argumen yang ikut disubstitusi.</p>
+<p>Pertanyaan yang sering muncul: kapan memakai makro berparameter versus fungsi. Jawaban singkat: pakai fungsi. Tapi kamu akan melihat banyak makro di alam liar dan di standard library. Orang cenderung memakainya untuk hal-hal singkat yang bersifat matematis, dan juga untuk fitur yang mungkin berubah dari satu platform ke platform lain. Kamu bisa mendefinisikan kata kunci berbeda untuk satu platform atau lainnya.</p>
+<h3 data-number="19.5.1" id="makro-dengan-satu-argumen"><span class="header-section-number">19.5.1</span> Makro dengan Satu Argumen</h3>
+<p>Kita mulai dengan yang sederhana, yang mengkuadratkan sebuah angka:</p>
+<p></p>
+<div class="sourceCode" id="cb363"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb363-1"><a href="c-preprocessor.html#cb363-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb363-2"><a href="c-preprocessor.html#cb363-2" aria-label="2"></a></span>
+<span id="cb363-3"><a href="c-preprocessor.html#cb363-3" aria-label="3"></a><span class="pp">#define SQR</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> x </span><span class="op">*</span><span class="pp"> x  </span><span class="co">// Belum tepat, tapi ikuti saja dulu</span></span>
+<span id="cb363-4"><a href="c-preprocessor.html#cb363-4" aria-label="4"></a></span>
+<span id="cb363-5"><a href="c-preprocessor.html#cb363-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb363-6"><a href="c-preprocessor.html#cb363-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb363-7"><a href="c-preprocessor.html#cb363-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> SQR<span class="op">(</span><span class="dv">12</span><span class="op">));</span>  <span class="co">// 144</span></span>
+<span id="cb363-8"><a href="c-preprocessor.html#cb363-8" aria-label="8"></a><span class="op">}</span></span></code></pre></div>
+<p>Maksudnya: “di mana pun kamu melihat <code>SQR</code> dengan suatu nilai, ganti dengan nilai itu dikali dirinya sendiri”.</p>
+<p>Jadi baris 7 akan diubah menjadi:</p>
+<div class="sourceCode" id="cb364" data-startfrom="7"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 6;"><span id="cb364-7"><a href="c-preprocessor.html#cb364-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">12</span> <span class="op">*</span> <span class="dv">12</span><span class="op">);</span>  <span class="co">// 144</span></span></code></pre></div>
+<p>yang dengan nyaman dikonversi C menjadi 144.</p>
+<p>Tapi kita membuat kesalahan elementer pada makro itu, kesalahan yang harus dihindari.</p>
+<p>Mari kita periksa. Bagaimana kalau kita ingin menghitung <code>SQR(3 + 4)</code>? Nah, <span class="math inline">\(3+4=7\)</span>, jadi tentu kita ingin menghitung <span class="math inline">\(7^2=49\)</span>. Itu dia; <code>49</code>— jawaban akhir.</p>
+<p>Mari kita masukkan ke kode dan lihat bahwa kita mendapat… 19?</p>
+<div class="sourceCode" id="cb365" data-startfrom="7"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 6;"><span id="cb365-7"><a href="c-preprocessor.html#cb365-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> SQR<span class="op">(</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span><span class="op">));</span>  <span class="co">// 19!!??</span></span></code></pre></div>
+<p>Apa yang terjadi?</p>
+<p>Kalau kita ikuti perluasan makronya, kita mendapat</p>
+<div class="sourceCode" id="cb366" data-startfrom="7"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 6;"><span id="cb366-7"><a href="c-preprocessor.html#cb366-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span><span class="op">);</span>  <span class="co">// 19!</span></span></code></pre></div>
+<p>Waduh! Karena perkalian lebih diutamakan, kita menghitung <span class="math inline">\(4\times3=12\)</span> lebih dulu, dan mendapat <span class="math inline">\(3+12+4=19\)</span>. Bukan yang kita inginkan.</p>
+<p>Jadi kita harus memperbaikinya agar benar.</p>
+<p><strong>Hal ini sangat umum, jadi lakukan saja secara otomatis setiap kali membuat makro matematika berparameter!</strong></p>
+<p>Perbaikannya mudah: tambahkan tanda kurung!</p>
+<div class="sourceCode" id="cb367" data-startfrom="3"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 2;"><span id="cb367-3"><a href="c-preprocessor.html#cb367-3" aria-label="3"></a><span class="pp">#define SQR</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp">   </span><span class="co">// Lebih baik... tapi masih belum cukup bagus!</span></span></code></pre></div>
+<p>Dan sekarang makro kita diperluas menjadi:</p>
+<div class="sourceCode" id="cb368" data-startfrom="7"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 6;"><span id="cb368-7"><a href="c-preprocessor.html#cb368-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span><span class="op">));</span>  <span class="co">// 49! Horeee!</span></span></code></pre></div>
+<p>Tapi sebenarnya kita masih punya masalah yang sama, yang bisa muncul kalau ada operator berprioritas lebih tinggi daripada perkalian (<code>*</code>) di dekatnya.</p>
+<p>Jadi cara yang aman dan benar untuk menyusun makro itu adalah dengan membungkus keseluruhannya dalam tanda kurung tambahan, seperti ini:</p>
+<div class="sourceCode" id="cb369" data-startfrom="3"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 2;"><span id="cb369-3"><a href="c-preprocessor.html#cb369-3" aria-label="3"></a><span class="pp">#define SQR</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">((</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">))</span><span class="pp">   </span><span class="co">// Bagus!</span></span></code></pre></div>
+<p>Biasakan melakukan itu setiap kali membuat makro matematika dan kamu tidak akan salah.</p>
+<h3 data-number="19.5.2" id="makro-dengan-lebih-dari-satu-argumen"><span class="header-section-number">19.5.2</span> Makro dengan Lebih dari Satu Argumen</h3>
+<p>Kamu bisa menumpuk ini sebanyak yang kamu mau:</p>
+<div class="sourceCode" id="cb370"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb370-1"><a href="c-preprocessor.html#cb370-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define TRIANGLE_AREA</span><span class="op">(</span><span class="pp">w</span><span class="op">,</span><span class="pp"> h</span><span class="op">)</span><span class="pp"> </span><span class="op">(</span><span class="fl">0.5</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">w</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">h</span><span class="op">))</span></span></code></pre></div>
+<p>Mari kita buat beberapa makro yang menyelesaikan <span class="math inline">\(x\)</span> dengan rumus kuadrat. Kalau-kalau kamu belum hafal, untuk persamaan berbentuk:</p>
+<p><span class="math inline">\(ax^2+bx+c=0\)</span></p>
+<p>kamu bisa mencari <span class="math inline">\(x\)</span> dengan rumus kuadrat:</p>
+<p><span class="math inline">\(x=\displaystyle\frac{-b\pm\sqrt{b^2-4ac}}{2a}\)</span></p>
+<p>Rumus yang gila. Perhatikan juga plus-minus (<span class="math inline">\(\pm\)</span>) di sana, yang menandakan bahwa sebenarnya ada dua solusi.</p>
+<p>Jadi mari kita buat makro untuk keduanya:</p>
+<div class="sourceCode" id="cb371"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb371-1"><a href="c-preprocessor.html#cb371-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define QUADP</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span><span class="pp"> </span><span class="op">((-(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">+</span><span class="pp"> sqrt</span><span class="op">((</span><span class="pp">b</span><span class="op">)*(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> </span><span class="dv">4</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">c</span><span class="op">)))</span><span class="pp"> </span><span class="op">/</span><span class="pp"> </span><span class="op">(</span><span class="dv">2</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)))</span></span>
+<span id="cb371-2"><a href="c-preprocessor.html#cb371-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define QUADM</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span><span class="pp"> </span><span class="op">((-(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> sqrt</span><span class="op">((</span><span class="pp">b</span><span class="op">)*(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> </span><span class="dv">4</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">c</span><span class="op">)))</span><span class="pp"> </span><span class="op">/</span><span class="pp"> </span><span class="op">(</span><span class="dv">2</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)))</span></span></code></pre></div>
+<p>Itu sudah memberi kita sedikit matematika. Tapi mari kita definisikan satu lagi yang bisa dipakai sebagai argumen <code>printf()</code> untuk mencetak kedua jawaban.</p>
+<div class="sourceCode" id="cb372"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb372-1"><a href="c-preprocessor.html#cb372-1" aria-hidden="true" tabindex="-1"></a><span class="co">//          makro              penggantian</span></span>
+<span id="cb372-2"><a href="c-preprocessor.html#cb372-2" aria-hidden="true" tabindex="-1"></a><span class="co">//      |-----------| |----------------------------|</span></span>
+<span id="cb372-3"><a href="c-preprocessor.html#cb372-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#define QUAD</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span><span class="pp"> QUADP</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">),</span><span class="pp"> QUADM</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span></span></code></pre></div>
+<p>Itu hanya dua nilai yang dipisahkan koma—dan kita bisa memakainya sebagai argumen “gabungan” untuk <code>printf()</code> seperti ini:</p>
+<div class="sourceCode" id="cb373"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb373-1"><a href="c-preprocessor.html#cb373-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;x = </span><span class="sc">%f</span><span class="st"> or x = </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> QUAD<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">5</span><span class="op">));</span></span></code></pre></div>
+<p>Mari kita satukan dalam kode:</p>
+<div class="sourceCode" id="cb374"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb374-1"><a href="c-preprocessor.html#cb374-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb374-2"><a href="c-preprocessor.html#cb374-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;math.h&gt;</span><span class="pp">  </span><span class="co">// Untuk sqrt()</span></span>
+<span id="cb374-3"><a href="c-preprocessor.html#cb374-3" aria-label="3"></a></span>
+<span id="cb374-4"><a href="c-preprocessor.html#cb374-4" aria-label="4"></a><span class="pp">#define QUADP</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span><span class="pp"> </span><span class="op">((-(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">+</span><span class="pp"> sqrt</span><span class="op">((</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> </span><span class="dv">4</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">c</span><span class="op">)))</span><span class="pp"> </span><span class="op">/</span><span class="pp"> </span><span class="op">(</span><span class="dv">2</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)))</span></span>
+<span id="cb374-5"><a href="c-preprocessor.html#cb374-5" aria-label="5"></a><span class="pp">#define QUADM</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span><span class="pp"> </span><span class="op">((-(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> sqrt</span><span class="op">((</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">)</span><span class="pp"> </span><span class="op">-</span><span class="pp"> </span><span class="dv">4</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">c</span><span class="op">)))</span><span class="pp"> </span><span class="op">/</span><span class="pp"> </span><span class="op">(</span><span class="dv">2</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)))</span></span>
+<span id="cb374-6"><a href="c-preprocessor.html#cb374-6" aria-label="6"></a><span class="pp">#define QUAD</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span><span class="pp"> QUADP</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">),</span><span class="pp"> QUADM</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> c</span><span class="op">)</span></span>
+<span id="cb374-7"><a href="c-preprocessor.html#cb374-7" aria-label="7"></a></span>
+<span id="cb374-8"><a href="c-preprocessor.html#cb374-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb374-9"><a href="c-preprocessor.html#cb374-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb374-10"><a href="c-preprocessor.html#cb374-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;2*x^2 + 10*x + 5 = 0</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb374-11"><a href="c-preprocessor.html#cb374-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;x = </span><span class="sc">%f</span><span class="st"> or x = </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> QUAD<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">5</span><span class="op">));</span></span>
+<span id="cb374-12"><a href="c-preprocessor.html#cb374-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Dan ini memberi kita output:</p>
+<div class="sourceCode" id="cb375"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb375-1"><a href="c-preprocessor.html#cb375-1" aria-hidden="true" tabindex="-1"></a>2*x^2 + 10*x + 5 = 0</span>
+<span id="cb375-2"><a href="c-preprocessor.html#cb375-2" aria-hidden="true" tabindex="-1"></a>x = -0.563508 or x = -4.436492</span></code></pre></div>
+<p>Memasukkan salah satu nilai itu memberi hasil kira-kira nol (agak meleset karena angkanya tidak persis):</p>
+<p><span class="math inline">\(2\times-0.563508^2+10\times-0.563508+5\approx0.000003\)</span></p>
+<h3 data-number="19.5.3" id="makro-dengan-argumen-variabel"><span class="header-section-number">19.5.3</span> Makro dengan Argumen Variabel</h3>
+<p></p>
+<p>Ada juga cara untuk mengoper jumlah argumen yang bervariasi ke makro, dengan elipsis (<code>...</code>) setelah argumen bernama yang sudah diketahui. Saat makro diperluas, semua argumen tambahan akan berada dalam daftar yang dipisahkan koma di makro <code>__VA_ARGS__</code>, dan bisa diganti dari sana:</p>
+<div class="sourceCode" id="cb376"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb376-1"><a href="c-preprocessor.html#cb376-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb376-2"><a href="c-preprocessor.html#cb376-2" aria-label="2"></a></span>
+<span id="cb376-3"><a href="c-preprocessor.html#cb376-3" aria-label="3"></a><span class="co">// Gabungkan dua argumen pertama menjadi satu angka,</span></span>
+<span id="cb376-4"><a href="c-preprocessor.html#cb376-4" aria-label="4"></a><span class="co">// lalu jadikan sisanya daftar yang dipisahkan koma:</span></span>
+<span id="cb376-5"><a href="c-preprocessor.html#cb376-5" aria-label="5"></a></span>
+<span id="cb376-6"><a href="c-preprocessor.html#cb376-6" aria-label="6"></a><span class="pp">#define X</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">,</span><span class="pp"> </span><span class="op">...)</span><span class="pp"> </span><span class="op">(</span><span class="dv">10</span><span class="op">*(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">+</span><span class="pp"> </span><span class="dv">20</span><span class="op">*(</span><span class="pp">b</span><span class="op">)),</span><span class="pp"> __VA_ARGS__</span></span>
+<span id="cb376-7"><a href="c-preprocessor.html#cb376-7" aria-label="7"></a></span>
+<span id="cb376-8"><a href="c-preprocessor.html#cb376-8" aria-label="8"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb376-9"><a href="c-preprocessor.html#cb376-9" aria-label="9"></a><span class="op">{</span></span>
+<span id="cb376-10"><a href="c-preprocessor.html#cb376-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%f</span><span class="st"> </span><span class="sc">%s</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> X<span class="op">(</span><span class="dv">5</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="fl">3.14</span><span class="op">,</span> <span class="st">&quot;Hi!&quot;</span><span class="op">,</span> <span class="dv">12</span><span class="op">));</span></span>
+<span id="cb376-11"><a href="c-preprocessor.html#cb376-11" aria-label="11"></a><span class="op">}</span></span></code></pre></div>
+<p>Substitusi yang terjadi di baris 10 adalah:</p>
+<div class="sourceCode" id="cb377" data-startfrom="10"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 9;"><span id="cb377-10"><a href="c-preprocessor.html#cb377-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%f</span><span class="st"> </span><span class="sc">%s</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dv">10</span><span class="op">*(</span><span class="dv">5</span><span class="op">)</span> <span class="op">+</span> <span class="dv">20</span><span class="op">*(</span><span class="dv">4</span><span class="op">)),</span> <span class="fl">3.14</span><span class="op">,</span> <span class="st">&quot;Hi!&quot;</span><span class="op">,</span> <span class="dv">12</span><span class="op">);</span></span></code></pre></div>
+<p>dengan output:</p>
+<div class="sourceCode" id="cb378"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb378-1"><a href="c-preprocessor.html#cb378-1" aria-hidden="true" tabindex="-1"></a>130 3.140000 Hi! 12</span></code></pre></div>
+<p>Kamu juga bisa men-“stringify” <code>__VA_ARGS__</code> dengan menaruh <code>#</code> di depannya:</p>
+<div class="sourceCode" id="cb379"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb379-1"><a href="c-preprocessor.html#cb379-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define X</span><span class="op">(...)</span><span class="pp"> </span><span class="op">#</span><span class="pp">__VA_ARGS__</span></span>
+<span id="cb379-2"><a href="c-preprocessor.html#cb379-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb379-3"><a href="c-preprocessor.html#cb379-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> X<span class="op">(</span><span class="dv">1</span><span class="op">,</span><span class="dv">2</span><span class="op">,</span><span class="dv">3</span><span class="op">));</span>  <span class="co">// Mencetak &quot;1, 2, 3&quot;</span></span></code></pre></div>
+<p> </p>
+<h3 data-number="19.5.4" id="stringification"><span class="header-section-number">19.5.4</span> Stringification</h3>
+<p></p>
+<p>Sudah disebut di atas, kamu bisa mengubah argumen apa pun menjadi string dengan menaruh <code>#</code> di depannya pada teks penggantian.</p>
+<p>Misalnya, kita bisa mencetak apa pun sebagai string dengan makro ini dan <code>printf()</code>:</p>
+<div class="sourceCode" id="cb380"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb380-1"><a href="c-preprocessor.html#cb380-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define STR</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">#</span><span class="pp">x</span></span>
+<span id="cb380-2"><a href="c-preprocessor.html#cb380-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb380-3"><a href="c-preprocessor.html#cb380-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> STR<span class="op">(</span><span class="fl">3.14159</span><span class="op">));</span></span></code></pre></div>
+<p>Dalam kasus itu, substitusinya menghasilkan:</p>
+<div class="sourceCode" id="cb381"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb381-1"><a href="c-preprocessor.html#cb381-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="st">&quot;3.14159&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Mari kita lihat apakah ini bisa dipakai lebih efektif sehingga kita bisa mengoper nama variabel <code>int</code> mana pun ke makro, dan makro itu mencetak nama dan nilainya.</p>
+<div class="sourceCode" id="cb382"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb382-1"><a href="c-preprocessor.html#cb382-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb382-2"><a href="c-preprocessor.html#cb382-2" aria-label="2"></a></span>
+<span id="cb382-3"><a href="c-preprocessor.html#cb382-3" aria-label="3"></a><span class="pp">#define PRINT_INT_VAL</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> printf</span><span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st"> = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span><span class="pp"> </span><span class="op">#</span><span class="pp">x</span><span class="op">,</span><span class="pp"> x</span><span class="op">)</span></span>
+<span id="cb382-4"><a href="c-preprocessor.html#cb382-4" aria-label="4"></a></span>
+<span id="cb382-5"><a href="c-preprocessor.html#cb382-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb382-6"><a href="c-preprocessor.html#cb382-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb382-7"><a href="c-preprocessor.html#cb382-7" aria-label="7"></a>    <span class="dt">int</span> a <span class="op">=</span> <span class="dv">5</span><span class="op">;</span></span>
+<span id="cb382-8"><a href="c-preprocessor.html#cb382-8" aria-label="8"></a></span>
+<span id="cb382-9"><a href="c-preprocessor.html#cb382-9" aria-label="9"></a>    PRINT_INT_VAL<span class="op">(</span>a<span class="op">);</span>  <span class="co">// mencetak &quot;a = 5&quot;</span></span>
+<span id="cb382-10"><a href="c-preprocessor.html#cb382-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p>Di baris 9, kita mendapat penggantian makro berikut:</p>
+<div class="sourceCode" id="cb383" data-startfrom="9"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c" style="counter-reset: source-line 8;"><span id="cb383-9"><a href="c-preprocessor.html#cb383-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s</span><span class="st"> = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="st">&quot;a&quot;</span><span class="op">,</span> a<span class="op">);</span></span></code></pre></div>
+<p></p>
+<h3 data-number="19.5.5" id="concatenation"><span class="header-section-number">19.5.5</span> Concatenation</h3>
+<p></p>
+<p>Kita juga bisa menyambung dua argumen dengan <code>##</code>. Seru!</p>
+<div class="sourceCode" id="cb384"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb384-1"><a href="c-preprocessor.html#cb384-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define CAT</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp"> a </span><span class="op">##</span><span class="pp"> b</span></span>
+<span id="cb384-2"><a href="c-preprocessor.html#cb384-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb384-3"><a href="c-preprocessor.html#cb384-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> CAT<span class="op">(</span><span class="fl">3.14</span><span class="op">,</span> <span class="dv">1592</span><span class="op">));</span>   <span class="co">// 3.141592</span></span></code></pre></div>
+<p></p>
+<h2 data-number="19.6" id="makro-multibaris"><span class="header-section-number">19.6</span> Makro Multibaris</h2>
+<p></p>
+<p>Makro bisa dilanjutkan ke beberapa baris kalau newline di-escape dengan backslash (<code>\</code>).</p>
+<p>Mari kita tulis makro multibaris yang mencetak angka dari <code>0</code> sampai hasil kali dua argumen yang dioper.</p>
+<p></p>
+<div class="sourceCode" id="cb385"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb385-1"><a href="c-preprocessor.html#cb385-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb385-2"><a href="c-preprocessor.html#cb385-2" aria-label="2"></a></span>
+<span id="cb385-3"><a href="c-preprocessor.html#cb385-3" aria-label="3"></a><span class="pp">#define PRINT_NUMS_TO_PRODUCT</span><span class="op">(</span><span class="pp">a</span><span class="op">,</span><span class="pp"> b</span><span class="op">)</span><span class="pp"> </span><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb385-4"><a href="c-preprocessor.html#cb385-4" aria-label="4"></a><span class="pp">    </span><span class="dt">int</span><span class="pp"> product </span><span class="op">=</span><span class="pp"> </span><span class="op">(</span><span class="pp">a</span><span class="op">)</span><span class="pp"> </span><span class="op">*</span><span class="pp"> </span><span class="op">(</span><span class="pp">b</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb385-5"><a href="c-preprocessor.html#cb385-5" aria-label="5"></a><span class="pp">    </span><span class="cf">for</span><span class="pp"> </span><span class="op">(</span><span class="dt">int</span><span class="pp"> i </span><span class="op">=</span><span class="pp"> </span><span class="dv">0</span><span class="op">;</span><span class="pp"> i </span><span class="op">&lt;</span><span class="pp"> product</span><span class="op">;</span><span class="pp"> i</span><span class="op">++)</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb385-6"><a href="c-preprocessor.html#cb385-6" aria-label="6"></a><span class="pp">        printf</span><span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span><span class="pp"> i</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb385-7"><a href="c-preprocessor.html#cb385-7" aria-label="7"></a><span class="pp">    </span><span class="op">}</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb385-8"><a href="c-preprocessor.html#cb385-8" aria-label="8"></a><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb385-9"><a href="c-preprocessor.html#cb385-9" aria-label="9"></a></span>
+<span id="cb385-10"><a href="c-preprocessor.html#cb385-10" aria-label="10"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb385-11"><a href="c-preprocessor.html#cb385-11" aria-label="11"></a><span class="op">{</span></span>
+<span id="cb385-12"><a href="c-preprocessor.html#cb385-12" aria-label="12"></a>    PRINT_NUMS_TO_PRODUCT<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">4</span><span class="op">);</span>  <span class="co">// Mengeluarkan angka dari 0 sampai 7</span></span>
+<span id="cb385-13"><a href="c-preprocessor.html#cb385-13" aria-label="13"></a><span class="op">}</span></span></code></pre></div>
+<p>Beberapa hal yang perlu dicatat:</p>
+<ul>
+<li>Escape di akhir setiap baris kecuali yang terakhir untuk menandakan bahwa makro berlanjut.</li>
+<li>Seluruhnya dibungkus dalam loop <code>do</code>-<code>while(0)</code> dengan kurung kurawal.</li>
+</ul>
+<p>Poin kedua mungkin agak aneh, tapi semuanya soal menyerap <code>;</code> di belakang yang dijatuhkan programmer setelah makro.</p>
+<p>Awalnya aku mengira kurung kurawal saja sudah cukup, tapi ada kasus yang gagal kalau programmer menaruh titik koma setelah makro. Inilah kasusnya:</p>
+<div class="sourceCode" id="cb386"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb386-1"><a href="c-preprocessor.html#cb386-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb386-2"><a href="c-preprocessor.html#cb386-2" aria-label="2"></a></span>
+<span id="cb386-3"><a href="c-preprocessor.html#cb386-3" aria-label="3"></a><span class="pp">#define FOO</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">(</span><span class="pp">x</span><span class="op">)++;</span><span class="pp"> </span><span class="op">}</span></span>
+<span id="cb386-4"><a href="c-preprocessor.html#cb386-4" aria-label="4"></a></span>
+<span id="cb386-5"><a href="c-preprocessor.html#cb386-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb386-6"><a href="c-preprocessor.html#cb386-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb386-7"><a href="c-preprocessor.html#cb386-7" aria-label="7"></a>    <span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb386-8"><a href="c-preprocessor.html#cb386-8" aria-label="8"></a></span>
+<span id="cb386-9"><a href="c-preprocessor.html#cb386-9" aria-label="9"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb386-10"><a href="c-preprocessor.html#cb386-10" aria-label="10"></a>        FOO<span class="op">(</span>i<span class="op">);</span></span>
+<span id="cb386-11"><a href="c-preprocessor.html#cb386-11" aria-label="11"></a>    <span class="cf">else</span></span>
+<span id="cb386-12"><a href="c-preprocessor.html#cb386-12" aria-label="12"></a>        printf<span class="op">(</span><span class="st">&quot;:-(</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb386-13"><a href="c-preprocessor.html#cb386-13" aria-label="13"></a></span>
+<span id="cb386-14"><a href="c-preprocessor.html#cb386-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">);</span></span>
+<span id="cb386-15"><a href="c-preprocessor.html#cb386-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p>Kelihatannya sederhana, tapi tidak akan terbangun tanpa syntax error:</p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb387-1"><a href="c-preprocessor.html#cb387-1" aria-hidden="true" tabindex="-1"></a>foo.c:11:5: error: ‘else’ without a previous ‘if’  </span></code></pre></div>
+<p>Kamu bisa lihat masalahnya?</p>
+<p>Mari kita lihat perluasannya:</p>
+<div class="sourceCode" id="cb388"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb388-1"><a href="c-preprocessor.html#cb388-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb388-2"><a href="c-preprocessor.html#cb388-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>i <span class="op">==</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb388-3"><a href="c-preprocessor.html#cb388-3" aria-hidden="true" tabindex="-1"></a>        <span class="op">(</span>i<span class="op">)++;</span></span>
+<span id="cb388-4"><a href="c-preprocessor.html#cb388-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span>             <span class="co">// &lt;-- Masalah dengan M huruf besar!</span></span>
+<span id="cb388-5"><a href="c-preprocessor.html#cb388-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb388-6"><a href="c-preprocessor.html#cb388-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb388-7"><a href="c-preprocessor.html#cb388-7" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;:-(</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p><code>;</code> itu mengakhiri pernyataan <code>if</code>, jadi <code>else</code> melayang-layang di sana secara ilegal<a href="function-specifier-alignment-specifier-dan-operator.html#fn132" class="footnote-ref" id="fnref132" role="doc-noteref"><sup>132</sup></a>.</p>
+<p>Jadi bungkus makro multibaris itu dengan <code>do</code>-<code>while(0)</code>.</p>
+<p> </p>
+<h2 data-number="19.7" id="my-assert"><span class="header-section-number">19.7</span> Contoh: Makro Assert</h2>
+<p>Menambahkan assert ke kodemu adalah cara bagus untuk menangkap kondisi yang menurutmu seharusnya tidak terjadi. C menyediakan fungsionalitas <code>assert()</code>. Ia memeriksa sebuah kondisi, dan kalau false, program berhenti sambil memberi tahu file dan nomor baris tempat assertion gagal.</p>
+<p>Tapi ini kurang memadai.</p>
+<ol type="1">
+<li>Pertama, kamu tidak bisa menambahkan pesan tambahan pada assert.</li>
+<li>Kedua, tidak ada saklar on-off yang mudah untuk semua assert.</li>
+</ol>
+<p>Yang pertama bisa kita atasi dengan makro.</p>
+<p>Pada dasarnya, kalau aku punya kode ini:</p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb389-1"><a href="c-preprocessor.html#cb389-1" aria-hidden="true" tabindex="-1"></a>ASSERT<span class="op">(</span>x <span class="op">&lt;</span> <span class="dv">20</span><span class="op">,</span> <span class="st">&quot;x must be under 20&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>aku ingin sesuatu seperti ini terjadi (dengan asumsi <code>ASSERT()</code> ada di baris 220 <code>foo.c</code>):</p>
+<div class="sourceCode" id="cb390"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb390-1"><a href="c-preprocessor.html#cb390-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(!(</span>x <span class="op">&lt;</span> <span class="dv">20</span><span class="op">))</span> <span class="op">{</span></span>
+<span id="cb390-2"><a href="c-preprocessor.html#cb390-2" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;foo.c:220: assertion x &lt; 20 failed: &quot;</span><span class="op">);</span></span>
+<span id="cb390-3"><a href="c-preprocessor.html#cb390-3" aria-hidden="true" tabindex="-1"></a>    fprintf<span class="op">(</span>stderr<span class="op">,</span> <span class="st">&quot;x must be under 20</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb390-4"><a href="c-preprocessor.html#cb390-4" aria-hidden="true" tabindex="-1"></a>    exit<span class="op">(</span><span class="dv">1</span><span class="op">);</span></span>
+<span id="cb390-5"><a href="c-preprocessor.html#cb390-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Kita bisa mengambil nama file dari makro <code>__FILE__</code>, dan nomor baris dari <code>__LINE__</code>. Pesannya sudah berupa string, tapi <code>x &lt; 20</code> bukan, jadi kita harus men-stringify-nya dengan <code>#</code>. Kita bisa membuat makro multibaris dengan escape backslash di akhir baris.</p>
+<div class="sourceCode" id="cb391"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb391-1"><a href="c-preprocessor.html#cb391-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define ASSERT</span><span class="op">(</span><span class="pp">c</span><span class="op">,</span><span class="pp"> m</span><span class="op">)</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-2"><a href="c-preprocessor.html#cb391-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-3"><a href="c-preprocessor.html#cb391-3" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="cf">if</span><span class="pp"> </span><span class="op">(!(</span><span class="pp">c</span><span class="op">))</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-4"><a href="c-preprocessor.html#cb391-4" aria-hidden="true" tabindex="-1"></a><span class="pp">        fprintf</span><span class="op">(</span><span class="pp">stderr</span><span class="op">,</span><span class="pp"> __FILE__ </span><span class="st">&quot;:</span><span class="sc">%d</span><span class="st">: assertion </span><span class="sc">%s</span><span class="st"> failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-5"><a href="c-preprocessor.html#cb391-5" aria-hidden="true" tabindex="-1"></a><span class="pp">                        __LINE__</span><span class="op">,</span><span class="pp"> </span><span class="op">#</span><span class="pp">c</span><span class="op">,</span><span class="pp"> m</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-6"><a href="c-preprocessor.html#cb391-6" aria-hidden="true" tabindex="-1"></a><span class="pp">        exit</span><span class="op">(</span><span class="dv">1</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-7"><a href="c-preprocessor.html#cb391-7" aria-hidden="true" tabindex="-1"></a><span class="pp">    </span><span class="op">}</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb391-8"><a href="c-preprocessor.html#cb391-8" aria-hidden="true" tabindex="-1"></a><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span></code></pre></div>
+<p>(Kelihatannya agak aneh dengan <code>__FILE__</code> di depan seperti itu, tapi ingat ia adalah string literal, dan string literal yang bersebelahan otomatis disambung. Sedangkan <code>__LINE__</code>, ia hanyalah <code>int</code>.)</p>
+<p>Dan itu berfungsi! Kalau kujalankan ini:</p>
+<div class="sourceCode" id="cb392"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb392-1"><a href="c-preprocessor.html#cb392-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb392-2"><a href="c-preprocessor.html#cb392-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb392-3"><a href="c-preprocessor.html#cb392-3" aria-hidden="true" tabindex="-1"></a>ASSERT<span class="op">(</span>x <span class="op">&lt;</span> <span class="dv">20</span><span class="op">,</span> <span class="st">&quot;x must be under 20&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>aku mendapat output ini:</p>
+<pre><code>foo.c:23: assertion x &lt; 20 failed: x must be under 20</code></pre>
+<p>Bagus sekali!</p>
+<p>Tinggal satu hal lagi, yaitu cara menyalakan dan mematikannya, dan itu bisa dilakukan dengan kompilasi kondisional.</p>
+<p>Berikut contoh lengkapnya:</p>
+<div class="sourceCode" id="cb394"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb394-1"><a href="c-preprocessor.html#cb394-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb394-2"><a href="c-preprocessor.html#cb394-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb394-3"><a href="c-preprocessor.html#cb394-3" aria-label="3"></a></span>
+<span id="cb394-4"><a href="c-preprocessor.html#cb394-4" aria-label="4"></a><span class="pp">#define ASSERT_ENABLED </span><span class="dv">1</span></span>
+<span id="cb394-5"><a href="c-preprocessor.html#cb394-5" aria-label="5"></a></span>
+<span id="cb394-6"><a href="c-preprocessor.html#cb394-6" aria-label="6"></a><span class="pp">#if ASSERT_ENABLED</span></span>
+<span id="cb394-7"><a href="c-preprocessor.html#cb394-7" aria-label="7"></a><span class="pp">#define ASSERT</span><span class="op">(</span><span class="pp">c</span><span class="op">,</span><span class="pp"> m</span><span class="op">)</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-8"><a href="c-preprocessor.html#cb394-8" aria-label="8"></a><span class="cf">do</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-9"><a href="c-preprocessor.html#cb394-9" aria-label="9"></a><span class="pp">    </span><span class="cf">if</span><span class="pp"> </span><span class="op">(!(</span><span class="pp">c</span><span class="op">))</span><span class="pp"> </span><span class="op">{</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-10"><a href="c-preprocessor.html#cb394-10" aria-label="10"></a><span class="pp">        fprintf</span><span class="op">(</span><span class="pp">stderr</span><span class="op">,</span><span class="pp"> __FILE__ </span><span class="st">&quot;:</span><span class="sc">%d</span><span class="st">: assertion </span><span class="sc">%s</span><span class="st"> failed: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-11"><a href="c-preprocessor.html#cb394-11" aria-label="11"></a><span class="pp">                        __LINE__</span><span class="op">,</span><span class="pp"> </span><span class="op">#</span><span class="pp">c</span><span class="op">,</span><span class="pp"> m</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-12"><a href="c-preprocessor.html#cb394-12" aria-label="12"></a><span class="pp">        exit</span><span class="op">(</span><span class="dv">1</span><span class="op">);</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-13"><a href="c-preprocessor.html#cb394-13" aria-label="13"></a><span class="pp">    </span><span class="op">}</span><span class="pp"> </span><span class="op">\</span></span>
+<span id="cb394-14"><a href="c-preprocessor.html#cb394-14" aria-label="14"></a><span class="op">}</span><span class="pp"> </span><span class="cf">while</span><span class="op">(</span><span class="dv">0</span><span class="op">)</span></span>
+<span id="cb394-15"><a href="c-preprocessor.html#cb394-15" aria-label="15"></a><span class="pp">#else</span></span>
+<span id="cb394-16"><a href="c-preprocessor.html#cb394-16" aria-label="16"></a><span class="pp">#define ASSERT</span><span class="op">(</span><span class="pp">c</span><span class="op">,</span><span class="pp"> m</span><span class="op">)</span><span class="pp">  </span><span class="co">// Makro kosong kalau tidak diaktifkan</span></span>
+<span id="cb394-17"><a href="c-preprocessor.html#cb394-17" aria-label="17"></a><span class="pp">#endif</span></span>
+<span id="cb394-18"><a href="c-preprocessor.html#cb394-18" aria-label="18"></a></span>
+<span id="cb394-19"><a href="c-preprocessor.html#cb394-19" aria-label="19"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb394-20"><a href="c-preprocessor.html#cb394-20" aria-label="20"></a><span class="op">{</span></span>
+<span id="cb394-21"><a href="c-preprocessor.html#cb394-21" aria-label="21"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">30</span><span class="op">;</span></span>
+<span id="cb394-22"><a href="c-preprocessor.html#cb394-22" aria-label="22"></a></span>
+<span id="cb394-23"><a href="c-preprocessor.html#cb394-23" aria-label="23"></a>    ASSERT<span class="op">(</span>x <span class="op">&lt;</span> <span class="dv">20</span><span class="op">,</span> <span class="st">&quot;x must be under 20&quot;</span><span class="op">);</span></span>
+<span id="cb394-24"><a href="c-preprocessor.html#cb394-24" aria-label="24"></a><span class="op">}</span></span></code></pre></div>
+<p>Ini menghasilkan output:</p>
+<div class="sourceCode" id="cb395"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb395-1"><a href="c-preprocessor.html#cb395-1" aria-hidden="true" tabindex="-1"></a>foo.c:23: assertion x &lt; 20 failed: x must be under 20</span></code></pre></div>
+<h2 data-number="19.8" id="directive-error"><span class="header-section-number">19.8</span> Directive <code>#error</code></h2>
+<p></p>
+<p>Directive ini membuat compiler langsung error begitu menemukannya.</p>
+<p>Biasanya, ini dipakai di dalam kondisional untuk mencegah kompilasi kecuali prasyarat tertentu terpenuhi:</p>
+<div class="sourceCode" id="cb396"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb396-1"><a href="c-preprocessor.html#cb396-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifndef __STDC_IEC_559__</span></span>
+<span id="cb396-2"><a href="c-preprocessor.html#cb396-2" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#error I really need IEEE-754 floating point to compile. Sorry!</span></span>
+<span id="cb396-3"><a href="c-preprocessor.html#cb396-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p> </p>
+<p>Beberapa compiler punya directive <code>#warning</code> pelengkap yang non-standar, yang mengeluarkan peringatan tapi tidak menghentikan kompilasi, namun ini tidak ada di spesifikasi C11.</p>
+<p></p>
+<h2 data-number="19.9" id="directive-embed"><span class="header-section-number">19.9</span> Directive <code>#embed</code></h2>
+<p></p>
+<!-- Godbolt demo: https://godbolt.org/z/Kb3ejE7q5 -->
+<p>Baru di C23!</p>
+<p>Dan saat ini belum berfungsi di compiler mana pun milikku, jadi jangan telan bagian ini bulat-bulat!</p>
+<p>Intinya, kamu bisa menyertakan byte-byte dari sebuah file sebagai konstanta integer seolah-olah kamu mengetiknya sendiri.</p>
+<p>Misalnya, kalau kamu punya file biner bernama <code>foo.bin</code> yang berisi empat byte bernilai desimal 11, 22, 33, dan 44, lalu kamu menulis ini:</p>
+<div class="sourceCode" id="cb397"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb397-1"><a href="c-preprocessor.html#cb397-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb397-2"><a href="c-preprocessor.html#cb397-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.bin&quot;</span></span>
+<span id="cb397-3"><a href="c-preprocessor.html#cb397-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Hasilnya persis seperti kamu mengetik ini:</p>
+<div class="sourceCode" id="cb398"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb398-1"><a href="c-preprocessor.html#cb398-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span><span class="dv">22</span><span class="op">,</span><span class="dv">33</span><span class="op">,</span><span class="dv">44</span><span class="op">};</span></span></code></pre></div>
+<p>Ini cara yang sangat kuat untuk menginisialisasi array dengan data biner tanpa perlu mengonversinya menjadi kode dulu—preprocessor yang mengerjakannya untukmu!</p>
+<p>Kasus pemakaian yang lebih khas mungkin file berisi gambar kecil yang akan ditampilkan dan tidak ingin kamu muat saat runtime.</p>
+<p>Berikut contoh lain:</p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb399-1"><a href="c-preprocessor.html#cb399-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb399-2"><a href="c-preprocessor.html#cb399-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &lt;foo.bin&gt;</span></span>
+<span id="cb399-3"><a href="c-preprocessor.html#cb399-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Kalau kamu memakai kurung siku, preprocessor mencari di serangkaian tempat yang ditentukan implementasi untuk menemukan file, persis seperti <code>#include</code>. Kalau kamu memakai tanda kutip ganda dan resource tidak ditemukan, compiler akan mencobanya seolah-olah kamu memakai kurung siku sebagai upaya putus asa terakhir untuk menemukan file itu.</p>
+<p><code>#embed</code> bekerja seperti <code>#include</code> dalam arti ia secara efektif menempelkan nilai sebelum compiler melihatnya. Artinya kamu bisa memakainya di berbagai tempat:</p>
+<pre><code>return
+#embed &quot;somevalue.dat&quot;
+;</code></pre>
+<p>atau</p>
+<pre><code>int x =
+#embed &quot;xvalue.dat&quot;
+;</code></pre>
+<p>Nah—apakah ini selalu byte? Maksudnya bernilai 0 sampai 255, inklusif? Jawabannya, secara bawaan jelas “ya”, kecuali saat jawabannya “tidak”.</p>
+<p>Secara teknis, elemennya selebar <code>CHAR_BIT</code> bit. Dan kemungkinan besar itu 8 di sistemmu, jadi kamu mendapat rentang 0-255 pada nilainya. (Nilainya selalu non-negatif.)</p>
+<p>Mungkin juga implementasi membolehkan ini diubah dengan cara tertentu, misalnya lewat command line atau parameter.</p>
+<p>Ukuran file dalam bit harus kelipatan ukuran elemen. Artinya, kalau setiap elemen 8 bit, ukuran file (dalam bit) harus kelipatan 8. Dalam pemakaian sehari-hari, ini cara membingungkan untuk mengatakan bahwa setiap file harus berupa jumlah byte yang bulat… yang tentu saja memang begitu. Jujur saja, aku sendiri tidak yakin kenapa aku repot-repot menulis paragraf ini. Baca spesifikasi kalau kamu benar-benar penasaran.</p>
+<h3 data-number="19.9.1" id="parameter-embed"><span class="header-section-number">19.9.1</span> Parameter <code>#embed</code></h3>
+<p>Ada berbagai parameter yang bisa disebutkan pada directive <code>#embed</code>. Berikut contoh dengan parameter <code>limit()</code> yang belum diperkenalkan:</p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb402-1"><a href="c-preprocessor.html#cb402-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb402-2"><a href="c-preprocessor.html#cb402-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;/dev/random&quot; limit(5)</span></span>
+<span id="cb402-3"><a href="c-preprocessor.html#cb402-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Tapi bagaimana kalau <code>limit</code> sudah didefinisikan di tempat lain? Untungnya kamu bisa menaruh <code>__</code> di sekeliling kata kuncinya dan ia bekerja dengan cara yang sama:</p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb403-1"><a href="c-preprocessor.html#cb403-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb403-2"><a href="c-preprocessor.html#cb403-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;/dev/random&quot; __limit__(5)</span></span>
+<span id="cb403-3"><a href="c-preprocessor.html#cb403-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Nah… apa itu <code>limit</code>?</p>
+<h3 data-number="19.9.2" id="parameter-limit"><span class="header-section-number">19.9.2</span> Parameter <code>limit()</code></h3>
+<p>Kamu bisa menentukan batas jumlah elemen yang disematkan dengan parameter ini.</p>
+<p>Ini nilai maksimum, bukan nilai mutlak. Kalau file yang disematkan lebih pendek dari batas yang ditentukan, hanya sebanyak itu byte yang diimpor.</p>
+<p>Contoh <code>/dev/random</code> di atas adalah contoh motivasi untuk ini—di Unix, itu <em>character device file</em> yang mengembalikan aliran tak terbatas bilangan yang cukup acak.</p>
+<p>Menyematkan byte dalam jumlah tak terbatas memberatkan RAM, jadi parameter <code>limit</code> memberi cara untuk berhenti setelah jumlah tertentu.</p>
+<p>Terakhir, kamu boleh memakai makro <code>#define</code> di dalam <code>limit</code>, kalau kamu penasaran.</p>
+<h3 data-number="19.9.3" id="parameter-if_empty"><span class="header-section-number">19.9.3</span> Parameter <code>if_empty</code></h3>
+<p></p>
+<p>Parameter ini menentukan apa hasil embed kalau file ada tapi tidak berisi data. Misalkan file <code>foo.dat</code> berisi satu byte bernilai 123. Kalau kita menulis ini:</p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb404-1"><a href="c-preprocessor.html#cb404-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> </span>
+<span id="cb404-2"><a href="c-preprocessor.html#cb404-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.dat&quot; if_empty(999)</span></span>
+<span id="cb404-3"><a href="c-preprocessor.html#cb404-3" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span></code></pre></div>
+<p>kita mendapat:</p>
+<div class="sourceCode" id="cb405"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb405-1"><a href="c-preprocessor.html#cb405-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">123</span><span class="op">;</span>   <span class="co">// Ketika foo.dat berisi byte 123</span></span></code></pre></div>
+<p>Tapi bagaimana kalau file <code>foo.dat</code> berukuran nol byte (artinya tidak berisi data dan kosong)? Kalau begitu, hasilnya diperluas menjadi:</p>
+<div class="sourceCode" id="cb406"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb406-1"><a href="c-preprocessor.html#cb406-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">999</span><span class="op">;</span>   <span class="co">// Ketika foo.dat kosong</span></span></code></pre></div>
+<p>Perlu dicatat, kalau <code>limit</code> diatur ke <code>0</code>, maka <code>if_empty</code> akan selalu dipakai. Artinya, batas nol secara efektif berarti file itu kosong.</p>
+<p>Ini akan selalu menghasilkan <code>x = 999</code> apa pun isi <code>foo.dat</code>:</p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb407-1"><a href="c-preprocessor.html#cb407-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> </span>
+<span id="cb407-2"><a href="c-preprocessor.html#cb407-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.dat&quot; limit(0) if_empty(999)</span></span>
+<span id="cb407-3"><a href="c-preprocessor.html#cb407-3" aria-hidden="true" tabindex="-1"></a><span class="op">;</span></span></code></pre></div>
+<p></p>
+<h3 data-number="19.9.4" id="parameter-prefix-dan-suffix"><span class="header-section-number">19.9.4</span> Parameter <code>prefix()</code> dan <code>suffix()</code></h3>
+<p> </p>
+<p>Ini cara untuk menambahkan sesuatu di depan embed.</p>
+<p>Perhatikan bahwa ini hanya berpengaruh pada data yang tidak kosong! Kalau file kosong, baik <code>prefix</code> maupun <code>suffix</code> tidak berpengaruh.</p>
+<p>Berikut contoh ketika kita menyematkan tiga bilangan acak, tapi mengawali angka-angka itu dengan <code>11,</code> dan mengakhirinya dengan <code>,99</code>:</p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb408-1"><a href="c-preprocessor.html#cb408-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb408-2"><a href="c-preprocessor.html#cb408-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;/dev/urandom&quot; limit(3) prefix(11,) suffix(,99)</span></span>
+<span id="cb408-3"><a href="c-preprocessor.html#cb408-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Contoh hasil:</p>
+<div class="sourceCode" id="cb409"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb409-1"><a href="c-preprocessor.html#cb409-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span><span class="dv">135</span><span class="op">,</span><span class="dv">116</span><span class="op">,</span><span class="dv">220</span><span class="op">,</span><span class="dv">99</span><span class="op">};</span></span></code></pre></div>
+<p>Tidak ada kewajiban memakai <code>prefix</code> dan <code>suffix</code> sekaligus. Kamu bisa memakai keduanya, salah satu, atau tidak sama sekali.</p>
+<p>Kita bisa memanfaatkan sifat bahwa keduanya hanya berlaku pada file yang tidak kosong untuk efek yang rapi, seperti pada contoh berikut yang dicuri tanpa malu dari spesifikasi.</p>
+<p>Katakanlah kita punya file <code>foo.dat</code> yang berisi sejumlah data. Dan kita ingin memakainya untuk menginisialisasi array, lalu kita ingin sufiks pada array berupa elemen nol.</p>
+<p>Tidak masalah, kan?</p>
+<div class="sourceCode" id="cb410"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb410-1"><a href="c-preprocessor.html#cb410-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb410-2"><a href="c-preprocessor.html#cb410-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.dat&quot; suffix(,0)</span></span>
+<span id="cb410-3"><a href="c-preprocessor.html#cb410-3" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Kalau <code>foo.dat</code> berisi 11, 22, dan 33, kita mendapat:</p>
+<div class="sourceCode" id="cb411"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb411-1"><a href="c-preprocessor.html#cb411-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span><span class="dv">22</span><span class="op">,</span><span class="dv">33</span><span class="op">,</span><span class="dv">0</span><span class="op">};</span></span></code></pre></div>
+<p>Tapi tunggu! Bagaimana kalau <code>foo.dat</code> kosong? Kita mendapat:</p>
+<div class="sourceCode" id="cb412"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb412-1"><a href="c-preprocessor.html#cb412-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{};</span></span></code></pre></div>
+<p>dan itu tidak bagus.</p>
+<p>Tapi kita bisa memperbaikinya seperti ini:</p>
+<div class="sourceCode" id="cb413"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb413-1"><a href="c-preprocessor.html#cb413-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb413-2"><a href="c-preprocessor.html#cb413-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.dat&quot; suffix(,)</span></span>
+<span id="cb413-3"><a href="c-preprocessor.html#cb413-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb413-4"><a href="c-preprocessor.html#cb413-4" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Karena parameter <code>suffix</code> dihilangkan kalau file kosong, ini hanya akan menjadi:</p>
+<div class="sourceCode" id="cb414"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb414-1"><a href="c-preprocessor.html#cb414-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span></code></pre></div>
+<p>yang tidak masalah.</p>
+<p> </p>
+<h3 data-number="19.9.5" id="identifier-__has_embed"><span class="header-section-number">19.9.5</span> Identifier <code>__has_embed()</code></h3>
+<p></p>
+<p>Ini cara yang bagus untuk menguji apakah file tertentu tersedia untuk disematkan, dan juga apakah file itu kosong atau tidak.</p>
+<p>Kamu memakainya dengan directive <code>#if</code>.</p>
+<p>Berikut potongan kode yang mengambil 5 bilangan acak dari character device generator bilangan acak. Kalau itu tidak ada, ia mencoba mengambilnya dari file <code>myrandoms.dat</code>. Kalau itu juga tidak ada, ia memakai beberapa nilai yang ditulis langsung:</p>
+<div class="sourceCode" id="cb415"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb415-1"><a href="c-preprocessor.html#cb415-1" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> random_nums<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb415-2"><a href="c-preprocessor.html#cb415-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __has_embed(&quot;/dev/urandom&quot;)</span></span>
+<span id="cb415-3"><a href="c-preprocessor.html#cb415-3" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#embed &quot;/dev/urandom&quot; limit(5)</span></span>
+<span id="cb415-4"><a href="c-preprocessor.html#cb415-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#elif __has_embed(&quot;myrandoms.dat&quot;)</span></span>
+<span id="cb415-5"><a href="c-preprocessor.html#cb415-5" aria-hidden="true" tabindex="-1"></a>    <span class="pp">#embed &quot;myrandoms.dat&quot; limit(5)</span></span>
+<span id="cb415-6"><a href="c-preprocessor.html#cb415-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
+<span id="cb415-7"><a href="c-preprocessor.html#cb415-7" aria-hidden="true" tabindex="-1"></a>    <span class="dv">140</span><span class="op">,</span><span class="dv">178</span><span class="op">,</span><span class="dv">92</span><span class="op">,</span><span class="dv">167</span><span class="op">,</span><span class="dv">120</span></span>
+<span id="cb415-8"><a href="c-preprocessor.html#cb415-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span>
+<span id="cb415-9"><a href="c-preprocessor.html#cb415-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">};</span></span></code></pre></div>
+<p>Secara teknis, identifier <code>__has_embed()</code> bernilai salah satu dari tiga nilai:</p>
+<table>
+<thead>
+<tr>
+<th>Hasil <code>__has_embed()</code></th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>__STDC_EMBED_NOT_FOUND__</code></td>
+<td>Jika file tidak ditemukan.</td>
+</tr>
+<tr>
+<td><code>__STDC_EMBED_FOUND__</code></td>
+<td>Jika file ditemukan dan tidak kosong.</td>
+</tr>
+<tr>
+<td><code>__STDC_EMBED_EMPTY__</code></td>
+<td>Jika file ditemukan dan kosong.</td>
+</tr>
+</tbody>
+</table>
+<p>Aku punya alasan kuat untuk percaya bahwa <code>__STDC_EMBED_NOT_FOUND__</code> adalah <code>0</code> dan yang lain bukan nol (karena itu tersirat dalam proposal dan masuk akal secara logika), tapi aku kesulitan menemukannya di versi draf spesifikasi ini.</p>
+<p></p>
+<p>TODO</p>
+<h3 data-number="19.9.6" id="parameter-lainnya"><span class="header-section-number">19.9.6</span> Parameter Lainnya</h3>
+<p>Implementasi compiler boleh mendefinisikan parameter embed lain sesukanya —cari parameter non-standar ini di dokumentasi compiler-mu.</p>
+<p>Misalnya:</p>
+<div class="sourceCode" id="cb416"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb416-1"><a href="c-preprocessor.html#cb416-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.bin&quot; limit(12) frotz(lamp)</span></span></code></pre></div>
+<p>Parameter ini biasanya diberi awalan untuk membantu namespacing:</p>
+<div class="sourceCode" id="cb417"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb417-1"><a href="c-preprocessor.html#cb417-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#embed &quot;foo.bin&quot; limit(12) fmc::frotz(lamp)</span></span></code></pre></div>
+<p>Mungkin masuk akal mencoba mendeteksi apakah parameter ini tersedia sebelum dipakai, dan untungnya kita bisa memakai <code>__has_embed</code> untuk itu.</p>
+<p>Biasanya, <code>__has_embed()</code> hanya memberi tahu apakah file ada atau tidak. Tapi—dan inilah bagian serunya—ia juga mengembalikan false kalau parameter tambahan tidak didukung!</p>
+<p>Jadi kalau kita memberinya file yang <em>kita tahu</em> ada serta parameter yang ingin kita uji keberadaannya, ia secara efektif memberi tahu apakah parameter itu didukung.</p>
+<p>Tapi file apa yang <em>selalu</em> ada? Ternyata kita bisa memakai makro <code>__FILE__</code>, yang diperluas menjadi nama file sumber yang merujuknya! File itu <em>pasti</em> ada, atau ada yang sangat salah di departemen ayam-dan-telur.</p>
+<p>Mari kita uji parameter <code>frotz</code> itu untuk melihat apakah bisa dipakai:</p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb418-1"><a href="c-preprocessor.html#cb418-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __has_embed(__FILE__ fmc::frotz(lamp))</span></span>
+<span id="cb418-2"><a href="c-preprocessor.html#cb418-2" aria-hidden="true" tabindex="-1"></a>    puts<span class="op">(</span><span class="st">&quot;fmc::frotz(lamp) is supported!&quot;</span><span class="op">);</span></span>
+<span id="cb418-3"><a href="c-preprocessor.html#cb418-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
+<span id="cb418-4"><a href="c-preprocessor.html#cb418-4" aria-hidden="true" tabindex="-1"></a>    puts<span class="op">(</span><span class="st">&quot;fmc::frotz(lamp) is NOT supported!&quot;</span><span class="op">);</span></span>
+<span id="cb418-5"><a href="c-preprocessor.html#cb418-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<h3 data-number="19.9.7" id="menyematkan-nilai-multi-byte"><span class="header-section-number">19.9.7</span> Menyematkan Nilai Multi-Byte</h3>
+<p>Bagaimana kalau yang dimasukkan <code>int</code>, bukan byte individual? Bagaimana dengan nilai multi-byte di file yang disematkan?</p>
+<p>Ini tidak didukung standar C23, tapi mungkin nanti ada ekstensi implementasi yang mendefinisikannya.</p>
+<p></p>
+<h2 data-number="19.10" id="pragma"><span class="header-section-number">19.10</span> Directive <code>#pragma</code></h2>
+<p></p>
+<p>Ini directive yang aneh, kependekan dari “pragmatic”. Kamu bisa memakainya untuk… ya, apa pun yang didukung compiler-mu.</p>
+<p>Pada dasarnya satu-satunya saat kamu menambahkan ini ke kodemu adalah kalau ada dokumentasi yang menyuruhmu melakukannya.</p>
+<h3 data-number="19.10.1" id="pragma-non-standar"><span class="header-section-number">19.10.1</span> Pragma Non-Standar</h3>
+<p></p>
+<p>Berikut satu contoh non-standar memakai <code>#pragma</code> untuk membuat compiler menjalankan loop <code>for</code> secara paralel dengan beberapa thread (kalau compiler mendukung ekstensi <a href="https://www.openmp.org/">OpenMP</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn133" class="footnote-ref" id="fnref133" role="doc-noteref"><sup>133</sup></a>):</p>
+<div class="sourceCode" id="cb419"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb419-1"><a href="c-preprocessor.html#cb419-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma omp parallel for</span></span>
+<span id="cb419-2"><a href="c-preprocessor.html#cb419-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span> <span class="op">...</span> <span class="op">}</span></span></code></pre></div>
+<p>Ada berbagai macam directive <code>#pragma</code> yang terdokumentasi di seluruh penjuru dunia.</p>
+<p>Semua <code>#pragma</code> yang tidak dikenali diabaikan oleh compiler.</p>
+<p></p>
+<h3 data-number="19.10.2" id="pragma-standar"><span class="header-section-number">19.10.2</span> Pragma Standar</h3>
+<p>Ada juga beberapa yang standar, dan ini diawali <code>STDC</code>, dengan bentuk yang sama:</p>
+<div class="sourceCode" id="cb420"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb420-1"><a href="c-preprocessor.html#cb420-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma STDC pragma_name on-off</span></span></code></pre></div>
+<p>Bagian <code>on-off</code> bisa berupa <code>ON</code>, <code>OFF</code>, atau <code>DEFAULT</code>.</p>
+<p>Dan <code>pragma_name</code> bisa salah satu dari ini:</p>
+<p> </p>
+<p></p>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 79%" />
+</colgroup>
+<thead>
+<tr>
+<th>Nama Pragma</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FP_CONTRACT</code></td>
+<td>Mengizinkan ekspresi floating point diringkas menjadi satu operasi untuk menghindari galat pembulatan yang mungkin terjadi dari beberapa operasi.</td>
+</tr>
+<tr>
+<td><code>FENV_ACCESS</code></td>
+<td>Atur ke <code>ON</code> jika kamu berencana mengakses flag status floating point. Jika <code>OFF</code>, compiler mungkin melakukan optimasi yang membuat nilai di flag tidak konsisten atau tidak valid.</td>
+</tr>
+<tr>
+<td><code>CX_LIMITED_RANGE</code></td>
+<td>Atur ke <code>ON</code> untuk mengizinkan compiler melewatkan pengecekan overflow saat melakukan aritmetika kompleks. Bawaannya <code>OFF</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Misalnya:</p>
+<div class="sourceCode" id="cb421"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb421-1"><a href="c-preprocessor.html#cb421-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma STDC FP_CONTRACT OFF</span></span>
+<span id="cb421-2"><a href="c-preprocessor.html#cb421-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma STDC CX_LIMITED_RANGE ON</span></span></code></pre></div>
+<p></p>
+<p>Soal <code>CX_LIMITED_RANGE</code>, spesifikasi menunjukkan:</p>
+<blockquote>
+<p>The purpose of the pragma is to allow the implementation to use the formulas:</p>
+<p><span class="math inline">\((x+iy)\times(u+iv) = (xu-yv)+i(yu+xv)\)</span></p>
+<p><span class="math inline">\((x+iy)/(u+iv) = [(xu+yv)+i(yu-xv)]/(u^2+v^2)\)</span></p>
+<p><span class="math inline">\(|x+iy|=\sqrt{x^2+y^2}\)</span></p>
+<p>where the programmer can determine they are safe.</p>
+</blockquote>
+<p></p>
+<h3 data-number="19.10.3" id="operator-_pragma"><span class="header-section-number">19.10.3</span> Operator <code>_Pragma</code></h3>
+<p></p>
+<p>Ini cara lain untuk mendeklarasikan pragma yang bisa dipakai di makro.</p>
+<p>Keduanya setara:</p>
+<div class="sourceCode" id="cb422"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb422-1"><a href="c-preprocessor.html#cb422-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#pragma &quot;Unnecessary&quot; quotes</span></span>
+<span id="cb422-2"><a href="c-preprocessor.html#cb422-2" aria-hidden="true" tabindex="-1"></a>_Pragma<span class="op">(</span><span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">Unnecessary</span><span class="sc">\&quot;</span><span class="st"> quotes&quot;</span><span class="op">)</span></span></code></pre></div>
+<p></p>
+<p>Ini bisa dipakai di makro, kalau perlu:</p>
+<div class="sourceCode" id="cb423"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb423-1"><a href="c-preprocessor.html#cb423-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define PRAGMA</span><span class="op">(</span><span class="pp">x</span><span class="op">)</span><span class="pp"> _Pragma</span><span class="op">(#</span><span class="pp">x</span><span class="op">)</span></span></code></pre></div>
+<p> </p>
+<h2 data-number="19.11" id="directive-line"><span class="header-section-number">19.11</span> Directive <code>#line</code></h2>
+<p> </p>
+<p>Ini memungkinkan kamu menimpa nilai <code>__LINE__</code> dan <code>__FILE__</code>. Kalau mau.</p>
+<p>Aku belum pernah ingin melakukannya, tapi di K&amp;R2 mereka menulis:</p>
+<blockquote>
+<p>For the benefit of other preprocessors that generate C programs […]</p>
+</blockquote>
+<p>Jadi mungkin itulah alasannya.</p>
+<p>Untuk menimpa nomor baris menjadi, misalnya, 300:</p>
+<div class="sourceCode" id="cb424"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb424-1"><a href="c-preprocessor.html#cb424-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#line 300</span></span></code></pre></div>
+<p>dan <code>__LINE__</code> akan terus menghitung naik dari sana.</p>
+<p></p>
+<p>Untuk menimpa nomor baris dan nama file:</p>
+<div class="sourceCode" id="cb425"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb425-1"><a href="c-preprocessor.html#cb425-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#line 300 &quot;newfilename&quot;</span></span></code></pre></div>
+<p></p>
+<h2 data-number="19.12" id="null-directive"><span class="header-section-number">19.12</span> Null Directive</h2>
+<p></p>
+<p>Tanda <code>#</code> sendirian di satu baris diabaikan oleh preprocessor. Nah, jujur saja, aku tidak tahu apa kasus pemakaiannya.</p>
+<p>Aku pernah melihat contoh seperti ini:</p>
+<div class="sourceCode" id="cb426"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb426-1"><a href="c-preprocessor.html#cb426-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef FOO</span></span>
+<span id="cb426-2"><a href="c-preprocessor.html#cb426-2" aria-hidden="true" tabindex="-1"></a>    <span class="er">#</span></span>
+<span id="cb426-3"><a href="c-preprocessor.html#cb426-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
+<span id="cb426-4"><a href="c-preprocessor.html#cb426-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Something&quot;</span><span class="op">);</span></span>
+<span id="cb426-5"><a href="c-preprocessor.html#cb426-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p>yang hanya kosmetik; baris dengan <code>#</code> sendirian itu bisa dihapus tanpa efek buruk.</p>
+<p>Atau mungkin demi konsistensi kosmetik, seperti ini:</p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb427-1"><a href="c-preprocessor.html#cb427-1" aria-hidden="true" tabindex="-1"></a><span class="er">#</span></span>
+<span id="cb427-2"><a href="c-preprocessor.html#cb427-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#ifdef FOO</span></span>
+<span id="cb427-3"><a href="c-preprocessor.html#cb427-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb427-4"><a href="c-preprocessor.html#cb427-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span>
+<span id="cb427-5"><a href="c-preprocessor.html#cb427-5" aria-hidden="true" tabindex="-1"></a><span class="er">#</span></span>
+<span id="cb427-6"><a href="c-preprocessor.html#cb427-6" aria-hidden="true" tabindex="-1"></a><span class="pp">#if BAR == 17</span></span>
+<span id="cb427-7"><a href="c-preprocessor.html#cb427-7" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">12</span><span class="op">;</span></span>
+<span id="cb427-8"><a href="c-preprocessor.html#cb427-8" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span>
+<span id="cb427-9"><a href="c-preprocessor.html#cb427-9" aria-hidden="true" tabindex="-1"></a><span class="er">#</span></span></code></pre></div>
+<p>Tapi, soal kosmetik, itu jelek.</p>
+<p>Satu postingan lain menyebut penghapusan komentar—bahwa di GCC, komentar setelah <code>#</code> tidak akan dilihat compiler. Itu tidak kuragukan, tapi spesifikasi tampaknya tidak menyebut ini sebagai perilaku standar.</p>
+<p>Pencarianku akan alasannya tidak membuahkan banyak hasil. Jadi aku akan bilang saja bahwa ini adalah esoterika C kuno yang sesungguhnya.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="lingkungan-di-luar-program.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="struct-ii-lebih-seru-dengan-struct.html" rel="next">Next</a></span></div></body>
+</html>

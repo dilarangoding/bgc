@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="variable-length-array-vla.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tipe-bagian-v-compound-literal-dan-generic-selection.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="31" id="goto"><span class="header-section-number">31</span> <code>goto</code></h1>
+<p></p>
+<p>Pernyataan <code>goto</code> dipuja secara universal dan bisa disajikan di sini tanpa perdebatan.</p>
+<p>Bercanda! Bertahun-tahun lamanya, orang bolak-balik berdebat apakah <code>goto</code> <a href="https://en.wikipedia.org/wiki/Goto#Criticism">dianggap berbahaya</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn175" class="footnote-ref" id="fnref175" role="doc-noteref"><sup>175</sup></a> atau tidak (sering kali dianggap tidak boleh).</p>
+<p>Menurut pendapat programmer yang satu ini, kamu sebaiknya memakai konstruksi apa pun yang menghasilkan kode <em>terbaik</em>, dengan mempertimbangkan kemudahan perawatan dan kecepatan. Dan kadang itu mungkin <code>goto</code>!</p>
+<p>Di bab ini, kita akan melihat cara kerja <code>goto</code> di C, lalu mengintip beberapa kasus umum tempat ia dipakai<a href="function-specifier-alignment-specifier-dan-operator.html#fn176" class="footnote-ref" id="fnref176" role="doc-noteref"><sup>176</sup></a>.</p>
+<h2 data-number="31.1" id="contoh-sederhana"><span class="header-section-number">31.1</span> Contoh Sederhana</h2>
+<p></p>
+<p>Pada contoh ini, kita memakai <code>goto</code> untuk melewati satu baris kode dan melompat ke sebuah <em>label</em>. Label adalah identifier yang bisa menjadi target <code>goto</code>—ia diakhiri titik dua (<code>:</code>).</p>
+<div class="sourceCode" id="cb610"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb610-1"><a href="goto.html#cb610-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb610-2"><a href="goto.html#cb610-2" aria-label="2"></a></span>
+<span id="cb610-3"><a href="goto.html#cb610-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb610-4"><a href="goto.html#cb610-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb610-5"><a href="goto.html#cb610-5" aria-label="5"></a>    printf<span class="op">(</span><span class="st">&quot;One</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb610-6"><a href="goto.html#cb610-6" aria-label="6"></a>    printf<span class="op">(</span><span class="st">&quot;Two</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb610-7"><a href="goto.html#cb610-7" aria-label="7"></a></span>
+<span id="cb610-8"><a href="goto.html#cb610-8" aria-label="8"></a>    <span class="cf">goto</span> skip_3<span class="op">;</span></span>
+<span id="cb610-9"><a href="goto.html#cb610-9" aria-label="9"></a></span>
+<span id="cb610-10"><a href="goto.html#cb610-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;Three</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb610-11"><a href="goto.html#cb610-11" aria-label="11"></a></span>
+<span id="cb610-12"><a href="goto.html#cb610-12" aria-label="12"></a>skip_3<span class="op">:</span></span>
+<span id="cb610-13"><a href="goto.html#cb610-13" aria-label="13"></a></span>
+<span id="cb610-14"><a href="goto.html#cb610-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;Five!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb610-15"><a href="goto.html#cb610-15" aria-label="15"></a><span class="op">}</span></span></code></pre></div>
+<p>Outputnya:</p>
+<div class="sourceCode" id="cb611"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb611-1"><a href="goto.html#cb611-1" aria-hidden="true" tabindex="-1"></a>One</span>
+<span id="cb611-2"><a href="goto.html#cb611-2" aria-hidden="true" tabindex="-1"></a>Two</span>
+<span id="cb611-3"><a href="goto.html#cb611-3" aria-hidden="true" tabindex="-1"></a>Five!</span></code></pre></div>
+<p><code>goto</code> membuat eksekusi melompat ke label yang disebutkan, melewati semua yang ada di antaranya.</p>
+<p>Kamu bisa melompat maju maupun mundur dengan <code>goto</code>.</p>
+<div class="sourceCode" id="cb612"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb612-1"><a href="goto.html#cb612-1" aria-hidden="true" tabindex="-1"></a>infinite_loop<span class="op">:</span></span>
+<span id="cb612-2"><a href="goto.html#cb612-2" aria-hidden="true" tabindex="-1"></a>    print<span class="op">(</span><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb612-3"><a href="goto.html#cb612-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> infinite_loop<span class="op">;</span></span></code></pre></div>
+<p>Label dilewati saat eksekusi. Yang berikut akan mencetak ketiga angka secara berurutan seolah-olah label itu tidak ada:</p>
+<div class="sourceCode" id="cb613"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb613-1"><a href="goto.html#cb613-1" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Zero</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb613-2"><a href="goto.html#cb613-2" aria-hidden="true" tabindex="-1"></a>label_1<span class="op">:</span></span>
+<span id="cb613-3"><a href="goto.html#cb613-3" aria-hidden="true" tabindex="-1"></a>label_2<span class="op">:</span></span>
+<span id="cb613-4"><a href="goto.html#cb613-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;One</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb613-5"><a href="goto.html#cb613-5" aria-hidden="true" tabindex="-1"></a>label_3<span class="op">:</span></span>
+<span id="cb613-6"><a href="goto.html#cb613-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Two</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb613-7"><a href="goto.html#cb613-7" aria-hidden="true" tabindex="-1"></a>label_4<span class="op">:</span></span>
+<span id="cb613-8"><a href="goto.html#cb613-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Three</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Seperti yang kamu perhatikan, konvensi umumnya adalah merapatkan label sepenuhnya ke kiri. Ini meningkatkan keterbacaan karena pembaca bisa dengan cepat memindai untuk menemukan tujuannya.</p>
+<p>Label punya <em>function scope</em>. Artinya, sedalam apa pun label itu berada di dalam blok, kamu tetap bisa <code>goto</code> ke sana dari mana saja di dalam fungsi.</p>
+<p>Artinya juga kamu hanya bisa <code>goto</code> ke label yang berada di fungsi yang sama dengan <code>goto</code>-nya. Label di fungsi lain berada di luar scope dari sudut pandang <code>goto</code>. Dan artinya kamu bisa memakai nama label yang sama di dua fungsi—hanya tidak boleh nama label yang sama di fungsi yang sama.</p>
+<p></p>
+<h2 data-number="31.2" id="continue-berlabel"><span class="header-section-number">31.2</span> <code>continue</code> Berlabel</h2>
+<p></p>
+<p>Di beberapa bahasa, kamu sebenarnya bisa menentukan label untuk pernyataan <code>continue</code>. C tidak mengizinkannya, tapi kamu dengan mudah bisa memakai <code>goto</code> sebagai gantinya.</p>
+<p>Untuk menunjukkan masalahnya, lihat <code>continue</code> pada loop bersarang ini:</p>
+<div class="sourceCode" id="cb614"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb614-1"><a href="goto.html#cb614-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb614-2"><a href="goto.html#cb614-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb614-3"><a href="goto.html#cb614-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span></span>
+<span id="cb614-4"><a href="goto.html#cb614-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">continue</span><span class="op">;</span>   <span class="co">// Selalu menuju j berikutnya</span></span>
+<span id="cb614-5"><a href="goto.html#cb614-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb614-6"><a href="goto.html#cb614-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Seperti yang kita lihat, <code>continue</code> itu, seperti semua <code>continue</code>, menuju iterasi berikutnya dari loop terdekat yang melingkupinya. Bagaimana kalau kita ingin <code>continue</code> di loop yang lebih luar, yaitu loop <code>i</code>?</p>
+<p>Nah, kita bisa <code>break</code> untuk kembali ke loop luar, kan?</p>
+<div class="sourceCode" id="cb615"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb615-1"><a href="goto.html#cb615-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb615-2"><a href="goto.html#cb615-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb615-3"><a href="goto.html#cb615-3" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span></span>
+<span id="cb615-4"><a href="goto.html#cb615-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span><span class="op">;</span>     <span class="co">// Membawa kita ke iterasi i berikutnya</span></span>
+<span id="cb615-5"><a href="goto.html#cb615-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb615-6"><a href="goto.html#cb615-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Itu membawa kita melewati dua tingkat loop bersarang. Tapi kalau kita menyarangkan loop lagi, pilihan kita habis. Bagaimana dengan yang ini, ketika tidak ada pernyataan yang bisa membawa kita keluar ke iterasi <code>i</code> berikutnya?</p>
+<div class="sourceCode" id="cb616"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb616-1"><a href="goto.html#cb616-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb616-2"><a href="goto.html#cb616-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb616-3"><a href="goto.html#cb616-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb616-4"><a href="goto.html#cb616-4" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">,</span> k<span class="op">);</span></span>
+<span id="cb616-5"><a href="goto.html#cb616-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb616-6"><a href="goto.html#cb616-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">continue</span><span class="op">;</span>  <span class="co">// Membawa kita ke iterasi k berikutnya</span></span>
+<span id="cb616-7"><a href="goto.html#cb616-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span>     <span class="co">// Membawa kita ke iterasi j berikutnya</span></span>
+<span id="cb616-8"><a href="goto.html#cb616-8" aria-hidden="true" tabindex="-1"></a>            <span class="op">????;</span>      <span class="co">// Membawa kita ke iterasi i berikutnya???</span></span>
+<span id="cb616-9"><a href="goto.html#cb616-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb616-10"><a href="goto.html#cb616-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb616-11"><a href="goto.html#cb616-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb616-12"><a href="goto.html#cb616-12" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Pernyataan <code>goto</code> menawarkan jalannya!</p>
+<div class="sourceCode" id="cb617"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb617-1"><a href="goto.html#cb617-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb617-2"><a href="goto.html#cb617-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb617-3"><a href="goto.html#cb617-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> k <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> k <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> k<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb617-4"><a href="goto.html#cb617-4" aria-hidden="true" tabindex="-1"></a>                printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">,</span> k<span class="op">);</span></span>
+<span id="cb617-5"><a href="goto.html#cb617-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb617-6"><a href="goto.html#cb617-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">goto</span> continue_i<span class="op">;</span>   <span class="co">// Sekarang melanjutkan loop i!!</span></span>
+<span id="cb617-7"><a href="goto.html#cb617-7" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb617-8"><a href="goto.html#cb617-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb617-9"><a href="goto.html#cb617-9" aria-hidden="true" tabindex="-1"></a>continue_i<span class="op">:</span> <span class="op">;</span></span>
+<span id="cb617-10"><a href="goto.html#cb617-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>Ada <code>;</code> di bagian akhir di sana—itu karena label tidak boleh menunjuk ke ujung polos dari sebuah compound statement (atau sebelum deklarasi variabel).</p>
+<p></p>
+<h2 data-number="31.3" id="keluar-darurat"><span class="header-section-number">31.3</span> Keluar Darurat</h2>
+<p></p>
+<p>Ketika kamu berada di dalam kode yang sangat bersarang, kamu bisa memakai <code>goto</code> untuk keluar dengan cara yang sering kali lebih bersih daripada menyarangkan lebih banyak <code>if</code> dan memakai variabel flag.</p>
+<div class="sourceCode" id="cb618"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb618-1"><a href="goto.html#cb618-1" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Pseudocode</span></span>
+<span id="cb618-2"><a href="goto.html#cb618-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb618-3"><a href="goto.html#cb618-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span><span class="op">(...)</span> <span class="op">{</span></span>
+<span id="cb618-4"><a href="goto.html#cb618-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(...)</span> <span class="op">{</span></span>
+<span id="cb618-5"><a href="goto.html#cb618-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">while</span> <span class="op">(...)</span> <span class="op">{</span></span>
+<span id="cb618-6"><a href="goto.html#cb618-6" aria-hidden="true" tabindex="-1"></a>                <span class="cf">do</span> <span class="op">{</span></span>
+<span id="cb618-7"><a href="goto.html#cb618-7" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">if</span> <span class="op">(</span>some_error_condition<span class="op">)</span></span>
+<span id="cb618-8"><a href="goto.html#cb618-8" aria-hidden="true" tabindex="-1"></a>                        <span class="cf">goto</span> bail<span class="op">;</span></span>
+<span id="cb618-9"><a href="goto.html#cb618-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb618-10"><a href="goto.html#cb618-10" aria-hidden="true" tabindex="-1"></a>                <span class="op">}</span> <span class="cf">while</span><span class="op">(...);</span></span>
+<span id="cb618-11"><a href="goto.html#cb618-11" aria-hidden="true" tabindex="-1"></a>            <span class="op">}</span></span>
+<span id="cb618-12"><a href="goto.html#cb618-12" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb618-13"><a href="goto.html#cb618-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb618-14"><a href="goto.html#cb618-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb618-15"><a href="goto.html#cb618-15" aria-hidden="true" tabindex="-1"></a>bail<span class="op">:</span></span>
+<span id="cb618-16"><a href="goto.html#cb618-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Pembersihan di sini</span></span></code></pre></div>
+<p>Tanpa <code>goto</code>, kamu harus memeriksa flag kondisi error di semua loop untuk bisa keluar sepenuhnya.</p>
+<p></p>
+<h2 data-number="31.4" id="break-berlabel"><span class="header-section-number">31.4</span> <code>break</code> Berlabel</h2>
+<p></p>
+<p>Situasinya sangat mirip dengan <code>continue</code> yang hanya melanjutkan loop paling dalam. <code>break</code> juga hanya keluar dari loop paling dalam.</p>
+<div class="sourceCode" id="cb619"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb619-1"><a href="goto.html#cb619-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb619-2"><a href="goto.html#cb619-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb619-3"><a href="goto.html#cb619-3" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span></span>
+<span id="cb619-4"><a href="goto.html#cb619-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span><span class="op">;</span>   <span class="co">// Hanya keluar dari loop j</span></span>
+<span id="cb619-5"><a href="goto.html#cb619-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb619-6"><a href="goto.html#cb619-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb619-7"><a href="goto.html#cb619-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb619-8"><a href="goto.html#cb619-8" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Done!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Tapi kita bisa memakai <code>goto</code> untuk keluar lebih jauh:</p>
+<div class="sourceCode" id="cb620"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb620-1"><a href="goto.html#cb620-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb620-2"><a href="goto.html#cb620-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> j<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb620-3"><a href="goto.html#cb620-3" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">, </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> j<span class="op">);</span></span>
+<span id="cb620-4"><a href="goto.html#cb620-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">goto</span> break_i<span class="op">;</span>   <span class="co">// Sekarang keluar dari loop i!</span></span>
+<span id="cb620-5"><a href="goto.html#cb620-5" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb620-6"><a href="goto.html#cb620-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb620-7"><a href="goto.html#cb620-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb620-8"><a href="goto.html#cb620-8" aria-hidden="true" tabindex="-1"></a>break_i<span class="op">:</span></span>
+<span id="cb620-9"><a href="goto.html#cb620-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb620-10"><a href="goto.html#cb620-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Done!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p></p>
+<h2 data-number="31.5" id="pembersihan-bertingkat"><span class="header-section-number">31.5</span> Pembersihan Bertingkat</h2>
+<p></p>
+<p>Kalau kamu memanggil beberapa fungsi untuk menginisialisasi beberapa sistem dan salah satunya gagal, kamu hanya boleh men-deinisialisasi yang sudah kamu capai sejauh ini.</p>
+<p>Mari kita buat contoh palsu ketika kita mulai menginisialisasi sistem dan memeriksa apakah ada yang mengembalikan error (kita pakai <code>-1</code> untuk menandakan error). Kalau ada yang begitu, kita hanya perlu mematikan sistem yang sudah kita inisialisasi sejauh ini.</p>
+<div class="sourceCode" id="cb621"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb621-1"><a href="goto.html#cb621-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>init_system_1<span class="op">()</span> <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb621-2"><a href="goto.html#cb621-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">goto</span> shutdown<span class="op">;</span></span>
+<span id="cb621-3"><a href="goto.html#cb621-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-4"><a href="goto.html#cb621-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>init_system_2<span class="op">()</span> <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb621-5"><a href="goto.html#cb621-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">goto</span> shutdown_1<span class="op">;</span></span>
+<span id="cb621-6"><a href="goto.html#cb621-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-7"><a href="goto.html#cb621-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>init_system_3<span class="op">()</span> <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb621-8"><a href="goto.html#cb621-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">goto</span> shutdown_2<span class="op">;</span></span>
+<span id="cb621-9"><a href="goto.html#cb621-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-10"><a href="goto.html#cb621-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>init_system_4<span class="op">()</span> <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span></span>
+<span id="cb621-11"><a href="goto.html#cb621-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">goto</span> shutdown_3<span class="op">;</span></span>
+<span id="cb621-12"><a href="goto.html#cb621-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-13"><a href="goto.html#cb621-13" aria-hidden="true" tabindex="-1"></a>    do_main_thing<span class="op">();</span>   <span class="co">// Jalankan program kita</span></span>
+<span id="cb621-14"><a href="goto.html#cb621-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-15"><a href="goto.html#cb621-15" aria-hidden="true" tabindex="-1"></a>    shutdown_system4<span class="op">();</span></span>
+<span id="cb621-16"><a href="goto.html#cb621-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-17"><a href="goto.html#cb621-17" aria-hidden="true" tabindex="-1"></a>shutdown_3<span class="op">:</span></span>
+<span id="cb621-18"><a href="goto.html#cb621-18" aria-hidden="true" tabindex="-1"></a>    shutdown_system3<span class="op">();</span></span>
+<span id="cb621-19"><a href="goto.html#cb621-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-20"><a href="goto.html#cb621-20" aria-hidden="true" tabindex="-1"></a>shutdown_2<span class="op">:</span></span>
+<span id="cb621-21"><a href="goto.html#cb621-21" aria-hidden="true" tabindex="-1"></a>    shutdown_system2<span class="op">();</span></span>
+<span id="cb621-22"><a href="goto.html#cb621-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-23"><a href="goto.html#cb621-23" aria-hidden="true" tabindex="-1"></a>shutdown_1<span class="op">:</span></span>
+<span id="cb621-24"><a href="goto.html#cb621-24" aria-hidden="true" tabindex="-1"></a>    shutdown_system1<span class="op">();</span></span>
+<span id="cb621-25"><a href="goto.html#cb621-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb621-26"><a href="goto.html#cb621-26" aria-hidden="true" tabindex="-1"></a>shutdown<span class="op">:</span></span>
+<span id="cb621-27"><a href="goto.html#cb621-27" aria-hidden="true" tabindex="-1"></a>    print<span class="op">(</span><span class="st">&quot;All subsystems shut down.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span></code></pre></div>
+<p>Perhatikan bahwa kita mematikan dalam urutan terbalik dari urutan inisialisasi subsistem. Jadi kalau subsistem 4 gagal mulai, ia akan mematikan 3, 2, lalu 1 dalam urutan itu.</p>
+<p></p>
+<h2 data-number="31.6" id="tail-call-optimization"><span class="header-section-number">31.6</span> Tail Call Optimization</h2>
+<p> </p>
+<p>Kurang lebih. Hanya untuk fungsi rekursif.</p>
+<p>Kalau kamu belum akrab, <a href="https://en.wikipedia.org/wiki/Tail_call">Tail Call Optimization (TCO)</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn177" class="footnote-ref" id="fnref177" role="doc-noteref"><sup>177</sup></a> adalah cara agar tidak menyia-nyiakan ruang stack saat memanggil fungsi lain pada keadaan yang sangat spesifik. Sayangnya detailnya di luar cakupan panduan ini.</p>
+<p>Tapi kalau kamu punya fungsi rekursif yang kamu tahu bisa dioptimasi dengan cara ini, kamu bisa memakai teknik ini. (Perhatikan bahwa kamu tidak bisa melakukan tail call ke fungsi lain karena label punya function scope.)</p>
+<p>Kita buat contoh yang lugas, faktorial.</p>
+<p>Berikut versi rekursif yang bukan TCO, tapi bisa dijadikan TCO!</p>
+<div class="sourceCode" id="cb622"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb622-1"><a href="goto.html#cb622-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb622-2"><a href="goto.html#cb622-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;complex.h&gt;</span></span>
+<span id="cb622-3"><a href="goto.html#cb622-3" aria-label="3"></a></span>
+<span id="cb622-4"><a href="goto.html#cb622-4" aria-label="4"></a><span class="dt">int</span> factorial<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> a<span class="op">)</span></span>
+<span id="cb622-5"><a href="goto.html#cb622-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb622-6"><a href="goto.html#cb622-6" aria-label="6"></a>    <span class="cf">if</span> <span class="op">(</span>n <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb622-7"><a href="goto.html#cb622-7" aria-label="7"></a>        <span class="cf">return</span> a<span class="op">;</span></span>
+<span id="cb622-8"><a href="goto.html#cb622-8" aria-label="8"></a></span>
+<span id="cb622-9"><a href="goto.html#cb622-9" aria-label="9"></a>    <span class="cf">return</span> factorial<span class="op">(</span>n <span class="op">-</span> <span class="dv">1</span><span class="op">,</span> a <span class="op">*</span> n<span class="op">);</span></span>
+<span id="cb622-10"><a href="goto.html#cb622-10" aria-label="10"></a><span class="op">}</span></span>
+<span id="cb622-11"><a href="goto.html#cb622-11" aria-label="11"></a></span>
+<span id="cb622-12"><a href="goto.html#cb622-12" aria-label="12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb622-13"><a href="goto.html#cb622-13" aria-label="13"></a><span class="op">{</span></span>
+<span id="cb622-14"><a href="goto.html#cb622-14" aria-label="14"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb622-15"><a href="goto.html#cb622-15" aria-label="15"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">! == </span><span class="sc">%ld\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> factorial<span class="op">(</span>i<span class="op">,</span> <span class="dv">1</span><span class="op">));</span></span>
+<span id="cb622-16"><a href="goto.html#cb622-16" aria-label="16"></a><span class="op">}</span></span></code></pre></div>
+<p>Untuk mewujudkannya, kamu bisa mengganti pemanggilan itu dengan dua langkah:</p>
+<ol type="1">
+<li>Atur nilai parameter menjadi nilai yang akan dipakai pada pemanggilan berikutnya.</li>
+<li><code>goto</code> ke label di baris pertama fungsi.</li>
+</ol>
+<p>Kita coba:</p>
+<div class="sourceCode" id="cb623"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb623-1"><a href="goto.html#cb623-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb623-2"><a href="goto.html#cb623-2" aria-label="2"></a></span>
+<span id="cb623-3"><a href="goto.html#cb623-3" aria-label="3"></a><span class="dt">int</span> factorial<span class="op">(</span><span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> a<span class="op">)</span></span>
+<span id="cb623-4"><a href="goto.html#cb623-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb623-5"><a href="goto.html#cb623-5" aria-label="5"></a>tco<span class="op">:</span>  <span class="co">// tambahkan ini</span></span>
+<span id="cb623-6"><a href="goto.html#cb623-6" aria-label="6"></a></span>
+<span id="cb623-7"><a href="goto.html#cb623-7" aria-label="7"></a>    <span class="cf">if</span> <span class="op">(</span>n <span class="op">==</span> <span class="dv">0</span><span class="op">)</span></span>
+<span id="cb623-8"><a href="goto.html#cb623-8" aria-label="8"></a>        <span class="cf">return</span> a<span class="op">;</span></span>
+<span id="cb623-9"><a href="goto.html#cb623-9" aria-label="9"></a></span>
+<span id="cb623-10"><a href="goto.html#cb623-10" aria-label="10"></a>    <span class="co">// ganti return dengan mengatur nilai parameter baru dan</span></span>
+<span id="cb623-11"><a href="goto.html#cb623-11" aria-label="11"></a>    <span class="co">// goto ke awal fungsi</span></span>
+<span id="cb623-12"><a href="goto.html#cb623-12" aria-label="12"></a></span>
+<span id="cb623-13"><a href="goto.html#cb623-13" aria-label="13"></a>    <span class="co">//return factorial(n - 1, a * n);</span></span>
+<span id="cb623-14"><a href="goto.html#cb623-14" aria-label="14"></a></span>
+<span id="cb623-15"><a href="goto.html#cb623-15" aria-label="15"></a>    <span class="dt">int</span> next_n <span class="op">=</span> n <span class="op">-</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// Lihat bagaimana ini cocok dengan</span></span>
+<span id="cb623-16"><a href="goto.html#cb623-16" aria-label="16"></a>    <span class="dt">int</span> next_a <span class="op">=</span> a <span class="op">*</span> n<span class="op">;</span>  <span class="co">// argumen rekursif di atas?</span></span>
+<span id="cb623-17"><a href="goto.html#cb623-17" aria-label="17"></a></span>
+<span id="cb623-18"><a href="goto.html#cb623-18" aria-label="18"></a>    n <span class="op">=</span> next_n<span class="op">;</span>   <span class="co">// Atur parameter ke nilai baru</span></span>
+<span id="cb623-19"><a href="goto.html#cb623-19" aria-label="19"></a>    a <span class="op">=</span> next_a<span class="op">;</span></span>
+<span id="cb623-20"><a href="goto.html#cb623-20" aria-label="20"></a></span>
+<span id="cb623-21"><a href="goto.html#cb623-21" aria-label="21"></a>    <span class="cf">goto</span> tco<span class="op">;</span>   <span class="co">// Dan ulangi!</span></span>
+<span id="cb623-22"><a href="goto.html#cb623-22" aria-label="22"></a><span class="op">}</span></span>
+<span id="cb623-23"><a href="goto.html#cb623-23" aria-label="23"></a></span>
+<span id="cb623-24"><a href="goto.html#cb623-24" aria-label="24"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb623-25"><a href="goto.html#cb623-25" aria-label="25"></a><span class="op">{</span></span>
+<span id="cb623-26"><a href="goto.html#cb623-26" aria-label="26"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">8</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb623-27"><a href="goto.html#cb623-27" aria-label="27"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st">! == </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> i<span class="op">,</span> factorial<span class="op">(</span>i<span class="op">,</span> <span class="dv">1</span><span class="op">));</span></span>
+<span id="cb623-28"><a href="goto.html#cb623-28" aria-label="28"></a><span class="op">}</span></span></code></pre></div>
+<p>Di atas, aku memakai variabel sementara untuk mengatur nilai parameter berikutnya sebelum melompat ke awal fungsi. Lihat bagaimana mereka cocok dengan argumen rekursif pada pemanggilan rekursifnya?</p>
+<p>Nah, kenapa memakai variabel sementara? Aku bisa saja melakukan ini:</p>
+<div class="sourceCode" id="cb624"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb624-1"><a href="goto.html#cb624-1" aria-hidden="true" tabindex="-1"></a>    a <span class="op">*=</span> n<span class="op">;</span></span>
+<span id="cb624-2"><a href="goto.html#cb624-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">-=</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb624-3"><a href="goto.html#cb624-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb624-4"><a href="goto.html#cb624-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> tco<span class="op">;</span></span></code></pre></div>
+<p>dan itu sebenarnya berfungsi dengan baik. Tapi kalau aku ceroboh menukar dua baris kode itu:</p>
+<div class="sourceCode" id="cb625"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb625-1"><a href="goto.html#cb625-1" aria-hidden="true" tabindex="-1"></a>    n <span class="op">-=</span> <span class="dv">1</span><span class="op">;</span>  <span class="co">// KABAR BURUK</span></span>
+<span id="cb625-2"><a href="goto.html#cb625-2" aria-hidden="true" tabindex="-1"></a>    a <span class="op">*=</span> n<span class="op">;</span></span></code></pre></div>
+<p>—sekarang kita dalam masalah. Kita mengubah <code>n</code> sebelum memakainya untuk mengubah <code>a</code>. Itu Buruk karena memang bukan begitu cara kerjanya saat memanggil secara rekursif. Memakai variabel sementara menghindari masalah ini bahkan kalau kamu tidak waspada. Dan compiler kemungkinan mengoptimasi mereka hingga hilang, bagaimanapun juga.</p>
+<p> </p>
+<h2 data-number="31.7" id="memulai-ulang-system-call-yang-terinterupsi"><span class="header-section-number">31.7</span> Memulai Ulang System Call yang Terinterupsi</h2>
+<p></p>
+<p>Ini di luar spesifikasi, tapi umum terlihat di sistem mirip Unix.</p>
+<p>Beberapa system call yang berjalan lama mungkin mengembalikan error kalau diinterupsi oleh signal, dan <code>errno</code> akan diatur ke <code>EINTR</code> untuk menandakan bahwa syscall itu baik-baik saja; ia hanya terinterupsi.</p>
+<p>Dalam kasus itu, sangat umum programmer ingin memulai ulang pemanggilan itu dan mencobanya lagi.</p>
+<div class="sourceCode" id="cb626"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb626-1"><a href="goto.html#cb626-1" aria-hidden="true" tabindex="-1"></a>retry<span class="op">:</span></span>
+<span id="cb626-2"><a href="goto.html#cb626-2" aria-hidden="true" tabindex="-1"></a>    byte_count <span class="op">=</span> read<span class="op">(</span><span class="dv">0</span><span class="op">,</span> buf<span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span>buf<span class="op">)</span> <span class="op">-</span> <span class="dv">1</span><span class="op">);</span>  <span class="co">// syscall read() Unix</span></span>
+<span id="cb626-3"><a href="goto.html#cb626-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb626-4"><a href="goto.html#cb626-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>byte_count <span class="op">==</span> <span class="op">-</span><span class="dv">1</span><span class="op">)</span> <span class="op">{</span>            <span class="co">// Terjadi error...</span></span>
+<span id="cb626-5"><a href="goto.html#cb626-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="op">(</span>errno <span class="op">==</span> EINTR<span class="op">)</span> <span class="op">{</span>          <span class="co">// Tapi hanya karena terinterupsi</span></span>
+<span id="cb626-6"><a href="goto.html#cb626-6" aria-hidden="true" tabindex="-1"></a>            printf<span class="op">(</span><span class="st">&quot;Restarting...</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb626-7"><a href="goto.html#cb626-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">goto</span> retry<span class="op">;</span></span>
+<span id="cb626-8"><a href="goto.html#cb626-8" aria-hidden="true" tabindex="-1"></a>        <span class="op">}</span></span></code></pre></div>
+<p>Banyak sistem mirip Unix punya flag <code>SA_RESTART</code> yang bisa dioper ke <code>sigaction()</code> untuk meminta OS memulai ulang secara otomatis syscall lambat apa pun alih-alih gagal dengan <code>EINTR</code>.</p>
+<p>Sekali lagi, ini khusus Unix dan di luar standar C.</p>
+<p>Meski begitu, teknik serupa bisa dipakai kapan pun sebuah fungsi perlu dimulai ulang.</p>
+<p></p>
+<h2 data-number="31.8" id="goto-dan-thread-preemption"><span class="header-section-number">31.8</span> <code>goto</code> dan Thread Preemption</h2>
+<p></p>
+<p>Contoh ini diambil langsung dari <a href="http://www.ostep.org/"><em>Operating Systems: Three Easy Pieces</em></a>, buku luar biasa lain dari penulis yang sepaham dan juga merasa buku bermutu seharusnya bisa diunduh gratis. Bukan berarti aku keras kepala atau semacamnya.</p>
+<div class="sourceCode" id="cb627"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb627-1"><a href="goto.html#cb627-1" aria-hidden="true" tabindex="-1"></a>retry<span class="op">:</span></span>
+<span id="cb627-2"><a href="goto.html#cb627-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb627-3"><a href="goto.html#cb627-3" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_lock<span class="op">(</span>L1<span class="op">);</span></span>
+<span id="cb627-4"><a href="goto.html#cb627-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb627-5"><a href="goto.html#cb627-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(</span>pthread_mutex_trylock<span class="op">(</span>L2<span class="op">)</span> <span class="op">!=</span> <span class="dv">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb627-6"><a href="goto.html#cb627-6" aria-hidden="true" tabindex="-1"></a>        pthread_mutex_unlock<span class="op">(</span>L1<span class="op">);</span></span>
+<span id="cb627-7"><a href="goto.html#cb627-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">goto</span> retry<span class="op">;</span></span>
+<span id="cb627-8"><a href="goto.html#cb627-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb627-9"><a href="goto.html#cb627-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb627-10"><a href="goto.html#cb627-10" aria-hidden="true" tabindex="-1"></a>    save_the_day<span class="op">();</span></span>
+<span id="cb627-11"><a href="goto.html#cb627-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb627-12"><a href="goto.html#cb627-12" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_unlock<span class="op">(</span>L2<span class="op">);</span></span>
+<span id="cb627-13"><a href="goto.html#cb627-13" aria-hidden="true" tabindex="-1"></a>    pthread_mutex_unlock<span class="op">(</span>L1<span class="op">);</span></span></code></pre></div>
+<p>Di situ thread dengan senang hati mendapatkan mutex <code>L1</code>, tapi kemudian berpotensi gagal mendapatkan sumber daya kedua yang dijaga mutex <code>L2</code> (misalnya kalau thread lain yang tidak kooperatif memegangnya). Kalau thread kita tidak bisa mendapatkan lock <code>L2</code>, ia melepas <code>L1</code> lalu memakai <code>goto</code> untuk mencoba ulang dengan rapi.</p>
+<p>Kita berharap thread pahlawan kita akhirnya berhasil mendapatkan kedua mutex dan menyelamatkan hari, sambil menghindari deadlock jahat.</p>
+<p></p>
+<h2 data-number="31.9" id="goto-dan-scope-variabel"><span class="header-section-number">31.9</span> <code>goto</code> dan Scope Variabel</h2>
+<p></p>
+<p>Kita sudah melihat bahwa label punya function scope, tapi hal-hal aneh bisa terjadi kalau kita melompati inisialisasi variabel.</p>
+<p>Lihat contoh ini ketika kita melompat dari tempat variabel <code>x</code> berada di luar scope ke tengah scope-nya (di dalam blok).</p>
+<div class="sourceCode" id="cb628"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb628-1"><a href="goto.html#cb628-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> label<span class="op">;</span></span>
+<span id="cb628-2"><a href="goto.html#cb628-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb628-3"><a href="goto.html#cb628-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb628-4"><a href="goto.html#cb628-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> x <span class="op">=</span> <span class="dv">12345</span><span class="op">;</span></span>
+<span id="cb628-5"><a href="goto.html#cb628-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb628-6"><a href="goto.html#cb628-6" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span></span>
+<span id="cb628-7"><a href="goto.html#cb628-7" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb628-8"><a href="goto.html#cb628-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>Ini akan dikompilasi dan dijalankan, tapi aku mendapat peringatan:</p>
+<div class="sourceCode" id="cb629"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb629-1"><a href="goto.html#cb629-1" aria-hidden="true" tabindex="-1"></a>warning: ‘x’ is used uninitialized in this function</span></code></pre></div>
+<p>Lalu mencetak <code>0</code> saat kujalankan (hasilmu mungkin berbeda).</p>
+<p>Pada dasarnya yang terjadi: kita melompat ke scope <code>x</code> (jadi boleh merujuknya di <code>printf()</code>) tapi melompati baris yang benar-benar menginisialisasinya ke <code>12345</code>. Jadi nilainya tak tentu.</p>
+<p>Perbaikannya, tentu saja, menempatkan inisialisasi <em>setelah</em> label dengan satu atau lain cara.</p>
+<div class="sourceCode" id="cb630"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb630-1"><a href="goto.html#cb630-1" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> label<span class="op">;</span></span>
+<span id="cb630-2"><a href="goto.html#cb630-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb630-3"><a href="goto.html#cb630-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb630-4"><a href="goto.html#cb630-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb630-5"><a href="goto.html#cb630-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb630-6"><a href="goto.html#cb630-6" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span></span>
+<span id="cb630-7"><a href="goto.html#cb630-7" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="dv">12345</span><span class="op">;</span></span>
+<span id="cb630-8"><a href="goto.html#cb630-8" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb630-9"><a href="goto.html#cb630-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>Mari kita lihat satu contoh lagi.</p>
+<div class="sourceCode" id="cb631"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb631-1"><a href="goto.html#cb631-1" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb631-2"><a href="goto.html#cb631-2" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb631-3"><a href="goto.html#cb631-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-4"><a href="goto.html#cb631-4" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span></span>
+<span id="cb631-5"><a href="goto.html#cb631-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-6"><a href="goto.html#cb631-6" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb631-7"><a href="goto.html#cb631-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb631-8"><a href="goto.html#cb631-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb631-9"><a href="goto.html#cb631-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> label<span class="op">;</span></span></code></pre></div>
+<p>Apa yang terjadi di sini?</p>
+<p>Pada kali pertama melewati blok, semuanya baik. <code>x</code> bernilai <code>10</code> dan itulah yang tercetak.</p>
+<p>Tapi setelah <code>goto</code>, kita melompat ke scope <code>x</code>, tapi melewati inisialisasinya. Artinya kita masih bisa mencetaknya, tapi nilainya tak tentu (karena belum diinisialisasi ulang).</p>
+<p>Di mesinku, ia mencetak <code>10</code> lagi (sampai tak terhingga), tapi itu hanya keberuntungan. Ia bisa mencetak nilai apa pun setelah <code>goto</code> karena <code>x</code> belum diinisialisasi.</p>
+<p></p>
+<h2 data-number="31.10" id="goto-dan-variable-length-array"><span class="header-section-number">31.10</span> <code>goto</code> dan Variable-Length Array</h2>
+<p></p>
+<p>Soal VLA dan <code>goto</code>, hanya ada satu aturan: kamu tidak boleh melompat dari luar scope VLA ke dalam scope VLA itu.</p>
+<p>Kalau aku mencoba ini:</p>
+<div class="sourceCode" id="cb632"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb632-1"><a href="goto.html#cb632-1" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb632-2"><a href="goto.html#cb632-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb632-3"><a href="goto.html#cb632-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> label<span class="op">;</span></span>
+<span id="cb632-4"><a href="goto.html#cb632-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb632-5"><a href="goto.html#cb632-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb632-6"><a href="goto.html#cb632-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> v<span class="op">[</span>x<span class="op">];</span></span>
+<span id="cb632-7"><a href="goto.html#cb632-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb632-8"><a href="goto.html#cb632-8" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span></span>
+<span id="cb632-9"><a href="goto.html#cb632-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb632-10"><a href="goto.html#cb632-10" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;Hi!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb632-11"><a href="goto.html#cb632-11" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>aku mendapat error:</p>
+<div class="sourceCode" id="cb633"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb633-1"><a href="goto.html#cb633-1" aria-hidden="true" tabindex="-1"></a>error: jump into scope of identifier with variably modified type</span></code></pre></div>
+<p>Kamu bisa melompat masuk sebelum deklarasi VLA, seperti ini:</p>
+<div class="sourceCode" id="cb634"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb634-1"><a href="goto.html#cb634-1" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb634-2"><a href="goto.html#cb634-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-3"><a href="goto.html#cb634-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> label<span class="op">;</span></span>
+<span id="cb634-4"><a href="goto.html#cb634-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-5"><a href="goto.html#cb634-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb634-6"><a href="goto.html#cb634-6" aria-hidden="true" tabindex="-1"></a>label<span class="op">:</span>  <span class="op">;</span></span>
+<span id="cb634-7"><a href="goto.html#cb634-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">int</span> v<span class="op">[</span>x<span class="op">];</span></span>
+<span id="cb634-8"><a href="goto.html#cb634-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb634-9"><a href="goto.html#cb634-9" aria-hidden="true" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;Hi!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb634-10"><a href="goto.html#cb634-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span></code></pre></div>
+<p>Karena dengan begitu VLA dialokasikan dengan benar sebelum dealokasinya yang tak terelakkan saat keluar dari scope.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="variable-length-array-vla.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tipe-bagian-v-compound-literal-dan-generic-selection.html" rel="next">Next</a></span></div></body>
+</html>

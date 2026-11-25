@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="arrays.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="structs.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="7" id="strings"><span class="header-section-number">7</span> Strings</h1>
+<p>Akhirnya! Strings! Apa yang bisa lebih sederhana dari ini?</p>
+<p>Nah, ternyata string di C sebenarnya bukan string. Betul! Mereka itu pointer! Tentu saja mereka pointer!</p>
+<p>Seperti array, string di C <em>nyaris tidak ada</em>.</p>
+<p>Tapi kita lihat saja—sebenarnya tidak seseram itu.</p>
+<h2 data-number="7.1" id="string-literal"><span class="header-section-number">7.1</span> String Literal</h2>
+<p>Sebelum mulai, mari kita bahas dulu string literal di C. String literal berupa deretan karakter di dalam tanda kutip <em>ganda</em> (<code>"</code>). (Tanda kutip tunggal mengapit karakter, dan itu makhluk yang sama sekali berbeda.)</p>
+<p>Contoh:</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb116-1"><a href="strings.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;Hello, world!</span><span class="sc">\n</span><span class="st">&quot;</span></span>
+<span id="cb116-2"><a href="strings.html#cb116-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;This is a test.&quot;</span></span>
+<span id="cb116-3"><a href="strings.html#cb116-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;When asked if this string had quotes in it, she replied, </span><span class="sc">\&quot;</span><span class="st">It does.</span><span class="sc">\&quot;</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Yang pertama punya newline di ujungnya—pemandangan yang sangat umum.</p>
+<p>Yang terakhir punya tanda kutip di dalamnya, dan kamu bisa lihat masing-masing didahului (kita bilang “di-escape oleh”) sebuah backslash (<code>\</code>) yang menandakan bahwa di titik itu ada tanda kutip literal yang menjadi bagian string. Begitulah cara C compiler membedakan antara mencetak tanda kutip ganda dan tanda kutip ganda penutup string.</p>
+<h2 data-number="7.2" id="variabel-string"><span class="header-section-number">7.2</span> Variabel String</h2>
+<p>Setelah tahu cara membuat string literal, sekarang kita tugaskan ke sebuah variabel supaya bisa kita pakai.</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb117-1"><a href="strings.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span></code></pre></div>
+<p>Perhatikan tipenya: pointer ke <code>char</code>. Variabel string <code>s</code> sebenarnya adalah pointer ke karakter pertama string itu, yaitu <code>H</code>.</p>
+<p>Kita bisa mencetaknya dengan format specifier <code>%s</code> (untuk “string”):</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb118-1"><a href="strings.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb118-2"><a href="strings.html#cb118-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb118-3"><a href="strings.html#cb118-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// &quot;Hello, world!&quot;</span></span></code></pre></div>
+<p></p>
+<h2 data-number="7.3" id="variabel-string-sebagai-array"><span class="header-section-number">7.3</span> Variabel String sebagai Array</h2>
+<p> Pilihan lainnya adalah ini, yang hampir setara dengan pemakaian <code>char*</code> di atas:</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb119-1"><a href="strings.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[</span><span class="dv">14</span><span class="op">]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb119-2"><a href="strings.html#cb119-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-3"><a href="strings.html#cb119-3" aria-hidden="true" tabindex="-1"></a><span class="co">// atau, kalau kita malas dengan benar dan menyuruh compiler</span></span>
+<span id="cb119-4"><a href="strings.html#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="co">// menghitung panjangnya untuk kita:</span></span>
+<span id="cb119-5"><a href="strings.html#cb119-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-6"><a href="strings.html#cb119-6" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span></code></pre></div>
+<p>Artinya, kamu bisa memakai notasi array untuk mengakses karakter dalam string. Mari kita lakukan persis itu untuk mencetak semua karakter string dalam satu baris:</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb120-1"><a href="strings.html#cb120-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb120-2"><a href="strings.html#cb120-2" aria-label="2"></a></span>
+<span id="cb120-3"><a href="strings.html#cb120-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb120-4"><a href="strings.html#cb120-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb120-5"><a href="strings.html#cb120-5" aria-label="5"></a>    <span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb120-6"><a href="strings.html#cb120-6" aria-label="6"></a></span>
+<span id="cb120-7"><a href="strings.html#cb120-7" aria-label="7"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">13</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb120-8"><a href="strings.html#cb120-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb120-9"><a href="strings.html#cb120-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb120-10"><a href="strings.html#cb120-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p>Perhatikan bahwa kita memakai format specifier <code>%c</code> untuk mencetak satu karakter.</p>
+<p>Lihat juga ini. Programnya tetap berjalan dengan baik kalau definisi <code>s</code> kita ubah menjadi tipe <code>char*</code>:</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb121-1"><a href="strings.html#cb121-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb121-2"><a href="strings.html#cb121-2" aria-label="2"></a></span>
+<span id="cb121-3"><a href="strings.html#cb121-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb121-4"><a href="strings.html#cb121-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb121-5"><a href="strings.html#cb121-5" aria-label="5"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span>   <span class="co">// char* di sini</span></span>
+<span id="cb121-6"><a href="strings.html#cb121-6" aria-label="6"></a></span>
+<span id="cb121-7"><a href="strings.html#cb121-7" aria-label="7"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">13</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb121-8"><a href="strings.html#cb121-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">[</span>i<span class="op">]);</span>    <span class="co">// Tapi masih memakai array di sini...?</span></span>
+<span id="cb121-9"><a href="strings.html#cb121-9" aria-label="9"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb121-10"><a href="strings.html#cb121-10" aria-label="10"></a><span class="op">}</span></span></code></pre></div>
+<p>Dan kita masih bisa memakai notasi array untuk mencetaknya! Ini mengejutkan, tapi itu hanya karena kita belum membahas kesetaraan array/pointer. Meski begitu, ini satu petunjuk lagi bahwa array dan pointer itu sama saja, jauh di dalamnya. </p>
+<h2 data-number="7.4" id="inisialisasi-string"><span class="header-section-number">7.4</span> Inisialisasi String</h2>
+<p> Kita sudah melihat beberapa contoh inisialisasi variabel string dengan string literal:</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb122-1"><a href="strings.html#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb122-2"><a href="strings.html#cb122-2" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, again!&quot;</span><span class="op">;</span></span></code></pre></div>
+<p>Tapi kedua inisialisasi ini berbeda secara halus. Sebuah string literal, seperti integer literal, memorinya dikelola otomatis oleh compiler untukmu! Untuk integer, yaitu data berukuran tetap, compiler bisa mengelolanya dengan mudah. Tapi string adalah makhluk berukuran byte yang bervariasi, yang dijinakkan compiler dengan cara dilempar ke sepotong memori, lalu kamu diberi pointer ke sana.</p>
+<p>Bentuk ini menunjuk ke mana pun string itu ditaruh. Biasanya tempat itu berada di negeri yang jauh dari memori program lainnya – yaitu memori read-only – karena alasan performa dan keamanan.</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb123-1"><a href="strings.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span></code></pre></div>
+<p>Jadi, kalau kamu mencoba mengubah string itu dengan ini:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb124-1"><a href="strings.html#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb124-2"><a href="strings.html#cb124-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb124-3"><a href="strings.html#cb124-3" aria-hidden="true" tabindex="-1"></a>s<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span>  <span class="co">// KABAR BURUK: mencoba mengubah string literal!</span></span></code></pre></div>
+<p>Perilakunya undefined. Tergantung sistemmu, kemungkinan besar hasilnya crash.</p>
+<p>Tapi mendeklarasikannya sebagai array itu berbeda. Compiler tidak menyembunyikan byte-byte itu di bagian kota yang lain; mereka ada di jalan seberang rumahmu. Yang satu ini <em>salinan</em> string yang bisa diubah – bisa kita ubah sesuka hati:</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb125-1"><a href="strings.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> t<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, again!&quot;</span><span class="op">;</span>  <span class="co">// t adalah salinan array dari string itu</span></span>
+<span id="cb125-2"><a href="strings.html#cb125-2" aria-hidden="true" tabindex="-1"></a>t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span> <span class="co">//  Tidak masalah</span></span>
+<span id="cb125-3"><a href="strings.html#cb125-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb125-4"><a href="strings.html#cb125-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span>  <span class="co">// &quot;zello, again!&quot;</span></span></code></pre></div>
+<p>Jadi ingat: kalau kamu punya pointer ke string literal, jangan coba mengubahnya! Dan kalau kamu memakai string di dalam tanda kutip ganda untuk menginisialisasi array, itu sebenarnya bukan string literal. </p>
+<h2 data-number="7.5" id="mendapatkan-panjang-string"><span class="header-section-number">7.5</span> Mendapatkan Panjang String</h2>
+<p> Tidak bisa, karena C tidak mencatatnya untukmu. Dan kalau dibilang “tidak bisa”, maksudnya sebenarnya “bisa”<a href="function-specifier-alignment-specifier-dan-operator.html#fn63" class="footnote-ref" id="fnref63" role="doc-noteref"><sup>63</sup></a>. Ada fungsi di <code>&lt;string.h&gt;</code> bernama <code>strlen()</code> yang bisa dipakai untuk menghitung panjang string apa pun dalam byte<a href="function-specifier-alignment-specifier-dan-operator.html#fn64" class="footnote-ref" id="fnref64" role="doc-noteref"><sup>64</sup></a>.</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb126-1"><a href="strings.html#cb126-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb126-2"><a href="strings.html#cb126-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb126-3"><a href="strings.html#cb126-3" aria-label="3"></a></span>
+<span id="cb126-4"><a href="strings.html#cb126-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb126-5"><a href="strings.html#cb126-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb126-6"><a href="strings.html#cb126-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb126-7"><a href="strings.html#cb126-7" aria-label="7"></a></span>
+<span id="cb126-8"><a href="strings.html#cb126-8" aria-label="8"></a>    printf<span class="op">(</span><span class="st">&quot;The string is </span><span class="sc">%zu</span><span class="st"> bytes long.</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> strlen<span class="op">(</span>s<span class="op">));</span></span>
+<span id="cb126-9"><a href="strings.html#cb126-9" aria-label="9"></a><span class="op">}</span></span></code></pre></div>
+<p>Fungsi <code>strlen()</code> mengembalikan tipe <code>size_t</code>, yaitu tipe integer sehingga bisa dipakai untuk perhitungan integer. Kita mencetak <code>size_t</code> dengan <code>%zu</code>.</p>
+<p>Program di atas mencetak:</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb127-1"><a href="strings.html#cb127-1" aria-hidden="true" tabindex="-1"></a>The string is 13 bytes long.</span></code></pre></div>
+<p>Bagus! Jadi ternyata <em>bisa</em> mendapatkan panjang string! </p>
+<p>Tapi… kalau C tidak mencatat panjang string di mana pun, bagaimana ia tahu seberapa panjang string itu?</p>
+<h2 data-number="7.6" id="terminasi-string"><span class="header-section-number">7.6</span> Terminasi String</h2>
+<p> C memperlakukan string sedikit berbeda dari banyak bahasa pemrograman, dan sebenarnya berbeda dari hampir semua bahasa pemrograman modern.</p>
+<p>Saat membuat bahasa baru, pada dasarnya ada dua pilihan untuk menyimpan string di memori:</p>
+<ol type="1">
+<li><p>Simpan byte-byte string beserta sebuah angka yang menyatakan panjang string.</p></li>
+<li><p>Simpan byte-byte string, dan tandai akhir string dengan byte khusus yang disebut <em>terminator</em>.</p></li>
+</ol>
+<p>Kalau kamu ingin string yang lebih panjang dari 255 karakter, pilihan 1 membutuhkan setidaknya dua byte untuk menyimpan panjangnya. Sedangkan pilihan 2 hanya butuh satu byte untuk mengakhiri string. Jadi ada sedikit penghematan di sana.</p>
+<p>Tentu saja, zaman sekarang menghemat satu byte (atau 3—banyak bahasa dengan senang hati membolehkan string sepanjang 4 gigabyte) terasa konyol. Tapi dulu, itu urusan yang lebih besar.</p>
+<p>Jadi C memilih pendekatan #2. Di C, sebuah “string” didefinisikan oleh dua ciri dasar:</p>
+<ul>
+<li>Sebuah pointer ke karakter pertama string.</li>
+<li>Sebuah byte bernilai nol (atau karakter <code>NUL</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn65" class="footnote-ref" id="fnref65" role="doc-noteref"><sup>65</sup></a>) di suatu tempat di memori setelah pointer itu, yang menandai akhir string.</li>
+</ul>
+<p>Karakter <code>NUL</code> bisa ditulis di kode C sebagai <code>\0</code>, meski jarang kamu perlu melakukannya.</p>
+<p>Ketika kamu menulis string di dalam tanda kutip ganda di kodemu, karakter <code>NUL</code> otomatis dan implisit ikut disertakan.</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb128-1"><a href="strings.html#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;Hello!&quot;</span><span class="op">;</span>  <span class="co">// Sebenarnya &quot;Hello!\0&quot; di balik layar</span></span></code></pre></div>
+<p>Dengan ini, mari kita tulis fungsi <code>strlen()</code> kita sendiri yang menghitung <code>char</code> dalam string sampai menemukan <code>NUL</code>.</p>
+<p>Caranya, telusuri string untuk mencari satu karakter <code>NUL</code>, sambil menghitung<a href="function-specifier-alignment-specifier-dan-operator.html#fn66" class="footnote-ref" id="fnref66" role="doc-noteref"><sup>66</sup></a>:</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb129-1"><a href="strings.html#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> my_strlen<span class="op">(</span><span class="dt">char</span> <span class="op">*</span>s<span class="op">)</span></span>
+<span id="cb129-2"><a href="strings.html#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb129-3"><a href="strings.html#cb129-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> count <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb129-4"><a href="strings.html#cb129-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb129-5"><a href="strings.html#cb129-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="op">(</span>s<span class="op">[</span>count<span class="op">]</span> <span class="op">!=</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">)</span>  <span class="co">// Tanda kutip tunggal untuk satu karakter</span></span>
+<span id="cb129-6"><a href="strings.html#cb129-6" aria-hidden="true" tabindex="-1"></a>        count<span class="op">++;</span></span>
+<span id="cb129-7"><a href="strings.html#cb129-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb129-8"><a href="strings.html#cb129-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> count<span class="op">;</span></span>
+<span id="cb129-9"><a href="strings.html#cb129-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Dan pada dasarnya begitulah cara <code>strlen()</code> bawaan menyelesaikan tugasnya. </p>
+<h2 data-number="7.7" id="menyalin-string"><span class="header-section-number">7.7</span> Menyalin String</h2>
+<p> String tidak bisa disalin lewat operator penugasan (<code>=</code>). Yang terjadi hanyalah menyalin pointer ke karakter pertama… sehingga akhirnya kamu punya dua pointer ke string yang sama:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb130-1"><a href="strings.html#cb130-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb130-2"><a href="strings.html#cb130-2" aria-label="2"></a></span>
+<span id="cb130-3"><a href="strings.html#cb130-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb130-4"><a href="strings.html#cb130-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb130-5"><a href="strings.html#cb130-5" aria-label="5"></a>    <span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb130-6"><a href="strings.html#cb130-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>t<span class="op">;</span></span>
+<span id="cb130-7"><a href="strings.html#cb130-7" aria-label="7"></a></span>
+<span id="cb130-8"><a href="strings.html#cb130-8" aria-label="8"></a>    <span class="co">// Ini menyalin pointer-nya, bukan menyalin string-nya!</span></span>
+<span id="cb130-9"><a href="strings.html#cb130-9" aria-label="9"></a>    t <span class="op">=</span> s<span class="op">;</span></span>
+<span id="cb130-10"><a href="strings.html#cb130-10" aria-label="10"></a></span>
+<span id="cb130-11"><a href="strings.html#cb130-11" aria-label="11"></a>    <span class="co">// Kita ubah t</span></span>
+<span id="cb130-12"><a href="strings.html#cb130-12" aria-label="12"></a>    t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span></span>
+<span id="cb130-13"><a href="strings.html#cb130-13" aria-label="13"></a></span>
+<span id="cb130-14"><a href="strings.html#cb130-14" aria-label="14"></a>    <span class="co">// Tapi mencetak s menampilkan perubahannya!</span></span>
+<span id="cb130-15"><a href="strings.html#cb130-15" aria-label="15"></a>    <span class="co">// Karena t dan s menunjuk ke string yang sama!</span></span>
+<span id="cb130-16"><a href="strings.html#cb130-16" aria-label="16"></a></span>
+<span id="cb130-17"><a href="strings.html#cb130-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// &quot;zello, world!&quot;</span></span>
+<span id="cb130-18"><a href="strings.html#cb130-18" aria-label="18"></a><span class="op">}</span></span></code></pre></div>
+<p>Kalau kamu ingin menyalin string, kamu harus menyalinnya byte demi byte—artinya kamu mengambil byte-byte string dari satu tempat di memori dan menduplikasinya ke tempat lain di memori. Ini dipermudah oleh fungsi <code>strcpy()</code>.<a href="function-specifier-alignment-specifier-dan-operator.html#fn67" class="footnote-ref" id="fnref67" role="doc-noteref"><sup>67</sup></a></p>
+<p>Sebelum menyalin string, pastikan ada ruang untuk menampung salinannya, yaitu array tujuan yang akan menampung karakter-karakternya harus setidaknya sepanjang string yang disalin.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb131-1"><a href="strings.html#cb131-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb131-2"><a href="strings.html#cb131-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;string.h&gt;</span></span>
+<span id="cb131-3"><a href="strings.html#cb131-3" aria-label="3"></a></span>
+<span id="cb131-4"><a href="strings.html#cb131-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb131-5"><a href="strings.html#cb131-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb131-6"><a href="strings.html#cb131-6" aria-label="6"></a>    <span class="dt">char</span> s<span class="op">[]</span> <span class="op">=</span> <span class="st">&quot;Hello, world!&quot;</span><span class="op">;</span></span>
+<span id="cb131-7"><a href="strings.html#cb131-7" aria-label="7"></a>    <span class="dt">char</span> t<span class="op">[</span><span class="dv">100</span><span class="op">];</span>  <span class="co">// Setiap char satu byte, jadi ruangnya lebih dari cukup</span></span>
+<span id="cb131-8"><a href="strings.html#cb131-8" aria-label="8"></a></span>
+<span id="cb131-9"><a href="strings.html#cb131-9" aria-label="9"></a>    <span class="co">// Ini menyalin string-nya!</span></span>
+<span id="cb131-10"><a href="strings.html#cb131-10" aria-label="10"></a>    strcpy<span class="op">(</span>t<span class="op">,</span> s<span class="op">);</span></span>
+<span id="cb131-11"><a href="strings.html#cb131-11" aria-label="11"></a></span>
+<span id="cb131-12"><a href="strings.html#cb131-12" aria-label="12"></a>    <span class="co">// Kita ubah t</span></span>
+<span id="cb131-13"><a href="strings.html#cb131-13" aria-label="13"></a>    t<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="ch">&#39;z&#39;</span><span class="op">;</span></span>
+<span id="cb131-14"><a href="strings.html#cb131-14" aria-label="14"></a></span>
+<span id="cb131-15"><a href="strings.html#cb131-15" aria-label="15"></a>    <span class="co">// Dan s tidak terpengaruh karena itu string yang berbeda</span></span>
+<span id="cb131-16"><a href="strings.html#cb131-16" aria-label="16"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// &quot;Hello, world!&quot;</span></span>
+<span id="cb131-17"><a href="strings.html#cb131-17" aria-label="17"></a></span>
+<span id="cb131-18"><a href="strings.html#cb131-18" aria-label="18"></a>    <span class="co">// Tapi t sudah berubah</span></span>
+<span id="cb131-19"><a href="strings.html#cb131-19" aria-label="19"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">);</span>  <span class="co">// &quot;zello, world!&quot;</span></span>
+<span id="cb131-20"><a href="strings.html#cb131-20" aria-label="20"></a><span class="op">}</span></span></code></pre></div>
+<p>Perhatikan bahwa pada <code>strcpy()</code>, pointer tujuan adalah argumen pertama, dan pointer sumber adalah argumen kedua. Trik untuk mengingatnya: ini urutan yang akan kamu pakai untuk menulis <code>t</code> dan <code>s</code> seandainya penugasan <code>=</code> bekerja untuk string, dengan sumber di kanan dan tujuan di kiri. </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="arrays.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="structs.html" rel="next">Next</a></span></div></body>
+</html>

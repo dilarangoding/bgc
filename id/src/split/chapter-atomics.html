@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="multithreading.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="function-specifier-alignment-specifier-dan-operator.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="40" id="chapter-atomics"><span class="header-section-number">40</span> Atomics</h1>
+<blockquote>
+<p><em>“They tried and failed, all of them?”</em><br />
+<em>“Oh, no.” She shook her head. “They tried and died.”</em></p>
+<p>—Paul Atreides and The Reverend Mother Gaius Helen Mohiam, <em>Dune</em></p>
+</blockquote>
+<p></p>
+<p>Ini salah satu aspek multithreading di C yang paling menantang. Tapi kita akan berusaha santai.</p>
+<p>Pada dasarnya, aku akan membahas pemakaian variabel atomic yang lebih lugas, apa itu, bagaimana cara kerjanya, dan sebagainya. Dan aku akan menyebut beberapa jalur yang jauh lebih rumit yang tersedia bagimu.</p>
+<p>Tapi aku tidak akan menempuh jalur-jalur itu. Bukan hanya karena aku nyaris tidak punya kualifikasi untuk menulis tentangnya, tapi kupikir kalau kamu tahu kamu membutuhkannya, kamu sudah tahu lebih banyak daripada aku.</p>
+<p>Tapi ada hal-hal aneh bahkan di dasar-dasarnya. Jadi kencangkan sabuk pengaman, semuanya, karena Kansas akan pamit pergi.</p>
+<h2 data-number="40.1" id="menguji-dukungan-atomic"><span class="header-section-number">40.1</span> Menguji Dukungan Atomic</h2>
+<p></p>
+<p>Atomic adalah fitur opsional. Ada makro <code>__STDC_NO_ATOMICS__</code> yang bernilai <code>1</code> kalau kamu <em>tidak</em> punya atomic.</p>
+<p>Makro itu mungkin tidak ada sebelum C11, jadi kita sebaiknya menguji versi bahasanya dengan <code>__STDC_VERSION__</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn208" class="footnote-ref" id="fnref208" role="doc-noteref"><sup>208</sup></a>.</p>
+<div class="sourceCode" id="cb770"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb770-1"><a href="chapter-atomics.html#cb770-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#if __STDC_VERSION__ &lt; 201112L || __STDC_NO_ATOMICS__ == 1</span></span>
+<span id="cb770-2"><a href="chapter-atomics.html#cb770-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAS_ATOMICS </span><span class="dv">0</span></span>
+<span id="cb770-3"><a href="chapter-atomics.html#cb770-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#else</span></span>
+<span id="cb770-4"><a href="chapter-atomics.html#cb770-4" aria-hidden="true" tabindex="-1"></a><span class="pp">#define HAS_ATOMICS </span><span class="dv">1</span></span>
+<span id="cb770-5"><a href="chapter-atomics.html#cb770-5" aria-hidden="true" tabindex="-1"></a><span class="pp">#endif</span></span></code></pre></div>
+<p></p>
+<p></p>
+<p>Kalau pengujian itu lolos, kamu aman meng-include <code>&lt;stdatomic.h&gt;</code>, header yang menjadi dasar sisa bab ini. Tapi kalau tidak ada dukungan atomic, header itu mungkin bahkan tidak ada.</p>
+<p>Di beberapa sistem, kamu mungkin perlu menambahkan <code>-latomic</code> di akhir command line kompilasi untuk memakai fungsi apa pun di header file itu.</p>
+<p></p>
+<h2 data-number="40.2" id="variabel-atomic"><span class="header-section-number">40.2</span> Variabel Atomic</h2>
+<p>Berikut <em>sebagian</em> dari cara kerja variabel atomic:</p>
+<p>Kalau kamu punya variabel atomic yang dibagi dan kamu menulis ke sana dari satu thread, penulisan itu akan <em>semua-atau-tidak-sama-sekali</em> di thread yang berbeda.</p>
+<p>Artinya, thread lain akan melihat seluruh penulisan, misalnya nilai 32-bit. Bukan setengahnya. Tidak ada cara bagi satu thread untuk menginterupsi thread lain yang sedang berada di <em>tengah</em> penulisan atomic multibyte.</p>
+<p>Hampir seperti ada kunci kecil di sekitar pengambilan dan pengisian variabel itu. (Dan <em>mungkin</em> memang ada! Lihat <a href="chapter-atomics.html#lock-free-atomic">Variabel Atomic Lock-Free</a>, di bawah.)</p>
+<p>Dan soal itu, kamu bisa saja tidak pernah memakai atomic kalau memakai mutex untuk mengunci critical section-mu. Hanya saja ada kelas <em>struktur data lock-free</em> yang selalu mengizinkan thread lain membuat kemajuan alih-alih terblokir oleh mutex… tapi ini sulit dibuat dengan benar dari nol, dan merupakan salah satu hal yang di luar cakupan panduan ini, sayangnya.</p>
+<p>Itu baru sebagian ceritanya. Tapi itulah bagian yang kita mulai.</p>
+<p>Sebelum lanjut, bagaimana cara mendeklarasikan variabel sebagai atomic?</p>
+<p>Pertama, include <code>&lt;stdatomic.h&gt;</code>.</p>
+<p></p>
+<p>Ini memberi kita tipe seperti <code>atomic_int</code>.</p>
+<p>Lalu kita tinggal mendeklarasikan variabel bertipe itu.</p>
+<p>Tapi mari kita buat demo dengan dua thread. Yang pertama berjalan sebentar lalu mengisi variabel dengan nilai tertentu, lalu keluar. Yang lain berjalan sampai ia melihat nilai itu terisi, lalu keluar.</p>
+<div class="sourceCode" id="cb771"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb771-1"><a href="chapter-atomics.html#cb771-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb771-2"><a href="chapter-atomics.html#cb771-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;threads.h&gt;</span></span>
+<span id="cb771-3"><a href="chapter-atomics.html#cb771-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
+<span id="cb771-4"><a href="chapter-atomics.html#cb771-4" aria-label="4"></a></span>
+<span id="cb771-5"><a href="chapter-atomics.html#cb771-5" aria-label="5"></a>atomic_int x<span class="op">;</span>   <span class="co">// KEKUATAN ATOMIC! BWAHAHAHA!</span></span>
+<span id="cb771-6"><a href="chapter-atomics.html#cb771-6" aria-label="6"></a></span>
+<span id="cb771-7"><a href="chapter-atomics.html#cb771-7" aria-label="7"></a><span class="dt">int</span> thread1<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb771-8"><a href="chapter-atomics.html#cb771-8" aria-label="8"></a><span class="op">{</span></span>
+<span id="cb771-9"><a href="chapter-atomics.html#cb771-9" aria-label="9"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb771-10"><a href="chapter-atomics.html#cb771-10" aria-label="10"></a></span>
+<span id="cb771-11"><a href="chapter-atomics.html#cb771-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 1: Sleeping for 1.5 seconds</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb771-12"><a href="chapter-atomics.html#cb771-12" aria-label="12"></a>    thrd_sleep<span class="op">(&amp;(</span><span class="kw">struct</span> timespec<span class="op">){.</span>tv_sec<span class="op">=</span><span class="dv">1</span><span class="op">,</span> <span class="op">.</span>tv_nsec<span class="op">=</span><span class="dv">500000000</span><span class="op">},</span> NULL<span class="op">);</span></span>
+<span id="cb771-13"><a href="chapter-atomics.html#cb771-13" aria-label="13"></a></span>
+<span id="cb771-14"><a href="chapter-atomics.html#cb771-14" aria-label="14"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 1: Setting x to 3490</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb771-15"><a href="chapter-atomics.html#cb771-15" aria-label="15"></a>    x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb771-16"><a href="chapter-atomics.html#cb771-16" aria-label="16"></a></span>
+<span id="cb771-17"><a href="chapter-atomics.html#cb771-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 1: Exiting</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb771-18"><a href="chapter-atomics.html#cb771-18" aria-label="18"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb771-19"><a href="chapter-atomics.html#cb771-19" aria-label="19"></a><span class="op">}</span></span>
+<span id="cb771-20"><a href="chapter-atomics.html#cb771-20" aria-label="20"></a></span>
+<span id="cb771-21"><a href="chapter-atomics.html#cb771-21" aria-label="21"></a><span class="dt">int</span> thread2<span class="op">(</span><span class="dt">void</span> <span class="op">*</span>arg<span class="op">)</span></span>
+<span id="cb771-22"><a href="chapter-atomics.html#cb771-22" aria-label="22"></a><span class="op">{</span></span>
+<span id="cb771-23"><a href="chapter-atomics.html#cb771-23" aria-label="23"></a>    <span class="op">(</span><span class="dt">void</span><span class="op">)</span>arg<span class="op">;</span></span>
+<span id="cb771-24"><a href="chapter-atomics.html#cb771-24" aria-label="24"></a></span>
+<span id="cb771-25"><a href="chapter-atomics.html#cb771-25" aria-label="25"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 2: Waiting for 3490</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb771-26"><a href="chapter-atomics.html#cb771-26" aria-label="26"></a>    <span class="cf">while</span> <span class="op">(</span>x <span class="op">!=</span> <span class="dv">3490</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// berputar di sini</span></span>
+<span id="cb771-27"><a href="chapter-atomics.html#cb771-27" aria-label="27"></a></span>
+<span id="cb771-28"><a href="chapter-atomics.html#cb771-28" aria-label="28"></a>    printf<span class="op">(</span><span class="st">&quot;Thread 2: Got 3490--exiting!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb771-29"><a href="chapter-atomics.html#cb771-29" aria-label="29"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb771-30"><a href="chapter-atomics.html#cb771-30" aria-label="30"></a><span class="op">}</span></span>
+<span id="cb771-31"><a href="chapter-atomics.html#cb771-31" aria-label="31"></a></span>
+<span id="cb771-32"><a href="chapter-atomics.html#cb771-32" aria-label="32"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb771-33"><a href="chapter-atomics.html#cb771-33" aria-label="33"></a><span class="op">{</span></span>
+<span id="cb771-34"><a href="chapter-atomics.html#cb771-34" aria-label="34"></a>    x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb771-35"><a href="chapter-atomics.html#cb771-35" aria-label="35"></a></span>
+<span id="cb771-36"><a href="chapter-atomics.html#cb771-36" aria-label="36"></a>    thrd_t t1<span class="op">,</span> t2<span class="op">;</span></span>
+<span id="cb771-37"><a href="chapter-atomics.html#cb771-37" aria-label="37"></a></span>
+<span id="cb771-38"><a href="chapter-atomics.html#cb771-38" aria-label="38"></a>    thrd_create<span class="op">(&amp;</span>t1<span class="op">,</span> thread1<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb771-39"><a href="chapter-atomics.html#cb771-39" aria-label="39"></a>    thrd_create<span class="op">(&amp;</span>t2<span class="op">,</span> thread2<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb771-40"><a href="chapter-atomics.html#cb771-40" aria-label="40"></a></span>
+<span id="cb771-41"><a href="chapter-atomics.html#cb771-41" aria-label="41"></a>    thrd_join<span class="op">(</span>t1<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb771-42"><a href="chapter-atomics.html#cb771-42" aria-label="42"></a>    thrd_join<span class="op">(</span>t2<span class="op">,</span> NULL<span class="op">);</span></span>
+<span id="cb771-43"><a href="chapter-atomics.html#cb771-43" aria-label="43"></a></span>
+<span id="cb771-44"><a href="chapter-atomics.html#cb771-44" aria-label="44"></a>    printf<span class="op">(</span><span class="st">&quot;Main    : Threads are done, so x better be 3490</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb771-45"><a href="chapter-atomics.html#cb771-45" aria-label="45"></a>    printf<span class="op">(</span><span class="st">&quot;Main    : And indeed, x == </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb771-46"><a href="chapter-atomics.html#cb771-46" aria-label="46"></a><span class="op">}</span></span></code></pre></div>
+<p></p>
+<p>Thread kedua berputar di tempat, memandangi flag dan menunggunya diisi dengan nilai <code>3490</code>. Dan thread pertama melakukannya.</p>
+<p>Dan outputnya:</p>
+<div class="sourceCode" id="cb772"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb772-1"><a href="chapter-atomics.html#cb772-1" aria-hidden="true" tabindex="-1"></a>Thread 1: Sleeping for 1.5 seconds</span>
+<span id="cb772-2"><a href="chapter-atomics.html#cb772-2" aria-hidden="true" tabindex="-1"></a>Thread 2: Waiting for 3490</span>
+<span id="cb772-3"><a href="chapter-atomics.html#cb772-3" aria-hidden="true" tabindex="-1"></a>Thread 1: Setting x to 3490</span>
+<span id="cb772-4"><a href="chapter-atomics.html#cb772-4" aria-hidden="true" tabindex="-1"></a>Thread 1: Exiting</span>
+<span id="cb772-5"><a href="chapter-atomics.html#cb772-5" aria-hidden="true" tabindex="-1"></a>Thread 2: Got 3490--exiting!</span>
+<span id="cb772-6"><a href="chapter-atomics.html#cb772-6" aria-hidden="true" tabindex="-1"></a>Main    : Threads are done, so x better be 3490</span>
+<span id="cb772-7"><a href="chapter-atomics.html#cb772-7" aria-hidden="true" tabindex="-1"></a>Main    : And indeed, x == 3490</span></code></pre></div>
+<p>Lihat, Ma! Kita mengakses variabel dari thread berbeda dan tidak memakai mutex! Dan itu akan berhasil setiap kali berkat sifat atomic dari variabel atomic.</p>
+<p>Mungkin kamu bertanya-tanya apa yang terjadi kalau itu <code>int</code> biasa yang non-atomic. Nah, di sistemku tetap berfungsi… kecuali kalau aku melakukan build dengan optimasi, dan dalam kasus itu ia menggantung di thread 2 menunggu melihat 3490 terisi<a href="function-specifier-alignment-specifier-dan-operator.html#fn209" class="footnote-ref" id="fnref209" role="doc-noteref"><sup>209</sup></a>.</p>
+<p>Tapi itu baru awal ceritanya. Bagian berikutnya akan membutuhkan lebih banyak tenaga otak dan berkaitan dengan sesuatu yang disebut <em>sinkronisasi</em>.</p>
+<h2 data-number="40.3" id="sinkronisasi"><span class="header-section-number">40.3</span> Sinkronisasi</h2>
+<p></p>
+<p>Bagian cerita berikutnya sepenuhnya tentang kapan penulisan memori tertentu di satu thread menjadi terlihat oleh thread lain.</p>
+<p>Mungkin kamu mengira, langsung terlihat, kan? Tapi tidak. Banyak hal bisa salah. Salah secara aneh.</p>
+<p>Compiler mungkin sudah menata ulang akses memori sehingga ketika kamu mengira sebuah nilai diisi lebih dulu dibanding yang lain, itu belum tentu benar. Dan kalaupun compiler tidak melakukannya, CPU-mu bisa melakukannya secara langsung. Atau mungkin ada hal lain di arsitektur ini yang membuat penulisan di satu CPU tertunda sebelum terlihat di CPU lain.</p>
+<p>Kabar baiknya, semua potensi masalah ini bisa kita ringkas menjadi satu: akses memori yang tidak tersinkronisasi bisa tampak tidak berurutan tergantung thread mana yang mengamati, seolah-olah baris kodenya sendiri telah ditata ulang.</p>
+<p>Sebagai contoh, mana yang terjadi lebih dulu pada kode berikut, penulisan ke <code>x</code> atau penulisan ke <code>y</code>?</p>
+<div class="sourceCode" id="cb773"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb773-1"><a href="chapter-atomics.html#cb773-1" aria-label="1"></a><span class="dt">int</span> x<span class="op">,</span> y<span class="op">;</span>  <span class="co">// global</span></span>
+<span id="cb773-2"><a href="chapter-atomics.html#cb773-2" aria-label="2"></a></span>
+<span id="cb773-3"><a href="chapter-atomics.html#cb773-3" aria-label="3"></a><span class="co">// ...</span></span>
+<span id="cb773-4"><a href="chapter-atomics.html#cb773-4" aria-label="4"></a></span>
+<span id="cb773-5"><a href="chapter-atomics.html#cb773-5" aria-label="5"></a>x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb773-6"><a href="chapter-atomics.html#cb773-6" aria-label="6"></a>y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb773-7"><a href="chapter-atomics.html#cb773-7" aria-label="7"></a></span>
+<span id="cb773-8"><a href="chapter-atomics.html#cb773-8" aria-label="8"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">,</span> y<span class="op">);</span></span></code></pre></div>
+<p>Jawabannya: kita tidak tahu. Compiler atau CPU bisa diam-diam menukar baris 5 dan 6 dan kita tidak akan tahu. Kode berjalan single-thread <em>seolah-olah</em> dieksekusi sesuai urutan kode.</p>
+<p>Dalam skenario multithread, kita mungkin punya sesuatu seperti pseudocode ini:</p>
+<div class="sourceCode" id="cb774"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb774-1"><a href="chapter-atomics.html#cb774-1" aria-label="1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb774-2"><a href="chapter-atomics.html#cb774-2" aria-label="2"></a></span>
+<span id="cb774-3"><a href="chapter-atomics.html#cb774-3" aria-label="3"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb774-4"><a href="chapter-atomics.html#cb774-4" aria-label="4"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb774-5"><a href="chapter-atomics.html#cb774-5" aria-label="5"></a>    y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb774-6"><a href="chapter-atomics.html#cb774-6" aria-label="6"></a><span class="op">}</span></span>
+<span id="cb774-7"><a href="chapter-atomics.html#cb774-7" aria-label="7"></a></span>
+<span id="cb774-8"><a href="chapter-atomics.html#cb774-8" aria-label="8"></a>thread2<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb774-9"><a href="chapter-atomics.html#cb774-9" aria-label="9"></a>    <span class="cf">while</span> <span class="op">(</span>y <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// berputar</span></span>
+<span id="cb774-10"><a href="chapter-atomics.html#cb774-10" aria-label="10"></a>    printf<span class="op">(</span><span class="st">&quot;x is now </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 2? ...atau 0?</span></span>
+<span id="cb774-11"><a href="chapter-atomics.html#cb774-11" aria-label="11"></a><span class="op">}</span></span></code></pre></div>
+<p>Apa output dari thread 2?</p>
+<p>Nah, kalau <code>x</code> diisi <code>2</code> <em>sebelum</em> <code>y</code> diisi <code>3</code>, maka aku akan mengharapkan output yang sangat masuk akal:</p>
+<div class="sourceCode" id="cb775"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb775-1"><a href="chapter-atomics.html#cb775-1" aria-hidden="true" tabindex="-1"></a>x is now 2 </span></code></pre></div>
+<p>Tapi sesuatu yang licik bisa menata ulang baris 4 dan 5 sehingga kita melihat nilai <code>0</code> untuk <code>x</code> saat mencetaknya.</p>
+<p>Dengan kata lain, semua taruhan batal kecuali kita bisa entah bagaimana berkata, “Mulai titik ini, aku mengharapkan semua penulisan sebelumnya di thread lain terlihat di thread ini.”</p>
+<p>Dua thread <em>tersinkronisasi</em> ketika mereka sepakat tentang keadaan memori bersama. Seperti yang sudah kita lihat, mereka tidak selalu sepakat dengan kode. Jadi bagaimana mereka sepakat?</p>
+<p>Memakai variabel atomic bisa memaksa kesepakatan itu<a href="function-specifier-alignment-specifier-dan-operator.html#fn210" class="footnote-ref" id="fnref210" role="doc-noteref"><sup>210</sup></a>. Kalau sebuah thread menulis ke variabel atomic, ia berkata “siapa pun yang membaca variabel atomic ini di masa depan juga akan melihat semua perubahan yang kubuat pada memori (atomic atau bukan) sampai dan termasuk variabel atomic itu”.</p>
+<p>Atau, dalam bahasa yang lebih manusiawi: mari duduk mengelilingi meja konferensi dan pastikan kita sepakat soal bagian memori bersama mana yang berisi nilai apa. Kamu setuju bahwa perubahan memori yang kamu buat sampai-dan-termasuk atomic store akan terlihat olehku setelah aku melakukan load pada variabel atomic yang sama.</p>
+<p>Jadi kita bisa dengan mudah memperbaiki contoh kita:</p>
+<div class="sourceCode" id="cb776"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb776-1"><a href="chapter-atomics.html#cb776-1" aria-label="1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb776-2"><a href="chapter-atomics.html#cb776-2" aria-label="2"></a>atomic <span class="dt">int</span> y <span class="op">=</span> <span class="dv">0</span><span class="op">;</span>  <span class="co">// Jadikan y atomic</span></span>
+<span id="cb776-3"><a href="chapter-atomics.html#cb776-3" aria-label="3"></a></span>
+<span id="cb776-4"><a href="chapter-atomics.html#cb776-4" aria-label="4"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb776-5"><a href="chapter-atomics.html#cb776-5" aria-label="5"></a>    x <span class="op">=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb776-6"><a href="chapter-atomics.html#cb776-6" aria-label="6"></a>    y <span class="op">=</span> <span class="dv">3</span><span class="op">;</span>             <span class="co">// Sinkronisasi saat menulis</span></span>
+<span id="cb776-7"><a href="chapter-atomics.html#cb776-7" aria-label="7"></a><span class="op">}</span></span>
+<span id="cb776-8"><a href="chapter-atomics.html#cb776-8" aria-label="8"></a></span>
+<span id="cb776-9"><a href="chapter-atomics.html#cb776-9" aria-label="9"></a>thread2<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb776-10"><a href="chapter-atomics.html#cb776-10" aria-label="10"></a>    <span class="cf">while</span> <span class="op">(</span>y <span class="op">!=</span> <span class="dv">3</span><span class="op">)</span> <span class="op">{}</span>  <span class="co">// Sinkronisasi saat membaca</span></span>
+<span id="cb776-11"><a href="chapter-atomics.html#cb776-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;x is now </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 2, titik.</span></span>
+<span id="cb776-12"><a href="chapter-atomics.html#cb776-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Karena thread-thread itu tersinkronisasi melalui <code>y</code>, semua penulisan di thread 1 yang terjadi <em>sebelum</em> penulisan ke <code>y</code> terlihat di thread 2 <em>setelah</em> pembacaan dari <code>y</code> (di loop <code>while</code>).</p>
+<p>Penting dicatat beberapa hal di sini:</p>
+<ol type="1">
+<li><p>Tidak ada yang tidur. Sinkronisasi bukan operasi yang memblokir. Kedua thread berjalan penuh sampai keluar. Bahkan yang terjebak di spin loop pun tidak menghalangi yang lain berjalan.</p></li>
+<li><p>Sinkronisasi terjadi ketika satu thread membaca variabel atomic yang ditulis thread lain. Jadi ketika thread 2 membaca <code>y</code>, semua penulisan memori sebelumnya di thread 1 (yaitu mengisi <code>x</code>) akan terlihat di thread 2.</p></li>
+<li><p>Perhatikan bahwa <code>x</code> tidak atomic. Itu tidak masalah karena kita tidak menyinkronkan lewat <code>x</code>, dan sinkronisasi lewat <code>y</code> saat kita menulisnya di thread 1 berarti semua penulisan sebelumnya—termasuk <code>x</code>—di thread 1 akan terlihat oleh thread lain… kalau thread lain itu membaca <code>y</code> untuk sinkronisasi.</p></li>
+</ol>
+<p>Memaksa sinkronisasi ini tidak efisien dan bisa jauh lebih lambat daripada sekadar memakai variabel biasa. Itulah kenapa kita tidak memakai atomic kecuali terpaksa untuk aplikasi tertentu.</p>
+<p>Jadi itulah dasar-dasarnya. Mari kita lihat lebih dalam.</p>
+<p></p>
+<h2 data-number="40.4" id="acquire-dan-release"><span class="header-section-number">40.4</span> Acquire dan Release</h2>
+<p> </p>
+<p>Terminologi lagi! Akan bermanfaat mempelajarinya sekarang.</p>
+<p>Ketika sebuah thread membaca variabel atomic, itu disebut operasi <em>acquire</em>.</p>
+<p>Ketika sebuah thread menulis variabel atomic, itu disebut operasi <em>release</em>.</p>
+<p>Apa maksudnya? Mari kita sejajarkan dengan istilah yang sudah kamu kenal terkait variabel atomic:</p>
+<p><strong>Read = Load = Acquire</strong>. Seperti saat kamu membandingkan variabel atomic atau membacanya untuk disalin ke nilai lain.</p>
+<p><strong>Write = Store = Release</strong>. Seperti saat kamu menugaskan nilai ke variabel atomic.</p>
+<p>Saat memakai variabel atomic dengan semantik acquire/release ini, C menjabarkan apa yang bisa terjadi kapan.</p>
+<p>Acquire/release membentuk dasar sinkronisasi yang baru saja kita bahas.</p>
+<p>Ketika sebuah thread meng-acquire variabel atomic, ia bisa melihat nilai yang diisi di thread lain yang me-release variabel yang sama.</p>
+<p>Dengan kata lain:</p>
+<p>Ketika sebuah thread membaca variabel atomic, ia bisa melihat nilai yang diisi di thread lain yang menulis ke variabel yang sama.</p>
+<p>Sinkronisasi terjadi di sepasang acquire/release.</p>
+<p>Detail lebih lanjut:</p>
+<p>Dengan read/load/acquire pada variabel atomic tertentu:</p>
+<ul>
+<li><p>Semua penulisan (atomic maupun non-atomic) di thread lain yang terjadi sebelum thread lain itu write/store/release variabel atomic ini kini terlihat di thread ini.</p></li>
+<li><p>Nilai baru variabel atomic yang diisi thread lain juga terlihat di thread ini.</p></li>
+<li><p>Tidak ada pembacaan atau penulisan variabel/memori apa pun di thread saat ini yang boleh ditata ulang untuk terjadi sebelum acquire ini.</p></li>
+<li><p>Acquire berperan sebagai penghalang satu arah dalam penataan ulang kode; pembacaan dan penulisan di thread saat ini bisa dipindah turun dari <em>sebelum</em> acquire ke <em>sesudah</em>-nya. Tapi, yang lebih penting untuk sinkronisasi, tidak ada yang bisa pindah naik dari <em>sesudah</em> acquire ke <em>sebelum</em>-nya.</p></li>
+</ul>
+<p>Dengan write/store/release pada variabel atomic tertentu:</p>
+<ul>
+<li><p>Semua penulisan (atomic maupun non-atomic) di thread saat ini yang terjadi sebelum release ini menjadi terlihat oleh thread lain yang telah read/load/acquire variabel atomic yang sama.</p></li>
+<li><p>Nilai yang ditulis ke variabel atomic ini oleh thread ini juga terlihat oleh thread lain.</p></li>
+<li><p>Tidak ada pembacaan atau penulisan variabel/memori apa pun di thread saat ini yang boleh ditata ulang untuk terjadi setelah release ini.</p></li>
+<li><p>Release berperan sebagai penghalang satu arah dalam penataan ulang kode: pembacaan dan penulisan di thread saat ini bisa dipindah naik dari <em>sesudah</em> release ke <em>sebelum</em>-nya. Tapi, yang lebih penting untuk sinkronisasi, tidak ada yang bisa pindah turun dari <em>sebelum</em> release ke <em>sesudah</em>-nya.</p></li>
+</ul>
+<p>Sekali lagi, intinya adalah sinkronisasi memori dari satu thread ke thread lain. Thread kedua bisa yakin bahwa variabel dan memori ditulis dalam urutan yang dimaksudkan programmer.</p>
+<pre><code>int x, y, z = 0;
+atomic_int a = 0;
+
+thread1() {
+    x = 10;
+    y = 20;
+    a = 999;  // Release
+    z = 30;
+}
+
+thread2()
+{
+    while (a != 999) { } // Acquire
+
+    assert(x == 10);  // tidak pernah gagal, x selalu 10
+    assert(y == 20);  // tidak pernah gagal, y selalu 20
+
+    assert(z == 0);  // mungkin gagal!!
+}</code></pre>
+<p>Pada contoh di atas, <code>thread2</code> bisa yakin akan nilai di <code>x</code> dan <code>y</code> setelah meng-acquire <code>a</code> karena keduanya diisi sebelum <code>thread1</code> me-release atomic <code>a</code>.</p>
+<p>Tapi <code>thread2</code> tidak bisa yakin akan nilai <code>z</code> karena itu terjadi setelah release. Mungkin penugasan ke <code>z</code> dipindah ke sebelum penugasan ke <code>a</code>.</p>
+<p>Catatan penting: me-release satu variabel atomic tidak berpengaruh pada acquire variabel atomic yang berbeda. Setiap variabel terisolasi dari yang lain.</p>
+<p> </p>
+<h2 data-number="40.5" id="sequential-consistency"><span class="header-section-number">40.5</span> Sequential Consistency</h2>
+<p></p>
+<p>Masih bertahan? Kita sudah melewati inti pemakaian atomic yang lebih sederhana. Dan karena kita bahkan tidak akan membahas pemakaian yang lebih kompleks di sini, kamu bisa sedikit santai.</p>
+<p><em>Sequential consistency</em> adalah yang disebut <em>memory ordering</em>. Ada banyak memory ordering, tapi sequential consistency adalah yang paling waras<a href="function-specifier-alignment-specifier-dan-operator.html#fn211" class="footnote-ref" id="fnref211" role="doc-noteref"><sup>211</sup></a> yang ditawarkan C. Ia juga yang bawaan. Kamu harus berusaha keras untuk memakai memory ordering lain.</p>
+<p>Semua yang sudah kita bahas sejauh ini terjadi dalam ranah sequential consistency.</p>
+<p>Kita sudah membahas bagaimana compiler atau CPU bisa menata ulang pembacaan dan penulisan memori dalam satu thread selama mengikuti aturan <em>as-if</em>.</p>
+<p>Dan kita sudah melihat bagaimana kita bisa mengerem perilaku ini dengan menyinkronkan lewat variabel atomic.</p>
+<p>Mari kita formalkan sedikit lagi.</p>
+<p>Kalau operasi-operasi <em>sequentially consistent</em>, artinya pada akhirnya, ketika semuanya selesai, semua thread bisa menyelonjorkan kaki, membuka minuman pilihan masing-masing, dan semuanya sepakat tentang urutan terjadinya perubahan memori selama eksekusi. Dan urutan itu adalah yang ditentukan oleh kode.</p>
+<p>Tidak akan ada yang berkata, “Bukankah <em>B</em> terjadi sebelum <em>A</em>?” kalau yang lain berkata, “<em>A</em> pasti terjadi sebelum <em>B</em>”. Mereka semua berteman di sini.</p>
+<p>Khususnya, dalam satu thread, tidak ada acquire dan release yang boleh ditata ulang terhadap satu sama lain. Ini tambahan dari aturan tentang akses memori lain apa yang boleh ditata ulang di sekitarnya.</p>
+<p>Aturan ini memberi tingkat kewarasan tambahan pada perkembangan load/acquire dan store/release atomic.</p>
+<p>Setiap memory order lain di C melibatkan pelonggaran aturan penataan ulang, baik untuk acquire/release maupun akses memori lain, atomic atau bukan. Kamu melakukannya kalau kamu <em>benar-benar</em> tahu apa yang kamu lakukan dan butuh dorongan kecepatan. <em>Di sini ada pasukan naga…</em></p>
+<p>Soal itu dibahas nanti, tapi untuk sekarang, kita bertahan di yang aman dan praktis.</p>
+<p></p>
+<h2 data-number="40.6" id="penugasan-dan-operator-atomic"><span class="header-section-number">40.6</span> Penugasan dan Operator Atomic</h2>
+<p></p>
+<p>Operator tertentu pada variabel atomic bersifat atomic. Dan yang lain tidak.</p>
+<p>Kita mulai dengan contoh tandingan:</p>
+<div class="sourceCode" id="cb778"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb778-1"><a href="chapter-atomics.html#cb778-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb778-2"><a href="chapter-atomics.html#cb778-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb778-3"><a href="chapter-atomics.html#cb778-3" aria-hidden="true" tabindex="-1"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb778-4"><a href="chapter-atomics.html#cb778-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x <span class="op">+</span> <span class="dv">3</span><span class="op">;</span>  <span class="co">// TIDAK atomic!</span></span>
+<span id="cb778-5"><a href="chapter-atomics.html#cb778-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Karena ada pembacaan <code>x</code> di sisi kanan penugasan dan penulisan di sisi kiri, ini dua operasi. Thread lain bisa menyelinap di tengah dan membuatmu kesal.</p>
+<p>Tapi kamu <em>bisa</em> memakai bentuk singkat <code>+=</code> untuk mendapat operasi atomic:</p>
+<div class="sourceCode" id="cb779"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb779-1"><a href="chapter-atomics.html#cb779-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb779-2"><a href="chapter-atomics.html#cb779-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb779-3"><a href="chapter-atomics.html#cb779-3" aria-hidden="true" tabindex="-1"></a>thread1<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb779-4"><a href="chapter-atomics.html#cb779-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">+=</span> <span class="dv">3</span><span class="op">;</span>   <span class="co">// ATOMIC!</span></span>
+<span id="cb779-5"><a href="chapter-atomics.html#cb779-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Dalam kasus itu, <code>x</code> akan di-increment sebesar <code>3</code> secara atomic—tidak ada thread lain yang bisa melompat ke tengah.</p>
+<p>Khususnya, operator-operator berikut adalah operasi atomic read-modify-write dengan sequential consistency, jadi pakailah dengan riang gembira. (Pada contoh, <code>a</code> bersifat atomic.)</p>
+<div class="sourceCode" id="cb780"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb780-1"><a href="chapter-atomics.html#cb780-1" aria-hidden="true" tabindex="-1"></a>a<span class="op">++</span>       a<span class="op">--</span>       <span class="op">--</span>a       <span class="op">++</span>a</span>
+<span id="cb780-2"><a href="chapter-atomics.html#cb780-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">+=</span> b    a <span class="op">-=</span> b    a <span class="op">*=</span> b    a <span class="op">/=</span> b    a <span class="op">%=</span> b</span>
+<span id="cb780-3"><a href="chapter-atomics.html#cb780-3" aria-hidden="true" tabindex="-1"></a>a <span class="op">&amp;=</span> b    a <span class="op">|=</span> b    a <span class="op">^=</span> b    a <span class="op">&gt;&gt;=</span> b   a <span class="op">&lt;&lt;=</span> b</span></code></pre></div>
+<p></p>
+<h2 data-number="40.7" id="fungsi-library-yang-otomatis-menyinkronkan"><span class="header-section-number">40.7</span> Fungsi Library yang Otomatis Menyinkronkan</h2>
+<p></p>
+<p>Sejauh ini kita sudah membahas bagaimana kamu bisa menyinkronkan dengan variabel atomic, tapi ternyata ada beberapa fungsi library yang melakukan sinkronisasi terbatas di balik layar.</p>
+<div class="sourceCode" id="cb781"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb781-1"><a href="chapter-atomics.html#cb781-1" aria-hidden="true" tabindex="-1"></a>call_once<span class="op">()</span>      thrd_create<span class="op">()</span>       thrd_join<span class="op">()</span></span>
+<span id="cb781-2"><a href="chapter-atomics.html#cb781-2" aria-hidden="true" tabindex="-1"></a>mtx_lock<span class="op">()</span>       mtx_timedlock<span class="op">()</span>     mtx_trylock<span class="op">()</span></span>
+<span id="cb781-3"><a href="chapter-atomics.html#cb781-3" aria-hidden="true" tabindex="-1"></a>malloc<span class="op">()</span>         calloc<span class="op">()</span>            realloc<span class="op">()</span></span>
+<span id="cb781-4"><a href="chapter-atomics.html#cb781-4" aria-hidden="true" tabindex="-1"></a>aligned_alloc<span class="op">()</span></span></code></pre></div>
+<p><strong><code>call_once()</code></strong>—Menyinkronkan dengan semua pemanggilan <code>call_once()</code> berikutnya untuk flag tertentu. Dengan begitu pemanggilan berikutnya bisa tenang bahwa kalau thread lain mengisi flag, mereka akan melihatnya.</p>
+<p><strong><code>thrd_create()</code></strong>—Menyinkronkan dengan awal thread baru. Thread baru bisa yakin akan melihat semua penulisan memori bersama dari parent thread sebelum pemanggilan <code>thrd_create()</code>.</p>
+<p><strong><code>thrd_join()</code></strong>—Ketika sebuah thread mati, ia menyinkronkan dengan fungsi ini. Thread yang memanggil <code>thrd_join()</code> bisa yakin bahwa ia melihat semua penulisan bersama dari thread yang telah berpulang itu.</p>
+<p><strong><code>mtx_lock()</code></strong>—Pemanggilan <code>mtx_unlock()</code> sebelumnya pada mutex yang sama menyinkronkan dengan pemanggilan ini. Inilah kasus yang paling mencerminkan proses acquire/release yang sudah kita bahas. <code>mtx_unlock()</code> melakukan release pada variabel mutex, menjamin thread berikutnya yang melakukan acquire dengan <code>mtx_lock()</code> bisa melihat semua perubahan memori bersama di critical section.</p>
+<p><strong><code>mtx_timedlock()</code></strong> dan <strong><code>mtx_trylock()</code></strong>—Mirip situasi <code>mtx_lock()</code>, kalau pemanggilan ini berhasil, pemanggilan <code>mtx_unlock()</code> sebelumnya menyinkronkan dengannya.</p>
+<p><strong>Fungsi Memori Dinamis</strong>: kalau kamu mengalokasikan memori, ia menyinkronkan dengan dealokasi sebelumnya dari memori yang sama. Dan alokasi serta dealokasi wilayah memori tertentu itu terjadi dalam satu urutan total yang disepakati semua thread. Aku <em>kira</em> idenya, dealokasi boleh menghapus wilayah itu kalau mau, dan kita ingin yakin bahwa alokasi berikutnya tidak melihat data yang belum dihapus. Kabari aku kalau ada yang lebih dari itu.</p>
+<p></p>
+<h2 data-number="40.8" id="type-specifier-dan-qualifier-atomic"><span class="header-section-number">40.8</span> Type Specifier dan Qualifier Atomic</h2>
+<p>Mari kita turunkan sedikit tingkatnya dan lihat tipe apa yang tersedia, dan bagaimana kita bahkan bisa membuat tipe atomic baru.</p>
+<p></p>
+<p>Pertama, mari kita lihat tipe atomic bawaan dan di-<code>typedef</code> ke apa mereka. (Bocoran: <code>_Atomic</code> adalah type qualifier!)</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Tipe atomic</th>
+<th>Padanan bentuk panjang</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>atomic_bool</code></td>
+<td><code>_Atomic _Bool</code></td>
+</tr>
+<tr>
+<td><code>atomic_char</code></td>
+<td><code>_Atomic char</code></td>
+</tr>
+<tr>
+<td><code>atomic_schar</code></td>
+<td><code>_Atomic signed char</code></td>
+</tr>
+<tr>
+<td><code>atomic_uchar</code></td>
+<td><code>_Atomic unsigned char</code></td>
+</tr>
+<tr>
+<td><code>atomic_short</code></td>
+<td><code>_Atomic short</code></td>
+</tr>
+<tr>
+<td><code>atomic_ushort</code></td>
+<td><code>_Atomic unsigned short</code></td>
+</tr>
+<tr>
+<td><code>atomic_int</code></td>
+<td><code>_Atomic int</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint</code></td>
+<td><code>_Atomic unsigned int</code></td>
+</tr>
+<tr>
+<td><code>atomic_long</code></td>
+<td><code>_Atomic long</code></td>
+</tr>
+<tr>
+<td><code>atomic_ulong</code></td>
+<td><code>_Atomic unsigned long</code></td>
+</tr>
+<tr>
+<td><code>atomic_llong</code></td>
+<td><code>_Atomic long long</code></td>
+</tr>
+<tr>
+<td><code>atomic_ullong</code></td>
+<td><code>_Atomic unsigned long long</code></td>
+</tr>
+<tr>
+<td><code>atomic_char16_t</code></td>
+<td><code>_Atomic char16_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_char32_t</code></td>
+<td><code>_Atomic char32_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_wchar_t</code></td>
+<td><code>_Atomic wchar_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_least8_t</code></td>
+<td><code>_Atomic int_least8_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_least8_t</code></td>
+<td><code>_Atomic uint_least8_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_least16_t</code></td>
+<td><code>_Atomic int_least16_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_least16_t</code></td>
+<td><code>_Atomic uint_least16_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_least32_t</code></td>
+<td><code>_Atomic int_least32_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_least32_t</code></td>
+<td><code>_Atomic uint_least32_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_least64_t</code></td>
+<td><code>_Atomic int_least64_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_least64_t</code></td>
+<td><code>_Atomic uint_least64_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_fast8_t</code></td>
+<td><code>_Atomic int_fast8_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_fast8_t</code></td>
+<td><code>_Atomic uint_fast8_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_fast16_t</code></td>
+<td><code>_Atomic int_fast16_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_fast16_t</code></td>
+<td><code>_Atomic uint_fast16_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_fast32_t</code></td>
+<td><code>_Atomic int_fast32_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_fast32_t</code></td>
+<td><code>_Atomic uint_fast32_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_int_fast64_t</code></td>
+<td><code>_Atomic int_fast64_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uint_fast64_t</code></td>
+<td><code>_Atomic uint_fast64_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_intptr_t</code></td>
+<td><code>_Atomic intptr_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uintptr_t</code></td>
+<td><code>_Atomic uintptr_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_size_t</code></td>
+<td><code>_Atomic size_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_ptrdiff_t</code></td>
+<td><code>_Atomic ptrdiff_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_intmax_t</code></td>
+<td><code>_Atomic intmax_t</code></td>
+</tr>
+<tr>
+<td><code>atomic_uintmax_t</code></td>
+<td><code>_Atomic uintmax_t</code></td>
+</tr>
+</tbody>
+</table>
+<p></p>
+<p>Pakai saja sesukamu! Tipe-tipe ini konsisten dengan alias atomic di C++, kalau itu membantu.</p>
+<p>Tapi bagaimana kalau kamu ingin lebih?</p>
+<p>Kamu bisa melakukannya dengan type qualifier atau type specifier.</p>
+<p></p>
+<p>Pertama, specifier! Ia adalah kata kunci <code>_Atomic</code> dengan tipe dalam kurung setelahnya<a href="function-specifier-alignment-specifier-dan-operator.html#fn212" class="footnote-ref" id="fnref212" role="doc-noteref"><sup>212</sup></a>—cocok dipakai dengan <code>typedef</code>:</p>
+<div class="sourceCode" id="cb782"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb782-1"><a href="chapter-atomics.html#cb782-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">_Atomic</span><span class="op">(</span><span class="dt">double</span><span class="op">)</span> atomic_double<span class="op">;</span></span>
+<span id="cb782-2"><a href="chapter-atomics.html#cb782-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb782-3"><a href="chapter-atomics.html#cb782-3" aria-hidden="true" tabindex="-1"></a>atomic_double f<span class="op">;</span></span></code></pre></div>
+<p>Batasan pada specifier: tipe yang dijadikan atomic tidak boleh bertipe array atau fungsi, dan tidak boleh atomic atau sudah ber-qualifier lain.</p>
+<p> </p>
+<p>Berikutnya, qualifier! Ia adalah kata kunci <code>_Atomic</code> <em>tanpa</em> tipe dalam kurung.</p>
+<p>Jadi keduanya melakukan hal serupa<a href="function-specifier-alignment-specifier-dan-operator.html#fn213" class="footnote-ref" id="fnref213" role="doc-noteref"><sup>213</sup></a>:</p>
+<div class="sourceCode" id="cb783"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb783-1"><a href="chapter-atomics.html#cb783-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span><span class="op">(</span><span class="dt">int</span><span class="op">)</span> i<span class="op">;</span>   <span class="co">// type specifier</span></span>
+<span id="cb783-2"><a href="chapter-atomics.html#cb783-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span>  j<span class="op">;</span>   <span class="co">// type qualifier</span></span></code></pre></div>
+<p>Bedanya, kamu bisa menyertakan type qualifier lain pada yang terakhir:</p>
+<div class="sourceCode" id="cb784"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb784-1"><a href="chapter-atomics.html#cb784-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">volatile</span> <span class="dt">int</span> k<span class="op">;</span>   <span class="co">// variabel atomic ber-qualifier</span></span></code></pre></div>
+<p>Batasan pada qualifier: tipe yang dijadikan atomic tidak boleh bertipe array atau fungsi.</p>
+<p></p>
+<h2 data-number="40.9" id="lock-free-atomic"><span class="header-section-number">40.9</span> Variabel Atomic Lock-Free</h2>
+<p></p>
+<p>Arsitektur hardware terbatas dalam jumlah data yang bisa dibaca dan ditulis secara atomic. Itu tergantung bagaimana ia dirakit. Dan bervariasi.</p>
+<p>Kalau kamu memakai tipe atomic, kamu bisa yakin bahwa akses ke tipe itu akan atomic… tapi ada syaratnya: kalau hardware tidak bisa melakukannya, ia dilakukan dengan lock sebagai gantinya.</p>
+<p>Jadi akses atomic menjadi lock-akses-unlock, yang cukup lebih lambat dan punya implikasi untuk signal handler.</p>
+<p><a href="chapter-atomics.html#atomic-flags">Atomic flag</a>, di bawah, adalah satu-satunya tipe atomic yang dijamin lock-free di semua implementasi yang patuh. Di dunia komputer desktop/laptop biasa, tipe lain yang lebih besar kemungkinan lock-free.</p>
+<p>Untungnya, ada beberapa cara untuk menentukan apakah tipe tertentu adalah atomic lock-free atau bukan.</p>
+<p>Pertama, beberapa makro—ini bisa dipakai saat compile time dengan <code>#if</code>. Berlaku untuk tipe signed maupun unsigned.</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th>Tipe Atomic</th>
+<th>Makro Lock Free</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>atomic_bool</code></td>
+<td><code>ATOMIC_BOOL_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_char</code></td>
+<td><code>ATOMIC_CHAR_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_char16_t</code></td>
+<td><code>ATOMIC_CHAR16_T_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_char32_t</code></td>
+<td><code>ATOMIC_CHAR32_T_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_wchar_t</code></td>
+<td><code>ATOMIC_WCHAR_T_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_short</code></td>
+<td><code>ATOMIC_SHORT_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_int</code></td>
+<td><code>ATOMIC_INT_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_long</code></td>
+<td><code>ATOMIC_LONG_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_llong</code></td>
+<td><code>ATOMIC_LLONG_LOCK_FREE</code></td>
+</tr>
+<tr>
+<td><code>atomic_intptr_t</code></td>
+<td><code>ATOMIC_POINTER_LOCK_FREE</code></td>
+</tr>
+</tbody>
+</table>
+<p>Makro-makro ini menariknya bisa punya <em>tiga</em> nilai berbeda:</p>
+<table>
+<thead>
+<tr>
+<th>Nilai</th>
+<th>Arti</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Tidak pernah lock-free.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><em>Kadang-kadang</em> lock-free.</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Selalu lock-free.</td>
+</tr>
+</tbody>
+</table>
+<p>Tunggu—bagaimana sesuatu bisa <em>kadang-kadang</em> lock-free? Ini hanya berarti jawabannya tidak diketahui saat compile time, tapi bisa diketahui nanti saat runtime. Mungkin jawabannya bervariasi tergantung apakah kamu menjalankan kode ini di Genuine Intel atau AMD, atau semacam itu<a href="function-specifier-alignment-specifier-dan-operator.html#fn214" class="footnote-ref" id="fnref214" role="doc-noteref"><sup>214</sup></a>.</p>
+<p>Tapi kamu selalu bisa menguji saat runtime dengan fungsi <code>atomic_is_lock_free()</code>. Fungsi ini mengembalikan true atau false apakah tipe tertentu atomic saat ini.</p>
+<p>Jadi kenapa kita peduli?</p>
+<p>Lock-free lebih cepat, jadi mungkin ada kekhawatiran kecepatan yang akan kamu atasi dengan cara lain. Atau mungkin kamu perlu memakai variabel atomic di signal handler.</p>
+<p></p>
+<h3 data-number="40.9.1" id="signal-handler-dan-atomic-lock-free"><span class="header-section-number">40.9.1</span> Signal Handler dan Atomic Lock-Free</h3>
+<p> </p>
+<p>Kalau kamu membaca atau menulis variabel bersama (static storage duration atau <code>_Thread_Local</code>) di signal handler, itu undefined behavior [astaga!]… Kecuali kamu melakukan salah satu dari berikut:</p>
+<ol type="1">
+<li><p>Menulis ke variabel bertipe <code>volatile sig_atomic_t</code>.</p></li>
+<li><p>Membaca atau menulis variabel atomic lock-free.</p></li>
+</ol>
+<p>Sejauh yang kutahu, variabel atomic lock-free adalah salah satu dari sedikit cara untuk mengambil informasi dari signal handler secara portabel.</p>
+<p>Menurut bacaanku, spesifikasi agak samar soal memory order saat meng-acquire atau me-release variabel atomic di signal handler. C++ menyatakan, dan itu masuk akal, bahwa akses semacam itu unsequenced terhadap sisa program<a href="function-specifier-alignment-specifier-dan-operator.html#fn215" class="footnote-ref" id="fnref215" role="doc-noteref"><sup>215</sup></a>. Bagaimanapun, signal bisa di-raise kapan saja. Jadi aku menganggap perilaku C serupa.</p>
+<p> </p>
+<h2 data-number="40.10" id="atomic-flags"><span class="header-section-number">40.10</span> Atomic Flag</h2>
+<p> </p>
+<p>Hanya ada satu tipe yang dijamin standar sebagai atomic lock-free: <code>atomic_flag</code>. Ini tipe opaque untuk operasi <a href="https://en.wikipedia.org/wiki/Test-and-set">test-and-set</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn216" class="footnote-ref" id="fnref216" role="doc-noteref"><sup>216</sup></a>.</p>
+<p>Ia bisa <em>set</em> atau <em>clear</em>. Kamu bisa menginisialisasinya menjadi clear dengan:</p>
+<p></p>
+<div class="sourceCode" id="cb785"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb785-1"><a href="chapter-atomics.html#cb785-1" aria-hidden="true" tabindex="-1"></a>atomic_flag f <span class="op">=</span> ATOMIC_FLAG_INIT<span class="op">;</span></span></code></pre></div>
+<p></p>
+<p></p>
+<p>Kamu bisa men-set flag secara atomic dengan <code>atomic_flag_test_and_set()</code>, yang akan men-set flag dan mengembalikan status sebelumnya sebagai <code>_Bool</code> (true untuk set).</p>
+<p></p>
+<p>Kamu bisa meng-clear flag secara atomic dengan <code>atomic_flag_clear()</code>.</p>
+<p>Berikut contoh ketika kita menginisialisasi flag menjadi clear, men-set-nya dua kali, lalu meng-clear-nya lagi.</p>
+<div class="sourceCode" id="cb786"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb786-1"><a href="chapter-atomics.html#cb786-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb786-2"><a href="chapter-atomics.html#cb786-2" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdbool.h&gt;</span><span class="pp">   </span><span class="co">// Tidak diperlukan di C23</span></span>
+<span id="cb786-3"><a href="chapter-atomics.html#cb786-3" aria-hidden="true" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
+<span id="cb786-4"><a href="chapter-atomics.html#cb786-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb786-5"><a href="chapter-atomics.html#cb786-5" aria-hidden="true" tabindex="-1"></a>atomic_flag f <span class="op">=</span> ATOMIC_FLAG_INIT<span class="op">;</span></span>
+<span id="cb786-6"><a href="chapter-atomics.html#cb786-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb786-7"><a href="chapter-atomics.html#cb786-7" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb786-8"><a href="chapter-atomics.html#cb786-8" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb786-9"><a href="chapter-atomics.html#cb786-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">bool</span> r <span class="op">=</span> atomic_flag_test_and_set<span class="op">(&amp;</span>f<span class="op">);</span></span>
+<span id="cb786-10"><a href="chapter-atomics.html#cb786-10" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Value was: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span>           <span class="co">// 0</span></span>
+<span id="cb786-11"><a href="chapter-atomics.html#cb786-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb786-12"><a href="chapter-atomics.html#cb786-12" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> atomic_flag_test_and_set<span class="op">(&amp;</span>f<span class="op">);</span></span>
+<span id="cb786-13"><a href="chapter-atomics.html#cb786-13" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Value was: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span>           <span class="co">// 1</span></span>
+<span id="cb786-14"><a href="chapter-atomics.html#cb786-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb786-15"><a href="chapter-atomics.html#cb786-15" aria-hidden="true" tabindex="-1"></a>    atomic_flag_clear<span class="op">(&amp;</span>f<span class="op">);</span></span>
+<span id="cb786-16"><a href="chapter-atomics.html#cb786-16" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> atomic_flag_test_and_set<span class="op">(&amp;</span>f<span class="op">);</span></span>
+<span id="cb786-17"><a href="chapter-atomics.html#cb786-17" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Value was: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> r<span class="op">);</span>           <span class="co">// 0</span></span>
+<span id="cb786-18"><a href="chapter-atomics.html#cb786-18" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p> </p>
+<h2 data-number="40.11" id="struct-dan-union-atomic"><span class="header-section-number">40.11</span> <code>struct</code> dan <code>union</code> Atomic</h2>
+<p></p>
+<p>Dengan qualifier atau specifier <code>_Atomic</code>, kamu bisa membuat <code>struct</code> atau <code>union</code> atomic! Cukup mencengangkan.</p>
+<p>Kalau tidak banyak data di dalamnya (yaitu segenggam byte), tipe atomic yang dihasilkan mungkin lock-free. Ujilah dengan <code>atomic_is_lock_free()</code>.</p>
+<div class="sourceCode" id="cb787"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb787-1"><a href="chapter-atomics.html#cb787-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb787-2"><a href="chapter-atomics.html#cb787-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
+<span id="cb787-3"><a href="chapter-atomics.html#cb787-3" aria-label="3"></a></span>
+<span id="cb787-4"><a href="chapter-atomics.html#cb787-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb787-5"><a href="chapter-atomics.html#cb787-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb787-6"><a href="chapter-atomics.html#cb787-6" aria-label="6"></a>    <span class="kw">struct</span> point <span class="op">{</span></span>
+<span id="cb787-7"><a href="chapter-atomics.html#cb787-7" aria-label="7"></a>        <span class="dt">float</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb787-8"><a href="chapter-atomics.html#cb787-8" aria-label="8"></a>    <span class="op">};</span></span>
+<span id="cb787-9"><a href="chapter-atomics.html#cb787-9" aria-label="9"></a></span>
+<span id="cb787-10"><a href="chapter-atomics.html#cb787-10" aria-label="10"></a>    <span class="kw">_Atomic</span><span class="op">(</span><span class="kw">struct</span> point<span class="op">)</span> p<span class="op">;</span></span>
+<span id="cb787-11"><a href="chapter-atomics.html#cb787-11" aria-label="11"></a></span>
+<span id="cb787-12"><a href="chapter-atomics.html#cb787-12" aria-label="12"></a>    printf<span class="op">(</span><span class="st">&quot;Is lock free: </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> atomic_is_lock_free<span class="op">(&amp;</span>p<span class="op">));</span></span>
+<span id="cb787-13"><a href="chapter-atomics.html#cb787-13" aria-label="13"></a><span class="op">}</span></span></code></pre></div>
+<p>Ini syaratnya: kamu tidak bisa mengakses field dari <code>struct</code> atau <code>union</code> atomic… lalu apa gunanya? Nah, kamu bisa <em>menyalin</em> seluruh <code>struct</code> secara atomic ke variabel non-atomic lalu memakainya. Kamu juga bisa menyalin secara atomic ke arah sebaliknya.</p>
+<div class="sourceCode" id="cb788"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb788-1"><a href="chapter-atomics.html#cb788-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb788-2"><a href="chapter-atomics.html#cb788-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdatomic.h&gt;</span></span>
+<span id="cb788-3"><a href="chapter-atomics.html#cb788-3" aria-label="3"></a></span>
+<span id="cb788-4"><a href="chapter-atomics.html#cb788-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb788-5"><a href="chapter-atomics.html#cb788-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb788-6"><a href="chapter-atomics.html#cb788-6" aria-label="6"></a>    <span class="kw">struct</span> point <span class="op">{</span></span>
+<span id="cb788-7"><a href="chapter-atomics.html#cb788-7" aria-label="7"></a>        <span class="dt">float</span> x<span class="op">,</span> y<span class="op">;</span></span>
+<span id="cb788-8"><a href="chapter-atomics.html#cb788-8" aria-label="8"></a>    <span class="op">};</span></span>
+<span id="cb788-9"><a href="chapter-atomics.html#cb788-9" aria-label="9"></a></span>
+<span id="cb788-10"><a href="chapter-atomics.html#cb788-10" aria-label="10"></a>    <span class="kw">_Atomic</span><span class="op">(</span><span class="kw">struct</span> point<span class="op">)</span> p<span class="op">;</span></span>
+<span id="cb788-11"><a href="chapter-atomics.html#cb788-11" aria-label="11"></a>    <span class="kw">struct</span> point t<span class="op">;</span></span>
+<span id="cb788-12"><a href="chapter-atomics.html#cb788-12" aria-label="12"></a></span>
+<span id="cb788-13"><a href="chapter-atomics.html#cb788-13" aria-label="13"></a>    p <span class="op">=</span> <span class="op">(</span><span class="kw">struct</span> point<span class="op">){</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">};</span>  <span class="co">// Salinan atomic</span></span>
+<span id="cb788-14"><a href="chapter-atomics.html#cb788-14" aria-label="14"></a></span>
+<span id="cb788-15"><a href="chapter-atomics.html#cb788-15" aria-label="15"></a>    <span class="co">//printf(&quot;%f\n&quot;, p.x);  // Error</span></span>
+<span id="cb788-16"><a href="chapter-atomics.html#cb788-16" aria-label="16"></a></span>
+<span id="cb788-17"><a href="chapter-atomics.html#cb788-17" aria-label="17"></a>    t <span class="op">=</span> p<span class="op">;</span>   <span class="co">// Salinan atomic</span></span>
+<span id="cb788-18"><a href="chapter-atomics.html#cb788-18" aria-label="18"></a></span>
+<span id="cb788-19"><a href="chapter-atomics.html#cb788-19" aria-label="19"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> t<span class="op">.</span>x<span class="op">);</span>  <span class="co">// OK!</span></span>
+<span id="cb788-20"><a href="chapter-atomics.html#cb788-20" aria-label="20"></a><span class="op">}</span></span></code></pre></div>
+<p>Kamu juga bisa mendeklarasikan <code>struct</code> yang field-field individualnya atomic. Apakah tipe atomic diizinkan pada bitfield ditentukan oleh implementasi.</p>
+<p></p>
+<h2 data-number="40.12" id="pointer-atomic"><span class="header-section-number">40.12</span> Pointer Atomic</h2>
+<p></p>
+<p>Sekadar catatan di sini tentang penempatan <code>_Atomic</code> untuk pointer.</p>
+<p>Pertama, pointer ke atomic (yaitu nilai pointer-nya tidak atomic, tapi yang ditunjuknya atomic):</p>
+<div class="sourceCode" id="cb789"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb789-1"><a href="chapter-atomics.html#cb789-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb789-2"><a href="chapter-atomics.html#cb789-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span>  <span class="co">// p adalah pointer ke int atomic</span></span>
+<span id="cb789-3"><a href="chapter-atomics.html#cb789-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb789-4"><a href="chapter-atomics.html#cb789-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// OK!</span></span></code></pre></div>
+<p>Kedua, pointer atomic ke nilai non-atomic (yaitu nilai pointer itu sendiri atomic, tapi yang ditunjuknya tidak):</p>
+<div class="sourceCode" id="cb790"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb790-1"><a href="chapter-atomics.html#cb790-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb790-2"><a href="chapter-atomics.html#cb790-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span> <span class="kw">_Atomic</span> p<span class="op">;</span>  <span class="co">// p adalah pointer atomic ke int</span></span>
+<span id="cb790-3"><a href="chapter-atomics.html#cb790-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb790-4"><a href="chapter-atomics.html#cb790-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// OK!</span></span></code></pre></div>
+<p>Terakhir, pointer atomic ke nilai atomic (yaitu pointer dan yang ditunjuknya sama-sama atomic):</p>
+<div class="sourceCode" id="cb791"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb791-1"><a href="chapter-atomics.html#cb791-1" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> x<span class="op">;</span></span>
+<span id="cb791-2"><a href="chapter-atomics.html#cb791-2" aria-hidden="true" tabindex="-1"></a><span class="kw">_Atomic</span> <span class="dt">int</span> <span class="op">*</span> <span class="kw">_Atomic</span> p<span class="op">;</span>  <span class="co">// p adalah pointer atomic ke int atomic</span></span>
+<span id="cb791-3"><a href="chapter-atomics.html#cb791-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb791-4"><a href="chapter-atomics.html#cb791-4" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// OK!</span></span></code></pre></div>
+<p></p>
+<h2 data-number="40.13" id="memory-order"><span class="header-section-number">40.13</span> Memory Order</h2>
+<p> </p>
+<p>Kita sudah membahas sequential consistency, yang paling masuk akal di antara semuanya. Tapi ada beberapa yang lain:</p>
+<p> </p>
+<table>
+<thead>
+<tr>
+<th><code>memory_order</code></th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory_order_seq_cst</code></td>
+<td>Sequential Consistency</td>
+</tr>
+<tr>
+<td><code>memory_order_acq_rel</code></td>
+<td>Acquire/Release</td>
+</tr>
+<tr>
+<td><code>memory_order_release</code></td>
+<td>Release</td>
+</tr>
+<tr>
+<td><code>memory_order_acquire</code></td>
+<td>Acquire</td>
+</tr>
+<tr>
+<td><code>memory_order_consume</code></td>
+<td>Consume</td>
+</tr>
+<tr>
+<td><code>memory_order_relaxed</code></td>
+<td>Relaxed</td>
+</tr>
+</tbody>
+</table>
+<p>Kamu bisa menentukan yang lain dengan fungsi library tertentu. Misalnya, kamu bisa menambahkan nilai ke variabel atomic seperti ini:</p>
+<div class="sourceCode" id="cb792"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb792-1"><a href="chapter-atomics.html#cb792-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb792-2"><a href="chapter-atomics.html#cb792-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb792-3"><a href="chapter-atomics.html#cb792-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">+=</span> <span class="dv">5</span><span class="op">;</span>  <span class="co">// Sequential consistency, yang bawaan</span></span></code></pre></div>
+<p>Atau kamu bisa melakukan hal yang sama dengan fungsi library ini:</p>
+<p></p>
+<div class="sourceCode" id="cb793"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb793-1"><a href="chapter-atomics.html#cb793-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb793-2"><a href="chapter-atomics.html#cb793-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb793-3"><a href="chapter-atomics.html#cb793-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span>  <span class="co">// Sequential consistency, yang bawaan</span></span></code></pre></div>
+<p></p>
+<p>Atau kamu bisa melakukan hal yang sama dengan memory ordering eksplisit:</p>
+<p></p>
+<div class="sourceCode" id="cb794"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb794-1"><a href="chapter-atomics.html#cb794-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb794-2"><a href="chapter-atomics.html#cb794-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb794-3"><a href="chapter-atomics.html#cb794-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add_explicit<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> memory_order_seq_cst<span class="op">);</span></span></code></pre></div>
+<p>Tapi bagaimana kalau kita tidak menginginkan sequential consistency? Dan kamu menginginkan acquire/release karena suatu alasan? Sebutkan saja:</p>
+<div class="sourceCode" id="cb795"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb795-1"><a href="chapter-atomics.html#cb795-1" aria-hidden="true" tabindex="-1"></a>atomic_int x <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb795-2"><a href="chapter-atomics.html#cb795-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb795-3"><a href="chapter-atomics.html#cb795-3" aria-hidden="true" tabindex="-1"></a>atomic_fetch_add_explicit<span class="op">(&amp;</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">,</span> memory_order_acq_rel<span class="op">);</span></span></code></pre></div>
+<p></p>
+<p>Kita akan membahas rincian memory order yang berbeda di bawah. Jangan mengutak-atik apa pun selain sequential consistency kecuali kamu tahu apa yang kamu lakukan. Sangat mudah membuat kesalahan yang menyebabkan kegagalan langka yang sulit direproduksi.</p>
+<h3 data-number="40.13.1" id="sequential-consistency-1"><span class="header-section-number">40.13.1</span> Sequential Consistency</h3>
+<p> </p>
+<ul>
+<li>Operasi load melakukan acquire (lihat di bawah).</li>
+<li>Operasi store melakukan release (lihat di bawah).</li>
+<li>Operasi read-modify-write melakukan acquire lalu release.</li>
+</ul>
+<p>Selain itu, untuk menjaga urutan total acquire dan release, tidak ada acquire atau release yang akan ditata ulang terhadap satu sama lain. (Aturan acquire/release tidak melarang penataan ulang release yang diikuti acquire. Tapi aturan sequentially consistent melarangnya.)</p>
+<p> </p>
+<h3 data-number="40.13.2" id="acquire"><span class="header-section-number">40.13.2</span> Acquire</h3>
+<p> </p>
+<p>Inilah yang terjadi pada operasi load/read variabel atomic.</p>
+<ul>
+<li><p>Kalau thread lain me-release variabel atomic ini, semua penulisan yang dilakukan thread itu kini terlihat di thread ini.</p></li>
+<li><p>Akses memori di thread ini yang terjadi setelah load ini tidak bisa ditata ulang ke sebelumnya.</p></li>
+</ul>
+<p> </p>
+<h3 data-number="40.13.3" id="release"><span class="header-section-number">40.13.3</span> Release</h3>
+<p> </p>
+<p>Inilah yang terjadi pada store/write variabel atomic.</p>
+<ul>
+<li><p>Kalau thread lain nanti meng-acquire variabel atomic ini, semua penulisan memori di thread ini sebelum penulisan atomic-nya menjadi terlihat oleh thread lain itu.</p></li>
+<li><p>Akses memori di thread ini yang terjadi sebelum release tidak bisa ditata ulang ke setelahnya.</p></li>
+</ul>
+<p> </p>
+<h3 data-number="40.13.4" id="consume"><span class="header-section-number">40.13.4</span> Consume</h3>
+<p> </p>
+<p>Yang ini aneh, mirip versi acquire yang kurang ketat. Ia memengaruhi akses memori yang <em>bergantung data</em> pada variabel atomic.</p>
+<p>Menjadi “bergantung data” secara samar berarti variabel atomic dipakai dalam suatu perhitungan.</p>
+<p>Artinya, kalau sebuah thread meng-consume variabel atomic, maka semua operasi di thread itu yang kemudian memakai variabel atomic tersebut akan bisa melihat penulisan memori di thread yang melakukan release.</p>
+<p>Bandingkan dengan acquire, ketika penulisan memori di thread yang melakukan release akan terlihat oleh <em>semua</em> operasi di thread saat ini, bukan hanya yang bergantung data.</p>
+<p>Seperti acquire juga, ada batasan operasi mana yang boleh ditata ulang <em>sebelum</em> consume. Dengan acquire, tidak ada yang boleh ditata ulang ke sebelumnya. Dengan consume, tidak ada yang bergantung pada nilai atomic yang dimuat yang boleh ditata ulang ke sebelumnya.</p>
+<p> </p>
+<h3 data-number="40.13.5" id="acquirerelease"><span class="header-section-number">40.13.5</span> Acquire/Release</h3>
+<p> </p>
+<p>Ini hanya berlaku untuk operasi read-modify-write. Ia acquire dan release yang digabung menjadi satu.</p>
+<ul>
+<li>Acquire terjadi untuk pembacaan.</li>
+<li>Release terjadi untuk penulisan.</li>
+</ul>
+<p> </p>
+<h3 data-number="40.13.6" id="relaxed"><span class="header-section-number">40.13.6</span> Relaxed</h3>
+<p> </p>
+<p>Tidak ada aturan; ini anarki! Semua orang boleh menata ulang semuanya di mana saja! Anjing dan kucing hidup bersama—histeria massal!</p>
+<p>Sebenarnya ada satu aturan. Pembacaan dan penulisan atomic tetap semua-atau-tidak-sama-sekali. Tapi operasi bisa ditata ulang sesuka hati dan sama sekali tidak ada sinkronisasi antar thread.</p>
+<p>Ada beberapa kasus pemakaian untuk memory order ini, yang bisa kamu temukan dengan sedikit pencarian, mis. counter sederhana.</p>
+<p>Dan kamu bisa memakai fence untuk memaksa sinkronisasi setelah sekumpulan penulisan relaxed.</p>
+<p> </p>
+<h2 data-number="40.14" id="fence"><span class="header-section-number">40.14</span> Fence</h2>
+<p></p>
+<p>Kamu tahu bagaimana release dan acquire variabel atomic terjadi saat kamu membaca dan menulisnya?</p>
+<p>Nah, mungkin juga melakukan release atau acquire <em>tanpa</em> variabel atomic.</p>
+<p>Ini disebut <em>fence</em>. Jadi kalau kamu ingin semua penulisan di sebuah thread terlihat di tempat lain, kamu bisa memasang release fence di satu thread dan acquire fence di thread lain, persis seperti cara kerja variabel atomic.</p>
+<p>Karena operasi consume tidak benar-benar masuk akal pada fence<a href="function-specifier-alignment-specifier-dan-operator.html#fn217" class="footnote-ref" id="fnref217" role="doc-noteref"><sup>217</sup></a>, <code>memory_order_consume</code> diperlakukan sebagai acquire.</p>
+<p>Kamu bisa memasang fence dengan order apa pun yang ditentukan:</p>
+<p></p>
+<div class="sourceCode" id="cb796"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb796-1"><a href="chapter-atomics.html#cb796-1" aria-hidden="true" tabindex="-1"></a>atomic_thread_fence<span class="op">(</span>memory_order_release<span class="op">);</span></span></code></pre></div>
+<p> </p>
+<p>Ada juga versi ringan fence untuk dipakai dengan signal handler, bernama <code>atomic_signal_fence()</code>.</p>
+<p>Cara kerjanya sama persis dengan <code>atomic_thread_fence()</code>, kecuali:</p>
+<ul>
+<li><p>Ia hanya menangani visibilitas nilai dalam thread yang sama; tidak ada sinkronisasi dengan thread lain.</p></li>
+<li><p>Tidak ada instruksi fence hardware yang dikeluarkan.</p></li>
+</ul>
+<p>Kalau kamu ingin yakin efek samping operasi non-atomic (dan operasi atomic relaxed) terlihat di signal handler, kamu bisa memakai fence ini.</p>
+<p>Idenya: signal handler dieksekusi di thread <em>ini</em>, bukan thread lain, jadi ini cara yang lebih ringan untuk memastikan perubahan di luar signal handler terlihat di dalamnya (yaitu belum ditata ulang).</p>
+<p> </p>
+<h2 data-number="40.15" id="referensi"><span class="header-section-number">40.15</span> Referensi</h2>
+<p>Kalau kamu ingin mempelajari hal-hal ini lebih jauh, berikut beberapa bahan yang membantuku menembusnya:</p>
+<ul>
+<li><p>Ceramah Herb Sutter <em><code>atomic&lt;&gt;</code> Weapons</em>:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=A8eCGOqgvH4">Bagian 1</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn218" class="footnote-ref" id="fnref218" role="doc-noteref"><sup>218</sup></a></li>
+<li><a href="https://www.youtube.com/watch?v=KeLBd2EJLOU">Bagian 2</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn219" class="footnote-ref" id="fnref219" role="doc-noteref"><sup>219</sup></a></li>
+</ul></li>
+<li><p><a href="https://preshing.com/archives/">Materi Jeff Preshing</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn220" class="footnote-ref" id="fnref220" role="doc-noteref"><sup>220</sup></a>, khususnya:</p>
+<ul>
+<li><a href="https://preshing.com/20120612/an-introduction-to-lock-free-programming/">An Introduction to Lock-Free Programming</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn221" class="footnote-ref" id="fnref221" role="doc-noteref"><sup>221</sup></a></li>
+<li><a href="https://preshing.com/20120913/acquire-and-release-semantics/">Acquire and Release Semantics</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn222" class="footnote-ref" id="fnref222" role="doc-noteref"><sup>222</sup></a></li>
+<li><a href="https://preshing.com/20130702/the-happens-before-relation/">The <em>Happens-Before</em> Relation</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn223" class="footnote-ref" id="fnref223" role="doc-noteref"><sup>223</sup></a></li>
+<li><a href="https://preshing.com/20130823/the-synchronizes-with-relation/">The <em>Synchronizes-With</em> Relation</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn224" class="footnote-ref" id="fnref224" role="doc-noteref"><sup>224</sup></a></li>
+<li><a href="https://preshing.com/20140709/the-purpose-of-memory_order_consume-in-cpp11/">The Purpose of <code>memory_order_consume</code> in C++11</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn225" class="footnote-ref" id="fnref225" role="doc-noteref"><sup>225</sup></a></li>
+<li><a href="https://preshing.com/20150402/you-can-do-any-kind-of-atomic-read-modify-write-operation/">You Can Do Any Kind of Atomic Read-Modify-Write Operation</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn226" class="footnote-ref" id="fnref226" role="doc-noteref"><sup>226</sup></a></li>
+</ul></li>
+<li><p>CPPReference:</p>
+<ul>
+<li><a href="https://en.cppreference.com/w/c/atomic/memory_order">Memory Order</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn227" class="footnote-ref" id="fnref227" role="doc-noteref"><sup>227</sup></a></li>
+<li><a href="https://en.cppreference.com/w/c/language/atomic">Atomic Types</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn228" class="footnote-ref" id="fnref228" role="doc-noteref"><sup>228</sup></a></li>
+</ul></li>
+<li><p><a href="https://docs.microsoft.com/en-us/windows/win32/dxtecharts/lockless-programming">Lockless Programming Considerations</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn229" class="footnote-ref" id="fnref229" role="doc-noteref"><sup>229</sup></a> oleh Bruce Dawson</p></li>
+<li><p>Orang-orang yang suka membantu dan berpengetahuan di <a href="https://www.reddit.com/r/C_Programming/">r/C_Programming</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn230" class="footnote-ref" id="fnref230" role="doc-noteref"><sup>230</sup></a></p></li>
+</ul>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="multithreading.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="function-specifier-alignment-specifier-dan-operator.html" rel="next">Next</a></span></div></body>
+</html>

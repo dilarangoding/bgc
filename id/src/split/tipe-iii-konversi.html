@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="tipe-ii-jauh-lebih-banyak-tipe.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tipe-iv-qualifier-dan-specifier.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="15" id="tipe-iii-konversi"><span class="header-section-number">15</span> Tipe III: Konversi</h1>
+<p></p>
+<p>Di bab ini kita akan membahas konversi dari satu tipe ke tipe lain. C punya berbagai cara untuk melakukannya, dan sebagian mungkin sedikit berbeda dari yang biasa kamu temui di bahasa lain.</p>
+<p>Sebelum membahas cara membuat konversi terjadi, mari kita lihat dulu bagaimana konversi bekerja saat ia <em>memang</em> terjadi.</p>
+<h2 data-number="15.1" id="konversi-string"><span class="header-section-number">15.1</span> Konversi String</h2>
+<p></p>
+<p>Tidak seperti banyak bahasa, C tidak melakukan konversi string ke angka (dan sebaliknya) semulus konversi antartipe numerik.</p>
+<p>Untuk itu, kita harus memanggil fungsi yang mengerjakan pekerjaan kotornya.</p>
+<h3 data-number="15.1.1" id="nilai-numerik-ke-string"><span class="header-section-number">15.1.1</span> Nilai Numerik ke String</h3>
+<p>Ketika ingin mengonversi angka menjadi string, kita bisa memakai <code>sprintf()</code> (dibaca <em>SPRINT-f</em>) atau <code>snprintf()</code> (<em>s-n-print-f</em>)<a href="function-specifier-alignment-specifier-dan-operator.html#fn106" class="footnote-ref" id="fnref106" role="doc-noteref"><sup>106</sup></a></p>
+<p>Keduanya pada dasarnya bekerja seperti <code>printf()</code>, hanya saja outputnya ke string, dan string itu bisa dicetak nanti, atau diapakan saja.</p>
+<p>Misalnya, mengubah sebagian nilai π menjadi string:</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb244-1"><a href="tipe-iii-konversi.html#cb244-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb244-2"><a href="tipe-iii-konversi.html#cb244-2" aria-label="2"></a></span>
+<span id="cb244-3"><a href="tipe-iii-konversi.html#cb244-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb244-4"><a href="tipe-iii-konversi.html#cb244-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb244-5"><a href="tipe-iii-konversi.html#cb244-5" aria-label="5"></a>    <span class="dt">char</span> s<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb244-6"><a href="tipe-iii-konversi.html#cb244-6" aria-label="6"></a>    <span class="dt">float</span> f <span class="op">=</span> <span class="fl">3.14159</span><span class="op">;</span></span>
+<span id="cb244-7"><a href="tipe-iii-konversi.html#cb244-7" aria-label="7"></a></span>
+<span id="cb244-8"><a href="tipe-iii-konversi.html#cb244-8" aria-label="8"></a>    <span class="co">// Konversi &quot;f&quot; menjadi string, simpan di &quot;s&quot;, tulis paling banyak 10</span></span>
+<span id="cb244-9"><a href="tipe-iii-konversi.html#cb244-9" aria-label="9"></a>    <span class="co">// karakter termasuk terminator NUL</span></span>
+<span id="cb244-10"><a href="tipe-iii-konversi.html#cb244-10" aria-label="10"></a></span>
+<span id="cb244-11"><a href="tipe-iii-konversi.html#cb244-11" aria-label="11"></a>    snprintf<span class="op">(</span>s<span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="st">&quot;</span><span class="sc">%f</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span></span>
+<span id="cb244-12"><a href="tipe-iii-konversi.html#cb244-12" aria-label="12"></a></span>
+<span id="cb244-13"><a href="tipe-iii-konversi.html#cb244-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;String value: </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> s<span class="op">);</span>  <span class="co">// String value: 3.141590</span></span>
+<span id="cb244-14"><a href="tipe-iii-konversi.html#cb244-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p>Jadi kamu bisa memakai <code>%d</code> atau <code>%u</code> seperti biasa untuk integer.</p>
+<h3 data-number="15.1.2" id="string-ke-nilai-numerik"><span class="header-section-number">15.1.2</span> String ke Nilai Numerik</h3>
+<p>Ada beberapa keluarga fungsi untuk ini di C. Kita sebut keluarga <code>atoi</code> (dibaca <em>a-to-i</em>) dan keluarga <code>strtol</code> (<em>stir-to-long</em>).</p>
+<p>Untuk konversi dasar dari string ke angka, coba fungsi <code>atoi</code> dari <code>&lt;stdlib.h&gt;</code>. Fungsi-fungsi ini punya penanganan error yang buruk (termasuk undefined behavior kalau kamu mengoper string yang salah), jadi pakailah dengan hati-hati.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Fungsi</th>
+<th style="text-align: left;">Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>atoi</code></td>
+<td style="text-align: left;">String ke <code>int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>atof</code></td>
+<td style="text-align: left;">String ke <code>float</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>atol</code></td>
+<td style="text-align: left;">String ke <code>long int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>atoll</code></td>
+<td style="text-align: left;">String ke <code>long long int</code></td>
+</tr>
+</tbody>
+</table>
+<p>Walaupun spesifikasi tidak mengakuinya, huruf <code>a</code> di awal nama fungsi singkatan dari <a href="https://en.wikipedia.org/wiki/ASCII">ASCII</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn107" class="footnote-ref" id="fnref107" role="doc-noteref"><sup>107</sup></a>, jadi sebenarnya <code>atoi()</code> adalah “ASCII-to-integer”, tapi mengatakannya hari ini agak terlalu berpusat pada ASCII.</p>
+<p>Berikut contoh mengonversi string menjadi <code>float</code>:</p>
+<div class="sourceCode" id="cb245"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb245-1"><a href="tipe-iii-konversi.html#cb245-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb245-2"><a href="tipe-iii-konversi.html#cb245-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb245-3"><a href="tipe-iii-konversi.html#cb245-3" aria-label="3"></a></span>
+<span id="cb245-4"><a href="tipe-iii-konversi.html#cb245-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb245-5"><a href="tipe-iii-konversi.html#cb245-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb245-6"><a href="tipe-iii-konversi.html#cb245-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>pi <span class="op">=</span> <span class="st">&quot;3.14159&quot;</span><span class="op">;</span></span>
+<span id="cb245-7"><a href="tipe-iii-konversi.html#cb245-7" aria-label="7"></a>    <span class="dt">float</span> f<span class="op">;</span></span>
+<span id="cb245-8"><a href="tipe-iii-konversi.html#cb245-8" aria-label="8"></a></span>
+<span id="cb245-9"><a href="tipe-iii-konversi.html#cb245-9" aria-label="9"></a>    f <span class="op">=</span> atof<span class="op">(</span>pi<span class="op">);</span></span>
+<span id="cb245-10"><a href="tipe-iii-konversi.html#cb245-10" aria-label="10"></a></span>
+<span id="cb245-11"><a href="tipe-iii-konversi.html#cb245-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">);</span></span>
+<span id="cb245-12"><a href="tipe-iii-konversi.html#cb245-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Tapi, seperti kubilang tadi, hal-hal aneh seperti ini menghasilkan undefined behavior:</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb246-1"><a href="tipe-iii-konversi.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> atoi<span class="op">(</span><span class="st">&quot;what&quot;</span><span class="op">);</span>  <span class="co">// &quot;What&quot; bukan angka yang pernah dikenal siapa pun</span></span></code></pre></div>
+<p>(Waktu kujalankan, hasilnya <code>0</code>, tapi jangan sekali-kali mengandalkannya. Hasilnya bisa sama sekali berbeda.)</p>
+<p>Untuk penanganan error yang lebih baik, mari kita lihat fungsi-fungsi <code>strtol</code>, yang juga ada di <code>&lt;stdlib.h&gt;</code>. Bukan hanya itu, mereka juga mengonversi ke lebih banyak tipe dan lebih banyak basis!</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Fungsi</th>
+<th style="text-align: left;">Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>strtol</code></td>
+<td style="text-align: left;">String ke <code>long int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strtoll</code></td>
+<td style="text-align: left;">String ke <code>long long int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strtoul</code></td>
+<td style="text-align: left;">String ke <code>unsigned long int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strtoull</code></td>
+<td style="text-align: left;">String ke <code>unsigned long long int</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strtof</code></td>
+<td style="text-align: left;">String ke <code>float</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strtod</code></td>
+<td style="text-align: left;">String ke <code>double</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>strtold</code></td>
+<td style="text-align: left;">String ke <code>long double</code></td>
+</tr>
+</tbody>
+</table>
+<p>Fungsi-fungsi ini semuanya punya pola pemakaian yang mirip, dan bagi banyak orang ini pengalaman pertama dengan pointer ke pointer! Tapi tenang saja—tidak sesulit kelihatannya.</p>
+<p>Mari kita coba contoh ketika string dikonversi menjadi <code>unsigned long</code>, dengan membuang informasi error (yaitu informasi tentang karakter yang salah di string input):</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb247-1"><a href="tipe-iii-konversi.html#cb247-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb247-2"><a href="tipe-iii-konversi.html#cb247-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb247-3"><a href="tipe-iii-konversi.html#cb247-3" aria-label="3"></a></span>
+<span id="cb247-4"><a href="tipe-iii-konversi.html#cb247-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb247-5"><a href="tipe-iii-konversi.html#cb247-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb247-6"><a href="tipe-iii-konversi.html#cb247-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;3490&quot;</span><span class="op">;</span></span>
+<span id="cb247-7"><a href="tipe-iii-konversi.html#cb247-7" aria-label="7"></a></span>
+<span id="cb247-8"><a href="tipe-iii-konversi.html#cb247-8" aria-label="8"></a>    <span class="co">// Konversi string s, angka basis 10, menjadi unsigned long int.</span></span>
+<span id="cb247-9"><a href="tipe-iii-konversi.html#cb247-9" aria-label="9"></a>    <span class="co">// NULL berarti kita tidak peduli dengan informasi error apa pun.</span></span>
+<span id="cb247-10"><a href="tipe-iii-konversi.html#cb247-10" aria-label="10"></a></span>
+<span id="cb247-11"><a href="tipe-iii-konversi.html#cb247-11" aria-label="11"></a>    <span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> strtoul<span class="op">(</span>s<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb247-12"><a href="tipe-iii-konversi.html#cb247-12" aria-label="12"></a></span>
+<span id="cb247-13"><a href="tipe-iii-konversi.html#cb247-13" aria-label="13"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%lu\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 3490</span></span>
+<span id="cb247-14"><a href="tipe-iii-konversi.html#cb247-14" aria-label="14"></a><span class="op">}</span></span></code></pre></div>
+<p>Perhatikan beberapa hal di sana. Meskipun kita tidak sudi menangkap informasi apa pun tentang karakter yang salah di string, <code>strtoul()</code> tidak akan menghasilkan undefined behavior; ia hanya mengembalikan <code>0</code>.</p>
+<p>Perhatikan juga bahwa kita menyebutkan bahwa ini angka desimal (basis 10).</p>
+<p>Apakah ini berarti kita bisa mengonversi angka dengan basis berbeda? Tentu! Kita coba biner!</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb248-1"><a href="tipe-iii-konversi.html#cb248-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb248-2"><a href="tipe-iii-konversi.html#cb248-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb248-3"><a href="tipe-iii-konversi.html#cb248-3" aria-label="3"></a></span>
+<span id="cb248-4"><a href="tipe-iii-konversi.html#cb248-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb248-5"><a href="tipe-iii-konversi.html#cb248-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb248-6"><a href="tipe-iii-konversi.html#cb248-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;101010&quot;</span><span class="op">;</span>  <span class="co">// Apa makna angka ini?</span></span>
+<span id="cb248-7"><a href="tipe-iii-konversi.html#cb248-7" aria-label="7"></a></span>
+<span id="cb248-8"><a href="tipe-iii-konversi.html#cb248-8" aria-label="8"></a>    <span class="co">// Konversi string s, angka basis 2, menjadi unsigned long int.</span></span>
+<span id="cb248-9"><a href="tipe-iii-konversi.html#cb248-9" aria-label="9"></a></span>
+<span id="cb248-10"><a href="tipe-iii-konversi.html#cb248-10" aria-label="10"></a>    <span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> strtoul<span class="op">(</span>s<span class="op">,</span> NULL<span class="op">,</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb248-11"><a href="tipe-iii-konversi.html#cb248-11" aria-label="11"></a></span>
+<span id="cb248-12"><a href="tipe-iii-konversi.html#cb248-12" aria-label="12"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%lu\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 42</span></span>
+<span id="cb248-13"><a href="tipe-iii-konversi.html#cb248-13" aria-label="13"></a><span class="op">}</span></span></code></pre></div>
+<p>Oke, itu semua seru-seruan, tapi <code>NULL</code> di situ untuk apa?</p>
+<p>Itu membantu kita mengetahui apakah terjadi error saat memproses string. Ia adalah pointer ke pointer ke <code>char</code>, yang terdengar menakutkan, tapi tidak lagi begitu setelah kamu paham.</p>
+<p>Mari kita coba contoh dengan sengaja memberi angka yang salah, dan kita lihat bagaimana <code>strtol()</code> memberi tahu di mana digit tidak valid yang pertama.</p>
+<div class="sourceCode" id="cb249"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb249-1"><a href="tipe-iii-konversi.html#cb249-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb249-2"><a href="tipe-iii-konversi.html#cb249-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb249-3"><a href="tipe-iii-konversi.html#cb249-3" aria-label="3"></a></span>
+<span id="cb249-4"><a href="tipe-iii-konversi.html#cb249-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb249-5"><a href="tipe-iii-konversi.html#cb249-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb249-6"><a href="tipe-iii-konversi.html#cb249-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;34x90&quot;</span><span class="op">;</span>  <span class="co">// &quot;x&quot; bukan digit yang valid di basis 10!</span></span>
+<span id="cb249-7"><a href="tipe-iii-konversi.html#cb249-7" aria-label="7"></a>    <span class="dt">char</span> <span class="op">*</span>badchar<span class="op">;</span></span>
+<span id="cb249-8"><a href="tipe-iii-konversi.html#cb249-8" aria-label="8"></a></span>
+<span id="cb249-9"><a href="tipe-iii-konversi.html#cb249-9" aria-label="9"></a>    <span class="co">// Konversi string s, angka basis 10, menjadi unsigned long int.</span></span>
+<span id="cb249-10"><a href="tipe-iii-konversi.html#cb249-10" aria-label="10"></a></span>
+<span id="cb249-11"><a href="tipe-iii-konversi.html#cb249-11" aria-label="11"></a>    <span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> strtoul<span class="op">(</span>s<span class="op">,</span> <span class="op">&amp;</span>badchar<span class="op">,</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb249-12"><a href="tipe-iii-konversi.html#cb249-12" aria-label="12"></a></span>
+<span id="cb249-13"><a href="tipe-iii-konversi.html#cb249-13" aria-label="13"></a>    <span class="co">// Ia mencoba mengonversi sebanyak mungkin, jadi sampai sini:</span></span>
+<span id="cb249-14"><a href="tipe-iii-konversi.html#cb249-14" aria-label="14"></a></span>
+<span id="cb249-15"><a href="tipe-iii-konversi.html#cb249-15" aria-label="15"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%lu\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span>  <span class="co">// 34</span></span>
+<span id="cb249-16"><a href="tipe-iii-konversi.html#cb249-16" aria-label="16"></a></span>
+<span id="cb249-17"><a href="tipe-iii-konversi.html#cb249-17" aria-label="17"></a>    <span class="co">// Tapi kita bisa melihat karakter bermasalah itu karena badchar</span></span>
+<span id="cb249-18"><a href="tipe-iii-konversi.html#cb249-18" aria-label="18"></a>    <span class="co">// menunjuk ke sana!</span></span>
+<span id="cb249-19"><a href="tipe-iii-konversi.html#cb249-19" aria-label="19"></a></span>
+<span id="cb249-20"><a href="tipe-iii-konversi.html#cb249-20" aria-label="20"></a>    printf<span class="op">(</span><span class="st">&quot;Invalid character: </span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>badchar<span class="op">);</span>  <span class="co">// &quot;x&quot;</span></span>
+<span id="cb249-21"><a href="tipe-iii-konversi.html#cb249-21" aria-label="21"></a><span class="op">}</span></span></code></pre></div>
+<p>Jadi di sana <code>strtoul()</code> mengubah apa yang ditunjuk <code>badchar</code> untuk menunjukkan di mana yang salah<a href="function-specifier-alignment-specifier-dan-operator.html#fn108" class="footnote-ref" id="fnref108" role="doc-noteref"><sup>108</sup></a>.</p>
+<p>Tapi bagaimana kalau tidak ada yang salah? Dalam kasus itu, <code>badchar</code> akan menunjuk ke terminator <code>NUL</code> di akhir string. Jadi kita bisa mengujinya:</p>
+<div class="sourceCode" id="cb250"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb250-1"><a href="tipe-iii-konversi.html#cb250-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb250-2"><a href="tipe-iii-konversi.html#cb250-2" aria-label="2"></a><span class="pp">#include </span><span class="im">&lt;stdlib.h&gt;</span></span>
+<span id="cb250-3"><a href="tipe-iii-konversi.html#cb250-3" aria-label="3"></a></span>
+<span id="cb250-4"><a href="tipe-iii-konversi.html#cb250-4" aria-label="4"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb250-5"><a href="tipe-iii-konversi.html#cb250-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb250-6"><a href="tipe-iii-konversi.html#cb250-6" aria-label="6"></a>    <span class="dt">char</span> <span class="op">*</span>s <span class="op">=</span> <span class="st">&quot;3490&quot;</span><span class="op">;</span>  <span class="co">// &quot;x&quot; bukan digit yang valid di basis 10!</span></span>
+<span id="cb250-7"><a href="tipe-iii-konversi.html#cb250-7" aria-label="7"></a>    <span class="dt">char</span> <span class="op">*</span>badchar<span class="op">;</span></span>
+<span id="cb250-8"><a href="tipe-iii-konversi.html#cb250-8" aria-label="8"></a></span>
+<span id="cb250-9"><a href="tipe-iii-konversi.html#cb250-9" aria-label="9"></a>    <span class="co">// Konversi string s, angka basis 10, menjadi unsigned long int.</span></span>
+<span id="cb250-10"><a href="tipe-iii-konversi.html#cb250-10" aria-label="10"></a></span>
+<span id="cb250-11"><a href="tipe-iii-konversi.html#cb250-11" aria-label="11"></a>    <span class="dt">unsigned</span> <span class="dt">long</span> <span class="dt">int</span> x <span class="op">=</span> strtoul<span class="op">(</span>s<span class="op">,</span> <span class="op">&amp;</span>badchar<span class="op">,</span> <span class="dv">10</span><span class="op">);</span></span>
+<span id="cb250-12"><a href="tipe-iii-konversi.html#cb250-12" aria-label="12"></a></span>
+<span id="cb250-13"><a href="tipe-iii-konversi.html#cb250-13" aria-label="13"></a>    <span class="co">// Periksa apakah semuanya berjalan baik</span></span>
+<span id="cb250-14"><a href="tipe-iii-konversi.html#cb250-14" aria-label="14"></a></span>
+<span id="cb250-15"><a href="tipe-iii-konversi.html#cb250-15" aria-label="15"></a>    <span class="cf">if</span> <span class="op">(*</span>badchar <span class="op">==</span> <span class="ch">&#39;</span><span class="sc">\0</span><span class="ch">&#39;</span><span class="op">)</span> <span class="op">{</span></span>
+<span id="cb250-16"><a href="tipe-iii-konversi.html#cb250-16" aria-label="16"></a>        printf<span class="op">(</span><span class="st">&quot;Success! </span><span class="sc">%lu\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb250-17"><a href="tipe-iii-konversi.html#cb250-17" aria-label="17"></a>    <span class="op">}</span> <span class="cf">else</span>  <span class="op">{</span></span>
+<span id="cb250-18"><a href="tipe-iii-konversi.html#cb250-18" aria-label="18"></a>        printf<span class="op">(</span><span class="st">&quot;Partial conversion: </span><span class="sc">%lu\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">);</span></span>
+<span id="cb250-19"><a href="tipe-iii-konversi.html#cb250-19" aria-label="19"></a>        printf<span class="op">(</span><span class="st">&quot;Invalid character: </span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>badchar<span class="op">);</span></span>
+<span id="cb250-20"><a href="tipe-iii-konversi.html#cb250-20" aria-label="20"></a>    <span class="op">}</span></span>
+<span id="cb250-21"><a href="tipe-iii-konversi.html#cb250-21" aria-label="21"></a><span class="op">}</span></span></code></pre></div>
+<p>Jadi begitulah. Fungsi gaya <code>atoi()</code> cukup baik untuk keadaan terkendali, tapi fungsi gaya <code>strtol()</code> memberimu kendali jauh lebih besar atas penanganan error dan basis input.</p>
+<p></p>
+<h2 data-number="15.2" id="konversi-char"><span class="header-section-number">15.2</span> Konversi <code>char</code></h2>
+<p></p>
+<p>Bagaimana kalau ada satu karakter berisi digit, seperti <code>'5'</code>… Apakah itu sama dengan nilai <code>5</code>?</p>
+<p>Kita coba dan lihat.</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb251-1"><a href="tipe-iii-konversi.html#cb251-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="ch">&#39;5&#39;</span><span class="op">);</span></span></code></pre></div>
+<p>Di sistemku yang memakai UTF-8, ini mencetak:</p>
+<div class="sourceCode" id="cb252"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb252-1"><a href="tipe-iii-konversi.html#cb252-1" aria-hidden="true" tabindex="-1"></a>5 53</span></code></pre></div>
+<p>Jadi… bukan. Dan 53? Apa itu? Itu code point UTF-8 (dan ASCII) untuk simbol karakter <code>'5'</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn109" class="footnote-ref" id="fnref109" role="doc-noteref"><sup>109</sup></a></p>
+<p>Lalu bagaimana cara mengonversi karakter <code>'5'</code> (yang ternyata bernilai 53) menjadi nilai <code>5</code>?</p>
+<p>Dengan satu trik cerdik, begitulah caranya!</p>
+<p>Standar C menjamin bahwa karakter-karakter ini punya code point yang berurutan dan dalam urutan ini:</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb253-1"><a href="tipe-iii-konversi.html#cb253-1" aria-hidden="true" tabindex="-1"></a>0  1  2  3  4  5  6  7  8  9</span></code></pre></div>
+<p>Renungkan sebentar–bagaimana kita bisa memakainya? Awas, spoiler…</p>
+<p>Mari kita lihat karakter-karakter itu beserta code point-nya di UTF-8:</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb254-1"><a href="tipe-iii-konversi.html#cb254-1" aria-hidden="true" tabindex="-1"></a>0  1  2  3  4  5  6  7  8  9</span>
+<span id="cb254-2"><a href="tipe-iii-konversi.html#cb254-2" aria-hidden="true" tabindex="-1"></a>48 49 50 51 52 53 54 55 56 57</span></code></pre></div>
+<p>Kamu bisa lihat di sana bahwa <code>'5'</code> adalah <code>53</code>, persis seperti yang kita dapat tadi. Dan <code>'0'</code> adalah <code>48</code>.</p>
+<p>Jadi kita bisa mengurangkan <code>'0'</code> dari karakter digit mana pun untuk mendapatkan nilai numeriknya:</p>
+<div class="sourceCode" id="cb255"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb255-1"><a href="tipe-iii-konversi.html#cb255-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> <span class="ch">&#39;6&#39;</span><span class="op">;</span></span>
+<span id="cb255-2"><a href="tipe-iii-konversi.html#cb255-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb255-3"><a href="tipe-iii-konversi.html#cb255-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> c<span class="op">;</span>  <span class="co">// x bernilai 54, code point untuk &#39;6&#39;</span></span>
+<span id="cb255-4"><a href="tipe-iii-konversi.html#cb255-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb255-5"><a href="tipe-iii-konversi.html#cb255-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> y <span class="op">=</span> c <span class="op">-</span> <span class="ch">&#39;0&#39;</span><span class="op">;</span> <span class="co">// y bernilai 6, persis seperti yang kita mau</span></span></code></pre></div>
+<p>Dan kita bisa mengonversi ke arah sebaliknya, cukup dengan menambahkan nilainya.</p>
+<div class="sourceCode" id="cb256"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb256-1"><a href="tipe-iii-konversi.html#cb256-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">6</span><span class="op">;</span></span>
+<span id="cb256-2"><a href="tipe-iii-konversi.html#cb256-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb256-3"><a href="tipe-iii-konversi.html#cb256-3" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> c <span class="op">=</span> x <span class="op">+</span> <span class="ch">&#39;0&#39;</span><span class="op">;</span>  <span class="co">// c bernilai 54</span></span>
+<span id="cb256-4"><a href="tipe-iii-konversi.html#cb256-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb256-5"><a href="tipe-iii-konversi.html#cb256-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>  <span class="co">// mencetak 54</span></span>
+<span id="cb256-6"><a href="tipe-iii-konversi.html#cb256-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%c\n</span><span class="st">&quot;</span><span class="op">,</span> c<span class="op">);</span>  <span class="co">// mencetak 6 dengan %c</span></span></code></pre></div>
+<p>Mungkin kamu mengira ini cara yang aneh untuk melakukan konversi, dan menurut standar zaman sekarang, memang begitu. Tapi di zaman dahulu kala ketika komputer dibuat dari kayu secara harfiah, inilah metode untuk konversi itu. Dan karena tidak rusak, C tidak pernah memperbaikinya.</p>
+<p></p>
+<h2 data-number="15.3" id="konversi-numerik"><span class="header-section-number">15.3</span> Konversi Numerik</h2>
+<p></p>
+<h3 data-number="15.3.1" id="boolean"><span class="header-section-number">15.3.1</span> Boolean</h3>
+<p></p>
+<p>Kalau nol dikonversi ke <code>bool</code>, hasilnya <code>0</code>. Selain itu hasilnya <code>1</code>.</p>
+<h3 data-number="15.3.2" id="konversi-integer-ke-integer"><span class="header-section-number">15.3.2</span> Konversi Integer ke Integer</h3>
+<p></p>
+<p>Kalau sebuah tipe integer dikonversi menjadi unsigned dan nilainya tidak muat, hasil unsigned-nya berputar seperti odometer sampai muat di unsigned itu<a href="function-specifier-alignment-specifier-dan-operator.html#fn110" class="footnote-ref" id="fnref110" role="doc-noteref"><sup>110</sup></a>.</p>
+<p>Kalau sebuah tipe integer dikonversi menjadi angka signed dan tidak muat, hasilnya ditentukan oleh implementasi! Sesuatu yang terdokumentasi akan terjadi, tapi kamu harus mencarinya sendiri<a href="function-specifier-alignment-specifier-dan-operator.html#fn111" class="footnote-ref" id="fnref111" role="doc-noteref"><sup>111</sup></a></p>
+<h3 data-number="15.3.3" id="konversi-integer-dan-floating-point"><span class="header-section-number">15.3.3</span> Konversi Integer dan Floating Point</h3>
+<p></p>
+<p>Kalau tipe floating point dikonversi menjadi tipe integer, bagian pecahannya dibuang tanpa ampun<a href="function-specifier-alignment-specifier-dan-operator.html#fn112" class="footnote-ref" id="fnref112" role="doc-noteref"><sup>112</sup></a>.</p>
+<p>Tapi—dan ini jebakannya—kalau angkanya terlalu besar untuk muat di integer, hasilnya undefined behavior. Jadi jangan lakukan itu.</p>
+<p>Dari integer atau floating point ke floating point, C berusaha sebaik mungkin mencari bilangan floating point terdekat dengan integer itu.</p>
+<p>Sekali lagi, kalau nilai aslinya tidak bisa direpresentasikan, hasilnya undefined behavior.</p>
+<p> </p>
+<h2 data-number="15.4" id="konversi-implisit"><span class="header-section-number">15.4</span> Konversi Implisit</h2>
+<p></p>
+<p>Konversi ini dilakukan compiler secara otomatis ketika kamu mencampur berbagai tipe.</p>
+<h3 data-number="15.4.1" id="integer-promotions"><span class="header-section-number">15.4.1</span> Integer Promotion</h3>
+<p>Di sejumlah tempat, kalau sebuah <code>int</code> bisa dipakai untuk merepresentasikan nilai dari <code>char</code> atau <code>short</code> (signed maupun unsigned), nilai itu <em>dipromosikan</em> naik menjadi <code>int</code>. Kalau tidak muat di <code>int</code>, ia dipromosikan menjadi <code>unsigned int</code>.</p>
+<p>Begitulah cara kita bisa melakukan hal seperti ini:</p>
+<div class="sourceCode" id="cb257"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb257-1"><a href="tipe-iii-konversi.html#cb257-1" aria-hidden="true" tabindex="-1"></a><span class="dt">char</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">,</span> y <span class="op">=</span> <span class="dv">20</span><span class="op">;</span></span>
+<span id="cb257-2"><a href="tipe-iii-konversi.html#cb257-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> i <span class="op">=</span> x <span class="op">+</span> y<span class="op">;</span></span></code></pre></div>
+<p>Dalam kasus itu, <code>x</code> dan <code>y</code> dipromosikan oleh C menjadi <code>int</code> sebelum perhitungan terjadi.</p>
+<p>Integer promotion terjadi saat Usual Arithmetic Conversion, pada fungsi variadic<a href="function-specifier-alignment-specifier-dan-operator.html#fn113" class="footnote-ref" id="fnref113" role="doc-noteref"><sup>113</sup></a>, operator unary <code>+</code> dan <code>-</code>, atau saat mengoper nilai ke fungsi tanpa prototype<a href="function-specifier-alignment-specifier-dan-operator.html#fn114" class="footnote-ref" id="fnref114" role="doc-noteref"><sup>114</sup></a>.</p>
+<h3 data-number="15.4.2" id="usual-arithmetic-conversions"><span class="header-section-number">15.4.2</span> Usual Arithmetic Conversion</h3>
+<p>Konversi otomatis ini dikerjakan C pada operasi numerik yang kamu minta. (Memang itulah namanya, omong-omong, menurut C11 §6.3.1.8.) Perhatikan bahwa di bagian ini kita hanya membicarakan tipe numerik—string dibahas nanti.</p>
+<p>Konversi ini menjawab pertanyaan tentang apa yang terjadi ketika tipe dicampur, seperti ini:</p>
+<div class="sourceCode" id="cb258"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb258-1"><a href="tipe-iii-konversi.html#cb258-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3</span> <span class="op">+</span> <span class="fl">1.2</span><span class="op">;</span>   <span class="co">// Mencampur int dan double</span></span>
+<span id="cb258-2"><a href="tipe-iii-konversi.html#cb258-2" aria-hidden="true" tabindex="-1"></a>                   <span class="co">// 4.2 dikonversi menjadi int</span></span>
+<span id="cb258-3"><a href="tipe-iii-konversi.html#cb258-3" aria-hidden="true" tabindex="-1"></a>                   <span class="co">// 4 disimpan di x</span></span>
+<span id="cb258-4"><a href="tipe-iii-konversi.html#cb258-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb258-5"><a href="tipe-iii-konversi.html#cb258-5" aria-hidden="true" tabindex="-1"></a><span class="dt">float</span> y <span class="op">=</span> <span class="dv">12</span> <span class="op">*</span> <span class="dv">2</span><span class="op">;</span>  <span class="co">// Mencampur float dan int</span></span>
+<span id="cb258-6"><a href="tipe-iii-konversi.html#cb258-6" aria-hidden="true" tabindex="-1"></a>                   <span class="co">// 24 dikonversi menjadi float</span></span>
+<span id="cb258-7"><a href="tipe-iii-konversi.html#cb258-7" aria-hidden="true" tabindex="-1"></a>                   <span class="co">// 24.0 disimpan di y</span></span></code></pre></div>
+<p>Apakah mereka menjadi <code>int</code>? Atau <code>float</code>? Bagaimana cara kerjanya?</p>
+<p>Berikut langkah-langkahnya, diparafrasekan agar mudah dicerna.</p>
+<ol type="1">
+<li><p>Kalau salah satu bagian ekspresi bertipe floating, konversikan bagian lainnya ke tipe floating itu.</p></li>
+<li><p>Kalau tidak, dan kedua tipe adalah tipe integer, lakukan integer promotion pada masing-masing, lalu jadikan tipe operand sebesar yang dibutuhkan untuk menampung nilai terbesar yang sama. Kadang ini melibatkan perubahan signed menjadi unsigned.</p></li>
+</ol>
+<p>Kalau ingin tahu detail lengkapnya, lihat C11 §6.3.1.8. Tapi kemungkinan besar kamu tidak perlu.</p>
+<p>Pokoknya ingat bahwa tipe int menjadi tipe float kalau ada tipe floating point di mana pun di dalamnya, dan compiler berusaha memastikan tipe integer campuran tidak overflow.</p>
+<p>Terakhir, kalau kamu mengonversi dari satu tipe floating point ke tipe floating point lain, compiler akan berusaha membuat konversi yang tepat. Kalau tidak bisa, ia akan membuat perkiraan terbaik yang ia bisa. Kalau angkanya terlalu besar untuk muat di tipe tujuan, <em>duar</em>: undefined behavior!</p>
+<h3 data-number="15.4.3" id="void"><span class="header-section-number">15.4.3</span> <code>void*</code></h3>
+<p>Tipe <code>void*</code> menarik karena bisa dikonversi dari atau ke tipe pointer mana pun.</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb259-1"><a href="tipe-iii-konversi.html#cb259-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb259-2"><a href="tipe-iii-konversi.html#cb259-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-3"><a href="tipe-iii-konversi.html#cb259-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span>  <span class="co">// &amp;x bertipe int*, tapi kita simpan di void*</span></span>
+<span id="cb259-4"><a href="tipe-iii-konversi.html#cb259-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb259-5"><a href="tipe-iii-konversi.html#cb259-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>q <span class="op">=</span> p<span class="op">;</span>    <span class="co">// p adalah void*, tapi kita simpan di int*</span></span></code></pre></div>
+<p></p>
+<h2 data-number="15.5" id="konversi-eksplisit"><span class="header-section-number">15.5</span> Konversi Eksplisit</h2>
+<p></p>
+<p>Konversi jenis ini harus kamu minta sendiri; compiler tidak akan melakukannya untukmu.</p>
+<p>Kamu bisa mengonversi dari satu tipe ke tipe lain dengan menugaskan satu tipe ke tipe lain memakai <code>=</code>.</p>
+<p>Kamu juga bisa mengonversi secara eksplisit dengan <em>cast</em>.</p>
+<p></p>
+<h3 data-number="15.5.1" id="casting"><span class="header-section-number">15.5.1</span> Casting</h3>
+<p></p>
+<p>Kamu bisa mengubah tipe sebuah ekspresi secara eksplisit dengan menaruh tipe baru dalam tanda kurung di depannya. Sebagian developer C tidak menyukai praktik ini kecuali benar-benar perlu, tapi kemungkinan besar kamu akan menemui kode C yang memakainya.</p>
+<p>Mari kita coba contoh ketika kita ingin mengonversi <code>int</code> menjadi <code>long</code> supaya bisa disimpan di <code>long</code>.</p>
+<p>Catatan: contoh ini dibuat-buat dan cast di sini sama sekali tidak perlu karena ekspresi <code>x + 12</code> akan otomatis diubah menjadi <code>long int</code> agar sesuai dengan tipe <code>y</code> yang lebih lebar.</p>
+<div class="sourceCode" id="cb260"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb260-1"><a href="tipe-iii-konversi.html#cb260-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">10</span><span class="op">;</span></span>
+<span id="cb260-2"><a href="tipe-iii-konversi.html#cb260-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="dt">int</span> y <span class="op">=</span> <span class="op">(</span><span class="dt">long</span> <span class="dt">int</span><span class="op">)</span>x <span class="op">+</span> <span class="dv">12</span><span class="op">;</span></span></code></pre></div>
+<p>Pada contoh itu, meskipun <code>x</code> tadinya bertipe <code>int</code>, ekspresi <code>(long int)x</code> bertipe <code>long int</code>. Kita bilang, “Kita meng-cast <code>x</code> menjadi <code>long int</code>.”</p>
+<p>Lebih sering, kamu mungkin melihat cast dipakai untuk mengonversi <code>void*</code> menjadi tipe pointer tertentu agar bisa di-dereference.</p>
+<p>Callback dari fungsi bawaan <code>qsort()</code> bisa menunjukkan perilaku ini karena <code>void*</code> dioper kepadanya:</p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb261-1"><a href="tipe-iii-konversi.html#cb261-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> compar<span class="op">(</span><span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>elem1<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>elem2<span class="op">)</span></span>
+<span id="cb261-2"><a href="tipe-iii-konversi.html#cb261-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb261-3"><a href="tipe-iii-konversi.html#cb261-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(*((</span><span class="dt">const</span> <span class="dt">int</span><span class="op">*)</span>elem2<span class="op">)</span> <span class="op">&gt;</span> <span class="op">*((</span><span class="dt">const</span> <span class="dt">int</span><span class="op">*)</span>elem1<span class="op">))</span> <span class="cf">return</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb261-4"><a href="tipe-iii-konversi.html#cb261-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="op">(*((</span><span class="dt">const</span> <span class="dt">int</span><span class="op">*)</span>elem2<span class="op">)</span> <span class="op">&lt;</span> <span class="op">*((</span><span class="dt">const</span> <span class="dt">int</span><span class="op">*)</span>elem1<span class="op">))</span> <span class="cf">return</span> <span class="op">-</span><span class="dv">1</span><span class="op">;</span></span>
+<span id="cb261-5"><a href="tipe-iii-konversi.html#cb261-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb261-6"><a href="tipe-iii-konversi.html#cb261-6" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Tapi kamu juga bisa menulisnya dengan jelas lewat penugasan:</p>
+<div class="sourceCode" id="cb262"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb262-1"><a href="tipe-iii-konversi.html#cb262-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> compar<span class="op">(</span><span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>elem1<span class="op">,</span> <span class="dt">const</span> <span class="dt">void</span> <span class="op">*</span>elem2<span class="op">)</span></span>
+<span id="cb262-2"><a href="tipe-iii-konversi.html#cb262-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb262-3"><a href="tipe-iii-konversi.html#cb262-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>e1 <span class="op">=</span> elem1<span class="op">;</span></span>
+<span id="cb262-4"><a href="tipe-iii-konversi.html#cb262-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">const</span> <span class="dt">int</span> <span class="op">*</span>e2 <span class="op">=</span> elem2<span class="op">;</span></span>
+<span id="cb262-5"><a href="tipe-iii-konversi.html#cb262-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb262-6"><a href="tipe-iii-konversi.html#cb262-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="op">*</span>e2 <span class="op">-</span> <span class="op">*</span>e1<span class="op">;</span></span>
+<span id="cb262-7"><a href="tipe-iii-konversi.html#cb262-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Salah satu tempat yang lebih sering memakai cast adalah untuk menghindari peringatan saat mencetak nilai pointer dengan <code>%p</code> yang jarang dipakai, yang rewel terhadap apa pun selain <code>void*</code>:</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb263-1"><a href="tipe-iii-konversi.html#cb263-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb263-2"><a href="tipe-iii-konversi.html#cb263-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb263-3"><a href="tipe-iii-konversi.html#cb263-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb263-4"><a href="tipe-iii-konversi.html#cb263-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%p\n</span><span class="st">&quot;</span><span class="op">,</span> p<span class="op">);</span></span></code></pre></div>
+<p>menghasilkan peringatan ini:</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb264-1"><a href="tipe-iii-konversi.html#cb264-1" aria-hidden="true" tabindex="-1"></a>warning: format ‘%p’ expects argument of type ‘void *’, but argument</span>
+<span id="cb264-2"><a href="tipe-iii-konversi.html#cb264-2" aria-hidden="true" tabindex="-1"></a>         2 has type ‘int *’</span></code></pre></div>
+<p>Kamu bisa memperbaikinya dengan cast:</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb265-1"><a href="tipe-iii-konversi.html#cb265-1" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%p\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">(</span><span class="dt">void</span> <span class="op">*)</span>p<span class="op">);</span></span></code></pre></div>
+<p>Tempat lainnya adalah pada perubahan pointer eksplisit, kalau kamu tidak ingin memakai <code>void*</code> sebagai perantara, tapi ini juga cukup jarang:</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb266-1"><a href="tipe-iii-konversi.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> x <span class="op">=</span> <span class="dv">3490</span><span class="op">;</span></span>
+<span id="cb266-2"><a href="tipe-iii-konversi.html#cb266-2" aria-hidden="true" tabindex="-1"></a><span class="dt">long</span> <span class="op">*</span>p <span class="op">=</span> <span class="op">&amp;</span>x<span class="op">;</span></span>
+<span id="cb266-3"><a href="tipe-iii-konversi.html#cb266-3" aria-hidden="true" tabindex="-1"></a><span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*</span>c <span class="op">=</span> <span class="op">(</span><span class="dt">unsigned</span> <span class="dt">char</span> <span class="op">*)</span>p<span class="op">;</span></span></code></pre></div>
+<p>Tempat ketiga yang sering mewajibkannya adalah pada fungsi konversi karakter di <a href="https://beej.us/guide/bgclr/html/split/ctype.html"><code>&lt;ctype.h&gt;</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn115" class="footnote-ref" id="fnref115" role="doc-noteref"><sup>115</sup></a> yang mengharuskan kamu meng-cast nilai yang tandanya meragukan menjadi <code>unsigned char</code> untuk menghindari undefined behavior.</p>
+<p>Sekali lagi, cast jarang sekali <em>dibutuhkan</em> dalam praktik. Kalau kamu mendapati dirimu sering meng-cast, mungkin ada cara lain untuk melakukan hal yang sama, atau mungkin kamu meng-cast secara tidak perlu.</p>
+<p>Atau mungkin memang perlu. Secara pribadi, aku berusaha menghindarinya, tapi tidak takut memakainya kalau harus.</p>
+<p> </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="tipe-ii-jauh-lebih-banyak-tipe.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="tipe-iv-qualifier-dan-specifier.html" rel="next">Next</a></span></div></body>
+</html>

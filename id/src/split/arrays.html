@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="pointers.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="strings.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="6" id="arrays"><span class="header-section-number">6</span> Arrays</h1>
+<blockquote>
+<p><em>“Should array indices start at 0 or 1? My compromise of 0.5 was rejected without, I thought, proper consideration.”</em></p>
+<p>—Stan Kelly-Bootle, computer scientist</p>
+</blockquote>
+<p> Untungnya, C punya array. Memang, C dianggap bahasa low-level<a href="function-specifier-alignment-specifier-dan-operator.html#fn53" class="footnote-ref" id="fnref53" role="doc-noteref"><sup>53</sup></a>, tapi konsep array sudah tertanam di dalamnya. Dan karena banyak sekali bahasa yang terinspirasi dari sintaks C, kemungkinan besar kamu sudah akrab dengan <code>[</code> dan <code>]</code> untuk mendeklarasikan dan memakai array.</p>
+<p>Tapi C hanya <em>nyaris</em> punya array! Seperti yang akan kita lihat nanti, array di C hanyalah syntactic sugar—jauh di dalamnya, semuanya adalah pointer dan semacamnya. <em>Panik!</em> Tapi untuk sekarang, kita pakai saja sebagai array. <em>Fiuh</em>.</p>
+<h2 data-number="6.1" id="contoh-mudah"><span class="header-section-number">6.1</span> Contoh Mudah</h2>
+<p>Langsung saja kita buat contohnya:</p>
+<p></p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb89-1"><a href="arrays.html#cb89-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb89-2"><a href="arrays.html#cb89-2" aria-label="2"></a></span>
+<span id="cb89-3"><a href="arrays.html#cb89-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb89-4"><a href="arrays.html#cb89-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb89-5"><a href="arrays.html#cb89-5" aria-label="5"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb89-6"><a href="arrays.html#cb89-6" aria-label="6"></a>    <span class="dt">float</span> f<span class="op">[</span><span class="dv">4</span><span class="op">];</span>  <span class="co">// Deklarasikan array berisi 4 float</span></span>
+<span id="cb89-7"><a href="arrays.html#cb89-7" aria-label="7"></a></span>
+<span id="cb89-8"><a href="arrays.html#cb89-8" aria-label="8"></a>    f<span class="op">[</span><span class="dv">0</span><span class="op">]</span> <span class="op">=</span> <span class="fl">3.14159</span><span class="op">;</span>  <span class="co">// Indeks dimulai dari 0, tentu saja.</span></span>
+<span id="cb89-9"><a href="arrays.html#cb89-9" aria-label="9"></a>    f<span class="op">[</span><span class="dv">1</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1.41421</span><span class="op">;</span></span>
+<span id="cb89-10"><a href="arrays.html#cb89-10" aria-label="10"></a>    f<span class="op">[</span><span class="dv">2</span><span class="op">]</span> <span class="op">=</span> <span class="fl">1.61803</span><span class="op">;</span></span>
+<span id="cb89-11"><a href="arrays.html#cb89-11" aria-label="11"></a>    f<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="fl">2.71828</span><span class="op">;</span></span>
+<span id="cb89-12"><a href="arrays.html#cb89-12" aria-label="12"></a></span>
+<span id="cb89-13"><a href="arrays.html#cb89-13" aria-label="13"></a>    <span class="co">// Cetak semuanya:</span></span>
+<span id="cb89-14"><a href="arrays.html#cb89-14" aria-label="14"></a></span>
+<span id="cb89-15"><a href="arrays.html#cb89-15" aria-label="15"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">4</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb89-16"><a href="arrays.html#cb89-16" aria-label="16"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> f<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb89-17"><a href="arrays.html#cb89-17" aria-label="17"></a>    <span class="op">}</span></span>
+<span id="cb89-18"><a href="arrays.html#cb89-18" aria-label="18"></a><span class="op">}</span></span></code></pre></div>
+<p>Saat mendeklarasikan array, kamu harus menentukan ukurannya. Dan ukuran itu harus tetap<a href="function-specifier-alignment-specifier-dan-operator.html#fn54" class="footnote-ref" id="fnref54" role="doc-noteref"><sup>54</sup></a>.</p>
+<p>Pada contoh di atas, kita membuat array berisi 4 <code>float</code>. Angka di dalam kurung siku pada deklarasi menunjukkan hal itu.</p>
+<p>Di baris-baris berikutnya, kita mengakses nilai di dalam array, baik untuk mengisi maupun membacanya, lagi-lagi dengan kurung siku. </p>
+<p>Semoga ini terlihat akrab dari bahasa-bahasa yang sudah kamu kenal!</p>
+<h2 data-number="6.2" id="mendapatkan-panjang-array"><span class="header-section-number">6.2</span> Mendapatkan Panjang Array</h2>
+<p> Tidak bisa…sebenarnya. C tidak mencatat informasi ini<a href="function-specifier-alignment-specifier-dan-operator.html#fn55" class="footnote-ref" id="fnref55" role="doc-noteref"><sup>55</sup></a>. Kamu harus mengelolanya sendiri di variabel lain.</p>
+<p>Kalau dibilang “tidak bisa”, maksudnya ada beberapa keadaan ketika kamu <em>bisa</em>. Ada trik untuk mendapatkan jumlah elemen array di scope tempat array itu dideklarasikan. Tapi pada umumnya, trik ini tidak akan berfungsi seperti yang kamu harapkan kalau array dioper ke fungsi<a href="function-specifier-alignment-specifier-dan-operator.html#fn56" class="footnote-ref" id="fnref56" role="doc-noteref"><sup>56</sup></a>.</p>
+<p>Mari kita lihat triknya. Idenya, kita ambil <code>sizeof</code> array itu, lalu dibagi ukuran tiap elemennya untuk mendapatkan panjangnya. Misalnya, kalau sebuah <code>int</code> berukuran 4 byte dan array-nya berukuran 32 byte, berarti di dalamnya ada tempat untuk <span class="math inline">\(\frac{32}{4}\)</span> atau <span class="math inline">\(8\)</span> <code>int</code>.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb90-1"><a href="arrays.html#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> x<span class="op">[</span><span class="dv">12</span><span class="op">];</span>  <span class="co">// 12 int</span></span>
+<span id="cb90-2"><a href="arrays.html#cb90-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-3"><a href="arrays.html#cb90-3" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span> x<span class="op">);</span>     <span class="co">// total 48 byte</span></span>
+<span id="cb90-4"><a href="arrays.html#cb90-4" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>  <span class="co">// 4 byte per int</span></span>
+<span id="cb90-5"><a href="arrays.html#cb90-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb90-6"><a href="arrays.html#cb90-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span> x <span class="op">/</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>  <span class="co">// 48/4 = 12 int!</span></span></code></pre></div>
+<p>Kalau array-nya berisi <code>char</code>, maka <code>sizeof</code> array itu <em>adalah</em> jumlah elemennya, karena <code>sizeof(char)</code> didefinisikan sebagai 1. Untuk tipe lainnya, kamu harus membaginya dengan ukuran tiap elemen.</p>
+<p>Tapi trik ini hanya berfungsi di scope tempat array didefinisikan. Kalau array dioper ke fungsi, trik ini gagal. Bahkan kalau ukurannya ditulis “besar” di signature fungsi:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb91-1"><a href="arrays.html#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> foo<span class="op">(</span><span class="dt">int</span> x<span class="op">[</span><span class="dv">12</span><span class="op">])</span></span>
+<span id="cb91-2"><a href="arrays.html#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb91-3"><a href="arrays.html#cb91-3" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span> x<span class="op">);</span>     <span class="co">// 8?! Ke mana perginya 48?</span></span>
+<span id="cb91-4"><a href="arrays.html#cb91-4" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>  <span class="co">// 4 byte per int</span></span>
+<span id="cb91-5"><a href="arrays.html#cb91-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-6"><a href="arrays.html#cb91-6" aria-hidden="true" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%zu\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="kw">sizeof</span> x <span class="op">/</span> <span class="kw">sizeof</span><span class="op">(</span><span class="dt">int</span><span class="op">));</span>  <span class="co">// 8/4 = 2 int?? SALAH.</span></span>
+<span id="cb91-7"><a href="arrays.html#cb91-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Ini terjadi karena ketika array “dioper” ke fungsi, yang dioper hanyalah pointer ke elemen pertama, dan itulah yang diukur <code>sizeof</code>. Pembahasan lebih lanjut ada di bagian <a href="arrays.html#passing1darrays">Mengoper Array Satu Dimensi ke Fungsi</a> di bawah.</p>
+<p>Satu hal lagi yang bisa dilakukan dengan <code>sizeof</code> dan array: mengetahui ukuran array dengan jumlah elemen tertentu tanpa mendeklarasikan array-nya. Ini seperti mengetahui ukuran <code>int</code> lewat <code>sizeof(int)</code>.</p>
+<p>Misalnya, untuk mengetahui berapa byte yang dibutuhkan array berisi 48 <code>double</code>, tulis begini:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb92-1"><a href="arrays.html#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="kw">sizeof</span><span class="op">(</span><span class="dt">double</span> <span class="op">[</span><span class="dv">48</span><span class="op">]);</span></span></code></pre></div>
+<p> </p>
+<h2 data-number="6.3" id="array-initializer"><span class="header-section-number">6.3</span> Array Initializer</h2>
+<p> Array bisa diinisialisasi lebih dulu dengan konstanta:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb93-1"><a href="arrays.html#cb93-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb93-2"><a href="arrays.html#cb93-2" aria-label="2"></a></span>
+<span id="cb93-3"><a href="arrays.html#cb93-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb93-4"><a href="arrays.html#cb93-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb93-5"><a href="arrays.html#cb93-5" aria-label="5"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb93-6"><a href="arrays.html#cb93-6" aria-label="6"></a>    <span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">22</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">3490</span><span class="op">,</span> <span class="dv">18</span><span class="op">,</span> <span class="dv">95</span><span class="op">};</span>  <span class="co">// Inisialisasi dengan nilai-nilai ini</span></span>
+<span id="cb93-7"><a href="arrays.html#cb93-7" aria-label="7"></a></span>
+<span id="cb93-8"><a href="arrays.html#cb93-8" aria-label="8"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb93-9"><a href="arrays.html#cb93-9" aria-label="9"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb93-10"><a href="arrays.html#cb93-10" aria-label="10"></a>    <span class="op">}</span></span>
+<span id="cb93-11"><a href="arrays.html#cb93-11" aria-label="11"></a><span class="op">}</span></span></code></pre></div>
+<p>Jangan pernah memasukkan item di initializer lebih banyak daripada tempat yang tersedia di array, kalau tidak compiler akan ngambek:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb94-1"><a href="arrays.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="ex">foo.c:</span> In function ‘main’:</span>
+<span id="cb94-2"><a href="arrays.html#cb94-2" aria-hidden="true" tabindex="-1"></a><span class="ex">foo.c:6:39:</span> warning: excess elements in array initializer</span>
+<span id="cb94-3"><a href="arrays.html#cb94-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">6</span> <span class="kw">|</span>     <span class="ex">int</span> a<span class="pp">[</span><span class="st">5</span><span class="pp">]</span> <span class="kw">=</span> {22, 37, 3490, 18, 95, 999<span class="er">}</span><span class="kw">;</span></span>
+<span id="cb94-4"><a href="arrays.html#cb94-4" aria-hidden="true" tabindex="-1"></a>      <span class="kw">|</span>                                       <span class="ex">^~~</span></span>
+<span id="cb94-5"><a href="arrays.html#cb94-5" aria-hidden="true" tabindex="-1"></a><span class="ex">foo.c:6:39:</span> note: <span class="pp">(</span><span class="ss">near initialization for ‘a’</span><span class="pp">)</span></span></code></pre></div>
+<p>Tapi (fakta menarik!) item di initializer boleh <em>lebih sedikit</em> daripada tempat yang tersedia di array. Elemen sisanya otomatis diinisialisasi dengan nol. Ini berlaku umum untuk semua jenis array initializer: kalau ada initializer, semua yang tidak diberi nilai secara eksplisit akan bernilai nol.</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb95-1"><a href="arrays.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">22</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">3490</span><span class="op">};</span></span>
+<span id="cb95-2"><a href="arrays.html#cb95-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-3"><a href="arrays.html#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="co">// sama dengan:</span></span>
+<span id="cb95-4"><a href="arrays.html#cb95-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-5"><a href="arrays.html#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">22</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">3490</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">};</span></span></code></pre></div>
+<p>Bentuk pintas yang sering dipakai untuk mengisi seluruh array dengan nol:</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb96-1"><a href="arrays.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">100</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">};</span></span></code></pre></div>
+<p>Artinya, “Buat elemen pertama bernilai nol, lalu secara otomatis buat sisanya nol juga.”</p>
+<p>Kamu juga bisa mengisi elemen tertentu di initializer dengan menyebutkan indeksnya! Kalau kamu melakukan ini, C dengan senang hati melanjutkan pengisian nilai berikutnya sampai initializer habis, dan mengisi sisanya dengan <code>0</code>.</p>
+<p>Caranya, taruh indeks di dalam kurung siku diikuti <code>=</code>, lalu tulis nilainya.</p>
+<p>Berikut contoh pembuatan array:</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb97-1"><a href="arrays.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">10</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">0</span><span class="op">,</span> <span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="op">[</span><span class="dv">5</span><span class="op">]=</span><span class="dv">55</span><span class="op">,</span> <span class="dv">66</span><span class="op">,</span> <span class="dv">77</span><span class="op">};</span></span></code></pre></div>
+<p>Karena kita menetapkan indeks 5 sebagai tempat awal <code>55</code>, data hasil di dalam array adalah:</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb98-1"><a href="arrays.html#cb98-1" aria-hidden="true" tabindex="-1"></a>0 11 22 0 0 55 66 77 0 0</span></code></pre></div>
+<p>Ekspresi konstan sederhana juga boleh dipakai di sana.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb99-1"><a href="arrays.html#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="pp">#define COUNT </span><span class="dv">5</span></span>
+<span id="cb99-2"><a href="arrays.html#cb99-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-3"><a href="arrays.html#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span>COUNT<span class="op">]</span> <span class="op">=</span> <span class="op">{[</span>COUNT<span class="op">-</span><span class="dv">3</span><span class="op">]=</span><span class="dv">3</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">1</span><span class="op">};</span></span></code></pre></div>
+<p>yang menghasilkan:</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb100-1"><a href="arrays.html#cb100-1" aria-hidden="true" tabindex="-1"></a>0 0 3 2 1</span></code></pre></div>
+<p>Terakhir, kamu juga bisa menyuruh C menghitung ukuran array dari initializer-nya, cukup dengan tidak menulis ukurannya:</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb101-1"><a href="arrays.html#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">22</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">3490</span><span class="op">};</span></span>
+<span id="cb101-2"><a href="arrays.html#cb101-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-3"><a href="arrays.html#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="co">// sama dengan:</span></span>
+<span id="cb101-4"><a href="arrays.html#cb101-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="arrays.html#cb101-5" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">22</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">3490</span><span class="op">};</span>  <span class="co">// Ukurannya tidak ditulis!</span></span></code></pre></div>
+<p></p>
+<h2 data-number="6.4" id="di-luar-batas"><span class="header-section-number">6.4</span> Di Luar Batas!</h2>
+<p> C tidak melarang kamu mengakses array di luar batasnya. Bahkan mungkin tidak ada peringatan sama sekali.</p>
+<p>Kita pinjam contoh di atas dan terus mencetak melewati ujung array. Array ini hanya punya 5 elemen, tapi mari coba cetak 10 dan lihat apa yang terjadi:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb102-1"><a href="arrays.html#cb102-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb102-2"><a href="arrays.html#cb102-2" aria-label="2"></a></span>
+<span id="cb102-3"><a href="arrays.html#cb102-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb102-4"><a href="arrays.html#cb102-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb102-5"><a href="arrays.html#cb102-5" aria-label="5"></a>    <span class="dt">int</span> i<span class="op">;</span></span>
+<span id="cb102-6"><a href="arrays.html#cb102-6" aria-label="6"></a>    <span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">22</span><span class="op">,</span> <span class="dv">37</span><span class="op">,</span> <span class="dv">3490</span><span class="op">,</span> <span class="dv">18</span><span class="op">,</span> <span class="dv">95</span><span class="op">};</span></span>
+<span id="cb102-7"><a href="arrays.html#cb102-7" aria-label="7"></a></span>
+<span id="cb102-8"><a href="arrays.html#cb102-8" aria-label="8"></a>    <span class="cf">for</span> <span class="op">(</span>i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">10</span><span class="op">;</span> i<span class="op">++)</span> <span class="op">{</span>  <span class="co">// KABAR BURUK: mencetak terlalu banyak elemen!</span></span>
+<span id="cb102-9"><a href="arrays.html#cb102-9" aria-label="9"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">]);</span></span>
+<span id="cb102-10"><a href="arrays.html#cb102-10" aria-label="10"></a>    <span class="op">}</span></span>
+<span id="cb102-11"><a href="arrays.html#cb102-11" aria-label="11"></a><span class="op">}</span></span></code></pre></div>
+<p>Di komputer penulis, hasilnya:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb103-1"><a href="arrays.html#cb103-1" aria-hidden="true" tabindex="-1"></a>22</span>
+<span id="cb103-2"><a href="arrays.html#cb103-2" aria-hidden="true" tabindex="-1"></a>37</span>
+<span id="cb103-3"><a href="arrays.html#cb103-3" aria-hidden="true" tabindex="-1"></a>3490</span>
+<span id="cb103-4"><a href="arrays.html#cb103-4" aria-hidden="true" tabindex="-1"></a>18</span>
+<span id="cb103-5"><a href="arrays.html#cb103-5" aria-hidden="true" tabindex="-1"></a>95</span>
+<span id="cb103-6"><a href="arrays.html#cb103-6" aria-hidden="true" tabindex="-1"></a>32765</span>
+<span id="cb103-7"><a href="arrays.html#cb103-7" aria-hidden="true" tabindex="-1"></a>1847052032</span>
+<span id="cb103-8"><a href="arrays.html#cb103-8" aria-hidden="true" tabindex="-1"></a>1780534144</span>
+<span id="cb103-9"><a href="arrays.html#cb103-9" aria-hidden="true" tabindex="-1"></a>-56487472</span>
+<span id="cb103-10"><a href="arrays.html#cb103-10" aria-hidden="true" tabindex="-1"></a>21890</span></code></pre></div>
+<p>Waduh! Apa itu? Ternyata mencetak melewati ujung array menghasilkan apa yang disebut developer C sebagai <em>undefined behavior</em>. Makhluk ini akan kita bahas lebih lanjut nanti, tapi untuk sekarang artinya: “Kamu sudah melakukan hal buruk, dan apa pun bisa terjadi selama programmu berjalan.”</p>
+<p>Dan “apa pun” di sini biasanya berarti menemukan angka nol, menemukan angka sampah, atau crash. Tapi sebenarnya spesifikasi C menyatakan bahwa dalam keadaan ini compiler boleh menghasilkan kode yang melakukan <em>apa saja</em><a href="function-specifier-alignment-specifier-dan-operator.html#fn57" class="footnote-ref" id="fnref57" role="doc-noteref"><sup>57</sup></a>.</p>
+<p>Singkatnya: jangan pernah melakukan apa pun yang menyebabkan undefined behavior. Pernah<a href="function-specifier-alignment-specifier-dan-operator.html#fn58" class="footnote-ref" id="fnref58" role="doc-noteref"><sup>58</sup></a>. </p>
+<h2 data-number="6.5" id="array-multidimensi"><span class="header-section-number">6.5</span> Array Multidimensi</h2>
+<p> Kamu boleh menambahkan dimensi sebanyak apa pun pada array.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb104-1"><a href="arrays.html#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">10</span><span class="op">];</span></span>
+<span id="cb104-2"><a href="arrays.html#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> b<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">7</span><span class="op">];</span></span>
+<span id="cb104-3"><a href="arrays.html#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> c<span class="op">[</span><span class="dv">4</span><span class="op">][</span><span class="dv">5</span><span class="op">][</span><span class="dv">6</span><span class="op">];</span></span></code></pre></div>
+<p>Array ini disimpan di memori dengan <a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order">row-major order</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn59" class="footnote-ref" id="fnref59" role="doc-noteref"><sup>59</sup></a>. Artinya, pada array 2D, indeks pertama menunjukkan baris, dan indeks kedua menunjukkan kolom.</p>
+<p>Array multidimensi juga bisa diberi initializer dengan cara menyarangkannya:</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb105-1"><a href="arrays.html#cb105-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb105-2"><a href="arrays.html#cb105-2" aria-label="2"></a></span>
+<span id="cb105-3"><a href="arrays.html#cb105-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb105-4"><a href="arrays.html#cb105-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb105-5"><a href="arrays.html#cb105-5" aria-label="5"></a>    <span class="dt">int</span> row<span class="op">,</span> col<span class="op">;</span></span>
+<span id="cb105-6"><a href="arrays.html#cb105-6" aria-label="6"></a></span>
+<span id="cb105-7"><a href="arrays.html#cb105-7" aria-label="7"></a>    <span class="dt">int</span> a<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span>      <span class="co">// Inisialisasi array 2D</span></span>
+<span id="cb105-8"><a href="arrays.html#cb105-8" aria-label="8"></a>        <span class="op">{</span><span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">},</span></span>
+<span id="cb105-9"><a href="arrays.html#cb105-9" aria-label="9"></a>        <span class="op">{</span><span class="dv">5</span><span class="op">,</span> <span class="dv">6</span><span class="op">,</span> <span class="dv">7</span><span class="op">,</span> <span class="dv">8</span><span class="op">,</span> <span class="dv">9</span><span class="op">}</span></span>
+<span id="cb105-10"><a href="arrays.html#cb105-10" aria-label="10"></a>    <span class="op">};</span></span>
+<span id="cb105-11"><a href="arrays.html#cb105-11" aria-label="11"></a></span>
+<span id="cb105-12"><a href="arrays.html#cb105-12" aria-label="12"></a>    <span class="cf">for</span> <span class="op">(</span>row <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> row <span class="op">&lt;</span> <span class="dv">2</span><span class="op">;</span> row<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb105-13"><a href="arrays.html#cb105-13" aria-label="13"></a>        <span class="cf">for</span> <span class="op">(</span>col <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> col <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> col<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb105-14"><a href="arrays.html#cb105-14" aria-label="14"></a>            printf<span class="op">(</span><span class="st">&quot;(</span><span class="sc">%d</span><span class="st">,</span><span class="sc">%d</span><span class="st">) = </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> row<span class="op">,</span> col<span class="op">,</span> a<span class="op">[</span>row<span class="op">][</span>col<span class="op">]);</span></span>
+<span id="cb105-15"><a href="arrays.html#cb105-15" aria-label="15"></a>        <span class="op">}</span></span>
+<span id="cb105-16"><a href="arrays.html#cb105-16" aria-label="16"></a>    <span class="op">}</span></span>
+<span id="cb105-17"><a href="arrays.html#cb105-17" aria-label="17"></a><span class="op">}</span></span></code></pre></div>
+<p>Outputnya:</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb106-1"><a href="arrays.html#cb106-1" aria-hidden="true" tabindex="-1"></a>(0,0) = 0</span>
+<span id="cb106-2"><a href="arrays.html#cb106-2" aria-hidden="true" tabindex="-1"></a>(0,1) = 1</span>
+<span id="cb106-3"><a href="arrays.html#cb106-3" aria-hidden="true" tabindex="-1"></a>(0,2) = 2</span>
+<span id="cb106-4"><a href="arrays.html#cb106-4" aria-hidden="true" tabindex="-1"></a>(0,3) = 3</span>
+<span id="cb106-5"><a href="arrays.html#cb106-5" aria-hidden="true" tabindex="-1"></a>(0,4) = 4</span>
+<span id="cb106-6"><a href="arrays.html#cb106-6" aria-hidden="true" tabindex="-1"></a>(1,0) = 5</span>
+<span id="cb106-7"><a href="arrays.html#cb106-7" aria-hidden="true" tabindex="-1"></a>(1,1) = 6</span>
+<span id="cb106-8"><a href="arrays.html#cb106-8" aria-hidden="true" tabindex="-1"></a>(1,2) = 7</span>
+<span id="cb106-9"><a href="arrays.html#cb106-9" aria-hidden="true" tabindex="-1"></a>(1,3) = 8</span>
+<span id="cb106-10"><a href="arrays.html#cb106-10" aria-hidden="true" tabindex="-1"></a>(1,4) = 9</span></code></pre></div>
+<p>Dan kamu juga bisa memakai indeks eksplisit:</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb107-1"><a href="arrays.html#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Buat matriks identitas 3x3</span></span>
+<span id="cb107-2"><a href="arrays.html#cb107-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-3"><a href="arrays.html#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="dt">int</span> a<span class="op">[</span><span class="dv">3</span><span class="op">][</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{[</span><span class="dv">0</span><span class="op">][</span><span class="dv">0</span><span class="op">]=</span><span class="dv">1</span><span class="op">,</span> <span class="op">[</span><span class="dv">1</span><span class="op">][</span><span class="dv">1</span><span class="op">]=</span><span class="dv">1</span><span class="op">,</span> <span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">2</span><span class="op">]=</span><span class="dv">1</span><span class="op">};</span></span></code></pre></div>
+<p>yang membangun array 2D seperti ini:</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb108-1"><a href="arrays.html#cb108-1" aria-hidden="true" tabindex="-1"></a>1 0 0</span>
+<span id="cb108-2"><a href="arrays.html#cb108-2" aria-hidden="true" tabindex="-1"></a>0 1 0</span>
+<span id="cb108-3"><a href="arrays.html#cb108-3" aria-hidden="true" tabindex="-1"></a>0 0 1</span></code></pre></div>
+<p></p>
+<h2 data-number="6.6" id="array-dan-pointer"><span class="header-section-number">6.6</span> Array dan Pointer</h2>
+<p> [<em>Sambil lalu</em>] Nah… tadi di atas mungkin ada disinggung bahwa array itu pointer, jauh di dalamnya? Sekarang kita menyelam sebentar di perairan dangkal supaya semuanya tidak benar-benar membingungkan. Nanti kita bahas hubungan sebenarnya antara array dan pointer, tapi untuk saat ini kita hanya akan melihat cara mengoper array ke fungsi.</p>
+<h3 data-number="6.6.1" id="mendapatkan-pointer-ke-array"><span class="header-section-number">6.6.1</span> Mendapatkan Pointer ke Array</h3>
+<p>Ada rahasia yang perlu disampaikan. Secara umum, ketika programmer C berbicara tentang pointer ke array, yang mereka maksud adalah pointer <em>ke elemen pertama</em> array<a href="function-specifier-alignment-specifier-dan-operator.html#fn60" class="footnote-ref" id="fnref60" role="doc-noteref"><sup>60</sup></a>.</p>
+<p>Jadi mari kita ambil pointer ke elemen pertama sebuah array.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb109-1"><a href="arrays.html#cb109-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb109-2"><a href="arrays.html#cb109-2" aria-label="2"></a></span>
+<span id="cb109-3"><a href="arrays.html#cb109-3" aria-label="3"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb109-4"><a href="arrays.html#cb109-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb109-5"><a href="arrays.html#cb109-5" aria-label="5"></a>    <span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
+<span id="cb109-6"><a href="arrays.html#cb109-6" aria-label="6"></a>    <span class="dt">int</span> <span class="op">*</span>p<span class="op">;</span></span>
+<span id="cb109-7"><a href="arrays.html#cb109-7" aria-label="7"></a></span>
+<span id="cb109-8"><a href="arrays.html#cb109-8" aria-label="8"></a>    p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">[</span><span class="dv">0</span><span class="op">];</span>  <span class="co">// p menunjuk ke array</span></span>
+<span id="cb109-9"><a href="arrays.html#cb109-9" aria-label="9"></a>                <span class="co">// Tepatnya, ke elemen pertama</span></span>
+<span id="cb109-10"><a href="arrays.html#cb109-10" aria-label="10"></a></span>
+<span id="cb109-11"><a href="arrays.html#cb109-11" aria-label="11"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> <span class="op">*</span>p<span class="op">);</span>  <span class="co">// Mencetak &quot;11&quot;</span></span>
+<span id="cb109-12"><a href="arrays.html#cb109-12" aria-label="12"></a><span class="op">}</span></span></code></pre></div>
+<p>Karena begitu sering dipakai di C, bahasanya menyediakan jalan pintas:</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb110-1"><a href="arrays.html#cb110-1" aria-label="1"></a>p <span class="op">=</span> <span class="op">&amp;</span>a<span class="op">[</span><span class="dv">0</span><span class="op">];</span>  <span class="co">// p menunjuk ke array</span></span>
+<span id="cb110-2"><a href="arrays.html#cb110-2" aria-label="2"></a></span>
+<span id="cb110-3"><a href="arrays.html#cb110-3" aria-label="3"></a><span class="co">// sama dengan:</span></span>
+<span id="cb110-4"><a href="arrays.html#cb110-4" aria-label="4"></a></span>
+<span id="cb110-5"><a href="arrays.html#cb110-5" aria-label="5"></a>p <span class="op">=</span> a<span class="op">;</span>      <span class="co">// p menunjuk ke array, tapi tampilannya jauh lebih enak!</span></span></code></pre></div>
+<p>Menyebut nama array saja, tanpa embel-embel, sama dengan mengambil pointer ke elemen pertama array! Ini akan sering kita pakai di contoh-contoh berikutnya.</p>
+<p>Tapi tunggu sebentar—bukankah <code>p</code> itu <code>int*</code>? Dan <code>*p</code> menghasilkan <code>11</code>, sama seperti <code>a[0]</code>? Yessss. Kamu mulai melihat sekilas hubungan antara array dan pointer di C. (Kita akan membahasnya jauh lebih dalam di bab <a href="pointers2.html#pointers2">Pointer II</a>, di bagian <a href="pointers2.html#arraypointerequiv">Kesetaraan Array/Pointer</a>.) </p>
+<h3 data-number="6.6.2" id="passing1darrays"><span class="header-section-number">6.6.2</span> Mengoper Array Satu Dimensi ke Fungsi</h3>
+<p> Kita coba contoh dengan array satu dimensi. Penulis akan menulis dua fungsi yang bisa menerima array dan melakukan hal berbeda.</p>
+<p>Bersiaplah untuk signature fungsi yang bikin takjub!</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb111-1"><a href="arrays.html#cb111-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb111-2"><a href="arrays.html#cb111-2" aria-label="2"></a></span>
+<span id="cb111-3"><a href="arrays.html#cb111-3" aria-label="3"></a><span class="co">// Dioper sebagai pointer ke elemen pertama</span></span>
+<span id="cb111-4"><a href="arrays.html#cb111-4" aria-label="4"></a><span class="dt">void</span> times2<span class="op">(</span><span class="dt">int</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">int</span> len<span class="op">)</span></span>
+<span id="cb111-5"><a href="arrays.html#cb111-5" aria-label="5"></a><span class="op">{</span></span>
+<span id="cb111-6"><a href="arrays.html#cb111-6" aria-label="6"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> len<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb111-7"><a href="arrays.html#cb111-7" aria-label="7"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">]</span> <span class="op">*</span> <span class="dv">2</span><span class="op">);</span></span>
+<span id="cb111-8"><a href="arrays.html#cb111-8" aria-label="8"></a><span class="op">}</span></span>
+<span id="cb111-9"><a href="arrays.html#cb111-9" aria-label="9"></a></span>
+<span id="cb111-10"><a href="arrays.html#cb111-10" aria-label="10"></a><span class="co">// Sama saja, tapi memakai notasi array</span></span>
+<span id="cb111-11"><a href="arrays.html#cb111-11" aria-label="11"></a><span class="dt">void</span> times3<span class="op">(</span><span class="dt">int</span> a<span class="op">[],</span> <span class="dt">int</span> len<span class="op">)</span></span>
+<span id="cb111-12"><a href="arrays.html#cb111-12" aria-label="12"></a><span class="op">{</span></span>
+<span id="cb111-13"><a href="arrays.html#cb111-13" aria-label="13"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> len<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb111-14"><a href="arrays.html#cb111-14" aria-label="14"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">]</span> <span class="op">*</span> <span class="dv">3</span><span class="op">);</span></span>
+<span id="cb111-15"><a href="arrays.html#cb111-15" aria-label="15"></a><span class="op">}</span></span>
+<span id="cb111-16"><a href="arrays.html#cb111-16" aria-label="16"></a></span>
+<span id="cb111-17"><a href="arrays.html#cb111-17" aria-label="17"></a><span class="co">// Sama saja, tapi memakai notasi array dengan ukuran</span></span>
+<span id="cb111-18"><a href="arrays.html#cb111-18" aria-label="18"></a><span class="dt">void</span> times4<span class="op">(</span><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">],</span> <span class="dt">int</span> len<span class="op">)</span></span>
+<span id="cb111-19"><a href="arrays.html#cb111-19" aria-label="19"></a><span class="op">{</span></span>
+<span id="cb111-20"><a href="arrays.html#cb111-20" aria-label="20"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> len<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb111-21"><a href="arrays.html#cb111-21" aria-label="21"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> a<span class="op">[</span>i<span class="op">]</span> <span class="op">*</span> <span class="dv">4</span><span class="op">);</span></span>
+<span id="cb111-22"><a href="arrays.html#cb111-22" aria-label="22"></a><span class="op">}</span></span>
+<span id="cb111-23"><a href="arrays.html#cb111-23" aria-label="23"></a></span>
+<span id="cb111-24"><a href="arrays.html#cb111-24" aria-label="24"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb111-25"><a href="arrays.html#cb111-25" aria-label="25"></a><span class="op">{</span></span>
+<span id="cb111-26"><a href="arrays.html#cb111-26" aria-label="26"></a>    <span class="dt">int</span> x<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">11</span><span class="op">,</span> <span class="dv">22</span><span class="op">,</span> <span class="dv">33</span><span class="op">,</span> <span class="dv">44</span><span class="op">,</span> <span class="dv">55</span><span class="op">};</span></span>
+<span id="cb111-27"><a href="arrays.html#cb111-27" aria-label="27"></a></span>
+<span id="cb111-28"><a href="arrays.html#cb111-28" aria-label="28"></a>    times2<span class="op">(</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb111-29"><a href="arrays.html#cb111-29" aria-label="29"></a>    times3<span class="op">(</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb111-30"><a href="arrays.html#cb111-30" aria-label="30"></a>    times4<span class="op">(</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb111-31"><a href="arrays.html#cb111-31" aria-label="31"></a><span class="op">}</span></span></code></pre></div>
+<p>Semua cara menuliskan array sebagai parameter fungsi tersebut identik.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb112-1"><a href="arrays.html#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> times2<span class="op">(</span><span class="dt">int</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">int</span> len<span class="op">)</span></span>
+<span id="cb112-2"><a href="arrays.html#cb112-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> times3<span class="op">(</span><span class="dt">int</span> a<span class="op">[],</span> <span class="dt">int</span> len<span class="op">)</span></span>
+<span id="cb112-3"><a href="arrays.html#cb112-3" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> times4<span class="op">(</span><span class="dt">int</span> a<span class="op">[</span><span class="dv">5</span><span class="op">],</span> <span class="dt">int</span> len<span class="op">)</span></span></code></pre></div>
+<p>Di kalangan pemakai C yang sudah berpengalaman, bentuk pertama jauh lebih umum.</p>
+<p>Bahkan pada bentuk terakhir, compiler tidak peduli angka berapa yang kamu tulis (selain harus lebih besar dari nol<a href="function-specifier-alignment-specifier-dan-operator.html#fn61" class="footnote-ref" id="fnref61" role="doc-noteref"><sup>61</sup></a>). Compiler sama sekali tidak memaksakan apa pun.</p>
+<p>Setelah mengatakan itu, ukuran array di deklarasi fungsi sebenarnya <em>penting</em> ketika kita mengoper array multidimensi ke fungsi, tapi nanti kita kembali ke sana. </p>
+<h3 data-number="6.6.3" id="mengubah-array-di-dalam-fungsi"><span class="header-section-number">6.6.3</span> Mengubah Array di Dalam Fungsi</h3>
+<p> Kita sudah bilang bahwa array hanyalah pointer yang menyamar. Artinya, kalau kamu mengoper array ke fungsi, kemungkinan besar yang kamu oper adalah pointer ke elemen pertama array.</p>
+<p>Tapi kalau fungsi punya pointer ke data, fungsi itu bisa mengubah data tersebut! Jadi perubahan yang dilakukan fungsi pada array akan terlihat juga di caller.</p>
+<p>Berikut contoh ketika kita mengoper pointer ke array ke sebuah fungsi, fungsi itu mengubah nilai-nilai di array, dan perubahannya terlihat di caller.</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb113-1"><a href="arrays.html#cb113-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb113-2"><a href="arrays.html#cb113-2" aria-label="2"></a></span>
+<span id="cb113-3"><a href="arrays.html#cb113-3" aria-label="3"></a><span class="dt">void</span> double_array<span class="op">(</span><span class="dt">int</span> <span class="op">*</span>a<span class="op">,</span> <span class="dt">int</span> len<span class="op">)</span></span>
+<span id="cb113-4"><a href="arrays.html#cb113-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb113-5"><a href="arrays.html#cb113-5" aria-label="5"></a>    <span class="co">// Kalikan setiap elemen dengan 2</span></span>
+<span id="cb113-6"><a href="arrays.html#cb113-6" aria-label="6"></a>    <span class="co">//</span></span>
+<span id="cb113-7"><a href="arrays.html#cb113-7" aria-label="7"></a>    <span class="co">// Ini menggandakan nilai di x pada main() karena x dan a sama-sama menunjuk</span></span>
+<span id="cb113-8"><a href="arrays.html#cb113-8" aria-label="8"></a>    <span class="co">// ke array yang sama di memori!</span></span>
+<span id="cb113-9"><a href="arrays.html#cb113-9" aria-label="9"></a></span>
+<span id="cb113-10"><a href="arrays.html#cb113-10" aria-label="10"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> len<span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb113-11"><a href="arrays.html#cb113-11" aria-label="11"></a>        a<span class="op">[</span>i<span class="op">]</span> <span class="op">*=</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb113-12"><a href="arrays.html#cb113-12" aria-label="12"></a><span class="op">}</span></span>
+<span id="cb113-13"><a href="arrays.html#cb113-13" aria-label="13"></a></span>
+<span id="cb113-14"><a href="arrays.html#cb113-14" aria-label="14"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb113-15"><a href="arrays.html#cb113-15" aria-label="15"></a><span class="op">{</span></span>
+<span id="cb113-16"><a href="arrays.html#cb113-16" aria-label="16"></a>    <span class="dt">int</span> x<span class="op">[</span><span class="dv">5</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span><span class="op">,</span> <span class="dv">5</span><span class="op">};</span></span>
+<span id="cb113-17"><a href="arrays.html#cb113-17" aria-label="17"></a></span>
+<span id="cb113-18"><a href="arrays.html#cb113-18" aria-label="18"></a>    double_array<span class="op">(</span>x<span class="op">,</span> <span class="dv">5</span><span class="op">);</span></span>
+<span id="cb113-19"><a href="arrays.html#cb113-19" aria-label="19"></a></span>
+<span id="cb113-20"><a href="arrays.html#cb113-20" aria-label="20"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="dv">5</span><span class="op">;</span> i<span class="op">++)</span></span>
+<span id="cb113-21"><a href="arrays.html#cb113-21" aria-label="21"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> x<span class="op">[</span>i<span class="op">]);</span>  <span class="co">// 2, 4, 6, 8, 10!</span></span>
+<span id="cb113-22"><a href="arrays.html#cb113-22" aria-label="22"></a><span class="op">}</span></span></code></pre></div>
+<p>Walaupun array dioper sebagai parameter <code>a</code> yang bertipe <code>int*</code>, lihat bagaimana kita mengaksesnya dengan notasi array <code>a[i]</code>! Haaah. Ini sepenuhnya diperbolehkan.</p>
+<p>Nanti ketika kita membahas kesetaraan antara array dan pointer, hal ini akan jauh lebih masuk akal. Untuk sekarang, cukup ketahui bahwa fungsi bisa mengubah array dan perubahannya terlihat di caller. </p>
+<h3 data-number="6.6.4" id="mengoper-array-multidimensi-ke-fungsi"><span class="header-section-number">6.6.4</span> Mengoper Array Multidimensi ke Fungsi</h3>
+<p> Ceritanya sedikit berubah ketika kita membicarakan array multidimensi. C perlu tahu semua dimensi (kecuali yang pertama) supaya punya cukup informasi untuk mengetahui di mana di memori nilai tertentu harus dicari.</p>
+<p>Berikut contoh ketika kita eksplisit menyebutkan semua dimensi:</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb114-1"><a href="arrays.html#cb114-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb114-2"><a href="arrays.html#cb114-2" aria-label="2"></a></span>
+<span id="cb114-3"><a href="arrays.html#cb114-3" aria-label="3"></a><span class="dt">void</span> print_2D_array<span class="op">(</span><span class="dt">int</span> a<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">3</span><span class="op">])</span></span>
+<span id="cb114-4"><a href="arrays.html#cb114-4" aria-label="4"></a><span class="op">{</span></span>
+<span id="cb114-5"><a href="arrays.html#cb114-5" aria-label="5"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> row <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> row <span class="op">&lt;</span> <span class="dv">2</span><span class="op">;</span> row<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb114-6"><a href="arrays.html#cb114-6" aria-label="6"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> col <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> col <span class="op">&lt;</span> <span class="dv">3</span><span class="op">;</span> col<span class="op">++)</span></span>
+<span id="cb114-7"><a href="arrays.html#cb114-7" aria-label="7"></a>            printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d</span><span class="st"> &quot;</span><span class="op">,</span> a<span class="op">[</span>row<span class="op">][</span>col<span class="op">]);</span></span>
+<span id="cb114-8"><a href="arrays.html#cb114-8" aria-label="8"></a>        printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb114-9"><a href="arrays.html#cb114-9" aria-label="9"></a>    <span class="op">}</span></span>
+<span id="cb114-10"><a href="arrays.html#cb114-10" aria-label="10"></a><span class="op">}</span></span>
+<span id="cb114-11"><a href="arrays.html#cb114-11" aria-label="11"></a></span>
+<span id="cb114-12"><a href="arrays.html#cb114-12" aria-label="12"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb114-13"><a href="arrays.html#cb114-13" aria-label="13"></a><span class="op">{</span></span>
+<span id="cb114-14"><a href="arrays.html#cb114-14" aria-label="14"></a>    <span class="dt">int</span> x<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">3</span><span class="op">]</span> <span class="op">=</span> <span class="op">{</span></span>
+<span id="cb114-15"><a href="arrays.html#cb114-15" aria-label="15"></a>        <span class="op">{</span><span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">},</span></span>
+<span id="cb114-16"><a href="arrays.html#cb114-16" aria-label="16"></a>        <span class="op">{</span><span class="dv">4</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">6</span><span class="op">}</span></span>
+<span id="cb114-17"><a href="arrays.html#cb114-17" aria-label="17"></a>    <span class="op">};</span></span>
+<span id="cb114-18"><a href="arrays.html#cb114-18" aria-label="18"></a></span>
+<span id="cb114-19"><a href="arrays.html#cb114-19" aria-label="19"></a>    print_2D_array<span class="op">(</span>x<span class="op">);</span></span>
+<span id="cb114-20"><a href="arrays.html#cb114-20" aria-label="20"></a><span class="op">}</span></span></code></pre></div>
+<p>Tapi dalam kasus ini, kedua bentuk<a href="function-specifier-alignment-specifier-dan-operator.html#fn62" class="footnote-ref" id="fnref62" role="doc-noteref"><sup>62</sup></a> berikut setara:</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb115-1"><a href="arrays.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_2D_array<span class="op">(</span><span class="dt">int</span> a<span class="op">[</span><span class="dv">2</span><span class="op">][</span><span class="dv">3</span><span class="op">])</span></span>
+<span id="cb115-2"><a href="arrays.html#cb115-2" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> print_2D_array<span class="op">(</span><span class="dt">int</span> a<span class="op">[][</span><span class="dv">3</span><span class="op">])</span></span></code></pre></div>
+<p>Compiler sebenarnya hanya butuh dimensi kedua supaya tahu seberapa jauh harus melompat di memori untuk setiap kenaikan dimensi pertama. Secara umum, compiler harus tahu semua dimensi kecuali yang pertama.</p>
+<p>Ingat juga bahwa compiler hanya melakukan pengecekan batas saat kompilasi secara minimal (kalau beruntung), dan C sama sekali tidak mengecek batas saat runtime. Tanpa sabuk pengaman! Jangan sampai crash karena mengakses elemen array di luar batas! </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="pointers.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="strings.html" rel="next">Next</a></span></div></body>
+</html>

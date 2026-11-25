@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="kata-pengantar.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="variabel-dan-pernyataan.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="2" id="hello-world"><span class="header-section-number">2</span> Hello, World!</h1>
+<h2 data-number="2.1" id="apa-yang-diharapkan-dari-c"><span class="header-section-number">2.1</span> Apa yang Diharapkan dari C</h2>
+<blockquote>
+<p><em>“Where do these stairs go?”</em><br />
+<em>“They go up.”</em></p>
+<p>—Ray Stantz and Peter Venkman, Ghostbusters</p>
+</blockquote>
+<p>C adalah bahasa low-level.</p>
+<p>Dulu tidak begitu. Di zaman ketika orang masih mengukir punch card dari granit, C adalah cara luar biasa untuk bebas dari kerepotan bahasa lower-level seperti <a href="https://en.wikipedia.org/wiki/Assembly_language">assembly</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn19" class="footnote-ref" id="fnref19" role="doc-noteref"><sup>19</sup></a>.</p>
+<p>Tapi di era modern ini, bahasa-bahasa generasi sekarang menawarkan berbagai fitur yang belum ada pada 1972, ketika C diciptakan. Artinya, C adalah bahasa yang cukup mendasar dengan fitur yang tidak banyak. C bisa melakukan <em>apa saja</em>, tapi kamu harus bekerja keras untuk itu.</p>
+<p>Lalu kenapa kita masih memakainya sekarang?</p>
+<ul>
+<li><p>Sebagai alat belajar: C bukan hanya bagian terhormat dari sejarah komputasi, tapi juga terhubung langsung ke <a href="https://en.wikipedia.org/wiki/Bare_machine">bare metal</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn20" class="footnote-ref" id="fnref20" role="doc-noteref"><sup>20</sup></a> dengan cara yang tidak dimiliki bahasa masa kini. Saat belajar C, kamu belajar bagaimana software berinteraksi dengan memori komputer di level rendah. Tidak ada sabuk pengaman. Dijamin, kamu akan menulis software yang crash. Dan itu semua bagian dari keseruannya!</p></li>
+<li><p>Sebagai alat yang berguna: C masih dipakai untuk aplikasi tertentu, seperti membangun <a href="https://en.wikipedia.org/wiki/Operating_system">sistem operasi</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn21" class="footnote-ref" id="fnref21" role="doc-noteref"><sup>21</sup></a> atau <a href="https://en.wikipedia.org/wiki/Embedded_system">embedded systems</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn22" class="footnote-ref" id="fnref22" role="doc-noteref"><sup>22</sup></a>. (Walaupun bahasa pemrograman <a href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn23" class="footnote-ref" id="fnref23" role="doc-noteref"><sup>23</sup></a> sedang mengincar kedua bidang ini!)</p></li>
+</ul>
+<p>Kalau kamu sudah mengenal bahasa lain, banyak hal di C yang terasa mudah. C menginspirasi banyak bahasa lain, jadi kamu akan menemukan potongan-potongannya di Go, Rust, Swift, Python, JavaScript, Java, dan berbagai bahasa lainnya. Bagian-bagian itu akan terasa akrab.</p>
+<p><em>Pointer</em> yang bikin orang tersandung di C. Hampir semua hal lain sudah akrab, tapi pointer adalah yang aneh. Konsep di balik pointer kemungkinan besar sudah kamu ketahui, tapi C memaksamu membahasnya secara eksplisit, dengan operator yang mungkin belum pernah kamu lihat.</p>
+<p>Bagian ini licik karena begitu kamu <a href="https://en.wikipedia.org/wiki/Grok"><em>grok</em></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn24" class="footnote-ref" id="fnref24" role="doc-noteref"><sup>24</sup></a> pointer, tiba-tiba semuanya jadi mudah. Tapi sebelum saat itu tiba, pointer seperti belut licin yang susah dipegang.</p>
+<p>Segala hal lain di C hanyalah menghafal cara lain (kadang cara yang sama!) untuk melakukan sesuatu yang sudah pernah kamu lakukan. Pointer-lah bagian yang aneh. Dan bisa dibilang, pointer pun hanyalah variasi dari tema yang mungkin sudah kamu kenal.</p>
+<p>Jadi bersiaplah untuk petualangan seru, sedekat mungkin dengan inti komputer tanpa perlu assembly, dalam bahasa komputer paling berpengaruh sepanjang masa<a href="function-specifier-alignment-specifier-dan-operator.html#fn25" class="footnote-ref" id="fnref25" role="doc-noteref"><sup>25</sup></a>. Pegang erat!</p>
+<h2 data-number="2.2" id="hello-world-1"><span class="header-section-number">2.2</span> Hello, World!</h2>
+<p>Inilah contoh program C yang paling klasik. Semua orang memakainya. (Perhatikan bahwa angka di sebelah kiri hanya sebagai acuan bagi pembaca dan bukan bagian dari kode sumber.)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb2-1"><a href="hello-world.html#cb2-1" aria-label="1"></a><span class="co">/* Program Hello world */</span></span>
+<span id="cb2-2"><a href="hello-world.html#cb2-2" aria-label="2"></a></span>
+<span id="cb2-3"><a href="hello-world.html#cb2-3" aria-label="3"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb2-4"><a href="hello-world.html#cb2-4" aria-label="4"></a></span>
+<span id="cb2-5"><a href="hello-world.html#cb2-5" aria-label="5"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb2-6"><a href="hello-world.html#cb2-6" aria-label="6"></a><span class="op">{</span></span>
+<span id="cb2-7"><a href="hello-world.html#cb2-7" aria-label="7"></a>    printf<span class="op">(</span><span class="st">&quot;Hello, World!</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span>  <span class="co">// Di sinilah pekerjaan sebenarnya dilakukan</span></span>
+<span id="cb2-8"><a href="hello-world.html#cb2-8" aria-label="8"></a><span class="op">}</span></span></code></pre></div>
+<p>Sekarang kita pakai sarung tangan karet lengan panjang yang tangguh, ambil scalpel, lalu bedah program ini untuk melihat apa yang membuatnya bekerja. Bersiaplah, kita mulai. Memotong dengan sangat hati-hati…</p>
+<p></p>
+<p>Kita selesaikan yang mudah dulu: apa pun di antara digraf <code>/*</code> dan <code>*/</code> adalah komentar dan sepenuhnya diabaikan oleh compiler. Begitu juga apa pun di baris yang sama setelah <code>//</code>. Dengan komentar, kamu bisa meninggalkan pesan untuk dirimu sendiri dan orang lain, sehingga ketika kamu membaca ulang kodenya di masa depan yang jauh, kamu tahu apa yang dulu coba kamu lakukan. Percayalah, kamu akan lupa; itu hal biasa.</p>
+<p></p>
+<p> </p>
+<p>Nah, apa itu <code>#include</code>? MENJIJIKKAN! Yah, intinya ia menyuruh C Preprocessor untuk mengambil isi file lain dan menyisipkannya ke dalam kode tepat <em>di situ</em>.</p>
+<p>Tunggu—apa itu C Preprocessor? Pertanyaan bagus. Kompilasi punya dua tahap<a href="function-specifier-alignment-specifier-dan-operator.html#fn26" class="footnote-ref" id="fnref26" role="doc-noteref"><sup>26</sup></a>: preprocessor dan compiler. Apa pun yang diawali tanda pagar, simbol hash, atau “octothorpe” (<code>#</code>) akan diproses oleh preprocessor sebelum compiler mulai bekerja. <em>Directive</em> preprocessor yang umum adalah <code>#include</code> dan <code>#define</code>. Soal itu kita bahas nanti.</p>
+<p>Sebelum lanjut, kenapa repot-repot menyebut bahwa tanda pagar itu namanya octothorpe? Jawabannya sederhana: kata octothorpe itu terlalu lucu, jadi namanya harus disebarkan setiap ada kesempatan. Octothorpe. Octothorpe, octothorpe, octothorpe.</p>
+<p>Nah, <em>anyway</em>. Setelah C preprocessor selesai memproses semuanya, hasilnya siap diambil compiler untuk dijadikan <a href="https://en.wikipedia.org/wiki/Assembly_language">kode assembly</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn27" class="footnote-ref" id="fnref27" role="doc-noteref"><sup>27</sup></a>, <a href="https://en.wikipedia.org/wiki/Machine_code">machine code</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn28" class="footnote-ref" id="fnref28" role="doc-noteref"><sup>28</sup></a>, atau apa pun yang dikerjakannya. Machine code adalah “bahasa” yang dipahami CPU, dan CPU memahaminya <em>dengan sangat cepat</em>. Ini salah satu alasan program C cenderung cepat.</p>
+<p>Untuk sekarang, jangan pusingkan detail teknis kompilasi; cukup ketahui bahwa source-mu dilewatkan ke preprocessor, lalu outputnya dilewatkan ke compiler, yang kemudian menghasilkan executable untuk kamu jalankan.</p>
+<p>Bagaimana dengan sisa barisnya? Apa itu <code>&lt;stdio.h&gt;</code>? Itulah yang disebut <em>header file</em>. Ekstensi .h di akhir nama file jadi penandanya. Yang satu ini header file “Standard I/O” (<code>stdio</code>), yang nantinya akan akrab dan kamu sukai. Header ini memberi kita akses ke berbagai fungsi I/O<a href="function-specifier-alignment-specifier-dan-operator.html#fn29" class="footnote-ref" id="fnref29" role="doc-noteref"><sup>29</sup></a>. Program demo kita mengeluarkan string “Hello, World!”, jadi kita perlu akses ke fungsi <code>printf()</code>. File <code>&lt;stdio.h&gt;</code> memberi kita akses itu. Intinya, kalau kita memakai <code>printf()</code> tanpa <code>#include &lt;stdio.h&gt;</code>, compiler akan protes.</p>
+<p>Dari mana tahu bahwa <code>printf()</code> butuh <code>#include &lt;stdio.h&gt;</code>? Jawabannya: dokumentasi. Di sistem Unix, ketik <code>man 3 printf</code> dan di bagian paling atas halaman man akan tertulis header file apa yang diperlukan. Atau lihat bagian referensi di buku ini. <code>:-)</code> </p>
+<p>Astaga. Semua itu hanya untuk membahas baris pertama! Tapi harus diakui, baris itu sudah dibedah tuntas. Tidak ada misteri yang tersisa!</p>
+<p>Jadi tarik napas dulu…lalu lihat lagi kode contohnya. Tinggal beberapa baris mudah.</p>
+<p>Selamat datang kembali! Penulis tahu kamu sebenarnya tidak istirahat; tadi hanya menuruti kemauanmu.</p>
+<p>Baris berikutnya adalah <code>main()</code>. Ini definisi fungsi <code>main()</code>; semua yang ada di antara kurung kurawal (<code>{</code> dan <code>}</code>) adalah bagian dari definisi fungsi tersebut.</p>
+<p>(Lalu bagaimana cara <em>memanggil</em> fungsi lain? Jawabannya ada di baris <code>printf()</code>, yang sebentar lagi kita bahas.)</p>
+<p>Fungsi <code>main</code> istimewa dalam banyak hal, tapi satu hal mengalahkan yang lain: fungsi inilah yang dipanggil otomatis ketika programmu mulai berjalan. Tidak ada kodemu yang dipanggil sebelum <code>main()</code>. Untuk contoh kita, ini tidak jadi masalah karena kita hanya ingin mencetak satu baris lalu keluar.</p>
+<p>Oh ya, satu lagi: begitu eksekusi program melewati ujung <code>main()</code>, yaitu di kurung kurawal penutup di bawah sana, program akan keluar dan kamu kembali ke command prompt.</p>
+<p>Jadi sekarang kita tahu bahwa program itu mengambil sebuah header file, <code>stdio.h</code>, dan mendeklarasikan fungsi <code>main()</code> yang dijalankan saat program dimulai. Apa saja isi menarik di dalam <code>main()</code>?</p>
+<p>Senang sekali kamu bertanya. Sungguh! Isinya hanya satu: pemanggilan fungsi <code>printf()</code>. Kamu bisa membedakan pemanggilan fungsi dari definisi fungsi dengan beberapa cara, salah satunya adalah tidak adanya kurung kurawal setelahnya. Pemanggilan fungsi diakhiri titik koma supaya compiler tahu ekspresinya sudah selesai. Kamu akan menaruh titik koma di akhir hampir segalanya, seperti yang akan terlihat nanti.</p>
+<p>Kamu mengoper satu argumen ke fungsi <code>printf()</code>: sebuah string yang akan dicetak saat fungsi dipanggil. Oh, ya—kita memanggil fungsi! Keren! Tunggu, tunggu—jangan sombong. Apa itu <code>\n</code> yang aneh di ujung string? Begini: sebagian besar karakter dalam string tercetak persis seperti yang tersimpan. Tapi ada karakter tertentu yang sulit ditampilkan di layar, sehingga ditulis sebagai kode backslash dua karakter. Salah satu yang paling populer adalah <code>\n</code> (dibaca “backslash-N” atau cukup “newline”), yang mewakili karakter <em>newline</em>. Karakter ini membuat pencetakan berikutnya dilanjutkan di awal baris selanjutnya, bukan di baris yang sama. Mirip menekan Enter di akhir baris.</p>
+<p>Sekarang salin kode itu ke file bernama <code>hello.c</code> lalu build. Di platform mirip Unix (misalnya Linux, BSD, Mac, atau WSL), dari command line kamu bisa build dengan perintah seperti ini:</p>
+<p></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb3-1"><a href="hello-world.html#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> hello hello.c</span></code></pre></div>
+<p>(Artinya: “kompilasi <code>hello.c</code>, dan hasilkan executable bernama <code>hello</code>”.)</p>
+<p>Setelah selesai, kamu akan punya file bernama <code>hello</code> yang bisa dijalankan dengan perintah ini:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb4-1"><a href="hello-world.html#cb4-1" aria-hidden="true" tabindex="-1"></a>./hello</span></code></pre></div>
+<p>(Awalan <code>./</code> memberi tahu shell untuk “jalankan dari direktori saat ini”.)</p>
+<p>Lihat apa yang terjadi:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode default"><code class="sourceCode default"><span id="cb5-1"><a href="hello-world.html#cb5-1" aria-hidden="true" tabindex="-1"></a>Hello, World! </span></code></pre></div>
+<p>Selesai dan sudah teruji! Kirim!</p>
+<h2 data-number="2.3" id="detail-kompilasi"><span class="header-section-number">2.3</span> Detail Kompilasi</h2>
+<p>Mari kita bahas lebih jauh cara membangun program C dan apa yang terjadi di balik layar.</p>
+<p>Seperti bahasa lain, C punya <em>kode sumber</em>. Tapi tergantung bahasa asalmu, mungkin kamu belum pernah harus <em>mengompilasi</em> kode sumber menjadi <em>executable</em>.</p>
+<p>Kompilasi adalah proses mengubah kode sumber C menjadi program yang bisa dijalankan oleh sistem operasi.</p>
+<p>Developer JavaScript dan Python tidak terbiasa dengan langkah kompilasi yang terpisah—padahal di balik layar kompilasi tetap terjadi! Python mengompilasi kode sumbermu menjadi <em>bytecode</em> yang dijalankan oleh mesin virtual Python. Developer Java sudah terbiasa dengan kompilasi, tapi hasilnya adalah bytecode untuk Java Virtual Machine.</p>
+<p>Kompilasi C menghasilkan <em>machine code</em>: deretan 1 dan 0 yang langsung dan cepat dieksekusi oleh CPU.</p>
+<blockquote>
+<p>Bahasa yang biasanya tidak dikompilasi disebut bahasa <em>interpreted</em>. Tapi seperti yang sudah disinggung soal Java dan Python, bahasa-bahasa itu juga punya langkah kompilasi. Dan tidak ada aturan yang melarang C diinterpretasikan. (Interpreter C itu ada!) Singkatnya, semua ini area abu-abu. Secara umum, kompilasi hanyalah mengubah kode sumber menjadi bentuk lain yang lebih mudah dieksekusi.</p>
+</blockquote>
+<p>C compiler adalah program yang melakukan kompilasi.</p>
+<p>Seperti sudah disebutkan, <code>gcc</code> adalah compiler yang terpasang di banyak <a href="https://en.wikipedia.org/wiki/Unix">sistem operasi mirip Unix</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn30" class="footnote-ref" id="fnref30" role="doc-noteref"><sup>30</sup></a>. Biasanya ia dijalankan dari command line di terminal, tapi tidak selalu. Kamu juga bisa menjalankannya dari IDE.</p>
+<p>Jadi, bagaimana cara build lewat command line?</p>
+<h2 data-number="2.4" id="build-dengan-gcc"><span class="header-section-number">2.4</span> Build dengan <code>gcc</code></h2>
+<p>Kalau kamu punya file sumber bernama <code>hello.c</code> di direktori saat ini, kamu bisa membangunnya menjadi program bernama <code>hello</code> dengan mengetik perintah ini di terminal:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb6-1"><a href="hello-world.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> hello hello.c</span></code></pre></div>
+<p><code>-o</code> berarti “output ke file ini”<a href="function-specifier-alignment-specifier-dan-operator.html#fn31" class="footnote-ref" id="fnref31" role="doc-noteref"><sup>31</sup></a>. Lalu <code>hello.c</code> di akhir adalah nama file yang ingin dikompilasi.</p>
+<p>Kalau sumbermu terbagi menjadi beberapa file, kamu bisa mengompilasi semuanya sekaligus (hampir seperti satu file, meski aturan sebenarnya lebih rumit) dengan menuliskan semua file <code>.c</code> di command line:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb7-1"><a href="hello-world.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-o</span> awesomegame ui.c characters.c npc.c items.c</span></code></pre></div>
+<p></p>
+<p>dan semuanya akan dibangun menjadi satu executable besar.</p>
+<p>Itu cukup untuk memulai—nanti kita akan membahas detail soal banyak file sumber, object file, dan segala macam hal menarik lainnya.</p>
+<h2 data-number="2.5" id="build-dengan-clang"><span class="header-section-number">2.5</span> Build dengan <code>clang</code></h2>
+<p>Di Mac, compiler bawaannya bukan <code>gcc</code>, melainkan <code>clang</code>. Tapi ada wrapper yang ikut terpasang, jadi menjalankan <code>gcc</code> tetap berfungsi.</p>
+<p>Kamu juga bisa memasang compiler <code>gcc</code> yang asli lewat <a href="https://formulae.brew.sh/formula/gcc">Homebrew</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn32" class="footnote-ref" id="fnref32" role="doc-noteref"><sup>32</sup></a> atau cara lain.</p>
+<h2 data-number="2.6" id="build-dari-ide"><span class="header-section-number">2.6</span> Build dari IDE</h2>
+<p>Kalau kamu memakai <em>Integrated Development Environment</em> (IDE), kemungkinan besar kamu tidak perlu build dari command line.</p>
+<p>Di Visual Studio, <code>CTRL-F7</code> untuk build dan <code>CTRL-F5</code> untuk run.</p>
+<p>Di VS Code, tekan <code>F5</code> untuk run lewat debugger. (Kamu perlu memasang C/C++ Extension.)</p>
+<p>Di XCode, build dengan <code>COMMAND-B</code> dan run dengan <code>COMMAND-R</code>. Untuk mendapatkan command line tools, cari “XCode command line tools” dan kamu akan menemukan petunjuk pemasangannya.</p>
+<p>Sebagai permulaan, ada baiknya juga mencoba build lewat command line—itu bagian dari sejarahnya!</p>
+<h2 data-number="2.7" id="versi-c"><span class="header-section-number">2.7</span> Versi C</h2>
+<p>C sudah berkembang jauh selama bertahun-tahun, dan punya banyak nomor versi untuk menyebut dialek bahasa yang sedang dipakai.</p>
+<p>Nomor ini biasanya merujuk ke tahun spesifikasinya.</p>
+<p>Versi yang paling terkenal ialah C89, C99, C11, dan C23. Buku ini berfokus pada yang terakhir.</p>
+<p>Berikut tabel yang lebih lengkap:</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr>
+<th>Versi</th>
+<th>Deskripsi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K&amp;R C</td>
+<td>1978, yang asli. Dinamai dari Brian Kernighan dan Dennis Ritchie. Ritchie merancang bahasa dan menulis kodenya, sementara Kernighan ikut menulis bukunya. Kode K&amp;R asli jarang ditemui sekarang. Kalaupun ada, kodenya akan terlihat aneh, seperti Bahasa Inggris Pertengahan bagi pembaca Inggris modern.</td>
+</tr>
+<tr>
+<td><strong>C89</strong>, ANSI C, C90</td>
+<td>Pada 1989, American National Standards Institute (ANSI) menerbitkan spesifikasi bahasa C yang menentukan corak C hingga hari ini. Setahun kemudian, kendali diserahkan ke International Organization for Standardization (ISO), yang menerbitkan C90 yang identik.</td>
+</tr>
+<tr>
+<td>C95</td>
+<td>Tambahan pada C89 yang jarang disebut, berisi dukungan wide character.</td>
+</tr>
+<tr>
+<td><strong>C99</strong></td>
+<td>Perombakan besar pertama dengan banyak tambahan bahasa. Yang paling diingat orang adalah hadirnya komentar gaya <code>//</code>. Saat tulisan ini dibuat, ini versi C yang paling populer dipakai.</td>
+</tr>
+<tr>
+<td><strong>C11</strong></td>
+<td>Pembaruan besar ini mencakup dukungan Unicode dan multi-threading. Ingat, kalau kamu mulai memakai fitur-fitur ini, portabilitas ke tempat-tempat yang masih terjebak di C99 bisa jadi korbannya. Tapi, jujur saja, 1999 sudah lama sekali.</td>
+</tr>
+<tr>
+<td>C17, C18</td>
+<td>Pembaruan perbaikan bug untuk C11. C17 tampaknya nama resminya, tapi penerbitannya tertunda sampai 2018. Setahu penulis, keduanya bisa dipertukarkan, dan C17 lebih disukai.</td>
+</tr>
+<tr>
+<td>C23</td>
+<td>Spesifikasi terbaru.</td>
+</tr>
+</tbody>
+</table>
+<p>Kamu bisa memaksa GCC memakai salah satu standar ini lewat argumen command line <code>-std=</code>. Kalau ingin ketat mengikuti standar, tambahkan <code>-pedantic</code>.</p>
+<p>Misalnya:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb8-1"><a href="hello-world.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-std</span><span class="op">=</span>c11 <span class="at">-pedantic</span> foo.c</span></code></pre></div>
+<p>Untuk buku ini, program dikompilasi sebagai C23 dengan semua peringatan diaktifkan:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode zsh"><code class="sourceCode zsh"><span id="cb9-1"><a href="hello-world.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> <span class="at">-Wextra</span> <span class="at">-std</span><span class="op">=</span>c23 <span class="at">-pedantic</span> foo.c</span></code></pre></div>
+<p></p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="kata-pengantar.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="variabel-dan-pernyataan.html" rel="next">Next</a></span></div></body>
+</html>

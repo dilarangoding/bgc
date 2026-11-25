@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span><a href="strings.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="inputoutput-file.html" rel="next">Next</a></span></div><hr>
+<h1 data-number="8" id="structs"><span class="header-section-number">8</span> Structs</h1>
+<p> Di C ada yang disebut <code>struct</code>, yaitu tipe yang bisa didefinisikan sendiri oleh pengguna dan menyimpan beberapa data sekaligus, yang bisa saja bertipe berbeda-beda.</p>
+<p>Ini cara praktis untuk membungkus beberapa variabel menjadi satu. Dengan begitu, mengoper variabel ke fungsi jadi lebih ringkas (cukup satu yang dioper, bukan banyak), data lebih rapi, dan kode lebih mudah dibaca.</p>
+<p>Kalau kamu berasal dari bahasa lain, mungkin kamu sudah akrab dengan konsep <em>class</em> dan <em>object</em>. Keduanya tidak ada di C secara bawaan<a href="function-specifier-alignment-specifier-dan-operator.html#fn68" class="footnote-ref" id="fnref68" role="doc-noteref"><sup>68</sup></a>. Kamu bisa membayangkan <code>struct</code> sebagai class yang hanya punya data member, tanpa method.</p>
+<h2 data-number="8.1" id="mendeklarasikan-struct"><span class="header-section-number">8.1</span> Mendeklarasikan Struct</h2>
+<p> Sebuah <code>struct</code> bisa dideklarasikan di kodemu seperti ini:</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb132-1"><a href="structs.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> car <span class="op">{</span></span>
+<span id="cb132-2"><a href="structs.html#cb132-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb132-3"><a href="structs.html#cb132-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> price<span class="op">;</span></span>
+<span id="cb132-4"><a href="structs.html#cb132-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> speed<span class="op">;</span></span>
+<span id="cb132-5"><a href="structs.html#cb132-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span></code></pre></div>
+<p>Ini sering dilakukan di scope global, di luar semua fungsi, supaya <code>struct</code> itu tersedia secara global.</p>
+<p>Dengan begitu, kamu membuat sebuah <em>tipe</em> baru. Nama lengkap tipenya adalah <code>struct car</code>. (Bukan sekadar <code>car</code>—itu tidak akan berfungsi.)</p>
+<p>Belum ada variabel bertipe itu, tapi kita bisa mendeklarasikannya:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb133-1"><a href="structs.html#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> car saturn<span class="op">;</span>  <span class="co">// Variabel &quot;saturn&quot; bertipe &quot;struct car&quot;</span></span></code></pre></div>
+<p>Sekarang kita punya variabel <code>saturn</code><a href="function-specifier-alignment-specifier-dan-operator.html#fn69" class="footnote-ref" id="fnref69" role="doc-noteref"><sup>69</sup></a> yang belum diinisialisasi, bertipe <code>struct car</code>.</p>
+<p>Sebaiknya kita inisialisasi! Tapi bagaimana cara mengisi nilai masing-masing field-nya?</p>
+<p>Seperti di banyak bahasa lain yang mencurinya dari C, kita memakai operator titik (<code>.</code>) untuk mengakses tiap field.</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb134-1"><a href="structs.html#cb134-1" aria-hidden="true" tabindex="-1"></a>saturn<span class="op">.</span>name <span class="op">=</span> <span class="st">&quot;Saturn SL/2&quot;</span><span class="op">;</span></span>
+<span id="cb134-2"><a href="structs.html#cb134-2" aria-hidden="true" tabindex="-1"></a>saturn<span class="op">.</span>price <span class="op">=</span> <span class="fl">15999.99</span><span class="op">;</span></span>
+<span id="cb134-3"><a href="structs.html#cb134-3" aria-hidden="true" tabindex="-1"></a>saturn<span class="op">.</span>speed <span class="op">=</span> <span class="dv">175</span><span class="op">;</span></span>
+<span id="cb134-4"><a href="structs.html#cb134-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb134-5"><a href="structs.html#cb134-5" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Name:           </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>name<span class="op">);</span></span>
+<span id="cb134-6"><a href="structs.html#cb134-6" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Price (USD):    </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>price<span class="op">);</span></span>
+<span id="cb134-7"><a href="structs.html#cb134-7" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Top Speed (km): </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>speed<span class="op">);</span></span></code></pre></div>
+<p>Di baris-baris awal, kita mengisi nilai-nilai di <code>struct car</code>, lalu di bagian berikutnya kita mencetak nilai-nilai itu. </p>
+<h2 data-number="8.2" id="struct-initializers"><span class="header-section-number">8.2</span> Struct Initializer</h2>
+<p> Contoh di bagian sebelumnya agak merepotkan. Pasti ada cara yang lebih baik untuk menginisialisasi variabel <code>struct</code> itu!</p>
+<p>Kamu bisa memakai initializer dengan mengisi nilai untuk field-field-nya <em>sesuai urutan kemunculannya di <code>struct</code></em> saat mendefinisikan variabel. (Ini tidak bisa dilakukan setelah variabelnya didefinisikan—harus terjadi saat definisi.)</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb135-1"><a href="structs.html#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> car <span class="op">{</span></span>
+<span id="cb135-2"><a href="structs.html#cb135-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb135-3"><a href="structs.html#cb135-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">float</span> price<span class="op">;</span></span>
+<span id="cb135-4"><a href="structs.html#cb135-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> speed<span class="op">;</span></span>
+<span id="cb135-5"><a href="structs.html#cb135-5" aria-hidden="true" tabindex="-1"></a><span class="op">};</span></span>
+<span id="cb135-6"><a href="structs.html#cb135-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-7"><a href="structs.html#cb135-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Sekarang dengan initializer! Urutan field sama seperti di deklarasi struct:</span></span>
+<span id="cb135-8"><a href="structs.html#cb135-8" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> car saturn <span class="op">=</span> <span class="op">{</span><span class="st">&quot;Saturn SL/2&quot;</span><span class="op">,</span> <span class="fl">16000.99</span><span class="op">,</span> <span class="dv">175</span><span class="op">};</span></span>
+<span id="cb135-9"><a href="structs.html#cb135-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb135-10"><a href="structs.html#cb135-10" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Name:      </span><span class="sc">%s\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>name<span class="op">);</span></span>
+<span id="cb135-11"><a href="structs.html#cb135-11" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Price:     </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>price<span class="op">);</span></span>
+<span id="cb135-12"><a href="structs.html#cb135-12" aria-hidden="true" tabindex="-1"></a>printf<span class="op">(</span><span class="st">&quot;Top Speed: </span><span class="sc">%d</span><span class="st"> km</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>speed<span class="op">);</span></span></code></pre></div>
+<p>Fakta bahwa field di initializer harus berurutan sama itu agak menyeramkan. Kalau ada yang mengubah urutan di <code>struct car</code>, semua kode lain bisa rusak!</p>
+<p>Kita bisa lebih spesifik dengan initializer:</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb136-1"><a href="structs.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> car saturn <span class="op">=</span> <span class="op">{.</span>speed<span class="op">=</span><span class="dv">175</span><span class="op">,</span> <span class="op">.</span>name<span class="op">=</span><span class="st">&quot;Saturn SL/2&quot;</span><span class="op">};</span></span></code></pre></div>
+<p>Sekarang initializer tidak bergantung pada urutan di deklarasi <code>struct</code>. Kode seperti ini jelas lebih aman.</p>
+<p>Seperti pada array initializer, field designator yang tidak disebutkan akan diinisialisasi dengan nol (di sini yaitu <code>.price</code>, yang sengaja dihilangkan). </p>
+<h2 data-number="8.3" id="mengoper-struct-ke-fungsi"><span class="header-section-number">8.3</span> Mengoper Struct ke Fungsi</h2>
+<p> Ada dua cara untuk mengoper <code>struct</code> ke fungsi.</p>
+<ol type="1">
+<li>Oper <code>struct</code>-nya.</li>
+<li>Oper pointer ke <code>struct</code>-nya.</li>
+</ol>
+<p>Ingat bahwa ketika sesuatu dioper ke fungsi, sebuah <em>salinan</em> dari sesuatu itu dibuat untuk dikerjakan oleh fungsi, baik itu salinan pointer, <code>int</code>, <code>struct</code>, atau apa pun.</p>
+<p>Pada dasarnya ada dua keadaan ketika kamu ingin mengoper pointer ke <code>struct</code>:</p>
+<ol type="1">
+<li>Fungsi perlu bisa mengubah <code>struct</code> yang dioper, dan perubahannya harus terlihat di caller.</li>
+<li><code>struct</code>-nya cukup besar sehingga menyalinnya ke stack lebih mahal daripada menyalin sebuah pointer<a href="function-specifier-alignment-specifier-dan-operator.html#fn70" class="footnote-ref" id="fnref70" role="doc-noteref"><sup>70</sup></a>.</li>
+</ol>
+<p>Karena dua alasan itu, jauh lebih umum mengoper pointer ke <code>struct</code> ke fungsi, walaupun mengoper <code>struct</code>-nya langsung sama sekali tidak dilarang.</p>
+<p>Mari kita coba mengoper pointer, dengan membuat fungsi yang memungkinkan kita mengisi field <code>.price</code> dari <code>struct car</code>:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode numberSource c numberLines"><code class="sourceCode c"><span id="cb137-1"><a href="structs.html#cb137-1" aria-label="1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb137-2"><a href="structs.html#cb137-2" aria-label="2"></a></span>
+<span id="cb137-3"><a href="structs.html#cb137-3" aria-label="3"></a><span class="kw">struct</span> car <span class="op">{</span></span>
+<span id="cb137-4"><a href="structs.html#cb137-4" aria-label="4"></a>    <span class="dt">char</span> <span class="op">*</span>name<span class="op">;</span></span>
+<span id="cb137-5"><a href="structs.html#cb137-5" aria-label="5"></a>    <span class="dt">float</span> price<span class="op">;</span></span>
+<span id="cb137-6"><a href="structs.html#cb137-6" aria-label="6"></a>    <span class="dt">int</span> speed<span class="op">;</span></span>
+<span id="cb137-7"><a href="structs.html#cb137-7" aria-label="7"></a><span class="op">};</span></span>
+<span id="cb137-8"><a href="structs.html#cb137-8" aria-label="8"></a></span>
+<span id="cb137-9"><a href="structs.html#cb137-9" aria-label="9"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">void</span><span class="op">)</span></span>
+<span id="cb137-10"><a href="structs.html#cb137-10" aria-label="10"></a><span class="op">{</span></span>
+<span id="cb137-11"><a href="structs.html#cb137-11" aria-label="11"></a>    <span class="kw">struct</span> car saturn <span class="op">=</span> <span class="op">{.</span>speed<span class="op">=</span><span class="dv">175</span><span class="op">,</span> <span class="op">.</span>name<span class="op">=</span><span class="st">&quot;Saturn SL/2&quot;</span><span class="op">};</span></span>
+<span id="cb137-12"><a href="structs.html#cb137-12" aria-label="12"></a></span>
+<span id="cb137-13"><a href="structs.html#cb137-13" aria-label="13"></a>    <span class="co">// Oper pointer ke struct car ini, beserta harga baru yang</span></span>
+<span id="cb137-14"><a href="structs.html#cb137-14" aria-label="14"></a>    <span class="co">// lebih realistis:</span></span>
+<span id="cb137-15"><a href="structs.html#cb137-15" aria-label="15"></a>    set_price<span class="op">(&amp;</span>saturn<span class="op">,</span> <span class="fl">799.99</span><span class="op">);</span></span>
+<span id="cb137-16"><a href="structs.html#cb137-16" aria-label="16"></a></span>
+<span id="cb137-17"><a href="structs.html#cb137-17" aria-label="17"></a>    printf<span class="op">(</span><span class="st">&quot;Price: </span><span class="sc">%f\n</span><span class="st">&quot;</span><span class="op">,</span> saturn<span class="op">.</span>price<span class="op">);</span></span>
+<span id="cb137-18"><a href="structs.html#cb137-18" aria-label="18"></a><span class="op">}</span></span></code></pre></div>
+<p>Kamu seharusnya bisa menyusun signature <code>set_price()</code> hanya dengan melihat tipe argumen yang kita punya di sana.</p>
+<p><code>saturn</code> adalah <code>struct car</code>, jadi <code>&amp;saturn</code> pasti alamat dari <code>struct car</code>, alias pointer ke <code>struct car</code>, yaitu <code>struct car*</code>.</p>
+<p>Dan <code>799.99</code> adalah <code>float</code>.</p>
+<p>Jadi deklarasi fungsinya pasti seperti ini:</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb138-1"><a href="structs.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> set_price<span class="op">(</span><span class="kw">struct</span> car <span class="op">*</span>c<span class="op">,</span> <span class="dt">float</span> new_price<span class="op">)</span></span></code></pre></div>
+<p>Tinggal menulis badannya. Satu percobaan mungkin begini:</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb139-1"><a href="structs.html#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> set_price<span class="op">(</span><span class="kw">struct</span> car <span class="op">*</span>c<span class="op">,</span> <span class="dt">float</span> new_price<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb139-2"><a href="structs.html#cb139-2" aria-hidden="true" tabindex="-1"></a>    c<span class="op">.</span>price <span class="op">=</span> new_price<span class="op">;</span>  <span class="co">// ERROR!!</span></span>
+<span id="cb139-3"><a href="structs.html#cb139-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Itu tidak akan berhasil karena operator titik hanya bekerja pada <code>struct</code>… bukan pada <em>pointer</em> ke <code>struct</code>.</p>
+<p>Oke, jadi kita bisa men-dereference variabel <code>c</code> untuk “de-pointer”-nya agar sampai ke <code>struct</code>-nya. Men-dereference <code>struct car*</code> menghasilkan <code>struct car</code> yang ditunjuk pointer itu, yang seharusnya bisa kita beri operator titik:</p>
+<div class="sourceCode" id="cb140"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb140-1"><a href="structs.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> set_price<span class="op">(</span><span class="kw">struct</span> car <span class="op">*</span>c<span class="op">,</span> <span class="dt">float</span> new_price<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb140-2"><a href="structs.html#cb140-2" aria-hidden="true" tabindex="-1"></a>    <span class="op">(*</span>c<span class="op">).</span>price <span class="op">=</span> new_price<span class="op">;</span>  <span class="co">// Berfungsi, tapi jelek dan tidak idiomatis :(</span></span>
+<span id="cb140-3"><a href="structs.html#cb140-3" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Dan itu berhasil! Tapi mengetik semua tanda kurung dan asterisk itu agak merepotkan. C punya syntactic sugar bernama <em>arrow operator</em> yang membantu soal ini. </p>
+<h2 data-number="8.4" id="arrow-operator"><span class="header-section-number">8.4</span> Arrow Operator</h2>
+<p> Arrow operator membantu merujuk ke field pada pointer ke <code>struct</code>.</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb141-1"><a href="structs.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="dt">void</span> set_price<span class="op">(</span><span class="kw">struct</span> car <span class="op">*</span>c<span class="op">,</span> <span class="dt">float</span> new_price<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb141-2"><a href="structs.html#cb141-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">// (*c).price = new_price;  // Berfungsi, tapi tidak idiomatis :(</span></span>
+<span id="cb141-3"><a href="structs.html#cb141-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">//</span></span>
+<span id="cb141-4"><a href="structs.html#cb141-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Baris di atas 100% setara dengan baris di bawah:</span></span>
+<span id="cb141-5"><a href="structs.html#cb141-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb141-6"><a href="structs.html#cb141-6" aria-hidden="true" tabindex="-1"></a>    c<span class="op">-&gt;</span>price <span class="op">=</span> new_price<span class="op">;</span>  <span class="co">// Nah, yang ini!</span></span>
+<span id="cb141-7"><a href="structs.html#cb141-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Jadi saat mengakses field, kapan memakai titik dan kapan memakai panah?</p>
+<ul>
+<li>Kalau kamu punya <code>struct</code>, pakai titik (<code>.</code>).</li>
+<li>Kalau kamu punya pointer ke <code>struct</code>, pakai panah (<code>-&gt;</code>). </li>
+</ul>
+<h2 data-number="8.5" id="menyalin-dan-mengembalikan-struct"><span class="header-section-number">8.5</span> Menyalin dan Mengembalikan <code>struct</code></h2>
+<p> Yang ini gampang!</p>
+<p>Tinggal tugaskan satu ke yang lain!</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb142-1"><a href="structs.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="kw">struct</span> car a<span class="op">,</span> b<span class="op">;</span></span>
+<span id="cb142-2"><a href="structs.html#cb142-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb142-3"><a href="structs.html#cb142-3" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> a<span class="op">;</span>  <span class="co">// Salin struct-nya</span></span></code></pre></div>
+<p>Mengembalikan <code>struct</code> (bukan pointer ke <code>struct</code>) dari sebuah fungsi juga membuat salinan serupa ke variabel penerimanya.</p>
+<p>Ini bukan “deep copy”<a href="function-specifier-alignment-specifier-dan-operator.html#fn71" class="footnote-ref" id="fnref71" role="doc-noteref"><sup>71</sup></a>. Semua field disalin apa adanya, termasuk pointer ke sesuatu. </p>
+<h2 data-number="8.6" id="membandingkan-struct"><span class="header-section-number">8.6</span> Membandingkan <code>struct</code></h2>
+<p> Hanya ada satu cara yang aman: bandingkan setiap field satu per satu.</p>
+<p>Mungkin kamu mengira bisa memakai <a href="https://beej.us/guide/bgclr/html/split/stringref.html#man-strcmp"><code>memcmp()</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn72" class="footnote-ref" id="fnref72" role="doc-noteref"><sup>72</sup></a>, tapi itu tidak menangani kemungkinan adanya <a href="struct-ii-lebih-seru-dengan-struct.html#struct-padding-bytes">padding byte</a> di dalamnya.</p>
+<p>Kalau <code>struct</code> dikosongkan dulu dengan nol memakai <a href="https://beej.us/guide/bgclr/html/split/stringref.html#man-memset"><code>memset()</code></a><a href="function-specifier-alignment-specifier-dan-operator.html#fn73" class="footnote-ref" id="fnref73" role="doc-noteref"><sup>73</sup></a>, hasilnya <em>mungkin</em> berhasil, tapi masih ada elemen aneh yang <a href="https://stackoverflow.com/questions/141720/how-do-you-compare-structs-for-equality-in-c">mungkin tidak dibandingkan seperti yang kamu harapkan</a><a href="function-specifier-alignment-specifier-dan-operator.html#fn74" class="footnote-ref" id="fnref74" role="doc-noteref"><sup>74</sup></a>. </p>
+<!-- BG_NEW_CHAPTER -->
+<!-- Beej's guide to C
+
+# vim: ts=4:sw=4:nosi:et:tw=72
+-->
+<hr><div style="text-align:center"><span><a href="strings.html" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="inputoutput-file.html" rel="next">Next</a></span></div></body>
+</html>

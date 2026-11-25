@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Beej's Guide to C Programming</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <!-- Generated by the mklightdark script -->
+  <!-- Modify that script to change syntax highlighting -->
+    <style>
+     @media (prefers-color-scheme: light) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          color: #aaaaaa;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+      div.sourceCode
+        {   }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+      code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+      code span.at { color: #7d9029; } /* Attribute */
+      code span.bn { color: #40a070; } /* BaseN */
+      code span.bu { color: #008000; } /* BuiltIn */
+      code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #4070a0; } /* Char */
+      code span.cn { color: #880000; } /* Constant */
+      code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+      code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+      code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+      code span.dt { color: #902000; } /* DataType */
+      code span.dv { color: #40a070; } /* DecVal */
+      code span.er { color: #ff0000; font-weight: bold; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #40a070; } /* Float */
+      code span.fu { color: #06287e; } /* Function */
+      code span.im { color: #008000; font-weight: bold; } /* Import */
+      code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+      code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+      code span.op { color: #666666; } /* Operator */
+      code span.ot { color: #007020; } /* Other */
+      code span.pp { color: #bc7a00; } /* Preprocessor */
+      code span.sc { color: #4070a0; } /* SpecialChar */
+      code span.ss { color: #bb6688; } /* SpecialString */
+      code span.st { color: #4070a0; } /* String */
+      code span.va { color: #19177c; } /* Variable */
+      code span.vs { color: #4070a0; } /* VerbatimString */
+      code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+      }
+    </style>
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #1a1a1a;
+        background-color: #fdfdfd;
+      }
+      body {
+        margin: 0 auto;
+        max-width: 36em;
+        padding-left: 50px;
+        padding-right: 50px;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        hyphens: auto;
+        overflow-wrap: break-word;
+        text-rendering: optimizeLegibility;
+        font-kerning: normal;
+      }
+      @media (max-width: 600px) {
+        body {
+          font-size: 0.9em;
+          padding: 12px;
+        }
+        h1 {
+          font-size: 1.8em;
+        }
+      }
+      @media print {
+        html {
+          background-color: white;
+        }
+        body {
+          background-color: transparent;
+          color: black;
+          font-size: 12pt;
+        }
+        p, h2, h3 {
+          orphans: 3;
+          widows: 3;
+        }
+        h2, h3, h4 {
+          page-break-after: avoid;
+        }
+      }
+      p {
+        margin: 1em 0;
+      }
+      a {
+        color: #1a1a1a;
+      }
+      a:visited {
+        color: #1a1a1a;
+      }
+      img {
+        max-width: 100%;
+      }
+      svg {
+        height: auto;
+        max-width: 100%;
+      }
+      h1, h2, h3, h4, h5, h6 {
+        margin-top: 1.4em;
+      }
+      h5, h6 {
+        font-size: 1em;
+        font-style: italic;
+      }
+      h6 {
+        font-weight: normal;
+      }
+      ol, ul {
+        padding-left: 1.7em;
+        margin-top: 1em;
+      }
+      li > ol, li > ul {
+        margin-top: 0;
+      }
+      blockquote {
+        margin: 1em 0 1em 1.7em;
+        padding-left: 1em;
+        border-left: 2px solid #e6e6e6;
+        color: #606060;
+      }
+      code {
+        font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+        font-size: 85%;
+        margin: 0;
+        hyphens: manual;
+      }
+      pre {
+        margin: 1em 0;
+        overflow: auto;
+      }
+      pre code {
+        padding: 0;
+        overflow: visible;
+        overflow-wrap: normal;
+      }
+      .sourceCode {
+       background-color: transparent;
+       overflow: visible;
+      }
+      hr {
+        background-color: #1a1a1a;
+        border: none;
+        height: 1px;
+        margin: 1em 0;
+      }
+      table {
+        margin: 1em 0;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: auto;
+        display: block;
+        font-variant-numeric: lining-nums tabular-nums;
+      }
+      table caption {
+        margin-bottom: 0.75em;
+      }
+      tbody {
+        margin-top: 0.5em;
+        border-top: 1px solid #1a1a1a;
+        border-bottom: 1px solid #1a1a1a;
+      }
+      th {
+        border-top: 1px solid #1a1a1a;
+        padding: 0.25em 0.5em 0.25em 0.5em;
+      }
+      td {
+        padding: 0.125em 0.5em 0.25em 0.5em;
+      }
+      header {
+        margin-bottom: 4em;
+        text-align: center;
+      }
+      #TOC li {
+        list-style: none;
+      }
+      #TOC ul {
+        padding-left: 1.3em;
+      }
+      #TOC > ul {
+        padding-left: 0;
+      }
+      #TOC a:not(:hover) {
+        text-decoration: none;
+      }
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      div.columns{display: flex; gap: min(4vw, 1.5em);}
+      div.column{flex: auto; overflow-x: auto;}
+      div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+      /* The extra [class] is a hack that increases specificity enough to
+         override a similar rule in reveal.js */
+      ul.task-list[class]{list-style: none;}
+      ul.task-list li input[type="checkbox"] {
+        font-size: inherit;
+        width: 0.8em;
+        margin: 0 0.8em 0.2em -1.6em;
+        vertical-align: middle;
+      }
+      .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+      /* CSS for syntax highlighting */
+      html { -webkit-text-size-adjust: 100%; }
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+        }
+      pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+      div.sourceCode
+        { color: #cccccc; background-color: #303030; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span.al { color: #ffcfaf; } /* Alert */
+      code span.an { color: #7f9f7f; font-weight: bold; } /* Annotation */
+      code span.at { } /* Attribute */
+      code span.bn { color: #dca3a3; } /* BaseN */
+      code span.bu { } /* BuiltIn */
+      code span.cf { color: #f0dfaf; } /* ControlFlow */
+      code span.ch { color: #dca3a3; } /* Char */
+      code span.cn { color: #dca3a3; font-weight: bold; } /* Constant */
+      code span.co { color: #7f9f7f; } /* Comment */
+      code span.cv { color: #7f9f7f; font-weight: bold; } /* CommentVar */
+      code span.do { color: #7f9f7f; } /* Documentation */
+      code span.dt { color: #dfdfbf; } /* DataType */
+      code span.dv { color: #dcdccc; } /* DecVal */
+      code span.er { color: #c3bf9f; } /* Error */
+      code span.ex { } /* Extension */
+      code span.fl { color: #c0bed1; } /* Float */
+      code span.fu { color: #efef8f; } /* Function */
+      code span.im { } /* Import */
+      code span.in { color: #7f9f7f; font-weight: bold; } /* Information */
+      code span.kw { color: #f0dfaf; } /* Keyword */
+      code span.op { color: #f0efd0; } /* Operator */
+      code span.ot { color: #efef8f; } /* Other */
+      code span.pp { color: #ffcfaf; font-weight: bold; } /* Preprocessor */
+      code span.sc { color: #dca3a3; } /* SpecialChar */
+      code span.ss { color: #cc9393; } /* SpecialString */
+      code span.st { color: #cc9393; } /* String */
+      code span.va { } /* Variable */
+      code span.vs { color: #cc9393; } /* VerbatimString */
+      code span.wa { color: #7f9f7f; font-weight: bold; } /* Warning */
+      }
+    </style>
+  <!-- Hand-rolled dark mode overrides for Pandoc's default CSS -->
+  <!-- Credit: GitHub user ardabbour -->
+    <style>
+     @media (prefers-color-scheme: dark) {
+      html {
+        color: #ddd;
+        background-color: #151515;
+      }
+      a {
+        color: #abb2bf;
+      }
+      a:visited {
+        color: #abb2bf;
+      }
+      hr {
+        background-color: #abb2bf;
+      }
+      table {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      th {
+        border-top: 1px solid #abb2bf;
+      }
+      tbody {
+        border-top: 1px solid #abb2bf;
+        border-bottom: 1px solid #abb2bf;
+      }
+      blockquote {
+        border-left: 2px solid #282c34;
+        color: #5c6370;
+      }
+      figure > embed {
+          filter: invert(0.8); /* yuck -- this part is Beej's fault*/
+      }
+     }
+    </style>
+  <!-- BG custom styling -->
+  <style type="text/css">
+  /* Fix for line numbers not visible */
+  pre.numberSource code > span {
+      left: -1em;
+  }
+  pre.numberSource {
+      margin-left: initial;
+  }
+
+  /* Put some space after the section numbers */
+  span.toc-section-number::after {
+      content: "\a0\a0\a0";  /* non-breaking whitespace */
+  }
+
+  /* Hide underlines on code number links */
+  pre > code.sourceCode > span > a:first-child::before {
+      text-decoration: none;
+  }
+
+  /* Color the source blocks */
+  div.sourceCode {
+      /* background-color: #f0f0f0; */
+  }
+
+  /* Fix iOS big text rendering issue */
+  pre > code.sourceCode > span {
+      display: initial;
+  }
+
+
+  /* Color the inline code */
+  code:not(.sourceCode) {
+      /* background: #f0f0f0; */
+      padding-left: 0.2em;
+      padding-right: 0.2em;
+      border-radius: 0.2em;
+  }
+
+  pre.sourceCode {
+      border: 1px solid #ccc;
+      padding: 0.5em;
+      border-radius: 0.2em;
+  }
+
+  /* Keep code tags from wrapping in tables */
+  tbody code {
+      white-space: nowrap;
+  }
+
+  /* Prevent hyphenation and hyphen breaks in code*/
+  code {
+      word-break: keep-all;
+  }
+
+  td {
+      vertical-align: top;
+  }
+
+  body {
+      font-size: 12pt;
+      max-width: 43em;
+      font-family: sans-serif;
+  }
+
+  html {
+      /* background: #f9f9f9; */
+  }
+
+  figure > embed {
+      max-width: 100%;
+  }
+
+  figure {
+      text-align: center;
+      margin-top: 2em;
+      margin-bottom: 2em;
+  }
+
+  figcaption {
+      font-size: 0.9em;
+      font-style: italic;
+      margin-top: 0.6em;
+  }
+
+  body {
+      counter-reset: figure-counter-major;
+      counter-reset: figure-counter-minor;
+  }
+
+  figure {
+      counter-increment: figure-counter-minor;
+  }
+
+  figcaption::before {
+      content: "Figure " counter(figure-counter-major) "." counter(figure-counter-minor) ": ";
+  }
+
+  blockquote {
+      border-left: 2px solid #bbb;
+      /*color: #444;*/
+  }
+
+  /* Contents */
+
+  nav[role="doc-toc"] > ul > li {
+    font-weight: bold;
+    margin-top: 1.2em;
+  }
+
+  nav[role="doc-toc"] > ul > li:first {
+    font-weight: bold;
+    margin-top: initial;
+  }
+
+  nav[role="doc-toc"] > ul > li > ul {
+    font-weight: normal;
+    margin-top: 0.3em;
+  }
+
+  /*
+  In multipage, we need to reset the figure counter to the chapter
+  number. Luckily, this is in the <h1 data-number> attribute. Unluckily,
+  there is no way to get this in a general way.
+
+  This doesn't work:
+
+    h1[data-number] {
+      counter-set: figure-counter-major attr(data-number);
+    }
+
+  Nor this:
+
+    h1[data-number] {
+      --figure-counter-major-value: attr(data-number);
+      counter-set: figure-counter-major var(--figure-counter-major-value);
+    }
+
+  So, dumbly, we have a bunch of rules for all these sections, up to the
+  maximum possible section.
+
+  Here's a program to generate them:
+
+    for (let i = 1; i < 100; i++)
+        console.log(`h1[data-number="${i}"]{counter-set:figure-counter-major ${i};counter-reset:figure-counter-minor;}`);
+
+  Note to self: never write a book with more than 99 frickin' chapters.
+  */
+
+  h1[data-number="1"]{counter-set:figure-counter-major 1;counter-reset:figure-counter-minor;}
+  h1[data-number="2"]{counter-set:figure-counter-major 2;counter-reset:figure-counter-minor;}
+  h1[data-number="3"]{counter-set:figure-counter-major 3;counter-reset:figure-counter-minor;}
+  h1[data-number="4"]{counter-set:figure-counter-major 4;counter-reset:figure-counter-minor;}
+  h1[data-number="5"]{counter-set:figure-counter-major 5;counter-reset:figure-counter-minor;}
+  h1[data-number="6"]{counter-set:figure-counter-major 6;counter-reset:figure-counter-minor;}
+  h1[data-number="7"]{counter-set:figure-counter-major 7;counter-reset:figure-counter-minor;}
+  h1[data-number="8"]{counter-set:figure-counter-major 8;counter-reset:figure-counter-minor;}
+  h1[data-number="9"]{counter-set:figure-counter-major 9;counter-reset:figure-counter-minor;}
+  h1[data-number="10"]{counter-set:figure-counter-major 10;counter-reset:figure-counter-minor;}
+  h1[data-number="11"]{counter-set:figure-counter-major 11;counter-reset:figure-counter-minor;}
+  h1[data-number="12"]{counter-set:figure-counter-major 12;counter-reset:figure-counter-minor;}
+  h1[data-number="13"]{counter-set:figure-counter-major 13;counter-reset:figure-counter-minor;}
+  h1[data-number="14"]{counter-set:figure-counter-major 14;counter-reset:figure-counter-minor;}
+  h1[data-number="15"]{counter-set:figure-counter-major 15;counter-reset:figure-counter-minor;}
+  h1[data-number="16"]{counter-set:figure-counter-major 16;counter-reset:figure-counter-minor;}
+  h1[data-number="17"]{counter-set:figure-counter-major 17;counter-reset:figure-counter-minor;}
+  h1[data-number="18"]{counter-set:figure-counter-major 18;counter-reset:figure-counter-minor;}
+  h1[data-number="19"]{counter-set:figure-counter-major 19;counter-reset:figure-counter-minor;}
+  h1[data-number="20"]{counter-set:figure-counter-major 20;counter-reset:figure-counter-minor;}
+  h1[data-number="21"]{counter-set:figure-counter-major 21;counter-reset:figure-counter-minor;}
+  h1[data-number="22"]{counter-set:figure-counter-major 22;counter-reset:figure-counter-minor;}
+  h1[data-number="23"]{counter-set:figure-counter-major 23;counter-reset:figure-counter-minor;}
+  h1[data-number="24"]{counter-set:figure-counter-major 24;counter-reset:figure-counter-minor;}
+  h1[data-number="25"]{counter-set:figure-counter-major 25;counter-reset:figure-counter-minor;}
+  h1[data-number="26"]{counter-set:figure-counter-major 26;counter-reset:figure-counter-minor;}
+  h1[data-number="27"]{counter-set:figure-counter-major 27;counter-reset:figure-counter-minor;}
+  h1[data-number="28"]{counter-set:figure-counter-major 28;counter-reset:figure-counter-minor;}
+  h1[data-number="29"]{counter-set:figure-counter-major 29;counter-reset:figure-counter-minor;}
+  h1[data-number="30"]{counter-set:figure-counter-major 30;counter-reset:figure-counter-minor;}
+  h1[data-number="31"]{counter-set:figure-counter-major 31;counter-reset:figure-counter-minor;}
+  h1[data-number="32"]{counter-set:figure-counter-major 32;counter-reset:figure-counter-minor;}
+  h1[data-number="33"]{counter-set:figure-counter-major 33;counter-reset:figure-counter-minor;}
+  h1[data-number="34"]{counter-set:figure-counter-major 34;counter-reset:figure-counter-minor;}
+  h1[data-number="35"]{counter-set:figure-counter-major 35;counter-reset:figure-counter-minor;}
+  h1[data-number="36"]{counter-set:figure-counter-major 36;counter-reset:figure-counter-minor;}
+  h1[data-number="37"]{counter-set:figure-counter-major 37;counter-reset:figure-counter-minor;}
+  h1[data-number="38"]{counter-set:figure-counter-major 38;counter-reset:figure-counter-minor;}
+  h1[data-number="39"]{counter-set:figure-counter-major 39;counter-reset:figure-counter-minor;}
+  h1[data-number="40"]{counter-set:figure-counter-major 40;counter-reset:figure-counter-minor;}
+  h1[data-number="41"]{counter-set:figure-counter-major 41;counter-reset:figure-counter-minor;}
+  h1[data-number="42"]{counter-set:figure-counter-major 42;counter-reset:figure-counter-minor;}
+  h1[data-number="43"]{counter-set:figure-counter-major 43;counter-reset:figure-counter-minor;}
+  h1[data-number="44"]{counter-set:figure-counter-major 44;counter-reset:figure-counter-minor;}
+  h1[data-number="45"]{counter-set:figure-counter-major 45;counter-reset:figure-counter-minor;}
+  h1[data-number="46"]{counter-set:figure-counter-major 46;counter-reset:figure-counter-minor;}
+  h1[data-number="47"]{counter-set:figure-counter-major 47;counter-reset:figure-counter-minor;}
+  h1[data-number="48"]{counter-set:figure-counter-major 48;counter-reset:figure-counter-minor;}
+  h1[data-number="49"]{counter-set:figure-counter-major 49;counter-reset:figure-counter-minor;}
+  h1[data-number="50"]{counter-set:figure-counter-major 50;counter-reset:figure-counter-minor;}
+  h1[data-number="51"]{counter-set:figure-counter-major 51;counter-reset:figure-counter-minor;}
+  h1[data-number="52"]{counter-set:figure-counter-major 52;counter-reset:figure-counter-minor;}
+  h1[data-number="53"]{counter-set:figure-counter-major 53;counter-reset:figure-counter-minor;}
+  h1[data-number="54"]{counter-set:figure-counter-major 54;counter-reset:figure-counter-minor;}
+  h1[data-number="55"]{counter-set:figure-counter-major 55;counter-reset:figure-counter-minor;}
+  h1[data-number="56"]{counter-set:figure-counter-major 56;counter-reset:figure-counter-minor;}
+  h1[data-number="57"]{counter-set:figure-counter-major 57;counter-reset:figure-counter-minor;}
+  h1[data-number="58"]{counter-set:figure-counter-major 58;counter-reset:figure-counter-minor;}
+  h1[data-number="59"]{counter-set:figure-counter-major 59;counter-reset:figure-counter-minor;}
+  h1[data-number="60"]{counter-set:figure-counter-major 60;counter-reset:figure-counter-minor;}
+  h1[data-number="61"]{counter-set:figure-counter-major 61;counter-reset:figure-counter-minor;}
+  h1[data-number="62"]{counter-set:figure-counter-major 62;counter-reset:figure-counter-minor;}
+  h1[data-number="63"]{counter-set:figure-counter-major 63;counter-reset:figure-counter-minor;}
+  h1[data-number="64"]{counter-set:figure-counter-major 64;counter-reset:figure-counter-minor;}
+  h1[data-number="65"]{counter-set:figure-counter-major 65;counter-reset:figure-counter-minor;}
+  h1[data-number="66"]{counter-set:figure-counter-major 66;counter-reset:figure-counter-minor;}
+  h1[data-number="67"]{counter-set:figure-counter-major 67;counter-reset:figure-counter-minor;}
+  h1[data-number="68"]{counter-set:figure-counter-major 68;counter-reset:figure-counter-minor;}
+  h1[data-number="69"]{counter-set:figure-counter-major 69;counter-reset:figure-counter-minor;}
+  h1[data-number="70"]{counter-set:figure-counter-major 70;counter-reset:figure-counter-minor;}
+  h1[data-number="71"]{counter-set:figure-counter-major 71;counter-reset:figure-counter-minor;}
+  h1[data-number="72"]{counter-set:figure-counter-major 72;counter-reset:figure-counter-minor;}
+  h1[data-number="73"]{counter-set:figure-counter-major 73;counter-reset:figure-counter-minor;}
+  h1[data-number="74"]{counter-set:figure-counter-major 74;counter-reset:figure-counter-minor;}
+  h1[data-number="75"]{counter-set:figure-counter-major 75;counter-reset:figure-counter-minor;}
+  h1[data-number="76"]{counter-set:figure-counter-major 76;counter-reset:figure-counter-minor;}
+  h1[data-number="77"]{counter-set:figure-counter-major 77;counter-reset:figure-counter-minor;}
+  h1[data-number="78"]{counter-set:figure-counter-major 78;counter-reset:figure-counter-minor;}
+  h1[data-number="79"]{counter-set:figure-counter-major 79;counter-reset:figure-counter-minor;}
+  h1[data-number="80"]{counter-set:figure-counter-major 80;counter-reset:figure-counter-minor;}
+  h1[data-number="81"]{counter-set:figure-counter-major 81;counter-reset:figure-counter-minor;}
+  h1[data-number="82"]{counter-set:figure-counter-major 82;counter-reset:figure-counter-minor;}
+  h1[data-number="83"]{counter-set:figure-counter-major 83;counter-reset:figure-counter-minor;}
+  h1[data-number="84"]{counter-set:figure-counter-major 84;counter-reset:figure-counter-minor;}
+  h1[data-number="85"]{counter-set:figure-counter-major 85;counter-reset:figure-counter-minor;}
+  h1[data-number="86"]{counter-set:figure-counter-major 86;counter-reset:figure-counter-minor;}
+  h1[data-number="87"]{counter-set:figure-counter-major 87;counter-reset:figure-counter-minor;}
+  h1[data-number="88"]{counter-set:figure-counter-major 88;counter-reset:figure-counter-minor;}
+  h1[data-number="89"]{counter-set:figure-counter-major 89;counter-reset:figure-counter-minor;}
+  h1[data-number="90"]{counter-set:figure-counter-major 90;counter-reset:figure-counter-minor;}
+  h1[data-number="91"]{counter-set:figure-counter-major 91;counter-reset:figure-counter-minor;}
+  h1[data-number="92"]{counter-set:figure-counter-major 92;counter-reset:figure-counter-minor;}
+  h1[data-number="93"]{counter-set:figure-counter-major 93;counter-reset:figure-counter-minor;}
+  h1[data-number="94"]{counter-set:figure-counter-major 94;counter-reset:figure-counter-minor;}
+  h1[data-number="95"]{counter-set:figure-counter-major 95;counter-reset:figure-counter-minor;}
+  h1[data-number="96"]{counter-set:figure-counter-major 96;counter-reset:figure-counter-minor;}
+  h1[data-number="97"]{counter-set:figure-counter-major 97;counter-reset:figure-counter-minor;}
+  h1[data-number="98"]{counter-set:figure-counter-major 98;counter-reset:figure-counter-minor;}
+  h1[data-number="99"]{counter-set:figure-counter-major 99;counter-reset:figure-counter-minor;}
+
+
+  </style>
+  <!-- BG custom styling for the wide body variant -->
+  <!-- Gets appended after bg-css.html -->
+
+  <style type="text/css">
+  body {
+      max-width: inherit;
+  }
+  </style>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+</head>
+<body>
+<div style="text-align:center"><span style="visibility: hidden"><a href="" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="kata-pengantar.html" rel="next">Next</a></span></div><hr>
+<header id="title-block-header">
+<h1 class="title">Beej's Guide to C Programming</h1>
+<p class="author">Brian "Beej Jorgensen" Hall</p>
+<p class="date">v0.11.5, Hak Cipta © 22 November 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="kata-pengantar.html#kata-pengantar" id="toc-kata-pengantar"><span class="toc-section-number">1</span> Kata Pengantar</a>
+<ul>
+<li><a href="kata-pengantar.html#pembaca" id="toc-pembaca"><span class="toc-section-number">1.1</span> Pembaca</a></li>
+<li><a href="kata-pengantar.html#cara-membaca-buku-ini" id="toc-cara-membaca-buku-ini"><span class="toc-section-number">1.2</span> Cara Membaca Buku Ini</a></li>
+<li><a href="kata-pengantar.html#platform-dan-compiler" id="toc-platform-dan-compiler"><span class="toc-section-number">1.3</span> Platform dan Compiler</a></li>
+<li><a href="kata-pengantar.html#halaman-utama-resmi" id="toc-halaman-utama-resmi"><span class="toc-section-number">1.4</span> Halaman Utama Resmi</a></li>
+<li><a href="kata-pengantar.html#kebijakan-email" id="toc-kebijakan-email"><span class="toc-section-number">1.5</span> Kebijakan Email</a></li>
+<li><a href="kata-pengantar.html#mirroring" id="toc-mirroring"><span class="toc-section-number">1.6</span> Mirroring</a></li>
+<li><a href="kata-pengantar.html#catatan-untuk-penerjemah" id="toc-catatan-untuk-penerjemah"><span class="toc-section-number">1.7</span> Catatan untuk Penerjemah</a></li>
+<li><a href="kata-pengantar.html#hak-cipta-dan-distribusi" id="toc-hak-cipta-dan-distribusi"><span class="toc-section-number">1.8</span> Hak Cipta dan Distribusi</a></li>
+<li><a href="kata-pengantar.html#dedikasi" id="toc-dedikasi"><span class="toc-section-number">1.9</span> Dedikasi</a></li>
+</ul></li>
+<li><a href="hello-world.html#hello-world" id="toc-hello-world"><span class="toc-section-number">2</span> Hello, World!</a>
+<ul>
+<li><a href="hello-world.html#apa-yang-diharapkan-dari-c" id="toc-apa-yang-diharapkan-dari-c"><span class="toc-section-number">2.1</span> Apa yang Diharapkan dari C</a></li>
+<li><a href="hello-world.html#hello-world-1" id="toc-hello-world-1"><span class="toc-section-number">2.2</span> Hello, World!</a></li>
+<li><a href="hello-world.html#detail-kompilasi" id="toc-detail-kompilasi"><span class="toc-section-number">2.3</span> Detail Kompilasi</a></li>
+<li><a href="hello-world.html#build-dengan-gcc" id="toc-build-dengan-gcc"><span class="toc-section-number">2.4</span> Build dengan <code>gcc</code></a></li>
+<li><a href="hello-world.html#build-dengan-clang" id="toc-build-dengan-clang"><span class="toc-section-number">2.5</span> Build dengan <code>clang</code></a></li>
+<li><a href="hello-world.html#build-dari-ide" id="toc-build-dari-ide"><span class="toc-section-number">2.6</span> Build dari IDE</a></li>
+<li><a href="hello-world.html#versi-c" id="toc-versi-c"><span class="toc-section-number">2.7</span> Versi C</a></li>
+</ul></li>
+<li><a href="variabel-dan-pernyataan.html#variabel-dan-pernyataan" id="toc-variabel-dan-pernyataan"><span class="toc-section-number">3</span> Variabel dan Pernyataan</a>
+<ul>
+<li><a href="variabel-dan-pernyataan.html#variabel" id="toc-variabel"><span class="toc-section-number">3.1</span> Variabel</a>
+<ul>
+<li><a href="variabel-dan-pernyataan.html#nama-variabel" id="toc-nama-variabel"><span class="toc-section-number">3.1.1</span> Nama Variabel</a></li>
+<li><a href="variabel-dan-pernyataan.html#tipe-variabel" id="toc-tipe-variabel"><span class="toc-section-number">3.1.2</span> Tipe Variabel</a></li>
+<li><a href="variabel-dan-pernyataan.html#tipe-boolean" id="toc-tipe-boolean"><span class="toc-section-number">3.1.3</span> Tipe Boolean</a></li>
+</ul></li>
+<li><a href="variabel-dan-pernyataan.html#operators" id="toc-operators"><span class="toc-section-number">3.2</span> Operator dan Ekspresi</a>
+<ul>
+<li><a href="variabel-dan-pernyataan.html#aritmetika" id="toc-aritmetika"><span class="toc-section-number">3.2.1</span> Aritmetika</a></li>
+<li><a href="variabel-dan-pernyataan.html#operator-ternary" id="toc-operator-ternary"><span class="toc-section-number">3.2.2</span> Operator Ternary</a></li>
+<li><a href="variabel-dan-pernyataan.html#pre-dan-post-increment-dan-decrement" id="toc-pre-dan-post-increment-dan-decrement"><span class="toc-section-number">3.2.3</span> Pre-dan-Post Increment-dan-Decrement</a></li>
+<li><a href="variabel-dan-pernyataan.html#operator-koma" id="toc-operator-koma"><span class="toc-section-number">3.2.4</span> Operator Koma</a></li>
+<li><a href="variabel-dan-pernyataan.html#operator-kondisional" id="toc-operator-kondisional"><span class="toc-section-number">3.2.5</span> Operator Kondisional</a></li>
+<li><a href="variabel-dan-pernyataan.html#operator-boolean" id="toc-operator-boolean"><span class="toc-section-number">3.2.6</span> Operator Boolean</a></li>
+<li><a href="variabel-dan-pernyataan.html#sizeof-operator" id="toc-sizeof-operator"><span class="toc-section-number">3.2.7</span> Operator <code>sizeof</code></a></li>
+</ul></li>
+<li><a href="variabel-dan-pernyataan.html#kendali-alur" id="toc-kendali-alur"><span class="toc-section-number">3.3</span> Kendali Alur</a>
+<ul>
+<li><a href="variabel-dan-pernyataan.html#ifstat" id="toc-ifstat"><span class="toc-section-number">3.3.1</span> Pernyataan <code>if</code>-<code>else</code></a></li>
+<li><a href="variabel-dan-pernyataan.html#whilestat" id="toc-whilestat"><span class="toc-section-number">3.3.2</span> Pernyataan <code>while</code></a></li>
+<li><a href="variabel-dan-pernyataan.html#dowhilestat" id="toc-dowhilestat"><span class="toc-section-number">3.3.3</span> Pernyataan <code>do</code>-<code>while</code></a></li>
+<li><a href="variabel-dan-pernyataan.html#forstat" id="toc-forstat"><span class="toc-section-number">3.3.4</span> Pernyataan <code>for</code></a></li>
+<li><a href="variabel-dan-pernyataan.html#switch-statement" id="toc-switch-statement"><span class="toc-section-number">3.3.5</span> Pernyataan <code>switch</code></a></li>
+</ul></li>
+</ul></li>
+<li><a href="functions.html#functions" id="toc-functions"><span class="toc-section-number">4</span> Fungsi</a>
+<ul>
+<li><a href="functions.html#passvalue" id="toc-passvalue"><span class="toc-section-number">4.1</span> Passing by Value</a></li>
+<li><a href="functions.html#prototypes" id="toc-prototypes"><span class="toc-section-number">4.2</span> Function Prototype</a></li>
+<li><a href="functions.html#daftar-parameter-kosong" id="toc-daftar-parameter-kosong"><span class="toc-section-number">4.3</span> Daftar Parameter Kosong</a></li>
+</ul></li>
+<li><a href="pointers.html#pointers" id="toc-pointers"><span class="toc-section-number">5</span> Pointer—Gemetar Ketakutan!</a>
+<ul>
+<li><a href="pointers.html#ptmem" id="toc-ptmem"><span class="toc-section-number">5.1</span> Memori dan Variabel</a></li>
+<li><a href="pointers.html#pttypes" id="toc-pttypes"><span class="toc-section-number">5.2</span> Tipe Pointer</a></li>
+<li><a href="pointers.html#deref" id="toc-deref"><span class="toc-section-number">5.3</span> Dereferencing</a></li>
+<li><a href="pointers.html#ptpass" id="toc-ptpass"><span class="toc-section-number">5.4</span> Mengoper Pointer sebagai Argumen</a></li>
+<li><a href="pointers.html#pointer-null" id="toc-pointer-null"><span class="toc-section-number">5.5</span> Pointer <code>NULL</code></a></li>
+<li><a href="pointers.html#catatan-tentang-mendeklarasikan-pointer" id="toc-catatan-tentang-mendeklarasikan-pointer"><span class="toc-section-number">5.6</span> Catatan tentang Mendeklarasikan Pointer</a></li>
+<li><a href="pointers.html#sizeof-dan-pointer" id="toc-sizeof-dan-pointer"><span class="toc-section-number">5.7</span> <code>sizeof</code> dan Pointer</a></li>
+</ul></li>
+<li><a href="arrays.html#arrays" id="toc-arrays"><span class="toc-section-number">6</span> Arrays</a>
+<ul>
+<li><a href="arrays.html#contoh-mudah" id="toc-contoh-mudah"><span class="toc-section-number">6.1</span> Contoh Mudah</a></li>
+<li><a href="arrays.html#mendapatkan-panjang-array" id="toc-mendapatkan-panjang-array"><span class="toc-section-number">6.2</span> Mendapatkan Panjang Array</a></li>
+<li><a href="arrays.html#array-initializer" id="toc-array-initializer"><span class="toc-section-number">6.3</span> Array Initializer</a></li>
+<li><a href="arrays.html#di-luar-batas" id="toc-di-luar-batas"><span class="toc-section-number">6.4</span> Di Luar Batas!</a></li>
+<li><a href="arrays.html#array-multidimensi" id="toc-array-multidimensi"><span class="toc-section-number">6.5</span> Array Multidimensi</a></li>
+<li><a href="arrays.html#array-dan-pointer" id="toc-array-dan-pointer"><span class="toc-section-number">6.6</span> Array dan Pointer</a>
+<ul>
+<li><a href="arrays.html#mendapatkan-pointer-ke-array" id="toc-mendapatkan-pointer-ke-array"><span class="toc-section-number">6.6.1</span> Mendapatkan Pointer ke Array</a></li>
+<li><a href="arrays.html#passing1darrays" id="toc-passing1darrays"><span class="toc-section-number">6.6.2</span> Mengoper Array Satu Dimensi ke Fungsi</a></li>
+<li><a href="arrays.html#mengubah-array-di-dalam-fungsi" id="toc-mengubah-array-di-dalam-fungsi"><span class="toc-section-number">6.6.3</span> Mengubah Array di Dalam Fungsi</a></li>
+<li><a href="arrays.html#mengoper-array-multidimensi-ke-fungsi" id="toc-mengoper-array-multidimensi-ke-fungsi"><span class="toc-section-number">6.6.4</span> Mengoper Array Multidimensi ke Fungsi</a></li>
+</ul></li>
+</ul></li>
+<li><a href="strings.html#strings" id="toc-strings"><span class="toc-section-number">7</span> Strings</a>
+<ul>
+<li><a href="strings.html#string-literal" id="toc-string-literal"><span class="toc-section-number">7.1</span> String Literal</a></li>
+<li><a href="strings.html#variabel-string" id="toc-variabel-string"><span class="toc-section-number">7.2</span> Variabel String</a></li>
+<li><a href="strings.html#variabel-string-sebagai-array" id="toc-variabel-string-sebagai-array"><span class="toc-section-number">7.3</span> Variabel String sebagai Array</a></li>
+<li><a href="strings.html#inisialisasi-string" id="toc-inisialisasi-string"><span class="toc-section-number">7.4</span> Inisialisasi String</a></li>
+<li><a href="strings.html#mendapatkan-panjang-string" id="toc-mendapatkan-panjang-string"><span class="toc-section-number">7.5</span> Mendapatkan Panjang String</a></li>
+<li><a href="strings.html#terminasi-string" id="toc-terminasi-string"><span class="toc-section-number">7.6</span> Terminasi String</a></li>
+<li><a href="strings.html#menyalin-string" id="toc-menyalin-string"><span class="toc-section-number">7.7</span> Menyalin String</a></li>
+</ul></li>
+<li><a href="structs.html#structs" id="toc-structs"><span class="toc-section-number">8</span> Structs</a>
+<ul>
+<li><a href="structs.html#mendeklarasikan-struct" id="toc-mendeklarasikan-struct"><span class="toc-section-number">8.1</span> Mendeklarasikan Struct</a></li>
+<li><a href="structs.html#struct-initializers" id="toc-struct-initializers"><span class="toc-section-number">8.2</span> Struct Initializer</a></li>
+<li><a href="structs.html#mengoper-struct-ke-fungsi" id="toc-mengoper-struct-ke-fungsi"><span class="toc-section-number">8.3</span> Mengoper Struct ke Fungsi</a></li>
+<li><a href="structs.html#arrow-operator" id="toc-arrow-operator"><span class="toc-section-number">8.4</span> Arrow Operator</a></li>
+<li><a href="structs.html#menyalin-dan-mengembalikan-struct" id="toc-menyalin-dan-mengembalikan-struct"><span class="toc-section-number">8.5</span> Menyalin dan Mengembalikan <code>struct</code></a></li>
+<li><a href="structs.html#membandingkan-struct" id="toc-membandingkan-struct"><span class="toc-section-number">8.6</span> Membandingkan <code>struct</code></a></li>
+</ul></li>
+<li><a href="inputoutput-file.html#inputoutput-file" id="toc-inputoutput-file"><span class="toc-section-number">9</span> Input/Output File</a>
+<ul>
+<li><a href="inputoutput-file.html#tipe-data-file" id="toc-tipe-data-file"><span class="toc-section-number">9.1</span> Tipe Data <code>FILE*</code></a></li>
+<li><a href="inputoutput-file.html#membaca-file-teks" id="toc-membaca-file-teks"><span class="toc-section-number">9.2</span> Membaca File Teks</a></li>
+<li><a href="inputoutput-file.html#akhir-file-eof" id="toc-akhir-file-eof"><span class="toc-section-number">9.3</span> Akhir File: <code>EOF</code></a>
+<ul>
+<li><a href="inputoutput-file.html#membaca-satu-baris-sekaligus" id="toc-membaca-satu-baris-sekaligus"><span class="toc-section-number">9.3.1</span> Membaca Satu Baris Sekaligus</a></li>
+</ul></li>
+<li><a href="inputoutput-file.html#input-terformat" id="toc-input-terformat"><span class="toc-section-number">9.4</span> Input Terformat</a></li>
+<li><a href="inputoutput-file.html#menulis-file-teks" id="toc-menulis-file-teks"><span class="toc-section-number">9.5</span> Menulis File Teks</a></li>
+<li><a href="inputoutput-file.html#io-file-biner" id="toc-io-file-biner"><span class="toc-section-number">9.6</span> I/O File Biner</a>
+<ul>
+<li><a href="inputoutput-file.html#peringatan-tentang-struct-dan-angka" id="toc-peringatan-tentang-struct-dan-angka"><span class="toc-section-number">9.6.1</span> Peringatan tentang <code>struct</code> dan Angka</a></li>
+</ul></li>
+</ul></li>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-membuat-tipe-baru" id="toc-typedef-membuat-tipe-baru"><span class="toc-section-number">10</span> <code>typedef</code>: Membuat Tipe Baru</a>
+<ul>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-dalam-teori" id="toc-typedef-dalam-teori"><span class="toc-section-number">10.1</span> <code>typedef</code> dalam Teori</a>
+<ul>
+<li><a href="typedef-membuat-tipe-baru.html#scoping" id="toc-scoping"><span class="toc-section-number">10.1.1</span> Scoping</a></li>
+</ul></li>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-dalam-praktik" id="toc-typedef-dalam-praktik"><span class="toc-section-number">10.2</span> <code>typedef</code> dalam Praktik</a>
+<ul>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-struct" id="toc-typedef-struct"><span class="toc-section-number">10.2.1</span> <code>typedef</code> dan <code>struct</code></a></li>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-dan-tipe-lain" id="toc-typedef-dan-tipe-lain"><span class="toc-section-number">10.2.2</span> <code>typedef</code> dan Tipe Lain</a></li>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-dan-pointer" id="toc-typedef-dan-pointer"><span class="toc-section-number">10.2.3</span> <code>typedef</code> dan Pointer</a></li>
+<li><a href="typedef-membuat-tipe-baru.html#typedef-dan-kapitalisasi" id="toc-typedef-dan-kapitalisasi"><span class="toc-section-number">10.2.4</span> <code>typedef</code> dan Kapitalisasi</a></li>
+</ul></li>
+<li><a href="typedef-membuat-tipe-baru.html#array-dan-typedef" id="toc-array-dan-typedef"><span class="toc-section-number">10.3</span> Array dan <code>typedef</code></a></li>
+</ul></li>
+<li><a href="pointers2.html#pointers2" id="toc-pointers2"><span class="toc-section-number">11</span> Pointer II: Aritmetika</a>
+<ul>
+<li><a href="pointers2.html#aritmetika-pointer" id="toc-aritmetika-pointer"><span class="toc-section-number">11.1</span> Aritmetika Pointer</a>
+<ul>
+<li><a href="pointers2.html#menambah-pointer" id="toc-menambah-pointer"><span class="toc-section-number">11.1.1</span> Menambah Pointer</a></li>
+<li><a href="pointers2.html#mengubah-pointer" id="toc-mengubah-pointer"><span class="toc-section-number">11.1.2</span> Mengubah Pointer</a></li>
+<li><a href="pointers2.html#mengurangi-pointer" id="toc-mengurangi-pointer"><span class="toc-section-number">11.1.3</span> Mengurangi Pointer</a></li>
+</ul></li>
+<li><a href="pointers2.html#arraypointerequiv" id="toc-arraypointerequiv"><span class="toc-section-number">11.2</span> Kesetaraan Array/Pointer</a>
+<ul>
+<li><a href="pointers2.html#kesetaraan-arraypointer-pada-pemanggilan-fungsi" id="toc-kesetaraan-arraypointer-pada-pemanggilan-fungsi"><span class="toc-section-number">11.2.1</span> Kesetaraan Array/Pointer pada Pemanggilan Fungsi</a></li>
+</ul></li>
+<li><a href="pointers2.html#pointer-void" id="toc-pointer-void"><span class="toc-section-number">11.3</span> Pointer <code>void</code></a></li>
+</ul></li>
+<li><a href="alokasi-memori-manual.html#alokasi-memori-manual" id="toc-alokasi-memori-manual"><span class="toc-section-number">12</span> Alokasi Memori Manual</a>
+<ul>
+<li><a href="alokasi-memori-manual.html#mengalokasikan-dan-mendealokasikan-malloc-dan-free" id="toc-mengalokasikan-dan-mendealokasikan-malloc-dan-free"><span class="toc-section-number">12.1</span> Mengalokasikan dan Mendealokasikan, <code>malloc()</code> dan <code>free()</code></a></li>
+<li><a href="alokasi-memori-manual.html#pengecekan-error" id="toc-pengecekan-error"><span class="toc-section-number">12.2</span> Pengecekan Error</a></li>
+<li><a href="alokasi-memori-manual.html#mengalokasikan-ruang-untuk-array" id="toc-mengalokasikan-ruang-untuk-array"><span class="toc-section-number">12.3</span> Mengalokasikan Ruang untuk Array</a></li>
+<li><a href="alokasi-memori-manual.html#alternatif-calloc" id="toc-alternatif-calloc"><span class="toc-section-number">12.4</span> Alternatif: <code>calloc()</code></a></li>
+<li><a href="alokasi-memori-manual.html#mengubah-ukuran-alokasi-dengan-realloc" id="toc-mengubah-ukuran-alokasi-dengan-realloc"><span class="toc-section-number">12.5</span> Mengubah Ukuran Alokasi dengan <code>realloc()</code></a>
+<ul>
+<li><a href="alokasi-memori-manual.html#membaca-baris-dengan-panjang-sembarang" id="toc-membaca-baris-dengan-panjang-sembarang"><span class="toc-section-number">12.5.1</span> Membaca Baris dengan Panjang Sembarang</a></li>
+<li><a href="alokasi-memori-manual.html#realloc-dengan-null" id="toc-realloc-dengan-null"><span class="toc-section-number">12.5.2</span> <code>realloc()</code> dengan <code>NULL</code></a></li>
+</ul></li>
+<li><a href="alokasi-memori-manual.html#alokasi-dengan-alignment" id="toc-alokasi-dengan-alignment"><span class="toc-section-number">12.6</span> Alokasi dengan Alignment</a></li>
+</ul></li>
+<li><a href="scope.html#scope" id="toc-scope"><span class="toc-section-number">13</span> Scope</a>
+<ul>
+<li><a href="scope.html#block-scope" id="toc-block-scope"><span class="toc-section-number">13.1</span> Block Scope</a>
+<ul>
+<li><a href="scope.html#di-mana-variabel-didefinisikan" id="toc-di-mana-variabel-didefinisikan"><span class="toc-section-number">13.1.1</span> Di Mana Variabel Didefinisikan</a></li>
+<li><a href="scope.html#variable-hiding" id="toc-variable-hiding"><span class="toc-section-number">13.1.2</span> Variable Hiding</a></li>
+</ul></li>
+<li><a href="scope.html#file-scope" id="toc-file-scope"><span class="toc-section-number">13.2</span> File Scope</a></li>
+<li><a href="scope.html#scope-pada-loop-for" id="toc-scope-pada-loop-for"><span class="toc-section-number">13.3</span> Scope pada Loop <code>for</code></a></li>
+<li><a href="scope.html#catatan-tentang-function-scope" id="toc-catatan-tentang-function-scope"><span class="toc-section-number">13.4</span> Catatan tentang Function Scope</a></li>
+</ul></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#tipe-ii-jauh-lebih-banyak-tipe" id="toc-tipe-ii-jauh-lebih-banyak-tipe"><span class="toc-section-number">14</span> Tipe II: Jauh Lebih Banyak Tipe!</a>
+<ul>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#integer-signed-dan-unsigned" id="toc-integer-signed-dan-unsigned"><span class="toc-section-number">14.1</span> Integer Signed dan Unsigned</a></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#tipe-karakter" id="toc-tipe-karakter"><span class="toc-section-number">14.2</span> Tipe Karakter</a></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#tipe-integer-lainnya-short-long-long-long" id="toc-tipe-integer-lainnya-short-long-long-long"><span class="toc-section-number">14.3</span> Tipe Integer Lainnya: <code>short</code>, <code>long</code>, <code>long long</code></a></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#float-lainnya-double-dan-long-double" id="toc-float-lainnya-double-dan-long-double"><span class="toc-section-number">14.4</span> Float Lainnya: <code>double</code> dan <code>long double</code></a>
+<ul>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#berapa-banyak-digit-desimal" id="toc-berapa-banyak-digit-desimal"><span class="toc-section-number">14.4.1</span> Berapa Banyak Digit Desimal?</a></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#mengonversi-ke-desimal-dan-kembali" id="toc-mengonversi-ke-desimal-dan-kembali"><span class="toc-section-number">14.4.2</span> Mengonversi ke Desimal dan Kembali</a></li>
+</ul></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#tipe-konstanta-numerik" id="toc-tipe-konstanta-numerik"><span class="toc-section-number">14.5</span> Tipe Konstanta Numerik</a>
+<ul>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#heksadesimal-dan-oktal" id="toc-heksadesimal-dan-oktal"><span class="toc-section-number">14.5.1</span> Heksadesimal dan Oktal</a></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#konstanta-integer" id="toc-konstanta-integer"><span class="toc-section-number">14.5.2</span> Konstanta Integer</a></li>
+<li><a href="tipe-ii-jauh-lebih-banyak-tipe.html#konstanta-floating-point" id="toc-konstanta-floating-point"><span class="toc-section-number">14.5.3</span> Konstanta Floating Point</a></li>
+</ul></li>
+</ul></li>
+<li><a href="tipe-iii-konversi.html#tipe-iii-konversi" id="toc-tipe-iii-konversi"><span class="toc-section-number">15</span> Tipe III: Konversi</a>
+<ul>
+<li><a href="tipe-iii-konversi.html#konversi-string" id="toc-konversi-string"><span class="toc-section-number">15.1</span> Konversi String</a>
+<ul>
+<li><a href="tipe-iii-konversi.html#nilai-numerik-ke-string" id="toc-nilai-numerik-ke-string"><span class="toc-section-number">15.1.1</span> Nilai Numerik ke String</a></li>
+<li><a href="tipe-iii-konversi.html#string-ke-nilai-numerik" id="toc-string-ke-nilai-numerik"><span class="toc-section-number">15.1.2</span> String ke Nilai Numerik</a></li>
+</ul></li>
+<li><a href="tipe-iii-konversi.html#konversi-char" id="toc-konversi-char"><span class="toc-section-number">15.2</span> Konversi <code>char</code></a></li>
+<li><a href="tipe-iii-konversi.html#konversi-numerik" id="toc-konversi-numerik"><span class="toc-section-number">15.3</span> Konversi Numerik</a>
+<ul>
+<li><a href="tipe-iii-konversi.html#boolean" id="toc-boolean"><span class="toc-section-number">15.3.1</span> Boolean</a></li>
+<li><a href="tipe-iii-konversi.html#konversi-integer-ke-integer" id="toc-konversi-integer-ke-integer"><span class="toc-section-number">15.3.2</span> Konversi Integer ke Integer</a></li>
+<li><a href="tipe-iii-konversi.html#konversi-integer-dan-floating-point" id="toc-konversi-integer-dan-floating-point"><span class="toc-section-number">15.3.3</span> Konversi Integer dan Floating Point</a></li>
+</ul></li>
+<li><a href="tipe-iii-konversi.html#konversi-implisit" id="toc-konversi-implisit"><span class="toc-section-number">15.4</span> Konversi Implisit</a>
+<ul>
+<li><a href="tipe-iii-konversi.html#integer-promotions" id="toc-integer-promotions"><span class="toc-section-number">15.4.1</span> Integer Promotion</a></li>
+<li><a href="tipe-iii-konversi.html#usual-arithmetic-conversions" id="toc-usual-arithmetic-conversions"><span class="toc-section-number">15.4.2</span> Usual Arithmetic Conversion</a></li>
+<li><a href="tipe-iii-konversi.html#void" id="toc-void"><span class="toc-section-number">15.4.3</span> <code>void*</code></a></li>
+</ul></li>
+<li><a href="tipe-iii-konversi.html#konversi-eksplisit" id="toc-konversi-eksplisit"><span class="toc-section-number">15.5</span> Konversi Eksplisit</a>
+<ul>
+<li><a href="tipe-iii-konversi.html#casting" id="toc-casting"><span class="toc-section-number">15.5.1</span> Casting</a></li>
+</ul></li>
+</ul></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#tipe-iv-qualifier-dan-specifier" id="toc-tipe-iv-qualifier-dan-specifier"><span class="toc-section-number">16</span> Tipe IV: Qualifier dan Specifier</a>
+<ul>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#type-qualifier" id="toc-type-qualifier"><span class="toc-section-number">16.1</span> Type Qualifier</a>
+<ul>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#const" id="toc-const"><span class="toc-section-number">16.1.1</span> <code>const</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#restrict" id="toc-restrict"><span class="toc-section-number">16.1.2</span> <code>restrict</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#volatile" id="toc-volatile"><span class="toc-section-number">16.1.3</span> <code>volatile</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#atomic" id="toc-atomic"><span class="toc-section-number">16.1.4</span> <code>_Atomic</code></a></li>
+</ul></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#storage-class-specifier" id="toc-storage-class-specifier"><span class="toc-section-number">16.2</span> Storage-Class Specifier</a>
+<ul>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#auto" id="toc-auto"><span class="toc-section-number">16.2.1</span> <code>auto</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#static" id="toc-static"><span class="toc-section-number">16.2.2</span> <code>static</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#extern" id="toc-extern"><span class="toc-section-number">16.2.3</span> <code>extern</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#register" id="toc-register"><span class="toc-section-number">16.2.4</span> <code>register</code></a></li>
+<li><a href="tipe-iv-qualifier-dan-specifier.html#thread_local" id="toc-thread_local"><span class="toc-section-number">16.2.5</span> <code>_Thread_local</code></a></li>
+</ul></li>
+</ul></li>
+<li><a href="proyek-multifile.html#proyek-multifile" id="toc-proyek-multifile"><span class="toc-section-number">17</span> Proyek Multifile</a>
+<ul>
+<li><a href="proyek-multifile.html#includes-func-protos" id="toc-includes-func-protos"><span class="toc-section-number">17.1</span> Include dan Function Prototype</a></li>
+<li><a href="proyek-multifile.html#menangani-include-yang-berulang" id="toc-menangani-include-yang-berulang"><span class="toc-section-number">17.2</span> Menangani Include yang Berulang</a></li>
+<li><a href="proyek-multifile.html#static-dan-extern" id="toc-static-dan-extern"><span class="toc-section-number">17.3</span> <code>static</code> dan <code>extern</code></a></li>
+<li><a href="proyek-multifile.html#mengompilasi-dengan-object-file" id="toc-mengompilasi-dengan-object-file"><span class="toc-section-number">17.4</span> Mengompilasi dengan Object File</a></li>
+</ul></li>
+<li><a href="lingkungan-di-luar-program.html#lingkungan-di-luar-program" id="toc-lingkungan-di-luar-program"><span class="toc-section-number">18</span> Lingkungan di Luar Program</a>
+<ul>
+<li><a href="lingkungan-di-luar-program.html#argumen-command-line" id="toc-argumen-command-line"><span class="toc-section-number">18.1</span> Argumen Command Line</a>
+<ul>
+<li><a href="lingkungan-di-luar-program.html#argv-terakhir-adalah-null" id="toc-argv-terakhir-adalah-null"><span class="toc-section-number">18.1.1</span> <code>argv</code> Terakhir adalah <code>NULL</code></a></li>
+<li><a href="lingkungan-di-luar-program.html#alternatifnya-char-argv" id="toc-alternatifnya-char-argv"><span class="toc-section-number">18.1.2</span> Alternatifnya: <code>char **argv</code></a></li>
+<li><a href="lingkungan-di-luar-program.html#fakta-menarik" id="toc-fakta-menarik"><span class="toc-section-number">18.1.3</span> Fakta Menarik</a></li>
+</ul></li>
+<li><a href="lingkungan-di-luar-program.html#exit-status" id="toc-exit-status"><span class="toc-section-number">18.2</span> Exit Status</a>
+<ul>
+<li><a href="lingkungan-di-luar-program.html#nilai-exit-status-lainnya" id="toc-nilai-exit-status-lainnya"><span class="toc-section-number">18.2.1</span> Nilai Exit Status Lainnya</a></li>
+</ul></li>
+<li><a href="lingkungan-di-luar-program.html#env-var" id="toc-env-var"><span class="toc-section-number">18.3</span> Environment Variable</a>
+<ul>
+<li><a href="lingkungan-di-luar-program.html#mengatur-environment-variable" id="toc-mengatur-environment-variable"><span class="toc-section-number">18.3.1</span> Mengatur Environment Variable</a></li>
+<li><a href="lingkungan-di-luar-program.html#environment-variable-alternatif-di-sistem-mirip-unix" id="toc-environment-variable-alternatif-di-sistem-mirip-unix"><span class="toc-section-number">18.3.2</span> Environment Variable Alternatif di Sistem Mirip Unix</a></li>
+</ul></li>
+</ul></li>
+<li><a href="c-preprocessor.html#c-preprocessor" id="toc-c-preprocessor"><span class="toc-section-number">19</span> C Preprocessor</a>
+<ul>
+<li><a href="c-preprocessor.html#include" id="toc-include"><span class="toc-section-number">19.1</span> <code>#include</code></a></li>
+<li><a href="c-preprocessor.html#makro-sederhana" id="toc-makro-sederhana"><span class="toc-section-number">19.2</span> Makro Sederhana</a></li>
+<li><a href="c-preprocessor.html#kompilasi-kondisional" id="toc-kompilasi-kondisional"><span class="toc-section-number">19.3</span> Kompilasi Kondisional</a>
+<ul>
+<li><a href="c-preprocessor.html#jika-terdefinisi-ifdef-dan-endif" id="toc-jika-terdefinisi-ifdef-dan-endif"><span class="toc-section-number">19.3.1</span> Jika Terdefinisi, <code>#ifdef</code> dan <code>#endif</code></a></li>
+<li><a href="c-preprocessor.html#jika-tidak-terdefinisi-ifndef" id="toc-jika-tidak-terdefinisi-ifndef"><span class="toc-section-number">19.3.2</span> Jika Tidak Terdefinisi, <code>#ifndef</code></a></li>
+<li><a href="c-preprocessor.html#else" id="toc-else"><span class="toc-section-number">19.3.3</span> <code>#else</code></a></li>
+<li><a href="c-preprocessor.html#else-if-elifdef-elifndef" id="toc-else-if-elifdef-elifndef"><span class="toc-section-number">19.3.4</span> Else-If: <code>#elifdef</code>, <code>#elifndef</code></a></li>
+<li><a href="c-preprocessor.html#kondisional-umum-if-elif" id="toc-kondisional-umum-if-elif"><span class="toc-section-number">19.3.5</span> Kondisional Umum: <code>#if</code>, <code>#elif</code></a></li>
+<li><a href="c-preprocessor.html#menghapus-makro-undef" id="toc-menghapus-makro-undef"><span class="toc-section-number">19.3.6</span> Menghapus Makro: <code>#undef</code></a></li>
+</ul></li>
+<li><a href="c-preprocessor.html#makro-bawaan" id="toc-makro-bawaan"><span class="toc-section-number">19.4</span> Makro Bawaan</a>
+<ul>
+<li><a href="c-preprocessor.html#makro-wajib" id="toc-makro-wajib"><span class="toc-section-number">19.4.1</span> Makro Wajib</a></li>
+<li><a href="c-preprocessor.html#makro-opsional" id="toc-makro-opsional"><span class="toc-section-number">19.4.2</span> Makro Opsional</a></li>
+</ul></li>
+<li><a href="c-preprocessor.html#makro-dengan-argumen" id="toc-makro-dengan-argumen"><span class="toc-section-number">19.5</span> Makro dengan Argumen</a>
+<ul>
+<li><a href="c-preprocessor.html#makro-dengan-satu-argumen" id="toc-makro-dengan-satu-argumen"><span class="toc-section-number">19.5.1</span> Makro dengan Satu Argumen</a></li>
+<li><a href="c-preprocessor.html#makro-dengan-lebih-dari-satu-argumen" id="toc-makro-dengan-lebih-dari-satu-argumen"><span class="toc-section-number">19.5.2</span> Makro dengan Lebih dari Satu Argumen</a></li>
+<li><a href="c-preprocessor.html#makro-dengan-argumen-variabel" id="toc-makro-dengan-argumen-variabel"><span class="toc-section-number">19.5.3</span> Makro dengan Argumen Variabel</a></li>
+<li><a href="c-preprocessor.html#stringification" id="toc-stringification"><span class="toc-section-number">19.5.4</span> Stringification</a></li>
+<li><a href="c-preprocessor.html#concatenation" id="toc-concatenation"><span class="toc-section-number">19.5.5</span> Concatenation</a></li>
+</ul></li>
+<li><a href="c-preprocessor.html#makro-multibaris" id="toc-makro-multibaris"><span class="toc-section-number">19.6</span> Makro Multibaris</a></li>
+<li><a href="c-preprocessor.html#my-assert" id="toc-my-assert"><span class="toc-section-number">19.7</span> Contoh: Makro Assert</a></li>
+<li><a href="c-preprocessor.html#directive-error" id="toc-directive-error"><span class="toc-section-number">19.8</span> Directive <code>#error</code></a></li>
+<li><a href="c-preprocessor.html#directive-embed" id="toc-directive-embed"><span class="toc-section-number">19.9</span> Directive <code>#embed</code></a>
+<ul>
+<li><a href="c-preprocessor.html#parameter-embed" id="toc-parameter-embed"><span class="toc-section-number">19.9.1</span> Parameter <code>#embed</code></a></li>
+<li><a href="c-preprocessor.html#parameter-limit" id="toc-parameter-limit"><span class="toc-section-number">19.9.2</span> Parameter <code>limit()</code></a></li>
+<li><a href="c-preprocessor.html#parameter-if_empty" id="toc-parameter-if_empty"><span class="toc-section-number">19.9.3</span> Parameter <code>if_empty</code></a></li>
+<li><a href="c-preprocessor.html#parameter-prefix-dan-suffix" id="toc-parameter-prefix-dan-suffix"><span class="toc-section-number">19.9.4</span> Parameter <code>prefix()</code> dan <code>suffix()</code></a></li>
+<li><a href="c-preprocessor.html#identifier-__has_embed" id="toc-identifier-__has_embed"><span class="toc-section-number">19.9.5</span> Identifier <code>__has_embed()</code></a></li>
+<li><a href="c-preprocessor.html#parameter-lainnya" id="toc-parameter-lainnya"><span class="toc-section-number">19.9.6</span> Parameter Lainnya</a></li>
+<li><a href="c-preprocessor.html#menyematkan-nilai-multi-byte" id="toc-menyematkan-nilai-multi-byte"><span class="toc-section-number">19.9.7</span> Menyematkan Nilai Multi-Byte</a></li>
+</ul></li>
+<li><a href="c-preprocessor.html#pragma" id="toc-pragma"><span class="toc-section-number">19.10</span> Directive <code>#pragma</code></a>
+<ul>
+<li><a href="c-preprocessor.html#pragma-non-standar" id="toc-pragma-non-standar"><span class="toc-section-number">19.10.1</span> Pragma Non-Standar</a></li>
+<li><a href="c-preprocessor.html#pragma-standar" id="toc-pragma-standar"><span class="toc-section-number">19.10.2</span> Pragma Standar</a></li>
+<li><a href="c-preprocessor.html#operator-_pragma" id="toc-operator-_pragma"><span class="toc-section-number">19.10.3</span> Operator <code>_Pragma</code></a></li>
+</ul></li>
+<li><a href="c-preprocessor.html#directive-line" id="toc-directive-line"><span class="toc-section-number">19.11</span> Directive <code>#line</code></a></li>
+<li><a href="c-preprocessor.html#null-directive" id="toc-null-directive"><span class="toc-section-number">19.12</span> Null Directive</a></li>
+</ul></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#struct-ii-lebih-seru-dengan-struct" id="toc-struct-ii-lebih-seru-dengan-struct"><span class="toc-section-number">20</span> <code>struct</code> II: Lebih Seru dengan <code>struct</code></a>
+<ul>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#initializer-untuk-struct-bersarang-dan-array" id="toc-initializer-untuk-struct-bersarang-dan-array"><span class="toc-section-number">20.1</span> Initializer untuk <code>struct</code> Bersarang dan Array</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#struct-anonim" id="toc-struct-anonim"><span class="toc-section-number">20.2</span> <code>struct</code> Anonim</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#struct-yang-merujuk-diri-sendiri" id="toc-struct-yang-merujuk-diri-sendiri"><span class="toc-section-number">20.3</span> <code>struct</code> yang Merujuk Diri Sendiri</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#flexible-array-member" id="toc-flexible-array-member"><span class="toc-section-number">20.4</span> Flexible Array Member</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#struct-padding-bytes" id="toc-struct-padding-bytes"><span class="toc-section-number">20.5</span> Padding Byte</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#offsetof" id="toc-offsetof"><span class="toc-section-number">20.6</span> <code>offsetof</code></a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#fake-oop" id="toc-fake-oop"><span class="toc-section-number">20.7</span> Fake OOP</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#bit-field" id="toc-bit-field"><span class="toc-section-number">20.8</span> Bit-Field</a>
+<ul>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#bit-field-yang-tidak-berdekatan" id="toc-bit-field-yang-tidak-berdekatan"><span class="toc-section-number">20.8.1</span> Bit-Field yang Tidak Berdekatan</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#int-signed-atau-unsigned" id="toc-int-signed-atau-unsigned"><span class="toc-section-number">20.8.2</span> <code>int</code> Signed atau Unsigned</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#bit-field-tanpa-nama" id="toc-bit-field-tanpa-nama"><span class="toc-section-number">20.8.3</span> Bit-Field Tanpa Nama</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#bit-field-tanpa-nama-dengan-lebar-nol" id="toc-bit-field-tanpa-nama-dengan-lebar-nol"><span class="toc-section-number">20.8.4</span> Bit-Field Tanpa Nama dengan Lebar Nol</a></li>
+</ul></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#union" id="toc-union"><span class="toc-section-number">20.9</span> Union</a>
+<ul>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#union-type-punning" id="toc-union-type-punning"><span class="toc-section-number">20.9.1</span> Union dan Type Punning</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#pointer-ke-union" id="toc-pointer-ke-union"><span class="toc-section-number">20.9.2</span> Pointer ke <code>union</code></a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#common-initial-sequence-pada-union" id="toc-common-initial-sequence-pada-union"><span class="toc-section-number">20.9.3</span> Common Initial Sequence pada Union</a></li>
+</ul></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#union-dan-struct-tanpa-nama" id="toc-union-dan-struct-tanpa-nama"><span class="toc-section-number">20.10</span> Union dan Struct Tanpa Nama</a></li>
+<li><a href="struct-ii-lebih-seru-dengan-struct.html#mengoper-dan-mengembalikan-struct-dan-union" id="toc-mengoper-dan-mengembalikan-struct-dan-union"><span class="toc-section-number">20.11</span> Mengoper dan Mengembalikan <code>struct</code> dan <code>union</code></a></li>
+</ul></li>
+<li><a href="karakter-dan-string-ii.html#karakter-dan-string-ii" id="toc-karakter-dan-string-ii"><span class="toc-section-number">21</span> Karakter dan String II</a>
+<ul>
+<li><a href="karakter-dan-string-ii.html#escape-sequence" id="toc-escape-sequence"><span class="toc-section-number">21.1</span> Escape Sequence</a>
+<ul>
+<li><a href="karakter-dan-string-ii.html#escape-yang-sering-dipakai" id="toc-escape-yang-sering-dipakai"><span class="toc-section-number">21.1.1</span> Escape yang Sering Dipakai</a></li>
+<li><a href="karakter-dan-string-ii.html#escape-yang-jarang-dipakai" id="toc-escape-yang-jarang-dipakai"><span class="toc-section-number">21.1.2</span> Escape yang Jarang Dipakai</a></li>
+<li><a href="karakter-dan-string-ii.html#escape-numerik" id="toc-escape-numerik"><span class="toc-section-number">21.1.3</span> Escape Numerik</a></li>
+</ul></li>
+</ul></li>
+<li><a href="enumerated-type-enum.html#enumerated-type-enum" id="toc-enumerated-type-enum"><span class="toc-section-number">22</span> Enumerated Type: <code>enum</code></a>
+<ul>
+<li><a href="enumerated-type-enum.html#perilaku-enum" id="toc-perilaku-enum"><span class="toc-section-number">22.1</span> Perilaku <code>enum</code></a>
+<ul>
+<li><a href="enumerated-type-enum.html#penomoran" id="toc-penomoran"><span class="toc-section-number">22.1.1</span> Penomoran</a></li>
+<li><a href="enumerated-type-enum.html#koma-di-akhir" id="toc-koma-di-akhir"><span class="toc-section-number">22.1.2</span> Koma di Akhir</a></li>
+<li><a href="enumerated-type-enum.html#scope-1" id="toc-scope-1"><span class="toc-section-number">22.1.3</span> Scope</a></li>
+<li><a href="enumerated-type-enum.html#gaya-penulisan" id="toc-gaya-penulisan"><span class="toc-section-number">22.1.4</span> Gaya Penulisan</a></li>
+</ul></li>
+<li><a href="enumerated-type-enum.html#enum-mu-adalah-sebuah-tipe" id="toc-enum-mu-adalah-sebuah-tipe"><span class="toc-section-number">22.2</span> <code>enum</code>-mu adalah Sebuah Tipe</a></li>
+</ul></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#pointer-iii-pointer-ke-pointer-dan-lainnya" id="toc-pointer-iii-pointer-ke-pointer-dan-lainnya"><span class="toc-section-number">23</span> Pointer III: Pointer ke Pointer dan Lainnya</a>
+<ul>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#pointer-ke-pointer" id="toc-pointer-ke-pointer"><span class="toc-section-number">23.1</span> Pointer ke Pointer</a>
+<ul>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#pointer-pointer-dan-const" id="toc-pointer-pointer-dan-const"><span class="toc-section-number">23.1.1</span> Pointer Pointer dan <code>const</code></a></li>
+</ul></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#multibyte-values" id="toc-multibyte-values"><span class="toc-section-number">23.2</span> Nilai Multibyte</a></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#pointer-null-dan-nol" id="toc-pointer-null-dan-nol"><span class="toc-section-number">23.3</span> Pointer <code>NULL</code> dan Nol</a></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#pointer-sebagai-integer" id="toc-pointer-sebagai-integer"><span class="toc-section-number">23.4</span> Pointer sebagai Integer</a></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#meng-cast-pointer-ke-pointer-lain" id="toc-meng-cast-pointer-ke-pointer-lain"><span class="toc-section-number">23.5</span> Meng-cast Pointer ke Pointer Lain</a></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#ptr_differences" id="toc-ptr_differences"><span class="toc-section-number">23.6</span> Selisih Pointer</a></li>
+<li><a href="pointer-iii-pointer-ke-pointer-dan-lainnya.html#pointer-ke-fungsi" id="toc-pointer-ke-fungsi"><span class="toc-section-number">23.7</span> Pointer ke Fungsi</a></li>
+</ul></li>
+<li><a href="operasi-bitwise.html#operasi-bitwise" id="toc-operasi-bitwise"><span class="toc-section-number">24</span> Operasi Bitwise</a>
+<ul>
+<li><a href="operasi-bitwise.html#bitwise-and-or-xor-dan-not" id="toc-bitwise-and-or-xor-dan-not"><span class="toc-section-number">24.1</span> Bitwise AND, OR, XOR, dan NOT</a></li>
+<li><a href="operasi-bitwise.html#bitwise-shift" id="toc-bitwise-shift"><span class="toc-section-number">24.2</span> Bitwise Shift</a></li>
+</ul></li>
+<li><a href="fungsi-variadic.html#fungsi-variadic" id="toc-fungsi-variadic"><span class="toc-section-number">25</span> Fungsi Variadic</a>
+<ul>
+<li><a href="fungsi-variadic.html#elipsis-pada-signature-fungsi" id="toc-elipsis-pada-signature-fungsi"><span class="toc-section-number">25.1</span> Elipsis pada Signature Fungsi</a></li>
+<li><a href="fungsi-variadic.html#mengambil-argumen-tambahan" id="toc-mengambil-argumen-tambahan"><span class="toc-section-number">25.2</span> Mengambil Argumen Tambahan</a></li>
+<li><a href="fungsi-variadic.html#fungsionalitas-va_list" id="toc-fungsionalitas-va_list"><span class="toc-section-number">25.3</span> Fungsionalitas <code>va_list</code></a></li>
+<li><a href="fungsi-variadic.html#fungsi-library-yang-memakai-va_list" id="toc-fungsi-library-yang-memakai-va_list"><span class="toc-section-number">25.4</span> Fungsi Library yang Memakai <code>va_list</code></a></li>
+<li><a href="fungsi-variadic.html#jebakan-makro-variadic" id="toc-jebakan-makro-variadic"><span class="toc-section-number">25.5</span> Jebakan Makro Variadic</a></li>
+</ul></li>
+<li><a href="locale-dan-internasionalisasi.html#locale-dan-internasionalisasi" id="toc-locale-dan-internasionalisasi"><span class="toc-section-number">26</span> Locale dan Internasionalisasi</a>
+<ul>
+<li><a href="locale-dan-internasionalisasi.html#mengatur-lokalisasi-cara-cepat-dan-kotor" id="toc-mengatur-lokalisasi-cara-cepat-dan-kotor"><span class="toc-section-number">26.1</span> Mengatur Lokalisasi, Cara Cepat dan Kotor</a></li>
+<li><a href="locale-dan-internasionalisasi.html#mengambil-pengaturan-locale-moneter" id="toc-mengambil-pengaturan-locale-moneter"><span class="toc-section-number">26.2</span> Mengambil Pengaturan Locale Moneter</a>
+<ul>
+<li><a href="locale-dan-internasionalisasi.html#monetary-digit-grouping" id="toc-monetary-digit-grouping"><span class="toc-section-number">26.2.1</span> Pengelompokan Digit Moneter</a></li>
+<li><a href="locale-dan-internasionalisasi.html#pemisah-dan-posisi-tanda" id="toc-pemisah-dan-posisi-tanda"><span class="toc-section-number">26.2.2</span> Pemisah dan Posisi Tanda</a></li>
+<li><a href="locale-dan-internasionalisasi.html#contoh-nilai" id="toc-contoh-nilai"><span class="toc-section-number">26.2.3</span> Contoh Nilai</a></li>
+</ul></li>
+<li><a href="locale-dan-internasionalisasi.html#spesifik-lokalisasi" id="toc-spesifik-lokalisasi"><span class="toc-section-number">26.3</span> Spesifik Lokalisasi</a></li>
+</ul></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#unicode-wide-character-dan-semacamnya" id="toc-unicode-wide-character-dan-semacamnya"><span class="toc-section-number">27</span> Unicode, Wide Character, dan Semacamnya</a>
+<ul>
+<li><a href="unicode-wide-character-dan-semacamnya.html#apa-itu-unicode" id="toc-apa-itu-unicode"><span class="toc-section-number">27.1</span> Apa Itu Unicode?</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#code-point" id="toc-code-point"><span class="toc-section-number">27.2</span> Code Point</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#encoding" id="toc-encoding"><span class="toc-section-number">27.3</span> Encoding</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#src-exec-charset" id="toc-src-exec-charset"><span class="toc-section-number">27.4</span> Source dan Execution Character Set</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#unicode-in-c" id="toc-unicode-in-c"><span class="toc-section-number">27.5</span> Unicode di C</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#utf8-quick" id="toc-utf8-quick"><span class="toc-section-number">27.6</span> Catatan Singkat tentang UTF-8 Sebelum Kita Terjun ke Semak-Semak</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#berbagai-tipe-karakter" id="toc-berbagai-tipe-karakter"><span class="toc-section-number">27.7</span> Berbagai Tipe Karakter</a>
+<ul>
+<li><a href="unicode-wide-character-dan-semacamnya.html#karakter-multibyte" id="toc-karakter-multibyte"><span class="toc-section-number">27.7.1</span> Karakter Multibyte</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#wide-characters" id="toc-wide-characters"><span class="toc-section-number">27.7.2</span> Wide Character</a></li>
+</ul></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#memakai-wide-character-dan-wchar_t" id="toc-memakai-wide-character-dan-wchar_t"><span class="toc-section-number">27.8</span> Memakai Wide Character dan <code>wchar_t</code></a>
+<ul>
+<li><a href="unicode-wide-character-dan-semacamnya.html#konversi-multibyte-ke-wchar_t" id="toc-konversi-multibyte-ke-wchar_t"><span class="toc-section-number">27.8.1</span> Konversi Multibyte ke <code>wchar_t</code></a></li>
+</ul></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsionalitas-wide-character" id="toc-fungsionalitas-wide-character"><span class="toc-section-number">27.9</span> Fungsionalitas Wide Character</a>
+<ul>
+<li><a href="unicode-wide-character-dan-semacamnya.html#wint_t" id="toc-wint_t"><span class="toc-section-number">27.9.1</span> <code>wint_t</code></a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#io-stream-orientation" id="toc-io-stream-orientation"><span class="toc-section-number">27.9.2</span> Orientasi I/O Stream</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-io" id="toc-fungsi-io"><span class="toc-section-number">27.9.3</span> Fungsi I/O</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-konversi-tipe" id="toc-fungsi-konversi-tipe"><span class="toc-section-number">27.9.4</span> Fungsi Konversi Tipe</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-penyalinan-string-dan-memori" id="toc-fungsi-penyalinan-string-dan-memori"><span class="toc-section-number">27.9.5</span> Fungsi Penyalinan String dan Memori</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-perbandingan-string-dan-memori" id="toc-fungsi-perbandingan-string-dan-memori"><span class="toc-section-number">27.9.6</span> Fungsi Perbandingan String dan Memori</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-pencarian-string" id="toc-fungsi-pencarian-string"><span class="toc-section-number">27.9.7</span> Fungsi Pencarian String</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-panjanglain-lain" id="toc-fungsi-panjanglain-lain"><span class="toc-section-number">27.9.8</span> Fungsi Panjang/Lain-lain</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#fungsi-klasifikasi-karakter" id="toc-fungsi-klasifikasi-karakter"><span class="toc-section-number">27.9.9</span> Fungsi Klasifikasi Karakter</a></li>
+</ul></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#parse-state-fungsi-restartable" id="toc-parse-state-fungsi-restartable"><span class="toc-section-number">27.10</span> Parse State, Fungsi Restartable</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#encoding-unicode-dan-c" id="toc-encoding-unicode-dan-c"><span class="toc-section-number">27.11</span> Encoding Unicode dan C</a>
+<ul>
+<li><a href="unicode-wide-character-dan-semacamnya.html#utf-8" id="toc-utf-8"><span class="toc-section-number">27.11.1</span> UTF-8</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#utf-16-utf-32-char16_t-dan-char32_t" id="toc-utf-16-utf-32-char16_t-dan-char32_t"><span class="toc-section-number">27.11.2</span> UTF-16, UTF-32, <code>char16_t</code>, dan <code>char32_t</code></a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#konversi-multibyte" id="toc-konversi-multibyte"><span class="toc-section-number">27.11.3</span> Konversi Multibyte</a></li>
+<li><a href="unicode-wide-character-dan-semacamnya.html#utf-3rd-party" id="toc-utf-3rd-party"><span class="toc-section-number">27.11.4</span> Library Pihak Ketiga</a></li>
+</ul></li>
+</ul></li>
+<li><a href="keluar-dari-program.html#keluar-dari-program" id="toc-keluar-dari-program"><span class="toc-section-number">28</span> Keluar dari Program</a>
+<ul>
+<li><a href="keluar-dari-program.html#keluar-normal" id="toc-keluar-normal"><span class="toc-section-number">28.1</span> Keluar Normal</a>
+<ul>
+<li><a href="keluar-dari-program.html#return-dari-main" id="toc-return-dari-main"><span class="toc-section-number">28.1.1</span> Return dari <code>main()</code></a></li>
+<li><a href="keluar-dari-program.html#exit" id="toc-exit"><span class="toc-section-number">28.1.2</span> <code>exit()</code></a></li>
+<li><a href="keluar-dari-program.html#memasang-exit-handler-dengan-atexit" id="toc-memasang-exit-handler-dengan-atexit"><span class="toc-section-number">28.1.3</span> Memasang Exit Handler dengan <code>atexit()</code></a></li>
+</ul></li>
+<li><a href="keluar-dari-program.html#keluar-lebih-cepat-dengan-quick_exit" id="toc-keluar-lebih-cepat-dengan-quick_exit"><span class="toc-section-number">28.2</span> Keluar Lebih Cepat dengan <code>quick_exit()</code></a></li>
+<li><a href="keluar-dari-program.html#nuke-it-from-orbit-_exit" id="toc-nuke-it-from-orbit-_exit"><span class="toc-section-number">28.3</span> Nuke it from Orbit: <code>_Exit()</code></a></li>
+<li><a href="keluar-dari-program.html#keluar-kadang-kadang-assert" id="toc-keluar-kadang-kadang-assert"><span class="toc-section-number">28.4</span> Keluar Kadang-kadang: <code>assert()</code></a></li>
+<li><a href="keluar-dari-program.html#keluar-tidak-normal-abort" id="toc-keluar-tidak-normal-abort"><span class="toc-section-number">28.5</span> Keluar Tidak Normal: <code>abort()</code></a></li>
+</ul></li>
+<li><a href="penanganan-signal.html#penanganan-signal" id="toc-penanganan-signal"><span class="toc-section-number">29</span> Penanganan Signal</a>
+<ul>
+<li><a href="penanganan-signal.html#apa-itu-signal" id="toc-apa-itu-signal"><span class="toc-section-number">29.1</span> Apa Itu Signal?</a></li>
+<li><a href="penanganan-signal.html#menangani-signal-dengan-signal" id="toc-menangani-signal-dengan-signal"><span class="toc-section-number">29.2</span> Menangani Signal dengan <code>signal()</code></a></li>
+<li><a href="penanganan-signal.html#menulis-signal-handler" id="toc-menulis-signal-handler"><span class="toc-section-number">29.3</span> Menulis Signal Handler</a></li>
+<li><a href="penanganan-signal.html#apa-yang-sebenarnya-bisa-kita-lakukan" id="toc-apa-yang-sebenarnya-bisa-kita-lakukan"><span class="toc-section-number">29.4</span> Apa yang Sebenarnya Bisa Kita Lakukan?</a></li>
+<li><a href="penanganan-signal.html#teman-tidak-membiarkan-temannya-signal" id="toc-teman-tidak-membiarkan-temannya-signal"><span class="toc-section-number">29.5</span> Teman Tidak Membiarkan Temannya <code>signal()</code></a></li>
+</ul></li>
+<li><a href="variable-length-array-vla.html#variable-length-array-vla" id="toc-variable-length-array-vla"><span class="toc-section-number">30</span> Variable-Length Array (VLA)</a>
+<ul>
+<li><a href="variable-length-array-vla.html#dasar-dasarnya" id="toc-dasar-dasarnya"><span class="toc-section-number">30.1</span> Dasar-Dasarnya</a></li>
+<li><a href="variable-length-array-vla.html#sizeof-dan-vla" id="toc-sizeof-dan-vla"><span class="toc-section-number">30.2</span> <code>sizeof</code> dan VLA</a></li>
+<li><a href="variable-length-array-vla.html#vla-multidimensi" id="toc-vla-multidimensi"><span class="toc-section-number">30.3</span> VLA Multidimensi</a></li>
+<li><a href="variable-length-array-vla.html#mengoper-vla-satu-dimensi-ke-fungsi" id="toc-mengoper-vla-satu-dimensi-ke-fungsi"><span class="toc-section-number">30.4</span> Mengoper VLA Satu Dimensi ke Fungsi</a></li>
+<li><a href="variable-length-array-vla.html#mengoper-vla-multidimensi-ke-fungsi" id="toc-mengoper-vla-multidimensi-ke-fungsi"><span class="toc-section-number">30.5</span> Mengoper VLA Multidimensi ke Fungsi</a>
+<ul>
+<li><a href="variable-length-array-vla.html#vla-multidimensi-parsial" id="toc-vla-multidimensi-parsial"><span class="toc-section-number">30.5.1</span> VLA Multidimensi Parsial</a></li>
+</ul></li>
+<li><a href="variable-length-array-vla.html#kompatibilitas-dengan-array-biasa" id="toc-kompatibilitas-dengan-array-biasa"><span class="toc-section-number">30.6</span> Kompatibilitas dengan Array Biasa</a></li>
+<li><a href="variable-length-array-vla.html#typedef-dan-vla" id="toc-typedef-dan-vla"><span class="toc-section-number">30.7</span> <code>typedef</code> dan VLA</a></li>
+<li><a href="variable-length-array-vla.html#jebakan-lompatan" id="toc-jebakan-lompatan"><span class="toc-section-number">30.8</span> Jebakan Lompatan</a></li>
+<li><a href="variable-length-array-vla.html#vla-general-issues" id="toc-vla-general-issues"><span class="toc-section-number">30.9</span> Masalah Umum</a></li>
+</ul></li>
+<li><a href="goto.html#goto" id="toc-goto"><span class="toc-section-number">31</span> <code>goto</code></a>
+<ul>
+<li><a href="goto.html#contoh-sederhana" id="toc-contoh-sederhana"><span class="toc-section-number">31.1</span> Contoh Sederhana</a></li>
+<li><a href="goto.html#continue-berlabel" id="toc-continue-berlabel"><span class="toc-section-number">31.2</span> <code>continue</code> Berlabel</a></li>
+<li><a href="goto.html#keluar-darurat" id="toc-keluar-darurat"><span class="toc-section-number">31.3</span> Keluar Darurat</a></li>
+<li><a href="goto.html#break-berlabel" id="toc-break-berlabel"><span class="toc-section-number">31.4</span> <code>break</code> Berlabel</a></li>
+<li><a href="goto.html#pembersihan-bertingkat" id="toc-pembersihan-bertingkat"><span class="toc-section-number">31.5</span> Pembersihan Bertingkat</a></li>
+<li><a href="goto.html#tail-call-optimization" id="toc-tail-call-optimization"><span class="toc-section-number">31.6</span> Tail Call Optimization</a></li>
+<li><a href="goto.html#memulai-ulang-system-call-yang-terinterupsi" id="toc-memulai-ulang-system-call-yang-terinterupsi"><span class="toc-section-number">31.7</span> Memulai Ulang System Call yang Terinterupsi</a></li>
+<li><a href="goto.html#goto-dan-thread-preemption" id="toc-goto-dan-thread-preemption"><span class="toc-section-number">31.8</span> <code>goto</code> dan Thread Preemption</a></li>
+<li><a href="goto.html#goto-dan-scope-variabel" id="toc-goto-dan-scope-variabel"><span class="toc-section-number">31.9</span> <code>goto</code> dan Scope Variabel</a></li>
+<li><a href="goto.html#goto-dan-variable-length-array" id="toc-goto-dan-variable-length-array"><span class="toc-section-number">31.10</span> <code>goto</code> dan Variable-Length Array</a></li>
+</ul></li>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#tipe-bagian-v-compound-literal-dan-generic-selection" id="toc-tipe-bagian-v-compound-literal-dan-generic-selection"><span class="toc-section-number">32</span> Tipe Bagian V: Compound Literal dan Generic Selection</a>
+<ul>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#compound-literal" id="toc-compound-literal"><span class="toc-section-number">32.1</span> Compound Literal</a>
+<ul>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#mengoper-object-tanpa-nama-ke-fungsi" id="toc-mengoper-object-tanpa-nama-ke-fungsi"><span class="toc-section-number">32.1.1</span> Mengoper Object Tanpa Nama ke Fungsi</a></li>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#struct-tanpa-nama" id="toc-struct-tanpa-nama"><span class="toc-section-number">32.1.2</span> <code>struct</code> Tanpa Nama</a></li>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#pointer-ke-object-tanpa-nama" id="toc-pointer-ke-object-tanpa-nama"><span class="toc-section-number">32.1.3</span> Pointer ke Object Tanpa Nama</a></li>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#object-tanpa-nama-dan-scope" id="toc-object-tanpa-nama-dan-scope"><span class="toc-section-number">32.1.4</span> Object Tanpa Nama dan Scope</a></li>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#contoh-konyol-object-tanpa-nama" id="toc-contoh-konyol-object-tanpa-nama"><span class="toc-section-number">32.1.5</span> Contoh Konyol Object Tanpa Nama</a></li>
+</ul></li>
+<li><a href="tipe-bagian-v-compound-literal-dan-generic-selection.html#type-generics" id="toc-type-generics"><span class="toc-section-number">32.2</span> Generic Selection</a></li>
+</ul></li>
+<li><a href="array-bagian-ii.html#array-bagian-ii" id="toc-array-bagian-ii"><span class="toc-section-number">33</span> Array Bagian II</a>
+<ul>
+<li><a href="array-bagian-ii.html#type-qualifier-untuk-array-dalam-daftar-parameter" id="toc-type-qualifier-untuk-array-dalam-daftar-parameter"><span class="toc-section-number">33.1</span> Type Qualifier untuk Array dalam Daftar Parameter</a></li>
+<li><a href="array-bagian-ii.html#static-untuk-array-dalam-daftar-parameter" id="toc-static-untuk-array-dalam-daftar-parameter"><span class="toc-section-number">33.2</span> <code>static</code> untuk Array dalam Daftar Parameter</a></li>
+<li><a href="array-bagian-ii.html#initializer-yang-setara" id="toc-initializer-yang-setara"><span class="toc-section-number">33.3</span> Initializer yang Setara</a></li>
+</ul></li>
+<li><a href="setjmp-longjmp.html#setjmp-longjmp" id="toc-setjmp-longjmp"><span class="toc-section-number">34</span> Long Jump dengan <code>setjmp</code>, <code>longjmp</code></a>
+<ul>
+<li><a href="setjmp-longjmp.html#memakai-setjmp-dan-longjmp" id="toc-memakai-setjmp-dan-longjmp"><span class="toc-section-number">34.1</span> Memakai <code>setjmp</code> dan <code>longjmp</code></a></li>
+<li><a href="setjmp-longjmp.html#jebakan" id="toc-jebakan"><span class="toc-section-number">34.2</span> Jebakan</a>
+<ul>
+<li><a href="setjmp-longjmp.html#nilai-variabel-lokal" id="toc-nilai-variabel-lokal"><span class="toc-section-number">34.2.1</span> Nilai Variabel Lokal</a></li>
+<li><a href="setjmp-longjmp.html#berapa-banyak-state-yang-disimpan" id="toc-berapa-banyak-state-yang-disimpan"><span class="toc-section-number">34.2.2</span> Berapa Banyak State yang Disimpan?</a></li>
+<li><a href="setjmp-longjmp.html#kamu-tidak-boleh-menamai-apa-pun-setjmp" id="toc-kamu-tidak-boleh-menamai-apa-pun-setjmp"><span class="toc-section-number">34.2.3</span> Kamu Tidak Boleh Menamai Apa Pun <code>setjmp</code></a></li>
+<li><a href="setjmp-longjmp.html#setjmp-tidak-boleh-berada-dalam-ekspresi-yang-lebih-besar" id="toc-setjmp-tidak-boleh-berada-dalam-ekspresi-yang-lebih-besar"><span class="toc-section-number">34.2.4</span> <code>setjmp()</code> Tidak Boleh Berada dalam Ekspresi yang Lebih Besar</a></li>
+<li><a href="setjmp-longjmp.html#kapan-longjmp-tidak-boleh-dilakukan" id="toc-kapan-longjmp-tidak-boleh-dilakukan"><span class="toc-section-number">34.2.5</span> Kapan <code>longjmp()</code> Tidak Boleh Dilakukan?</a></li>
+<li><a href="setjmp-longjmp.html#kamu-tidak-boleh-mengoper-0-ke-longjmp" id="toc-kamu-tidak-boleh-mengoper-0-ke-longjmp"><span class="toc-section-number">34.2.6</span> Kamu Tidak Boleh Mengoper <code>0</code> ke <code>longjmp()</code></a></li>
+<li><a href="setjmp-longjmp.html#longjmp-dan-variable-length-array" id="toc-longjmp-dan-variable-length-array"><span class="toc-section-number">34.2.7</span> <code>longjmp()</code> dan Variable Length Array</a></li>
+</ul></li>
+</ul></li>
+<li><a href="incomplete-type.html#incomplete-type" id="toc-incomplete-type"><span class="toc-section-number">35</span> Incomplete Type</a>
+<ul>
+<li><a href="incomplete-type.html#kasus-pemakaian-struktur-yang-merujuk-diri-sendiri" id="toc-kasus-pemakaian-struktur-yang-merujuk-diri-sendiri"><span class="toc-section-number">35.1</span> Kasus Pemakaian: Struktur yang Merujuk Diri Sendiri</a></li>
+<li><a href="incomplete-type.html#pesan-error-incomplete-type" id="toc-pesan-error-incomplete-type"><span class="toc-section-number">35.2</span> Pesan Error Incomplete Type</a></li>
+<li><a href="incomplete-type.html#incomplete-type-lainnya" id="toc-incomplete-type-lainnya"><span class="toc-section-number">35.3</span> Incomplete Type Lainnya</a></li>
+<li><a href="incomplete-type.html#kasus-pemakaian-array-di-header-file" id="toc-kasus-pemakaian-array-di-header-file"><span class="toc-section-number">35.4</span> Kasus Pemakaian: Array di Header File</a></li>
+<li><a href="incomplete-type.html#melengkapi-incomplete-type" id="toc-melengkapi-incomplete-type"><span class="toc-section-number">35.5</span> Melengkapi Incomplete Type</a></li>
+</ul></li>
+<li><a href="bilangan-kompleks.html#bilangan-kompleks" id="toc-bilangan-kompleks"><span class="toc-section-number">36</span> Bilangan Kompleks</a>
+<ul>
+<li><a href="bilangan-kompleks.html#tipe-kompleks" id="toc-tipe-kompleks"><span class="toc-section-number">36.1</span> Tipe Kompleks</a></li>
+<li><a href="bilangan-kompleks.html#menugaskan-bilangan-kompleks" id="toc-menugaskan-bilangan-kompleks"><span class="toc-section-number">36.2</span> Menugaskan Bilangan Kompleks</a></li>
+<li><a href="bilangan-kompleks.html#membentuk-membongkar-dan-mencetak" id="toc-membentuk-membongkar-dan-mencetak"><span class="toc-section-number">36.3</span> Membentuk, Membongkar, dan Mencetak</a></li>
+<li><a href="bilangan-kompleks.html#aritmetika-dan-perbandingan-kompleks" id="toc-aritmetika-dan-perbandingan-kompleks"><span class="toc-section-number">36.4</span> Aritmetika dan Perbandingan Kompleks</a></li>
+<li><a href="bilangan-kompleks.html#matematika-kompleks" id="toc-matematika-kompleks"><span class="toc-section-number">36.5</span> Matematika Kompleks</a>
+<ul>
+<li><a href="bilangan-kompleks.html#fungsi-trigonometri" id="toc-fungsi-trigonometri"><span class="toc-section-number">36.5.1</span> Fungsi Trigonometri</a></li>
+<li><a href="bilangan-kompleks.html#fungsi-eksponensial-dan-logaritmik" id="toc-fungsi-eksponensial-dan-logaritmik"><span class="toc-section-number">36.5.2</span> Fungsi Eksponensial dan Logaritmik</a></li>
+<li><a href="bilangan-kompleks.html#fungsi-pangkat-dan-nilai-mutlak" id="toc-fungsi-pangkat-dan-nilai-mutlak"><span class="toc-section-number">36.5.3</span> Fungsi Pangkat dan Nilai Mutlak</a></li>
+<li><a href="bilangan-kompleks.html#fungsi-manipulasi" id="toc-fungsi-manipulasi"><span class="toc-section-number">36.5.4</span> Fungsi Manipulasi</a></li>
+</ul></li>
+</ul></li>
+<li><a href="tipe-integer-berlebar-tetap.html#tipe-integer-berlebar-tetap" id="toc-tipe-integer-berlebar-tetap"><span class="toc-section-number">37</span> Tipe Integer Berlebar Tetap</a>
+<ul>
+<li><a href="tipe-integer-berlebar-tetap.html#tipe-berukuran-bit" id="toc-tipe-berukuran-bit"><span class="toc-section-number">37.1</span> Tipe Berukuran Bit</a></li>
+<li><a href="tipe-integer-berlebar-tetap.html#tipe-ukuran-integer-maksimum" id="toc-tipe-ukuran-integer-maksimum"><span class="toc-section-number">37.2</span> Tipe Ukuran Integer Maksimum</a></li>
+<li><a href="tipe-integer-berlebar-tetap.html#memakai-konstanta-berukuran-tetap" id="toc-memakai-konstanta-berukuran-tetap"><span class="toc-section-number">37.3</span> Memakai Konstanta Berukuran Tetap</a></li>
+<li><a href="tipe-integer-berlebar-tetap.html#batas-integer-berukuran-tetap" id="toc-batas-integer-berukuran-tetap"><span class="toc-section-number">37.4</span> Batas Integer Berukuran Tetap</a></li>
+<li><a href="tipe-integer-berlebar-tetap.html#format-specifier" id="toc-format-specifier"><span class="toc-section-number">37.5</span> Format Specifier</a></li>
+</ul></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#fungsionalitas-tanggal-dan-waktu" id="toc-fungsionalitas-tanggal-dan-waktu"><span class="toc-section-number">38</span> Fungsionalitas Tanggal dan Waktu</a>
+<ul>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#terminologi-dan-informasi-singkat" id="toc-terminologi-dan-informasi-singkat"><span class="toc-section-number">38.1</span> Terminologi dan Informasi Singkat</a></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#tipe-tanggal" id="toc-tipe-tanggal"><span class="toc-section-number">38.2</span> Tipe Tanggal</a></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#inisialisasi-dan-konversi-antartipe" id="toc-inisialisasi-dan-konversi-antartipe"><span class="toc-section-number">38.3</span> Inisialisasi dan Konversi Antartipe</a>
+<ul>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#mengonversi-time_t-ke-struct-tm" id="toc-mengonversi-time_t-ke-struct-tm"><span class="toc-section-number">38.3.1</span> Mengonversi <code>time_t</code> ke <code>struct tm</code></a></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#mengonversi-struct-tm-ke-time_t" id="toc-mengonversi-struct-tm-ke-time_t"><span class="toc-section-number">38.3.2</span> Mengonversi <code>struct tm</code> ke <code>time_t</code></a></li>
+</ul></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#output-tanggal-terformat" id="toc-output-tanggal-terformat"><span class="toc-section-number">38.4</span> Output Tanggal Terformat</a></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#resolusi-lebih-tinggi-dengan-timespec_get" id="toc-resolusi-lebih-tinggi-dengan-timespec_get"><span class="toc-section-number">38.5</span> Resolusi Lebih Tinggi dengan <code>timespec_get()</code></a></li>
+<li><a href="fungsionalitas-tanggal-dan-waktu.html#selisih-antarwaktu" id="toc-selisih-antarwaktu"><span class="toc-section-number">38.6</span> Selisih Antarwaktu</a></li>
+</ul></li>
+<li><a href="multithreading.html#multithreading" id="toc-multithreading"><span class="toc-section-number">39</span> Multithreading</a>
+<ul>
+<li><a href="multithreading.html#latar-belakang" id="toc-latar-belakang"><span class="toc-section-number">39.1</span> Latar Belakang</a></li>
+<li><a href="multithreading.html#hal-hal-yang-bisa-kamu-lakukan" id="toc-hal-hal-yang-bisa-kamu-lakukan"><span class="toc-section-number">39.2</span> Hal-Hal yang Bisa Kamu Lakukan</a></li>
+<li><a href="multithreading.html#data-race-dan-standard-library" id="toc-data-race-dan-standard-library"><span class="toc-section-number">39.3</span> Data Race dan Standard Library</a></li>
+<li><a href="multithreading.html#membuat-dan-menunggu-thread" id="toc-membuat-dan-menunggu-thread"><span class="toc-section-number">39.4</span> Membuat dan Menunggu Thread</a></li>
+<li><a href="multithreading.html#melepas-thread-detach" id="toc-melepas-thread-detach"><span class="toc-section-number">39.5</span> Melepas Thread (Detach)</a></li>
+<li><a href="multithreading.html#thread-local-data" id="toc-thread-local-data"><span class="toc-section-number">39.6</span> Thread Local Data</a>
+<ul>
+<li><a href="multithreading.html#thread-local" id="toc-thread-local"><span class="toc-section-number">39.6.1</span> Storage-Class <code>_Thread_local</code></a></li>
+<li><a href="multithreading.html#opsi-lain-thread-specific-storage" id="toc-opsi-lain-thread-specific-storage"><span class="toc-section-number">39.6.2</span> Opsi Lain: Thread-Specific Storage</a></li>
+</ul></li>
+<li><a href="multithreading.html#mutex" id="toc-mutex"><span class="toc-section-number">39.7</span> Mutex</a>
+<ul>
+<li><a href="multithreading.html#berbagai-tipe-mutex" id="toc-berbagai-tipe-mutex"><span class="toc-section-number">39.7.1</span> Berbagai Tipe Mutex</a></li>
+</ul></li>
+<li><a href="multithreading.html#condition-variable" id="toc-condition-variable"><span class="toc-section-number">39.8</span> Condition Variable</a>
+<ul>
+<li><a href="multithreading.html#condition-wait-dengan-timeout" id="toc-condition-wait-dengan-timeout"><span class="toc-section-number">39.8.1</span> Condition Wait dengan Timeout</a></li>
+<li><a href="multithreading.html#broadcast-membangunkan-semua-thread-yang-menunggu" id="toc-broadcast-membangunkan-semua-thread-yang-menunggu"><span class="toc-section-number">39.8.2</span> Broadcast: Membangunkan Semua Thread yang Menunggu</a></li>
+</ul></li>
+<li><a href="multithreading.html#menjalankan-fungsi-satu-kali" id="toc-menjalankan-fungsi-satu-kali"><span class="toc-section-number">39.9</span> Menjalankan Fungsi Satu Kali</a></li>
+</ul></li>
+<li><a href="chapter-atomics.html#chapter-atomics" id="toc-chapter-atomics"><span class="toc-section-number">40</span> Atomics</a>
+<ul>
+<li><a href="chapter-atomics.html#menguji-dukungan-atomic" id="toc-menguji-dukungan-atomic"><span class="toc-section-number">40.1</span> Menguji Dukungan Atomic</a></li>
+<li><a href="chapter-atomics.html#variabel-atomic" id="toc-variabel-atomic"><span class="toc-section-number">40.2</span> Variabel Atomic</a></li>
+<li><a href="chapter-atomics.html#sinkronisasi" id="toc-sinkronisasi"><span class="toc-section-number">40.3</span> Sinkronisasi</a></li>
+<li><a href="chapter-atomics.html#acquire-dan-release" id="toc-acquire-dan-release"><span class="toc-section-number">40.4</span> Acquire dan Release</a></li>
+<li><a href="chapter-atomics.html#sequential-consistency" id="toc-sequential-consistency"><span class="toc-section-number">40.5</span> Sequential Consistency</a></li>
+<li><a href="chapter-atomics.html#penugasan-dan-operator-atomic" id="toc-penugasan-dan-operator-atomic"><span class="toc-section-number">40.6</span> Penugasan dan Operator Atomic</a></li>
+<li><a href="chapter-atomics.html#fungsi-library-yang-otomatis-menyinkronkan" id="toc-fungsi-library-yang-otomatis-menyinkronkan"><span class="toc-section-number">40.7</span> Fungsi Library yang Otomatis Menyinkronkan</a></li>
+<li><a href="chapter-atomics.html#type-specifier-dan-qualifier-atomic" id="toc-type-specifier-dan-qualifier-atomic"><span class="toc-section-number">40.8</span> Type Specifier dan Qualifier Atomic</a></li>
+<li><a href="chapter-atomics.html#lock-free-atomic" id="toc-lock-free-atomic"><span class="toc-section-number">40.9</span> Variabel Atomic Lock-Free</a>
+<ul>
+<li><a href="chapter-atomics.html#signal-handler-dan-atomic-lock-free" id="toc-signal-handler-dan-atomic-lock-free"><span class="toc-section-number">40.9.1</span> Signal Handler dan Atomic Lock-Free</a></li>
+</ul></li>
+<li><a href="chapter-atomics.html#atomic-flags" id="toc-atomic-flags"><span class="toc-section-number">40.10</span> Atomic Flag</a></li>
+<li><a href="chapter-atomics.html#struct-dan-union-atomic" id="toc-struct-dan-union-atomic"><span class="toc-section-number">40.11</span> <code>struct</code> dan <code>union</code> Atomic</a></li>
+<li><a href="chapter-atomics.html#pointer-atomic" id="toc-pointer-atomic"><span class="toc-section-number">40.12</span> Pointer Atomic</a></li>
+<li><a href="chapter-atomics.html#memory-order" id="toc-memory-order"><span class="toc-section-number">40.13</span> Memory Order</a>
+<ul>
+<li><a href="chapter-atomics.html#sequential-consistency-1" id="toc-sequential-consistency-1"><span class="toc-section-number">40.13.1</span> Sequential Consistency</a></li>
+<li><a href="chapter-atomics.html#acquire" id="toc-acquire"><span class="toc-section-number">40.13.2</span> Acquire</a></li>
+<li><a href="chapter-atomics.html#release" id="toc-release"><span class="toc-section-number">40.13.3</span> Release</a></li>
+<li><a href="chapter-atomics.html#consume" id="toc-consume"><span class="toc-section-number">40.13.4</span> Consume</a></li>
+<li><a href="chapter-atomics.html#acquirerelease" id="toc-acquirerelease"><span class="toc-section-number">40.13.5</span> Acquire/Release</a></li>
+<li><a href="chapter-atomics.html#relaxed" id="toc-relaxed"><span class="toc-section-number">40.13.6</span> Relaxed</a></li>
+</ul></li>
+<li><a href="chapter-atomics.html#fence" id="toc-fence"><span class="toc-section-number">40.14</span> Fence</a></li>
+<li><a href="chapter-atomics.html#referensi" id="toc-referensi"><span class="toc-section-number">40.15</span> Referensi</a></li>
+</ul></li>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#function-specifier-alignment-specifier-dan-operator" id="toc-function-specifier-alignment-specifier-dan-operator"><span class="toc-section-number">41</span> Function Specifier, Alignment Specifier dan Operator</a>
+<ul>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#function-specifier" id="toc-function-specifier"><span class="toc-section-number">41.1</span> Function Specifier</a>
+<ul>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#inline-untuk-kecepatanmungkin" id="toc-inline-untuk-kecepatanmungkin"><span class="toc-section-number">41.1.1</span> <code>inline</code> untuk Kecepatan—Mungkin</a></li>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#noreturn" id="toc-noreturn"><span class="toc-section-number">41.1.2</span> <code>noreturn</code> dan <code>_Noreturn</code></a></li>
+</ul></li>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#alignment-specifier-dan-operator" id="toc-alignment-specifier-dan-operator"><span class="toc-section-number">41.2</span> Alignment Specifier dan Operator</a>
+<ul>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#alignas-dan-_alignas" id="toc-alignas-dan-_alignas"><span class="toc-section-number">41.2.1</span> <code>alignas</code> dan <code>_Alignas</code></a></li>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#alignof-dan-_alignof" id="toc-alignof-dan-_alignof"><span class="toc-section-number">41.2.2</span> <code>alignof</code> dan <code>_Alignof</code></a></li>
+</ul></li>
+<li><a href="function-specifier-alignment-specifier-dan-operator.html#fungsi-memalignment" id="toc-fungsi-memalignment"><span class="toc-section-number">41.3</span> Fungsi <code>memalignment()</code></a></li>
+</ul></li>
+</ul>
+</nav>
+<!-- BG_NEW_CHAPTER -->
+<hr><div style="text-align:center"><span style="visibility: hidden"><a href="" rel="prev">Prev</a> | </span><a href="index.html">Contents</a><span> | <a href="kata-pengantar.html" rel="next">Next</a></span></div></body>
+</html>
